@@ -1,0 +1,124 @@
+\documentclass[anon,12pt]{colt2026} % Anonymized submission
+%\documentclass[final,12pt]{colt2026} % Include author names
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+\newcommand{\br}[1]{\mathopen{}\left( #1 \right)}
+\newcommand{\brc}[1]{\mathopen{}\left\{ #1 \right\}}
+\newcommand{\spr}[1]{\mathopen{}\left| #1 \right|}
+\newcommand{\fl}[1]{\mathopen{}\left\lfloor #1 \right\rfloor}
+\newcommand{\cl}[1]{\mathopen{}\left\lceil #1 \right\rceil}
+\newcommand{\angl}[1]{\mathopen{}\langle #1 \rangle}
+\newcommand{\e}[1]{\exp\left\{ #1 \right\}}
+
+\newcommand{\ecc}{\operatorname{ecc}}
+\newcommand{\rad}{\operatorname{rad}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\Rim}{\operatorname{Rim}}
+\newcommand{\rim}{\operatorname{rim}}
+\newcommand{\Anc}{\operatorname{Anc}}
+
+\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}}
+\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}}
+
+\newcommand{\Cent}{\texttt{Cent}}
+\newcommand{\APP}{\texttt{APP}}
+\newcommand{\OPT}{\texttt{OPT}}
+\newcommand{\COST}{\texttt{COST}}
+\newcommand{\LB}{\mathcal{LB}}
+\newcommand{\HB}{\mathcal{HB}}
+\newcommand{\THB}{\mathcal{THB}}
+\newcommand{\THH}{\texttt{TH}}
+
+\newcommand{\argmin}{\mathopen{}\operatorname*{arg\,min}}
+\newcommand{\argmax}{\mathopen{}\operatorname*{arg\,max}}
+
+
+\title[Active Learning and Covering Problems with Precedence]{Active Learning and Covering Problems with Precedence}
+\usepackage{times}
+% Use \Name{Author Name} to specify the name.
+% If the surname contains spaces, enclose the surname
+% in braces, e.g. \Name{John {Smith Jones}} similarly
+% if the name has a "von" part, e.g \Name{Jane {de Winter}}.
+% If the first letter in the forenames is a diacritic
+% enclose the diacritic in braces, e.g. \Name{{\'E}louise Smith}
+
+% Two authors with the same address
+% \coltauthor{\Name{Author Name1} \Email{abc@sample.com}\and
+%  \Name{Author Name2} \Email{xyz@sample.com}\\
+%  \addr Address}
+
+% Three or more authors with the same address:
+% \coltauthor{\Name{Author Name1} \Email{an1@sample.com}\\
+%  \Name{Author Name2} \Email{an2@sample.com}\\
+%  \Name{Author Name3} \Email{an3@sample.com}\\
+%  \addr Address}
+
+% Authors with different addresses:
+\coltauthor{%
+ \Name{Michał Szyfelbein} \Email{abc@sample.com}\\
+ \addr Address 1
+ \AND
+ \Name{Dariusz Dereniowski} \Email{xyz@sample.com}\\
+ \addr Address 2%
+ \AND
+ \Name{Tytus Pikies} \Email{xyz@sample.com}\\
+ \addr Address 3%
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}%
+  In the Bayesian Active Learning a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
+
+  In the covering problems, we are given a set of items and a collection of subsets  that cover these items. The objective is to select a sequence of tests that covers all items (again in worst or average case).
+
+  For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
+  This paper explores the connection of active learning and covering problems under such constraints. 
+  
+  We show that given any $\br{O\br{1}, \alpha}$-approximation ratio for the precedence constrained set cover problem, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the worst case active learning problem with precedence constraints, where $n$ is the number of hypothesis. Similarly for the average case version, we prove that given any $O\br{\beta}$-approximation ratio for the precedence constrained min-sum set cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the average case active learning problem with precedence constraints. Finally, we provide several approximation algorithms for the set cover and min-sum set cover problems with precedence constraints.
+\end{abstract}
+
+\begin{keywords}%
+  Bayesian active learning, Set cover, Precedence constraints, Approximation Algorithms, Decision Trees%
+\end{keywords}
+
+\section{Introduction}
+
+This is where the content of your paper goes.
+\begin{itemize}
+  \item Limit the main text (not counting references and appendices) to 12 PMLR-formatted pages, using this template. Please add any additional appendix to the same file after references - there is no page limit for the appendix.
+  \item Include, either in the main text or the appendices, \emph{all} details, proofs and derivations required to substantiate the results.
+  \item The contribution, novelty and significance of submissions will be judged primarily based on
+\textit{the main text of 12 pages}. Thus, include enough details, and overview of key arguments, 
+to convince the reviewers of the validity of result statements, and to ease parsing of technical material in the appendix.
+  \item Use the \textbackslash documentclass[anon,12pt]\{colt2026\} option during submission process -- this automatically hides the author names listed under \textbackslash coltauthor. Submissions should NOT include author names or other identifying information in the main text or appendix. To the extent possible, you should avoid including directly identifying information in the text. You should still include all relevant references, discussion, and scientific content, even if this might provide significant hints as to the author identity. But you should generally refer to your own prior work in third person. Do not include acknowledgments in the submission. They can be added in the camera-ready version of accepted papers. 
+  
+  Please note that while submissions must be anonymized, and author names are withheld from reviewers, they are known to the area chair overseeing the paper’s review.  The assigned area chair is allowed to reveal author names to a reviewer during the rebuttal period, upon the reviewer’s request, if they deem such information is needed in ensuring a proper review.  
+  \item Use \textbackslash documentclass[final,12pt]\{colt2026\} only during camera-ready submission.
+\end{itemize}
+
+
+
+% Acknowledgments---Will not appear in anonymized version
+\acks{We thank a bunch of people and funding agency.}
+
+\bibliography{yourbibfile}
+
+\appendix
+
+% \crefalias{section}{appendix} % uncomment if you are using cleveref
+
+\section{My Proof of Theorem 1}
+
+This is a boring technical proof.
+
+\section{My Proof of Theorem 2}
+
+This is a complete version of a proof sketched in the main text.
+
+\end{document}
