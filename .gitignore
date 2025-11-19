@@ -34,7 +34,6 @@
 *.pdfsync
 
 # Build directories
-*.pdf
 build/
 out/
 
