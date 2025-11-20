@@ -1,0 +1,31 @@
+\begin{tikzpicture}[
+    node distance=2.5cm and 3cm,
+    problem/.style={rectangle, draw, very thick, minimum width=2.2cm, minimum height=1cm, align=center, font=\small},
+    arrow/.style={->, very thick}
+]
+
+% Third row (define first for positioning)
+\node[problem] (pcmssc) {PCMSSC};
+\node[problem, right=3cm of pcmssc] (pcsc) {PCSC};
+
+% Second row (above pcsc)
+\node[problem, above right=0.7cm and 2cm of pcsc] (gst) {GST};
+
+% Top row (above gst)
+\node[problem, above left=0.6cm and 1.5cm of gst] (mdpcs) {MDPCS};
+
+% Bottom row
+\node[problem, below=0.6cm of pcmssc] (pcacal) {PCACAL};
+\node[problem, below=0.6cm of pcsc] (pcwcal) {PCWCAL};
+\node[problem, right=3cm of pcwcal] (pctc) {PCTC};
+
+% Arrows
+\draw[arrow] (mdpcs) -- (gst);
+\draw[arrow] (mdpcs) -- (pcsc);
+\draw[arrow] (mdpcs) -- (pcmssc);
+\draw[arrow] (gst) -- (pcsc);
+\draw[arrow] (pcsc) -- (pctc);
+\draw[arrow] (pcsc) -- (pcwcal);
+\draw[arrow] (pcmssc) -- (pcacal);
+
+\end{tikzpicture}

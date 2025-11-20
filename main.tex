@@ -4,6 +4,16 @@
 % The following packages will be automatically loaded:
 % amsmath, amssymb, natbib, graphicx, url, algorithm2e
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usepackage{caption}
+
+% Configure algorithm2e style
+\SetAlFnt{\small}
+\SetAlCapFnt{\normalsize}
+\SetAlCapNameFnt{\normalsize}
+\SetNlSty{textbf}{}{}
+
 \newcommand{\br}[1]{\mathopen{}\left( #1 \right)}
 \newcommand{\brc}[1]{\mathopen{}\left\{ #1 \right\}}
 \newcommand{\spr}[1]{\mathopen{}\left| #1 \right|}
@@ -80,29 +90,17 @@
   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
   This paper explores the connection of active learning and covering problems under such constraints. 
   
-  We show that given any $\br{O\br{1}, \alpha}$-approximation ratio for the precedence constrained set cover problem, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the worst case active learning problem with precedence constraints, where $n$ is the number of hypothesis. Similarly for the average case version, we prove that given any $O\br{\beta}$-approximation ratio for the precedence constrained min-sum set cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the average case active learning problem with precedence constraints. Finally, we provide several approximation algorithms for the set cover and min-sum set cover problems with precedence constraints.
+  We show that given any bicriteria $\br{O\br{1}, \alpha}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Active Learning with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $O\br{\beta}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the Average Case Active Learning with Precedence Constraints. Finally, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints.
 \end{abstract}
 
 \begin{keywords}%
   Bayesian active learning, Set cover, Precedence constraints, Approximation Algorithms, Decision Trees%
 \end{keywords}
 
-\section{Introduction}
-
-This is where the content of your paper goes.
-\begin{itemize}
-  \item Limit the main text (not counting references and appendices) to 12 PMLR-formatted pages, using this template. Please add any additional appendix to the same file after references - there is no page limit for the appendix.
-  \item Include, either in the main text or the appendices, \emph{all} details, proofs and derivations required to substantiate the results.
-  \item The contribution, novelty and significance of submissions will be judged primarily based on
-\textit{the main text of 12 pages}. Thus, include enough details, and overview of key arguments, 
-to convince the reviewers of the validity of result statements, and to ease parsing of technical material in the appendix.
-  \item Use the \textbackslash documentclass[anon,12pt]\{colt2026\} option during submission process -- this automatically hides the author names listed under \textbackslash coltauthor. Submissions should NOT include author names or other identifying information in the main text or appendix. To the extent possible, you should avoid including directly identifying information in the text. You should still include all relevant references, discussion, and scientific content, even if this might provide significant hints as to the author identity. But you should generally refer to your own prior work in third person. Do not include acknowledgments in the submission. They can be added in the camera-ready version of accepted papers. 
-  
-  Please note that while submissions must be anonymized, and author names are withheld from reviewers, they are known to the area chair overseeing the paper’s review.  The assigned area chair is allowed to reveal author names to a reviewer during the rebuttal period, upon the reviewer’s request, if they deem such information is needed in ensuring a proper review.  
-  \item Use \textbackslash documentclass[final,12pt]\{colt2026\} only during camera-ready submission.
-\end{itemize}
-
-
+\include{sections/introduction}
+\include{sections/preliminaries}
+\include{sections/approximating_learning}
+\include{sections/set_covering_with_constrainst}
 
 % Acknowledgments---Will not appear in anonymized version
 \acks{We thank a bunch of people and funding agency.}
