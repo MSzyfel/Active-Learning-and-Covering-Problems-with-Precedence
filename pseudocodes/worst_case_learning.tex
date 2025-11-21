@@ -10,7 +10,7 @@ $\mathcal{U} \gets \brc{(h,j) \mid h,j \in \mathcal{H}}$\;
 \ForEach{$t \in \mathcal{T}$}{
 Mark $t$ as covering $(h,j) \in \mathcal{U}$ if $t$ distinguishes $h$ and $j$\;
 }
-$S \gets$ Run the $\alpha$-approximation algorithm for PCSC on instance $(\mathcal{U},\mathcal{T},\mathcal{F})$ with $K = n/2$\;
+$S \gets$ Run the $\alpha$-approximation algorithm for PCSC on instance $(\mathcal{U},\mathcal{T},\mathcal{F})$ with $K = \binom{|\mathcal{H}|}{2}/2$\;
 
 $D \gets D_S\gets$ any decision tree built on tests from $S$ closed under $\mathcal{F}$\;
 
