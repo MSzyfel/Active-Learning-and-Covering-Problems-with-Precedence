@@ -1,10 +1,61 @@
 \section{Active Learning via Covering Problems}
+
+We begin with the following folklore lemma concerning both worst and average case learning.
+\begin{lemma}\label{lemma:subspace_opt}
+    Let $I=\br{\mathcal{H}, \mathcal{T},\mathcal{F}}$ be any PCAL instance. Let $\mathcal{H}'\subseteq \mathcal{H}$. Then $\OPT\br{\mathcal{H}', \mathcal{T}, \mathcal{F}} \leq \OPT\br{I}$.
+\end{lemma}
 \subsection{Worst Case}
+
+\begin{definition}[Pairsep]
+    Let $D$ be any decision tree for the PCWCAL problem instance $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $P_D$ called \emph{pairsep} as follows. Initially, $P_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\binom{\spr{\mathcal{H}'}}{2} > \binom{\spr{\mathcal{H}}}{2}/2$, we append to $P_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COST\br{D}=\OPT\br{\mathcal{I}}$, then we denote $P^*\br{\mathcal{I}} = P_D$ (ties broken arbitrarily).
+\end{definition}
+
+It should be remarked that $P_D$ is well-defined, as each test in $P_D$ can have at most one child associated with more than half of the pairs hypotheses in $\mathcal{H}'$. Since $P_D$ is a subpath of $D$, we also have the following simple observation.
+
+\begin{observation}
+    Let $I$ be any instance of PCWCAL. Then $\spr{P^*\br{I}} \leq \OPT\br{I}$.
+\end{observation}
+
+This allows to use $\spr{P^*\br{I}}$ as a lower bound on $\OPT\br{I}$ in the analysis of the approximation algorithm for PCWCAL. We have the following lemma:
+\begin{lemma}\label{lemma:pairsep_cost}
+    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCWCAL instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\mathcal{U}, \mathcal{T}, \mathcal{F}}$ with $K=n/2$, where $\mathcal{U} = \brc{(h,j) \mid h,j \in \mathcal{H}}$ and a test $t$ covers $(h,j)$ if it distinguishes $h$ and $j$. Then, $\spr{S^*} \leq \spr{P^*\br{I}}$.
+\end{lemma}
+    \begin{proof}
+        We show that $P^*\br{I}$ is a feasible solution for the PCSC instance $\br{\mathcal{U}, \mathcal{T}, \mathcal{F}}$ with $K=n/2$. By definition, for every $\mathcal{H'} \in \mathcal{H} - P^*\br{I}$, we have $\binom{\spr{\mathcal{H}'}}{2} \leq \binom{\spr{\mathcal{H}}}{2}/2$. Therefore the number of pairs covered by tests in $P^*\br{I}$ is at least:
+        $$
+        \binom{\spr{\mathcal{H}}}{2} - \sum_{\mathcal{H}' \in \mathcal{H} - P^*\br{I}}\binom{\spr{\mathcal{H}'}}{2} \geq \binom{\spr{\mathcal{H}}}{2} - \frac{\binom{\spr{\mathcal{H}}}{2}}{2} = \frac{\binom{\spr{\mathcal{H}}}{2}}{2}.
+        $$
+        Therefore, by the optimality of $S^*$, we have $\spr{S^*} \leq \spr{P^*\br{I}}$ as required.
+    \end{proof}
+
 \begin{theorem}
-    If there is an $\br{O\br{1}, \alpha}$-bicriteria approximation algorithm for PCSC then there is an
-$O\br{\alpha \cdot \log n}$-approximation algorithm for PCWCAL.
+    If there is an $\br{\gamma, \alpha}$-bicriteria approximation algorithm for PCSC then there is an
+$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for PCWCAL. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
+\begin{proof}
 \input{pseudocodes/worst_case_learning.tex}
+The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{lemma:pairsep_cost}:
+    \begin{observation}
+        Let $D_S$ be the decision tree built on tests from $S$ closed under $\mathcal{F}$. Then, $\COST\br{D_S} \leq \alpha \cdot \spr{P^*\br{I}}$.
+    \end{observation}
+    We are now ready to prove the theorem.
+    \begin{lemma}
+        Let $D$ be the decision tree returned by \textsc{WorstDecisionTree} on input $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then, $\COST\br{D} \leq \frac{2\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log n \cdot \OPT\br{I}$.
+    \end{lemma}
+    \begin{proof}
+        We prove the lemma by induction on $p=\binom{\spr{\mathcal{H}}}{2}$. The base case when $n=1$ and $p=2$ is trivial since there are no pairs to cover. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COST\br{D'} \leq \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $I'$. We have that:
+        $$
+        \begin{align*}
+            \COST\br{D} \leq & \COST\br{D_S} + \max_{\mathcal{H}' \in \mathcal{H} - S} \COST\br{D'} \\
+            \leq & \alpha \cdot \spr{S^*} + \max_{\mathcal{H}' \in \mathcal{H} - S} \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'} \\
+            \leq & \alpha \cdot \spr{P^*\br{I}} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \br{\br{\frac{2\gamma-1}{2\gamma}}\cdot \binom{n}{2}} \cdot \OPT\br{I} \\
+            = & \alpha \cdot \OPT\br{I} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \br{\log \binom{n}{2}} \cdot \OPT\br{I} - \alpha\cdot \OPT\br{I} \\
+            = & \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n}{2} \cdot \OPT\br{I} \\
+        \end{align*}
+        $$
+        Since $\log \binom{n}{2} \leq 2 \log n$, the lemma follows.
+    \end{proof}
+\end{proof}
 \subsection{Average Case}
 \begin{theorem}
     If there is a $\beta$- approximation algorithm for PCMSSC then there is an

@@ -12,7 +12,7 @@ Mark $t$ as covering $(h,j) \in \mathcal{U}$ if $t$ distinguishes $h$ and $j$\;
 }
 $S \gets$ Run the $\alpha$-approximation algorithm for PCSC on instance $(\mathcal{U},\mathcal{T},\mathcal{F})$ with $K = n/2$\;
 
-$D \gets$ any decision tree built on tests from $S$ closed under $\mathcal{F}$\;
+$D \gets D_S\gets$ any decision tree built on tests from $S$ closed under $\mathcal{F}$\;
 
 \ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
 $D' \gets$ \textsc{WorstDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$\;

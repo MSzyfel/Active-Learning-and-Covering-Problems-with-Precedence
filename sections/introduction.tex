@@ -3,9 +3,20 @@
 Consider following problems:
 \begin{itemize}
   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\mathcal{T}$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
-  \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers all items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
+  \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
 \end{itemize}
 
+\begin{figure}[h]
+\centering
+\input{figures/pcal_example}
+\caption{Example of a PCAL instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\input{figures/pccp_example}
+\caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+\end{figure}
 
 \subsection{Our results and techniques}
 
@@ -26,14 +37,12 @@ outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
 general & $O(\sqrt{n}\log n)$* & $O(\sqrt{n})$ & $O(\sqrt{n}\log n)$* & $O(\sqrt{n}\log n)$* \\
 \hline
 \end{tabular}
-\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results)}
-\label{tab:results}
+\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results)}\label{tab:results}
 \end{table}
 
 \begin{figure}[h]
 \centering
 \input{figures/reduction_diagram}
-\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}
-\label{fig:reductions}
+\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
 \end{figure}
 

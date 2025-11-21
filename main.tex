@@ -4,6 +4,7 @@
 % The following packages will be automatically loaded:
 % amsmath, amssymb, natbib, graphicx, url, algorithm2e
 
+\usepackage{indentfirst}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning}
 \usepackage{caption}
@@ -45,6 +46,9 @@
 \newcommand{\argmin}{\mathopen{}\operatorname*{arg\,min}}
 \newcommand{\argmax}{\mathopen{}\operatorname*{arg\,max}}
 
+% Theorem environments
+\newtheorem{observation}{Observation}
+
 
 \title[Active Learning and Covering Problems with Precedence]{Active Learning and Covering Problems with Precedence}
 \usepackage{times}
@@ -83,9 +87,10 @@
 \maketitle
 
 \begin{abstract}%
+
   In the Bayesian Active Learning a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
 
-  In the covering problems, we are given a set of items and a collection of subsets  that cover these items. The objective is to select a sequence of tests that covers all items which again, minimizing the worst or average covering cost.
+  In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
 
   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
   This paper explores the connection of active learning and covering problems under such constraints. 
@@ -101,6 +106,8 @@
 \include{sections/preliminaries}
 \include{sections/approximating_learning}
 \include{sections/set_covering_with_constrainst}
+\include{sections/hardness}
+\include{sections/conclusions}
 
 % Acknowledgments---Will not appear in anonymized version
 \acks{We thank a bunch of people and funding agency.}
