@@ -1,20 +1,21 @@
 \section{Preliminaries}
 \begin{definition}[Precedence constrained set cover (PCSC)]
-    
+Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
 \end{definition}
 \begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
-    
+Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
 \end{definition}
 \begin{definition}[Precedence constrained test cover (PCTC)]
-    
+Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
 \end{definition}
-\begin{definition}[Precedence constrained worst case active learning (PCWCAL)]  
+\begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
+Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the worst-case depth of the tree.
 \end{definition}
 \begin{definition}[Precedence constrained average case active learning (PCACAL)]
-    
+Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, and a probability distribution over $\mathcal{H}$, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
 \end{definition}
 \begin{definition}[Group Steiner Tree (GST)]
-    
+Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
 \end{definition}
 
 For a subfamily $\mathcal{A} \subseteq \mathcal{F}$, we define the coverage as:
@@ -33,7 +34,7 @@ The density $\Delta$ of a nonempty subfamily $\mathcal{A}$ on subset $X$ is:
 For convenience, we define $\Delta\br{\emptyset, X} < 0$.
 
 \begin{definition}[Max-Density Precedence-Closed Subfamily (MDPCS)]
-Given a family of sets $\mathcal{G}$, a precedence relation $\prec$, and a set of items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the MDPCS problem asks to find a precedence-closed subfamily $\mathcal{A} \subseteq \mathcal{G}$ that maximizes $\Delta\br{\mathcal{A}, R}$.
+Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\prec$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the MDPCS problem asks to find a precedence-closed subfamily $\mathcal{A} \subseteq \mathcal{G}$ that maximizes $\Delta\br{\mathcal{A}, R}$.
 \end{definition}
 
 
