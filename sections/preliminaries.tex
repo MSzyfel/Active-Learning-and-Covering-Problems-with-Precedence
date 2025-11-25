@@ -16,6 +16,25 @@
 \begin{definition}[Group Steiner Tree (GST)]
     
 \end{definition}
+
+For a subfamily $\mathcal{A} \subseteq \mathcal{F}$, we define the coverage as:
+\[
+\cov\br{\mathcal{A}} \equiv \bigcup_{A \in \mathcal{A}} A
+\]
+For a subset $X$ of the universe, the coverage on $X$ is:
+\[
+\cov\br{\mathcal{A}, X} = \cov\br{\mathcal{A}} \cap X
+\]
+
+The density $\Delta$ of a nonempty subfamily $\mathcal{A}$ on subset $X$ is:
+\[
+\Delta\br{\mathcal{A}, X} \equiv \frac{\spr{\cov\br{\mathcal{A}, X}}}{\spr{\mathcal{A}}}
+\]
+For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+
 \begin{definition}[Max-Density Precedence-Closed Subfamily (MDPCS)]
-    
+Given a family of sets $\mathcal{G}$, a precedence relation $\prec$, and a set of items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the MDPCS problem asks to find a precedence-closed subfamily $\mathcal{A} \subseteq \mathcal{G}$ that maximizes $\Delta\br{\mathcal{A}, R}$.
 \end{definition}
+
+
+For $S \in \mathcal{G}$, let $P[S]$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$ (i.e., the ancestors of $S$ including $S$ itself).

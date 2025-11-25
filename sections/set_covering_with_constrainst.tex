@@ -1,1 +1,60 @@
 \section{Set covering with constraints}
+
+\subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
+
+The key to solce PCSC and PCMSSC is to solve the MDPCS problem. An approximation algorithm for MDPCS can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{InsertCitHere}, the following greedy algorithm achieves an $O\br{\sqrt{m}}$-approximation for MDPCS: 
+
+\input{pseudocodes/mdpcs_greedy.tex}
+
+Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{P[S], R}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. We show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation .
+
+ For each $S \in \mathcal{G}$, let $p(S) = \spr{P[S]}$ and $c(S, R) = \spr{\cov\br{P[S], R}}$. 
+\begin{theorem}
+Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
+$
+p(S) \leq C \cdot c(S)^\epsilon
+$ ($\epsilon$-shallow ancestry).
+Then MDPCS-Greedy provides an $O(n^\epsilon)$-approximation.
+\end{theorem}
+
+\begin{proof}
+ Let $\mathcal{A}^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+\begin{enumerate}
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\mathcal{A}, R} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\mathcal{A}^*, R} \leq n$. Therefore:
+$$
+\frac{\Delta\br{\mathcal{A}^*, R}}{\Delta\br{\mathcal{A}, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+$$
+    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+c(S) \leq \delta \cdot C \cdot c(S)^\epsilon
+$. Rearraning this inequality, we get that $
+c(S) \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+$. We have that:
+\[
+\spr{\cov\br{\mathcal{A}^*}} \leq \sum_{j=1}^{k} c(S_j) \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+Therefore:
+\[
+\Delta\br{\mathcal{A}^*, R} = \frac{\spr{\cov\br{\mathcal{A}^*, R}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+By the greedy choice, $\Delta\br{\mathcal{A}, R} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+\[
+\frac{\Delta\br{\mathcal{A}^*, R}}{\Delta\br{\mathcal{A}, R}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\]
+\end{enumerate}
+Since $C$ is constant, the theorem follows.
+\end{proof}
+\subsection{Precedence constrained set cover}
+We show the following:
+
+\begin{theorem}
+    If there exists an $\gamma$ approximation algorithm for the MDPCS problem, then there exists an $\br{H_K+1} \cdot \gamma$ - approximate algorithm for the PCSC problem.
+
+\end{theorem}
+\begin{proof}
+    \input{pseudocodes/set_cover.tex}
+    % \begin{lemma}
+    %     Let $u_1,\dots, u_p$ be the ele
+    % \end{lemma}
+\end{proof}

@@ -1,0 +1,18 @@
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+\caption{The greedy algorithm for MDPCS}
+\label{MDPCSalgorithm}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{\textsc{MDPCS-Greedy}$(\mathcal{G}, \prec, R)$}{
+$\mathcal{A} \gets \mathcal{G}$\;
+
+\ForEach{$S \in \mathcal{G}$}{
+\If{$\Delta\br{P[S], R} > \Delta\br{\mathcal{A}, R}$}{
+$\mathcal{A} \gets P[S]$\;
+}
+}
+\Return $\mathcal{A}$\;
+}
+}
+\end{algorithm}
