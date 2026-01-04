@@ -1,5 +1,44 @@
 \section{Introduction}
 
+\DD{pomysl na intro: zdefiniowac dwa glowne problemy: learning + set cover; zapowiedziec, ze sa powiazane ze soba i celem papieru jest przestudiowanie tych zaleznosci plus usyskanie konkretnych wynikow; pytanie/do sprawdzenia: czy ktores wyniki przypadkiem poprawiaja lub sa tozsame z najlepszymi znanymi bez precedensow; ewentualne inna ``marketingowe'' uwagi.}
+
+Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an adaptive learning process.
+Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x.y\in t$ and $\bigcup t=\cH$.
+As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
+That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
+Each subsequent test is selected by \questioner by taking into acocunt replies from all test to date.
+Without formally stating an optimization criterion we refer to  the above as the \emph{Adaptive Learing Process} ($\ProblemAL$).
+(Another widely used name in the literature is the decision tree construction).
+The goal for the \questioner is to output $\target$.
+
+Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
+This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecesors had to be performed previously.
+Hence we have the \emph{Worst Case Adaptive Learing with Precedences} ($\ProblemWCALP$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
+Similarly, in the \emph{Average Case Adaptive Learing with Precedences} ($\ProblemACALP$) the optimization criterion changes to minimizing the number of queries done on average.
+
+
+In this work we study connections between adaptive lerning with precedences and the covering problems defined as follows.
+We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup\cS=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
+We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup\cC}\geq k$.
+We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
+In the \emph{Precedence Constrained Set Cover} ($\ProblemPCSC$) the goal is to minimize $\spr{\cC}$.
+A permutation $C_1,\ldots,C_k)$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+The \emph{coverage time} of a $x\in\bigcup\cC$ is the minimum index $i$ such that $x\in C_i$.
+In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_k)$ that minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
+
+
+\subsection{Our contribution}
+
+\DD{Pomysl na rozdzial:
+\begin{itemize}
+ \item zajawka, że wprpwadzimy nowe inne problemy (raz - jak pomocnicze; dwa - jako dopelnienie obrazu roznych rzeczy z litearatury)
+ \item zdefiniowac pozostałe problemy z ``diagramu'' zaleznosci miedzy nimi
+ \item diagram
+ \item najwazniejsze twierdzenia
+ \item tabelka na podsumowanie
+\end{itemize}
+}
+
 Consider following problems:
 \begin{itemize}
   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\mathcal{T}$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
