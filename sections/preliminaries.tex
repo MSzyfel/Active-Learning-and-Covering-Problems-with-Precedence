@@ -8,12 +8,32 @@ Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ s
 \begin{definition}[Precedence constrained test cover (PCTC)]
 Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
 \end{definition}
+
+In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
+
+The goal is to design a \textit{strategy} of learning which is an adaptive algorithm, that based on the previous responses provides the searcher with the next test to be performed. We represent this strategy as a rooted tree called a \textit{decision tree} $D$, where each internal node represents a test to be performed and each leaf represents a hypothesis. We demand that each edge outgoing from the root $r$ of $D$ is associated with a unique response to a test $r$ and that the same holds for all decision subtrees of $D-r$ (which are not leafs). It should be remarked that it is possible for a test to appear multiple times in the decision tree. Therefore, by $\mathcal{T}_D$ we denote subset of $\mathcal{T}$ that appear in decision tree $D$ and by $T_D$ we denote the set of inner nodes of $D$, so that each usage of a test in $D$ corresponds to a unique element of $T_D$.
+
+Let $T_{D, h}$ denote the sequence of tests performed when the hidden hypothesis is $h$ and the learner follows the strategy represented by decision tree $D$. The cost of identifying hypothesis $h$ using decision tree $D$ is defined as $\COST\br{D, h} = \spr{T_{D, h}}$. We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \mathcal{H}} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \mathcal{H}} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\mathcal{H}}$).
+
 \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
 Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the worst-case depth of the tree.
 \end{definition}
 \begin{definition}[Precedence constrained average case active learning (PCACAL)]
-Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, and a probability distribution over $\mathcal{H}$, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
+Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, 
+% and a probability distribution over $\mathcal{H}$, 
+construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
 \end{definition}
+
+Let $\mathcal{H}_t$ denote the set of hypotheses that are not yet distinguished by the tests selected before test $t\in T_D$ in the decision tree. Then we immediately obtain the following simple observation:
+\begin{observation}
+    Let $D$ be any decision tree for $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then we have that:
+    $$
+    \COSTA\br{D} = \sum_{t \in T_D} \spr{\mathcal{H}_t}
+    $$
+\end{observation}
+
+
+
 \begin{definition}[Group Steiner Tree (GST)]
 Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
 \end{definition}
@@ -39,3 +59,4 @@ Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\prec$, and a s
 
 
 For $S \in \mathcal{G}$, let $P[S]$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$ (i.e., the ancestors of $S$ including $S$ itself).
+

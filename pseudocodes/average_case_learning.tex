@@ -3,7 +3,7 @@
 \DontPrintSemicolon
 \LinesNumbered
 \caption{The $O(\beta\cdot\log n)$-approximation algorithm for the PCACAL}
-\label{averageDecisionTree}
+\label{alg:averageDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{\textsc{AverageDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
 
@@ -16,7 +16,7 @@ Set $t$ to cover $u\in \mathcal{H}$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \
 }
 $S \gets$ Run the $\beta$-approximation algorithm for PCMSSC on instance $(\mathcal{H}, \mathcal{T}, \mathcal{F},f)$ with $f=1/4$.
 
-$D \gets D_S \gets $ any decision tree built on tests from $S$ closed under $\mathcal{F}$.
+$D \gets D_S \gets $ decision tree which consists of sequence of tests $S$.
 
 \ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
 $D' \gets$ \textsc{AverageDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.

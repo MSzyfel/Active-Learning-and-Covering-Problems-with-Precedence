@@ -2,7 +2,7 @@
 \DontPrintSemicolon
 \LinesNumbered
 \caption{The $O(\alpha\cdot\log n)$-approximation algorithm for the PCWCAL}
-\label{createDecisionTree}
+\label{alg:worstDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{\textsc{WorstDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
 \If{$\spr{\mathcal{H}} = 1$}{
@@ -13,7 +13,7 @@ Set $t$ to cover $u\in \mathcal{H}$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \
 }
 $S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $(\mathcal{H}, \mathcal{T}, \mathcal{F}, f)$ with $f=1/4$.
 
-$D \gets D_S \gets $ any decision tree built on tests from $S$ closed under $\mathcal{F}$.
+$D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\mathcal{F}$.
 
 \ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
 $D' \gets$ \textsc{WorstDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
