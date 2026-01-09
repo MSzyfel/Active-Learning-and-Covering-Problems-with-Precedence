@@ -5,20 +5,21 @@
 \label{createDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{\textsc{WorstDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
-$\mathcal{U} \gets \brc{(h,j) \mid h,j \in \mathcal{H}}$\;
-
-\ForEach{$t \in \mathcal{T}$}{
-Mark $t$ as covering $(h,j) \in \mathcal{U}$ if $t$ distinguishes $h$ and $j$\;
+\If{$\spr{\mathcal{H}} = 1$}{
+    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$.
 }
-$S \gets$ Run the $\alpha$-approximation algorithm for PCSC on instance $(\mathcal{U},\mathcal{T},\mathcal{F})$ with $K = \spr{\mathcal{U}}/2$\;
+\ForEach{$t \in \mathcal{T}$}{
+Set $t$ to cover $u\in \mathcal{H}$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\mathcal{H}}$.
+}
+$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $(\mathcal{H}, \mathcal{T}, \mathcal{F}, f)$ with $f=1/4$.
 
-$D \gets D_S\gets$ any decision tree built on tests from $S$ closed under $\mathcal{F}$\;
+$D \gets D_S \gets $ any decision tree built on tests from $S$ closed under $\mathcal{F}$.
 
 \ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
-$D' \gets$ \textsc{WorstDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$\;
+$D' \gets$ \textsc{WorstDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
 
-Attach $D'$ to the leaf of $D$ corresponding to $\mathcal{H}'$\;
+Attach $D'$ to the leaf of $D$ corresponding to $\mathcal{H}'$.
 }
-\Return $D$\;
+\Return $D$.
 }
 \end{algorithm}
