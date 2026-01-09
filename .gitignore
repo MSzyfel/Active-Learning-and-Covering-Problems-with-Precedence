@@ -70,3 +70,6 @@ __pycache__/
 venv/
 env/
 ENV/
+
+#Remove produced file
+*.pdf
