@@ -32,6 +32,18 @@ Let $\mathcal{H}_t$ denote the set of hypotheses that are not yet distinguished 
     $$
 \end{observation}
 
+We will also make use of the following folklore lemmas which are due to the fact that any decision tree for $I$ can be restricted to a decision tree for each subproblem $\br{\mathcal{H}_i, \mathcal{T}, \mathcal{F}}$ without increasing the cost:
+
+\begin{lemma}\label{lemma:subspace_opt}
+    Let $I=\br{\mathcal{H}, \mathcal{T},\mathcal{F}}$ be any PCAL instance. Let $\mathcal{H}'\subseteq \mathcal{H}$. Then $\OPT\br{\mathcal{H}', \mathcal{T}, \mathcal{F}} \leq \OPT\br{I}$.
+\end{lemma}
+\begin{lemma}\label{lemma:subinstances_avg}
+    Let $I=(\mathcal{H}, \mathcal{T}, \mathcal{F})$ be an instance of $PCACAL$. Let $\mathcal{H}_1,\dots,\mathcal{H}_t\subseteq \mathcal{H}$ such that $\bigcup_{i=1}^t \mathcal{H}_i \subseteq \mathcal{H}$ and for any $i\neq j$, $\mathcal{H}_i\cap \mathcal{H}_j = \emptyset$. Then we have that:
+    $$
+    \OPTA\br{I} \geq \sum_{i=1}^t \OPTA\br{\br{\mathcal{H}_i, \mathcal{T}, \mathcal{F}}}
+    $$
+\end{lemma}
+
 
 
 \begin{definition}[Group Steiner Tree (GST)]
