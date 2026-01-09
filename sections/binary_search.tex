@@ -1,4 +1,36 @@
-\section{Binary search with precedence}
+\section{Warm up: Binary search with precedence}
 In this section, we consider the special case of the PCWCAL and PCACAL where the instance $I = (\mathcal{H}, \mathcal{T}, \mathcal{F})$ is an instance of the binary search problem with precedence constraints. In this setup we are given a linearly ordered set of $n$ elements $\mathcal{H} = \{h_1, h_2, \ldots, h_n\}$ with $h_1 \prec h_2 \prec \ldots \prec h_n$ and a set of tests $t_{i,j}\in \mathcal{T}$ corresponding to performing a comparison operation informing the learner whether the target element is less than or equal to $h_j$ or greater than $h_j$. This problem is NP-hard (see Section \ref{section}) however it is possible to derive an $O\br{\log n}$-approximation algorithm for both the PCWCAL and PCACAL.
 
 The algorithm for a worst case is simple. We use the equivalence between binary searching in an ordered set and the edge ranking coloring of a path. An edge ranking of a path is a coloring of its edges such that any path between two edges of the same color contains an edge of a lower color \cite{citation}. Intuitevely, the color corresponds to the level of the decision tree where the test corresponding to the edge is performed. Let the input path be $P$. For any test $t\in\mathcal{T}$ define its \emph{depth} as $d\br{t}=\max_{\tau \in \mathcal{T}, P_{\tau, t}\in F}\brc{d\br{\tau, t}}+1$. Let the height of $\mathcal{F}$ be defined as $h\br{\mathcal{F}}=\max_{t\in \mathcal{T}}\brc{d\br{t}}$. The algorithm starts by partitioning $\mathcal{T}$ into $h\br{\mathcal{F}}$ sets $\mathcal{T}_1, \mathcal{T}_2, \ldots, \mathcal{T}_{h\br{\mathcal{F}}}$ such that for any $t\in \mathcal{T}_i$, $d\br{t}=i$. Then, the algorithm builds a decision tree processing layer one by one. Let $\mathcal{T}_i$ be such layer. We concatenate the (possibly disjoint) edges in $T_i$ into a path $P_i$. Then, we compute an optimal edge ranking coloring of $P_i$ using $\log n$ colors starting from color $\br{i-1}\cdot\log n$. Finally, we build a decision tree for the tests in $\mathcal{T}_i$ according to the edge ranking coloring. Observe that the resulting coloring is a valid edge ranking of $P$ and that each edge has a color greater than all its predecessors in $\mathcal{F}$. Thus, the precedence constraints are respected. The final decision tree $D$ is built recursively picking the root of the decision tree to be edge in $P$ with the smallest color. it is easy to see that $\COSTW\br{D, P}\leq h\br{\mathcal{F}}\cdot \log n$. Since the optimal decision tree has depth at least $h\br{\mathcal{F}}$, the algorithm is an $O\br{\log n}$-approximation.
+
+To obtain an algorithm for the average case, we use a different approach.
+A precedence constrained $1/2$-cut in a path is a subset of edges whose removal splits the path into subpaths of size at most $n/2$, such that the subset is precedence-closed. We wish to minimize the size of this set. We have the following observation:
+\begin{lemma}
+    Let $S^*$ be the optimal precedence constrained $1/2$-cut in a path $P=\angl{v_1,\dots, v_n}$. Then either $S^* = F[\brc{\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}}]$ or there exist edges $e_1, e_2$ such that $S^*=F[\brc{e_1, e_2}]$.
+\end{lemma}
+\begin{proof}
+    Observe that if $S^*$ contains $\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}$ then it is a $1/2$ cut. In such case we are done, since minimal precedence closed subset of edges containing $\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}$ is $F[\brc{\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}}]$. Otherwise, let $e_1$ be the edge in $S^*$ closest to $v_1$ and $e_2$ be the edge in $S^*$ closest to $v_n$. Since $e_1$ and $e_2$ suffice to be a $1/2$-cut, the minimal precedence closed subset of edges with this property is $F[\brc{e_1, e_2}]$.
+\end{proof}
+
+Therefore one can easily compute such a cut in polynomial time by checking all possible candidates. We also have the following lemma relating the size of the optimal cut with the cost of the optimal decision tree:
+\begin{lemma}\label{lemma:cutcost}
+    Let $P$ be the path induced by the instance $I = (\mathcal{H}, \mathcal{T}, \mathcal{F})$ of the binary search problem with precedence constraints. Additionally, let $S^*\subseteq \mathcal{T}$ be the optimal precedence constrained $1/2$-cut in $P$. Then we have that $n\cdot\spr{S^*}/2\leq \OPTA\br{I}$.
+\end{lemma}
+\begin{proof}
+    Let $D^*$ be the optimal decision tree for $I$. Let $S_D$ be the set of all tests which appeared at least once in $D^*$ before the number of hypotheses consistent with previous responses dropped below $n/2$. Clearly, $S_D$ is a precedence-closed $1/2$-cut in $P$. Additionally, each test in $S_D$ contributes at least $n/2$ to the average cost of $D^*$. Thus, we have that $\COSTA\br{D^*}\geq n\cdot \spr{S_D}/2 \geq n\cdot \spr{S^*}/2$.
+\end{proof}
+
+The two lemmas above suggest a natural approach to finding a good strategy. Find the optimal precedence constrained $1/2$-cut $S^*$ in $P$ and use the tests in $S^*$ to build any precedence-respecting decision tree $D$ that splits the hypotheses into subproblems of size at most $n/2$. Then, recursively build decision trees for each subproblem and attach them to the leaves of $D$. It is easy to see that the resulting decision tree respects precedence constraints. We have the following theorem:
+\begin{theorem}
+    The above algorithm is an $O\br{\log n}$-approximation for the PCACAL in the case of binary search with precedence constraints.
+\end{theorem}
+\begin{proof}
+    Let $D$ be the decision tree built by the algorithm. We prove by induction on $n$ that $\frac{\COSTA\br{D}}{\OPTA\br{I}}\leq 2\log n$. The base case for $n=1$ is trivial since there is only one hypothesis and no tests are needed. For the inductive step, observe that the cost of $D$ can be upper bounded as follows:
+    \begin{align*}
+        \frac{\COSTA\br{D, P}}{\OPTA\br{I}} &\leq \frac{\spr{S^*}\cdot n + \sum_{P'\in P-S^*}\COSTA\br{D_{P'}, P'}}{\OPTA\br{I}} 
+        \\&\leq 2 + \frac{\sum_{P'\in P-S^*} 2\cdot \log\br{\frac{n}{2}}\cdot \OPT\br{I_{P'}}}{\sum_{P'\in P-S^*}\OPT\br{I_{P'}}} 
+        \\&=
+        2 + 2\log\br{\frac{n}{2}} = 2\log n.
+    \end{align*}
+    where the first inequality follows from the definition of average cost, the second inequality follows from the Lemma \ref{lemma:cutcost}, inductive hypothesis, the fact that each subproblem has size at most $n/2$ and Lemma \ref{lemma:subinstances_avg}. The claim follows.
+\end{proof}

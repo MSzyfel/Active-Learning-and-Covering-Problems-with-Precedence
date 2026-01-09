@@ -1,19 +1,22 @@
 \section{Active Learning via Covering Problems}
 
-We begin with the following folklore lemma concerning both worst and average case learning.
-\begin{lemma}\label{lemma:subspace_opt}
-    Let $I=\br{\mathcal{H}, \mathcal{T},\mathcal{F}}$ be any PCAL instance. Let $\mathcal{H}'\subseteq \mathcal{H}$. Then $\OPT\br{\mathcal{H}', \mathcal{T}, \mathcal{F}} \leq \OPT\br{I}$.
-\end{lemma}
-\subsection{Worst Case}
-
-\begin{definition}[Coversep]
-    Let $D$ be any decision tree for $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $P_D$ called \emph{coversep} as follows. Initially, $P_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\spr{\mathcal{H}'}> \spr{\mathcal{H}}/2$, we append to $P_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPTW\br{I}$, then we denote $P^*\br{I} = P_D$ (ties broken arbitrarily).
+To build our algorithm we will make use of the following definition:
+\begin{definition}[Sepcover]
+    Let $D$ be any decision tree for $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\spr{\mathcal{H}'}> \spr{\mathcal{H}}/2$, we append to $P_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPTW\br{I}$, then we denote $P^*\br{I} = P_D$ (ties broken arbitrarily).
 \end{definition}
 
-It should be remarked that $P_D$ is well-defined, as each test in $P_D$ can have at most one child associated with more than half of the hypotheses in $\mathcal{H}'$. Since $P_D$ is a subpath of $D$, we also have the following simple observation.
+It should be remarked that $P_D$ is well-defined, as each test in $P_D$ can have at most one child associated with more than half of the hypotheses in $\mathcal{H}'$. Since $P_D$ is a subpath of $D$, we also have the following simple observation. Figure \ref{fig:sepcover} illustrates the definition of sepcover.
+
+\begin{figure}[h]
+\centering
+\input{figures/sepcover.tex}
+\caption{Sepcover sequence in a decision tree}
+\label{fig:sepcover}
+\end{figure}
 
 We will say that a test in $P^*\br{I}$ \emph{sepcovers} an element $u \in \mathcal{H}$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\mathcal{H}'$ of size at most $\spr{\mathcal{H}}/2$.
 
+\subsection{Worst Case}
 \begin{observation}
     Let $I$ be any instance of PCWCAL. Then $\spr{P^*\br{I}} \leq \OPTW\br{I}$.
 \end{observation}
