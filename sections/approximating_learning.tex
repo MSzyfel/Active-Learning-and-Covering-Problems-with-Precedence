@@ -44,15 +44,13 @@ The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{le
     \end{lemma}
     \begin{proof}
         We prove the lemma by induction on $p=\binom{\spr{\mathcal{H}}}{2}$. The base case when $n=1$ and $p=2$ is trivial since there are no pairs to cover. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COST\br{D'} \leq \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $I'$. We have that:
-        $$
         \begin{align*}
             \COST\br{D} \leq & \COST\br{D_S} + \max_{\mathcal{H}' \in \mathcal{H} - S} \COST\br{D'} \\
             \leq & \alpha \cdot \spr{S^*} + \max_{\mathcal{H}' \in \mathcal{H} - S} \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'} \\
             \leq & \alpha \cdot \spr{P^*\br{I}} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \br{\br{\frac{2\gamma-1}{2\gamma}}\cdot \binom{n}{2}} \cdot \OPT\br{I} \\
             = & \alpha \cdot \OPT\br{I} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \br{\log \binom{n}{2}} \cdot \OPT\br{I} - \alpha\cdot \OPT\br{I} \\
-            = & \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n}{2} \cdot \OPT\br{I} \\
+            = & \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n}{2} \cdot \OPT\br{I}
         \end{align*}
-        $$
         Since $\log \binom{n}{2} \leq 2 \log n$, the lemma follows.
     \end{proof}
 \end{proof}
