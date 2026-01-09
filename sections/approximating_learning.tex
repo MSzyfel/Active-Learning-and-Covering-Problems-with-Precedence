@@ -6,26 +6,24 @@ We begin with the following folklore lemma concerning both worst and average cas
 \end{lemma}
 \subsection{Worst Case}
 
-\begin{definition}[Pairsep]
-    Let $D$ be any decision tree for the PCWCAL problem instance $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $P_D$ called \emph{pairsep} as follows. Initially, $P_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\binom{\spr{\mathcal{H}'}}{2} > \binom{\spr{\mathcal{H}}}{2}/2$, we append to $P_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COST\br{D}=\OPT\br{\mathcal{I}}$, then we denote $P^*\br{\mathcal{I}} = P_D$ (ties broken arbitrarily).
+\begin{definition}[Coversep]
+    Let $D$ be any decision tree for $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $P_D$ called \emph{coversep} as follows. Initially, $P_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\spr{\mathcal{H}'}> \spr{\mathcal{H}}/2$, we append to $P_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPTW\br{I}$, then we denote $P^*\br{I} = P_D$ (ties broken arbitrarily).
 \end{definition}
 
-It should be remarked that $P_D$ is well-defined, as each test in $P_D$ can have at most one child associated with more than half of the pairs hypotheses in $\mathcal{H}'$. Since $P_D$ is a subpath of $D$, we also have the following simple observation.
+It should be remarked that $P_D$ is well-defined, as each test in $P_D$ can have at most one child associated with more than half of the hypotheses in $\mathcal{H}'$. Since $P_D$ is a subpath of $D$, we also have the following simple observation.
+
+We will say that a test in $P^*\br{I}$ \emph{sepcovers} an element $u \in \mathcal{H}$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\mathcal{H}'$ of size at most $\spr{\mathcal{H}}/2$.
 
 \begin{observation}
-    Let $I$ be any instance of PCWCAL. Then $\spr{P^*\br{I}} \leq \OPT\br{I}$.
+    Let $I$ be any instance of PCWCAL. Then $\spr{P^*\br{I}} \leq \OPTW\br{I}$.
 \end{observation}
 
-This allows to use $\spr{P^*\br{I}}$ as a lower bound on $\OPT\br{I}$ in the analysis of the approximation algorithm for PCWCAL. We have the following lemma:
-\begin{lemma}\label{lemma:pairsep_cost}
-    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCWCAL instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\mathcal{U}, \mathcal{T}, \mathcal{F}}$ with $K=n/2$, where $\mathcal{U} = \brc{(h,j) \mid h,j \in \mathcal{H}}$ and a test $t$ covers $(h,j)$ if it distinguishes $h$ and $j$. Then, $\spr{S^*} \leq \spr{P^*\br{I}}$.
+We will use $\spr{P^*\br{I}}$ as a lower bound on $\OPTW\br{I}$ in the analysis of the approximation algorithm for PCWCAL. We have the following lemma:
+\begin{lemma}\label{lemma:cover_sep_worst_case}
+    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCWCAL instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ where $f=1/4$ and a test $t$ covers $h\in \mathcal{H}$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$. Then, $\spr{S^*} \leq \spr{P^*\br{I}}$.
 \end{lemma}
     \begin{proof}
-        We show that $P^*\br{I}$ is a feasible solution for the PCSC instance $\br{\mathcal{U}, \mathcal{T}, \mathcal{F}}$ with $K=n/2$. By definition, for every $\mathcal{H'} \in \mathcal{H} - P^*\br{I}$, we have $\binom{\spr{\mathcal{H}'}}{2} \leq \binom{\spr{\mathcal{H}}}{2}/2$. Therefore the number of pairs covered by tests in $P^*\br{I}$ is at least:
-        $$
-        \binom{\spr{\mathcal{H}}}{2} - \sum_{\mathcal{H}' \in \mathcal{H} - P^*\br{I}}\binom{\spr{\mathcal{H}'}}{2} \geq \binom{\spr{\mathcal{H}}}{2} - \frac{\binom{\spr{\mathcal{H}}}{2}}{2} = \frac{\binom{\spr{\mathcal{H}}}{2}}{2}.
-        $$
-        Therefore, by the optimality of $S^*$, we have $\spr{S^*} \leq \spr{P^*\br{I}}$ as required.
+        We show that $P^*\br{I}$ is a feasible solution for the PCSC instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F},K}$. Assume towards a contradiction that this is not the case, i. e. less than $\spr{\mathcal{H}}/4$ are covered by $P^*\br{I}$. Therefore there exists $t\in P^*\br{I}$ and a response $\mathcal{H}'$ of size $\spr{\mathcal{H}'}\leq \spr{\mathcal{H}}/2$ such that hypotheses in $\mathcal{H}'$ are not covered by $P^*\br{I}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\mathcal{H}'\subseteq U_{t,j}$ (since $\mathcal{H}'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\mathcal{H}'} < \spr{\mathcal{H}}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\mathcal{H}'}+\spr{U_{t,j}-\mathcal{H}'}<3/4\cdot \spr{\mathcal{H}}$ which by definition means that $h$ is covered by $P^*\br{I}$, a contradiction.
     \end{proof}
 
 \begin{theorem}
@@ -33,50 +31,88 @@ This allows to use $\spr{P^*\br{I}}$ as a lower bound on $\OPT\br{I}$ in the ana
 $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for PCWCAL. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
+    The algorithm \ref{alg:worstDecisionTree} is recursive and works as follows: Given an instance $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$, if $\spr{\mathcal{H}}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ with $f=1/4$, where a test $t$ covers element $u \in \mathcal{H}$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\mathcal{H}}$. Let $S$ be the returned set of tests. We build a decision tree $D_S$ on tests from $S$ closed under $\mathcal{F}$. For each $\mathcal{H}' \in \mathcal{H}-S$, we recursively call \textsc{WorstDecisionTree} on instance $\br{\mathcal{H}', \mathcal{T}-S, \mathcal{F}-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\mathcal{H}'$. Finally, we return the constructed decision tree $D$.
 \input{pseudocodes/worst_case_learning.tex}
-The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{lemma:pairsep_cost}:
+The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}.:
     \begin{observation}
-        Let $D_S$ be the decision tree built on tests from $S$ closed under $\mathcal{F}$. Then, $\COST\br{D_S} \leq \alpha \cdot \spr{P^*\br{I}}$.
+        Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\mathcal{F}$. Then, $\COSTW\br{D_S} \leq \alpha \cdot \spr{P^*\br{I}}$.
     \end{observation}
     We are now ready to prove the theorem.
     \begin{lemma}
-        Let $D$ be the decision tree returned by \textsc{WorstDecisionTree} on input $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then, $\COST\br{D} \leq \frac{2\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log n \cdot \OPT\br{I}$.
+        Let $D$ be the decision tree returned by \textsc{WorstDecisionTree} on input $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then, $\COSTW\br{D, I} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{I}$.
     \end{lemma}
     \begin{proof}
-        We prove the lemma by induction on $p=\binom{\spr{\mathcal{H}}}{2}$. The base case when $n=1$ and $p=2$ is trivial since there are no pairs to cover. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COST\br{D'} \leq \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $I'$. We have that:
+        We prove the lemma by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COSTW\br{D', I'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $I'$. We have that:
+        $$
         \begin{align*}
-            \COST\br{D} \leq & \COST\br{D_S} + \max_{\mathcal{H}' \in \mathcal{H} - S} \COST\br{D'} \\
-            \leq & \alpha \cdot \spr{S^*} + \max_{\mathcal{H}' \in \mathcal{H} - S} \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n'}{2} \cdot \OPT\br{I'} \\
-            \leq & \alpha \cdot \spr{P^*\br{I}} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \br{\br{\frac{2\gamma-1}{2\gamma}}\cdot \binom{n}{2}} \cdot \OPT\br{I} \\
-            = & \alpha \cdot \OPT\br{I} + \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \br{\log \binom{n}{2}} \cdot \OPT\br{I} - \alpha\cdot \OPT\br{I} \\
-            = & \frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}}\cdot \log \binom{n}{2} \cdot \OPT\br{I}
+            \COSTW\br{D, I} \leq & \COSTW\br{D_S, I} + \max_{\mathcal{H}' \in \mathcal{H} - S} \COSTW\br{D', I'} \\
+            \leq & \alpha \cdot \spr{S^*} + \max_{\mathcal{H}' \in \mathcal{H} - S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'} \\
+            \leq & \alpha \cdot \spr{P^*\br{I}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{I} \\
+            = & \alpha \cdot \OPTW\br{I} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{I} - \alpha\cdot \OPTW\br{I} \\
+            = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{I} \\
         \end{align*}
-        Since $\log \binom{n}{2} \leq 2 \log n$, the lemma follows.
+        $$
+        
+        where the second inequality follows by the induction hypothesis, the third inequality follows by Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\mathcal{H}'} \leq \frac{(4\gamma -1)}{4\gamma}\cdot n$ for every $\mathcal{H}' \in \mathcal{H}-S$ and the equalities follow by rearranging terms. This concludes the proof of the lemma.
     \end{proof}
 \end{proof}
 \subsection{Average Case}
-\begin{definition}[Coversep]
-    Let $D$ be any decision tree for the PCACAL problem instance $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. We define a sequence of tests $C_D$ called \emph{coversep} as follows. Initially, $C_D$ is empty and $\mathcal{H}' = \mathcal{H}$. While $\spr{\mathcal{H}'}> \spr{\mathcal{H}}/2$, we append to $C_D$ the test $r\br{D_{\mathcal{H}'}}$ and update $\mathcal{H}'$ to be the set of hypotheses corresponding to the child of $D_{\mathcal{H}'}$ that contains the most hypotheses. If $\COST\br{D}=\OPT\br{\mathcal{I}}$, then we denote $C^*\br{\mathcal{I}} = C_D$ (ties broken arbitrarily).
-\end{definition}
-It should be remarked that $C_D$ is well-defined, as each test in $C_D$ can have at most one child associated with more than half of the hypotheses in $\mathcal{H}'$. Since $C_D$ is a subpath of $D$, we also have the following simple observation.
 
+We follow a similar idea, however we use the connection to PCMSSC instead of PCSC. In order to lower bound the cost of the optimal decision tree, we will need the following notion: Let $S$ be any sequence of tests in a decision tree $D$. Then let:
+$$
+\COSTA\br{S, I} = \sum_{t \in S} \spr{\mathcal{H}_t}.
+$$
+
+We have the following observations:
 \begin{observation}
-    Let $I$ be any instance of PCACAL. Then $\COST\br{C^*\br{I}} \leq \OPT\br{I}$.
+    Let $D$ be any decision tree for $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ and let $S$ be any sequence of tests in $D$. Then,
+    $$
+    \COSTA\br{D, I} = \COSTA\br{S, I} + \sum_{D'\in D-S} \COSTA\br{D', I}.
+    $$
 \end{observation}
 
-This allows to use $\COST\br{C^*\br{I}}$ as a lower bound on $\OPT\br{I}$ in the analysis of the approximation algorithm for PCACAL. We have the following lemma:
-\begin{lemma}\label{lemma:pairsep_cost}
-    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCACAL instance. Let $S^*$ be the optimal solution for the PCMSSC on instance $\br{\mathcal{U}, \mathcal{T}, \mathcal{F}}$ with $K=n/4$, where $\mathcal{U} = \mathcal{H}$ and a test $t$ element $u \in \mathcal{U}$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\mathcal{U}}$. Then, $\COST\br{S^*} \leq \COST\br{C^*\br{I}}$.
+As an immediate corollary for $D=D^*\br{I}$ and $S=P^*\br{I}$ we have:
+\begin{observation}
+    Let $I$ be any instance of PCACAL. Then $\COSTA\br{P^*\br{I}, I} \leq \OPTA\br{I}$.
+\end{observation}
+
+This allows to use $\COSTA\br{P^*\br{I}, I}$ as a lower bound on $\OPTA\br{I}$ in the analysis of the approximation algorithm for PCACAL. We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
+\begin{lemma}\label{lemma:cover_sep_average_case}
+    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCACAL instance. Let $S^*$ be the optimal solution for the PCMSSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ with $f=1/4$, where a test $t$ covers element $u \in \mathcal{H}$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\mathcal{H}}$. Then, $\COSTA\br{S^*} \leq \COSTA\br{P^*\br{I}}$.
 \end{lemma}
-    % \begin{proof}
-    %     We will treat the sequence $C^*\br{I}$ as a path in a decision tree. We show, that if a given response to a query in this path is associated with a subtree which does not contain queries from $C^*\br{I}$, then the amount of hypotheses is such response is at most $\frac{3}{4}\cdot \spr{\mathcal{H}}$. 
-    %     $$
-    %     \binom{\spr{\mathcal{H}}}{2} - \sum_{\mathcal{H}' \in \mathcal{H} - P^*\br{I}}\binom{\spr{\mathcal{H}'}}{2} \geq \binom{\spr{\mathcal{H}}}{2} - \frac{\binom{\spr{\mathcal{H}}}{2}}{2} = \frac{\binom{\spr{\mathcal{H}}}{2}}{2}.
-    %     $$
-    %     Therefore, by the optimality of $S^*$, we have $\spr{S^*} \leq \spr{P^*\br{I}}$ as required.
-    % \end{proof}
+\begin{proof}
+    Assume towards a contradiction that $\COSTA\br{S^*} > \COSTA\br{P^*\br{I}}$. We will show that in such case there exists a cover $\sigma \subseteq P^*\br{I}$ such that $c_A\br{\sigma} < \COSTA\br{P^*\br{I}}$, a contradiction with the optimality of $S^*$. Let $\sigma$ be the smallest subsequence of $P^*\br{I}$ which covers at least $\spr{\mathcal{H}}/4$ elements. Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}. Let $h \in \mathcal{H}$. There are two cases to consider:
+    \begin{itemize}
+        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $P^*\br{I}$. By definition, tests previous to $t$ in $\sigma$ cover at most $\spr{\mathcal{H}}/4$ elements. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\mathcal{H}}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $c_A\br{\sigma}$ is at most its contribution to $\COSTA\br{P^*\br{I}}$.
+        \item $\sigma$ does not cover $h$. In such case $h$ is sepcovered by some test $t$ in $P^*\br{I}$ but not in $\sigma$. therefore, the contribution of $h$ to $c_A\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{P^*\br{I}}$ is at least $\spr{\sigma}$.
+    \end{itemize}
+    Thus, we have that $c_A\br{\sigma} < \COSTA\br{P^*\br{I}}$, a contradiction.
+\end{proof}
+    
 \begin{theorem}
     If there is a $\beta$- approximation algorithm for PCMSSC then there is an
 $O\br{\beta \cdot \log n}$-approximation algorithm for PCACAL.
 \end{theorem}
+\begin{proof}
+The idea behind Algorithm \ref{alg:averageDecisionTree} is the same as for the worst case version of the problem except the fact that we use a solution to PCMSSC instead of PCSC. 
 \input{pseudocodes/average_case_learning.tex}
+\begin{observation}
+    Let $D_S$ be the decision tree consisting of the sequence of tests $S$. Then, $\COSTA\br{D_S, I} \leq \beta \cdot \COSTA\br{P^*\br{I}, I}$.
+\end{observation}
+
+We are now ready to prove the theorem:
+\begin{lemma}
+    Let $D$ be the decision tree returned by \textsc{AverageDecisionTree} on input $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then, $\COSTA\br{D, I} \leq \beta \cdot \log_{4/3} n \cdot \OPTA\br{I}$.
+\end{lemma}
+\begin{proof}
+We prove the lemma by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COSTA\br{D', I'} \leq \beta \cdot \log_{4/3} n' \cdot \OPTA\br{I'}$, where $D'$ is the decision tree returned by \textsc{AverageDecisionTree} on input $I'$. We have that:
+\begin{align*}
+    \COSTA\br{D, I} \leq & \COSTA\br{D_S, I} + \sum_{\mathcal{H}' \in \mathcal{H} - S} \COSTA\br{D', I'} \\
+    \leq & \beta \cdot \COSTA\br{P^*\br{I}, I} + \sum_{\mathcal{H}' \in \mathcal{H} - S} \beta \cdot \log_{4/3} n' \cdot \OPTA\br{I'} \\
+    \leq & \beta \cdot \COSTA\br{P^*\br{I}, I} + \sum_{\mathcal{H}' \in \mathcal{H} - S} \beta \cdot \log_{4/3} \br{\frac{3}{4}\cdot n} \cdot \OPTA\br{I} \\
+    = & \beta \cdot \COSTA\br{P^*\br{I}, I} + \beta\cdot \br{\log_{4/3} n - 1} \cdot \OPTA\br{I} \\
+    \leq & \beta\cdot \log_{4/3} n \cdot \OPTA\br{I} \\
+\end{align*}
+where the second inequality follows by the induction hypothesis, the third inequality follows by Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\mathcal{H}'} \leq \frac{3}{4}\cdot n$ for every $\mathcal{H}' \in \mathcal{H}-S$ and the equalities follow by rearranging terms. This concludes the proof of the lemma.
+\end{proof}
+\end{proof}
