@@ -46,7 +46,6 @@ The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{le
     \end{lemma}
     \begin{proof}
         We prove the lemma by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0. Assume by induction that for every $I' = \br{\mathcal{H}', \mathcal{T}, \mathcal{F}}$ such that $\mathcal{H}' \in \mathcal{H}-S$ and $n' = \spr{\mathcal{H}'}$ we have $\COSTW\br{D', I'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $I'$. We have that:
-        $$
         \begin{align*}
             \COSTW\br{D, I} \leq & \COSTW\br{D_S, I} + \max_{\mathcal{H}' \in \mathcal{H} - S} \COSTW\br{D', I'} \\
             \leq & \alpha \cdot \spr{S^*} + \max_{\mathcal{H}' \in \mathcal{H} - S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'} \\
@@ -54,7 +53,6 @@ The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{le
             = & \alpha \cdot \OPTW\br{I} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{I} - \alpha\cdot \OPTW\br{I} \\
             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{I} \\
         \end{align*}
-        $$
         
         where the second inequality follows by the induction hypothesis, the third inequality follows by Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\mathcal{H}'} \leq \frac{(4\gamma -1)}{4\gamma}\cdot n$ for every $\mathcal{H}' \in \mathcal{H}-S$ and the equalities follow by rearranging terms. This concludes the proof of the lemma.
     \end{proof}
