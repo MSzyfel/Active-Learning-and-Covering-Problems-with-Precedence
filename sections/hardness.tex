@@ -1,7 +1,57 @@
 \section{Hardness}
-\subsection{Binary search with precedence constrains}\begin{theorem}
-    Worst-Case Binary Search With Precedence Caseonstrains is NP-hard.
+\newcommand{\coord}[3]{v[#1, #2, #3]}
+\newcommand{\ecoord}[3]{v[#1, #2, #3]}
+
+\subsection{Binary search with precedence constrains}
+\begin{theorem}
+    Worst-Case Binary Search With Precedence Constraints is NP-hard.
 \end{theorem}
+\begin{proof}
+	Consider an instance of \ProblemThreeSat given as: a set of variables $V$, and a set of clauses $C$.
+	Each clause consist of exactly $3$ literals.
+	Moreover, the variant where any $v \in V$ appears at most $5$ times as $v$ or $\overline{v}$ in the clauses is still \NPcomplete \cite{GareyAndJohnson}. 
+	Obviously, in this variant $|C| = \O(|V|)$.
+	The idea is to:
+	\begin{itemize}
+		\item Divide the line into $2$ modules: variables and clauses. 
+		Moreover divide the modules into small segments so each corresponds to a single variable, clause, respectively.
+		Use precedence constraints to force this.
+		\item All the variables can be queried at once.
+		Hence, either the variable or it's negation is quarried in a given turn.
+		\item Make every literal dependent on the corresponding variable.
+		\item Now, if at least one variable was queried in the time $t$, then at least one literal can be queried in $t+1$.
+		\item If at least one literal was queried then a clause gadget can be quaried in a time $t'$, otherwise in greater time. 
+	\end{itemize}
+	
+	More formally, the mapping of an instance of \ProblemThreeSat is as follows.
+	To construct the graph:
+	\begin{enumerate}
+		\item Let $d > 0$ be such a value that $\log_2(|C| + |V| + d) \in Z$.
+		Add $d$ dummy variables.
+		\item Let a clause $C_i$ be composed of literals $l_i^1, l_i^2, l_i^3$ in any order.
+		For every clause $C_i = \{v_i^1, v_i^2, v_i^3\}$, construct a gadget given as a path graph on vertices
+		\[
+			\coord{C}{i}{1}, \coord{C}{i}{2}, \coord{C}{i}{v_i^1}, \coord{C}{i}{v_i^2}, \coord{C}{i}{v_i^3}, \coord{C}{i}{3}, 	\coord{C}{i}{4}.
+		\]
+		\item For a variable $v_i$, construct a gadget compose of $3$ vertices as a path
+		\[
+			\coord{v}{i}{1}, \coord{v}{i}{2}, \coord{v}{i}{3}
+		\]
+		Denote edge $(\coord{V}{i}{1}, \coord{V}{i}{2})$ as $\ecoord{V}{i}{+}$.
+		Denote edge $(\coord{V}{i}{2}, \coord{V}{i}{3})$ as $\ecoord{V}{i}{-}$.
+		\item Compose the graph in the following way:
+		Connect each clause gadget one by one, by a "separator edge".
+		I.e. the vertex $\coord{C}{i}{4}$ is connected to $\coord{C}{i+1}{1}$ $i$-th separator edge.
+		Connect $\coord{C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $(i+1)$-th separator edge.
+		Continue with variable gadgets in the same way.
+	\end{enumerate}
+	To define the order on the edges:
+	\begin{enumerate}
+		\item There are exactly $1+2+\ldots+2^{k}$ separator edges.
+	\end{enumerate}
+	
+\end{proof}
+
 \begin{theorem}
     Average-Case Binary Search With Precedence Caseonstrains is NP-hard.
 \end{theorem}
