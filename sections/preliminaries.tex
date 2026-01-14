@@ -1,20 +1,33 @@
 \section{Preliminaries}
-\begin{definition}[Precedence constrained set cover (PCSC)]
-Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
-\end{definition}
-\begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
-Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
-\end{definition}
+% \begin{definition}[Precedence constrained set cover (PCSC)]
+% Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
+% \end{definition}
+% \begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
+% Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
+% \end{definition}
 \begin{definition}[Precedence constrained test cover (PCTC)]
 Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
 \end{definition}
+\DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
 
-In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
+% In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
+
+\DD{Propozycje do notacji:
+\begin{itemize}
+ \item odnosnie czesciowych porzadkow, to moze pozostac przy akademickim $(\cT,\preceq)$
+ \item drzewo decyzyjne to $D$, to niech $D_v$ oznacza poddrzewo ukorzenione w tescie $v$; wowczas $V(D_v)$ donosiloby sie do wierzcholkow/testow ponizej $v$, wlacznie z $v$
+ \item moze cos w rodzaju leaves($D'$) oraz internal($D'$) do oznaczanie lisci i wierzch. wewnetrznych drzewa
+ \item do oznaczania sekwencji zapytan do wierzcholka $v$ w $D$ moznaby uzywac standardowego $D_{r\rightarrow v}$
+ \item proponuje, aby wszelkie parametry byly komendami latex ($OPT_*, COST_*, cov()$, nazwy problemow (to juz wprowadzilem). Czyli nazwijmy to wszystko jako zmienne globalne. Ja to pewnie zrobie w kolejnej rundzie, a tylko zaznaczam, aby pozniej sie tego trzymac. (Zalety te same co w kodowaniu z identyfikatorami stalych vs stale zaszyte w kodzie.)
+\end{itemize}
+}
 
 The goal is to design a \textit{strategy} of learning which is an adaptive algorithm, that based on the previous responses provides the searcher with the next test to be performed. We represent this strategy as a rooted tree called a \textit{decision tree} $D$, where each internal node represents a test to be performed and each leaf represents a hypothesis. We demand that each edge outgoing from the root $r$ of $D$ is associated with a unique response to a test $r$ and that the same holds for all decision subtrees of $D-r$ (which are not leafs). It should be remarked that it is possible for a test to appear multiple times in the decision tree. Therefore, by $\mathcal{T}_D$ we denote subset of $\mathcal{T}$ that appear in decision tree $D$ and by $T_D$ we denote the set of inner nodes of $D$, so that each usage of a test in $D$ corresponds to a unique element of $T_D$.
 
 Let $T_{D, h}$ denote the sequence of tests performed when the hidden hypothesis is $h$ and the learner follows the strategy represented by decision tree $D$. The cost of identifying hypothesis $h$ using decision tree $D$ is defined as $\COST\br{D, h} = \spr{T_{D, h}}$. We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \mathcal{H}} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \mathcal{H}} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\mathcal{H}}$).
 
+
+\DD{Skoro mamy już te problemy $\ProblemPCWCAL$ oraz $\ProblemPCACAL$ zdefiniowane, to tutaj aby nie powtarzac w nowej notacji drze decyzyjnych zamienie to na uwage/obserwacje w ramach jednego paragrafu do optymalizacji czego to sie sprowadza odnosnie drzew dec.}
 \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
 Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the worst-case depth of the tree.
 \end{definition}
@@ -24,6 +37,7 @@ Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests an
 construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
 \end{definition}
 
+\DD{W sumie sie wole upewnic co mamy na mysli piszac ``not distinguished''? Ja to czytam jako zbior hipotez bedacych potencjalnymi targetami?}
 Let $\mathcal{H}_t$ denote the set of hypotheses that are not yet distinguished by the tests selected before test $t\in T_D$ in the decision tree. Then we immediately obtain the following simple observation:
 \begin{observation}
     Let $D$ be any decision tree for $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then we have that:

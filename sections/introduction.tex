@@ -3,7 +3,7 @@
 \DD{pomysl na intro: zdefiniowac dwa glowne problemy: learning + set cover; zapowiedziec, ze sa powiazane ze soba i celem papieru jest przestudiowanie tych zaleznosci plus usyskanie konkretnych wynikow; pytanie/do sprawdzenia: czy ktores wyniki przypadkiem poprawiaja lub sa tozsame z najlepszymi znanymi bez precedensow; ewentualne inna ``marketingowe'' uwagi.}
 
 Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an adaptive learning process.
-Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x.y\in t$ and $\bigcup t=\cH$.
+Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup t=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
 That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
 Each subsequent test is selected by \questioner by taking into acocunt replies from all test to date.
@@ -13,8 +13,8 @@ The goal for the \questioner is to output $\target$.
 
 Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
 This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecesors had to be performed previously.
-Hence we have the \emph{Worst Case Adaptive Learing with Precedences} ($\ProblemWCALP$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
-Similarly, in the \emph{Average Case Adaptive Learing with Precedences} ($\ProblemACALP$) the optimization criterion changes to minimizing the number of queries done on average.
+Hence we have the \emph{Precedence Constrained Worst Case Adaptive Learing} ($\ProblemPCWCAL$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
+Similarly, in the \emph{Precedence Constrained Average Case Adaptive Learing} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
 
 
 In this work we study connections between adaptive lerning with precedences and the covering problems defined as follows.
@@ -22,10 +22,11 @@ We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup\cC}\geq k$.
 We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
 In the \emph{Precedence Constrained Set Cover} ($\ProblemPCSC$) the goal is to minimize $\spr{\cC}$.
-A permutation $C_1,\ldots,C_k)$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+A permutation $C_1,\ldots,C_l)$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
 The \emph{coverage time} of a $x\in\bigcup\cC$ is the minimum index $i$ such that $x\in C_i$.
-In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_k)$ that minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
+In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_l)$ that covers at least $k$ items in $\cU$ and minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
 
+\DD{czy powyzsze jest dobrze zdefiniowane, tzn. jest pewna subtelnosc w tym, ze do coverage time wliczone sa wszystkie elementy, ktore pokrywa sekwencja. Chodzi o to, ze moze ich byc duzo wiecej niz $k$, wiec niejako placimy kare za pokrywanie za duzo. Nie do konca to intuicyjne, wiec chcialem przedyskutowac.}
 
 \subsection{Our contribution}
 
