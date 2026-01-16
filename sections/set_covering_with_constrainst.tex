@@ -1,5 +1,11 @@
 \section{Set covering with constraints}
 
+For a subset $X$ of the universe, the coverage on $X$ is:
+\[
+\cov\br{\mathcal{A}, X} = \cov\br{\mathcal{A}} \cap X
+\]
+For $S \in \mathcal{G}$, let $P[S]$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$ (i.e., the ancestors of $S$ including $S$ itself).
+
 \subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
 
 The key to solce PCSC and PCMSSC is to solve the MDPCS problem. An approximation algorithm for MDPCS can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{InsertCitHere}, the following greedy algorithm achieves an $O\br{\sqrt{m}}$-approximation for MDPCS: 

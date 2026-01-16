@@ -75,7 +75,9 @@
 \newcommand{\ProblemPCMSSC}{\textsc{PCMSSC}}
 \newcommand{\cTinD}[1]{\cT[#1]}  % tests in decision tree #1
 \newcommand{\inner}[1]{\operatorname{inner}(#1)}  %inner nodes in a decision tree
-\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 when #2 is the hypothesis
+\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 to arrive at node #2
+\newcommand{\paraTitle}[1]{\noindent\textbf{#1}}   %paragraph titles (to eliminate more sub-sub-subsections
+\newcommand{\sepcover}[1]{P^*\br{#1}}
 
 
 \usepackage[T1]{fontenc}
@@ -149,13 +151,13 @@
 \end{itemize}
 }
 
-\include{sections/introduction}
-\include{sections/preliminaries}
-\include{sections/binary_search}
-\include{sections/approximating_learning}
-\include{sections/set_covering_with_constrainst}
-\include{sections/hardness}
-\include{sections/conclusions}
+\input{sections/introduction}
+\input{sections/preliminaries}
+\input{sections/binary_search}
+\input{sections/approximating_learning}
+\input{sections/set_covering_with_constrainst}
+\input{sections/hardness}
+\input{sections/conclusions}
 
 % Acknowledgments---Will not appear in anonymized version
 \acks{We thank a bunch of people and funding agency.}

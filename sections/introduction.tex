@@ -2,23 +2,23 @@
 
 \DD{pomysl na intro: zdefiniowac dwa glowne problemy: learning + set cover; zapowiedziec, ze sa powiazane ze soba i celem papieru jest przestudiowanie tych zaleznosci plus usyskanie konkretnych wynikow; pytanie/do sprawdzenia: czy ktores wyniki przypadkiem poprawiaja lub sa tozsame z najlepszymi znanymi bez precedensow; ewentualne inna ``marketingowe'' uwagi.}
 
-Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an adaptive learning process.
+Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an active learning process.
 Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup t=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
 That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
 Each subsequent test is selected by \questioner by taking into acocunt replies from all test to date.
-Without formally stating an optimization criterion we refer to  the above as the \emph{Adaptive Learing Process} ($\ProblemAL$).
+Without formally stating an optimization criterion we refer to  the above as the \emph{Active Learing Process} ($\ProblemAL$).
 (Another widely used name in the literature is the decision tree construction).
 The goal for the \questioner is to output $\target$.
 
 Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
-This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecesors had to be performed previously.
-Hence we have the \emph{Precedence Constrained Worst Case Adaptive Learing} ($\ProblemPCWCAL$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
-Similarly, in the \emph{Precedence Constrained Average Case Adaptive Learing} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
-Whenever the criterion is not important or we want to make a claim that applies to both we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Adaptive Learning} instance.
+This leads us to the two active learning problems in which order to perform a test $t$, all its predecesors had to be performed previously.
+Hence we have the \emph{Precedence Constrained Worst Case Active Learing} ($\ProblemPCWCAL$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
+Similarly, in the \emph{Precedence Constrained Average Case Active Learing} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
+Whenever the criterion is not important or we want to make a claim that applies to both we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
 
 
-In this work we study connections between adaptive lerning with precedences and the covering problems defined as follows.
+In this work we study connections between active lerning with precedences and the covering problems defined as follows.
 We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup\cS=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup\cC}\geq k$.
 We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
@@ -31,7 +31,7 @@ In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the go
 
 % Consider following problems:
 % \begin{itemize}
-%   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
+%   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner actively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
 %   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
 % \end{itemize}
 
@@ -70,6 +70,18 @@ Hence we start with stating the main results of this work.
 Our main results are obtained through several algorithmic ``reductions'' by which we mean that we use approximation algorithms for selected problems to obtain approximations for others.
 In order to show a full picture of our method we introduce three remaining problems that paly an important role in our approach.
 
+\begin{definition}[Group Steiner Tree (GST)]
+Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
+\end{definition}
+
+The \emph{density} $\Delta$ of a nonempty subfamily $\mathcal{A}$ on an universum $X$ ($A\subseteq X$ for each $A\in\mathcal{A}$) is
+\[
+\Delta\br{\mathcal{A}, X} \equiv \frac{\spr{\bigcup\mathcal{A}\cap X}}{\spr{\mathcal{A}}}
+\]
+For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+\begin{definition}[Max-Density Precedence-Closed Subfamily (MDPCS)]
+Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\prec$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the MDPCS problem asks to find a precedence-closed subfamily $\mathcal{A} \subseteq \mathcal{G}$ that maximizes $\Delta\br{\mathcal{A}, R}$.
+\end{definition}
 
 \begin{definition}[Precedence constrained test cover (PCTC)]
 Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
