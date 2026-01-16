@@ -19,12 +19,12 @@ We will say that a test in $P^*\br{I}$ \emph{sepcovers} an element $u \in \mathc
 
 \subsection{Worst Case}
 \begin{observation}
-    Let $I$ be any instance of PCWCAL. Then $\spr{P^*\br{I}} \leq \OPTW\br{I}$.
+    Let $I$ be any instance of $\ProblemPCWAL$. Then $\spr{P^*\br{I}} \leq \OPTW\br{I}$.
 \end{observation}
 
-We will use $\spr{P^*\br{I}}$ as a lower bound on $\OPTW\br{I}$ in the analysis of the approximation algorithm for PCWCAL. We have the following lemma:
+We will use $\spr{P^*\br{I}}$ as a lower bound on $\OPTW\br{I}$ in the analysis of the approximation algorithm for $\ProblemPCWAL$. We have the following lemma:
 \begin{lemma}\label{lemma:cover_sep_worst_case}
-    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any PCWCAL instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ where $f=1/4$ and a test $t$ covers $h\in \mathcal{H}$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$. Then, $\spr{S^*} \leq \spr{P^*\br{I}}$.
+    Let $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$ be any $\ProblemPCWAL$ instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ where $f=1/4$ and a test $t$ covers $h\in \mathcal{H}$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$. Then, $\spr{S^*} \leq \spr{P^*\br{I}}$.
 \end{lemma}
     \begin{proof}
         We show that $P^*\br{I}$ is a feasible solution for the PCSC instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F},K}$. Assume towards a contradiction that this is not the case, i. e. less than $\spr{\mathcal{H}}/4$ are covered by $P^*\br{I}$. Therefore there exists $t\in P^*\br{I}$ and a response $\mathcal{H}'$ of size $\spr{\mathcal{H}'}\leq \spr{\mathcal{H}}/2$ such that hypotheses in $\mathcal{H}'$ are not covered by $P^*\br{I}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\mathcal{H}'\subseteq U_{t,j}$ (since $\mathcal{H}'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\mathcal{H}'} < \spr{\mathcal{H}}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\mathcal{H}'}+\spr{U_{t,j}-\mathcal{H}'}<3/4\cdot \spr{\mathcal{H}}$ which by definition means that $h$ is covered by $P^*\br{I}$, a contradiction.
@@ -32,7 +32,7 @@ We will use $\spr{P^*\br{I}}$ as a lower bound on $\OPTW\br{I}$ in the analysis 
 
 \begin{theorem}
     If there is an $\br{\gamma, \alpha}$-bicriteria approximation algorithm for PCSC then there is an
-$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for PCWCAL. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
+$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWAL$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
     The algorithm \ref{alg:worstDecisionTree} is recursive and works as follows: Given an instance $I=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$, if $\spr{\mathcal{H}}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $\br{\mathcal{H}, \mathcal{T}, \mathcal{F}, f}$ with $f=1/4$, where a test $t$ covers element $u \in \mathcal{H}$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\mathcal{H}}$. Let $S$ be the returned set of tests. We build a decision tree $D_S$ on tests from $S$ closed under $\mathcal{F}$. For each $\mathcal{H}' \in \mathcal{H}-S$, we recursively call \textsc{WorstDecisionTree} on instance $\br{\mathcal{H}', \mathcal{T}-S, \mathcal{F}-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\mathcal{H}'$. Finally, we return the constructed decision tree $D$.

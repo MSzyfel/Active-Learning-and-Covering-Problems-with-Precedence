@@ -27,9 +27,15 @@ A permutation $C_1,\ldots,C_l)$ of the elements in $\cC$ is \emph{consistent} wi
 The \emph{coverage time} of a $x\in\bigcup\cC$ is the minimum index $i$ such that $x\in C_i$.
 In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_l)$ that covers at least $k$ items in $\cU$ and minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
 
-\DD{czy powyzsze jest dobrze zdefiniowane, tzn. jest pewna subtelnosc w tym, ze do coverage time wliczone sa wszystkie elementy, ktore pokrywa sekwencja. Chodzi o to, ze moze ich byc duzo wiecej niz $k$, wiec niejako placimy kare za pokrywanie za duzo. Nie do konca to intuicyjne, wiec chcialem przedyskutowac.}
+\DD{czy powyzsze jest dobrze zdefiniowane? tzn. jest pewna subtelnosc w tym, ze do coverage time wliczone sa wszystkie elementy, ktore pokrywa sekwencja. Chodzi o to, ze moze ich byc duzo wiecej niz $k$, wiec niejako placimy kare za pokrywanie za duzo. Nie do konca to intuicyjne, wiec chcialem przedyskutowac.}
 
-\subsection{Our contribution}
+% Consider following problems:
+% \begin{itemize}
+%   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
+%   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
+% \end{itemize}
+
+\subsection{Our results and techniques}
 
 \DD{Pomysl na rozdzial:
 \begin{itemize}
@@ -41,25 +47,43 @@ In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the go
 \end{itemize}
 }
 
-Consider following problems:
-\begin{itemize}
-  \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\mathcal{T}$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
-  \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
-\end{itemize}
+Our main goal is to derive several complexity results regarding the problems introduced above.
+Hence we start with stating the main results of this work.
 
-\begin{figure}[h]
+\DD{Tutaj poszłyby główne twierdzenia dot. $\ProblemPCAL$, $\ProblemPCMSSC$ oraz $\ProblemPCSC$, czyli tych głównych z intro.}
+
+
+\DD{Ten przykład jest super, ale chyba musimy znaleźć sposób na jego kompresję, tzn. nie stać nas na zapłacenie całej strony; około 1/3 strony byłaby ok (może tabelka obok drzewa decyzyjnego (moze zamiana kolumn vs wierszy aby ją powęzić, a może mocno zminimalizować przestrzeń między kolumnami, a partial order jako łuki pomiędzy etykietami wierszy tabelki?); też do przemyślenia gdzie ten przykład umieścić (raczej nie w ``contribution'', ale albo w intro, albo w preliminaries chyba}
+\begin{figure}[htb]
 \centering
 \input{figures/pcal_example}
-\caption{Example of a PCAL instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
+\caption{Example of a $\ProblemPCAL$ instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
 \end{figure}
+
+\DD{na razie zakomentowałem rysunek dot zbiorów}
+% \begin{figure}[h]
+% \centering
+% \input{figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \end{figure}
+
+Our main results are obtained through several algorithmic ``reductions'' by which we mean that we use approximation algorithms for selected problems to obtain approximations for others.
+In order to show a full picture of our method we introduce three remaining problems that paly an important role in our approach.
+
+
+\begin{definition}[Precedence constrained test cover (PCTC)]
+Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
+\end{definition}
+\DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
+\DD{co dokładnie znaczy ``distinguishing a pair''?}
 
 \begin{figure}[h]
 \centering
-\input{figures/pccp_example}
-\caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+\input{figures/reduction_diagram}
+\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
 \end{figure}
 
-\subsection{Our results and techniques}
+
 
 \begin{table}[h]
 \centering
@@ -80,10 +104,4 @@ general & $O(\sqrt{n}\log n)$* & $O(\sqrt{n})$ & $O(\sqrt{n}\log n)$* & $O(\sqrt
 \end{tabular}
 \caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results)}\label{tab:results}
 \end{table}
-
-\begin{figure}[h]
-\centering
-\input{figures/reduction_diagram}
-\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
-\end{figure}
 

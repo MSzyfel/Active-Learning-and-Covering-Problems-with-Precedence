@@ -5,10 +5,6 @@
 % \begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
 % Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
 % \end{definition}
-\begin{definition}[Precedence constrained test cover (PCTC)]
-Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
-\end{definition}
-\DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
 
 % In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
 
