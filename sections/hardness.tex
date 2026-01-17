@@ -1,6 +1,5 @@
 \section{Hardness}
 \newcommand{\coord}[3]{v[#1, #2, #3]}
-\newcommand{\ecoord}[3]{e[#1, #2, #3]}
 \newcommand{\sepedge}[1]{e^{sep}[#1]}
 \newcommand{\varedge}[1]{e^{var}[#1]}
 \newcommand{\litedge}[1]{e^{cla}[#1]}
@@ -18,9 +17,9 @@
 	The idea is to:
 	\begin{itemize}
 		\item Divide the line into $2$ modules: variables and clauses. 
-		Moreover, divide the modules into small segments so each corresponds to a single variable, clause, respectively.
+		Moreover, divide the modules into small segments, so each corresponds to a single variable, clause, respectively.
 		Use precedence constraints to force this separation.
-		\item All the variable vertic1es can be queried at once.
+		\item All the variable vertices can be queried at the same time.
 		Hence, either the variable or it's negation is quarried in a given turn.
 		And the negation (or the variable) can be queried in the next.
 		\item Make every literal dependent on the corresponding variable.
@@ -28,44 +27,75 @@
 		\item If at least one literal vertex was queried then a clause gadget can be quarried in "short" time, because some "middle" vertex of the component was quarried. 
 	\end{itemize}
 	
-	More formally, the mapping of an instance of \ProblemThreeSat is as follows.
-	To construct thMake all other edges e graph:
+	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $C$, and variables, denoted by $V$, is as follows.
+	To construct all other edges e graph:
 	\begin{enumerate}
-		\item Let $d > 0$ be such a value that $\log_2(|C| + |V| + d) \in Z$.
+		\item Let $d > 0$ be smallest value such a value that $\log_2(|C| + |V| - 2 + d) \in Z$.
 		Add $d$ dummy variables -- i.e. variables unrelated to any clause.
-		From now, we assume that $\log_2(|C| + |V|) \in Z$.
-		\item For every $C_i = \{v_i^1, v_i^2, v_i^3\}$, construct a gadget given as a path graph on vertices
+		From now, we assume that $|V| + |C| - 1 = 2^k-1$, for some $k > 0$.
+		\item For every $c_i = \{v_i^1, v_i^2, v_i^3\}$, construct a gadget given as a path graph on vertices
 		\[
-			\coord{C}{i}{1}, \coord{C}{i}{2}, \coord{C}{i}{v_i^1}, \coord{C}{i}{v_i^2}, \coord{C}{i}{v_i^3}, \coord{C}{i}{3}, \coord{C}{i}{4}.
+			\coord{C}{i}{1}, \coord{C}{i}{v_i^1}, \coord{C}{i}{v_i^{12}}, \coord{C}{i}{v_i^{23}}, \coord{C}{i}{v_i^3}, \coord{C}{i}{2}.
 		\]
-		Denote the edge $(\coord{C}{i}{2}, \coord{C}{i}{v_i^1})$ as $\litedge{i, v_i^1}$.
-		Denote the edge $(\coord{C}{i}{v_i^1}, \coord{C}{i}{v_i^2})$ as $\litedge{i, v_i^2}$.
-		Denote the edge $(\coord{C}{i}{v_i^2}, \coord{C}{i}{v_i^3})$ as $\litedge{i, v_i^3}$.
+		Denote the edges between the consecutive pairs of vertices as: $\litedge{i, 0}$, $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$, $\litedge{i, 0'}$.
 		\item For a variable $v_i$, construct a gadget compose of $3$ vertices as a path
 		\[
 			\coord{v}{i}{1}, \coord{v}{i}{2}, \coord{v}{i}{3}
 		\]
-		Denote edge $(\coord{V}{i}{1}, \coord{V}{i}{2})$ as $\ecoord{V}{i}{+}$.
-		Denote edge $(\coord{V}{i}{2}, \coord{V}{i}{3})$ as $\ecoord{V}{i}{-}$.
-		\item Compose the graph in the following way:
-		Connect each clause gadget one by one, by a "separator edge".
-		I.e. the vertex $\coord{C}{i}{4}$ is connected to $\coord{C}{i+1}{1}$ by and edge denoted as $\sepedge{i}$
-		Connect $\coord{C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $\sepedge{|C|}$ $C$-th separator edge.
-		Continue with variable gadgets in the same way.
+		Denote the edge $(\coord{v}{i}{1}, \coord{v}{i}{2})$ as $\varedge{v_i^-}$.
+		Denote the edge $(\coord{V}{v}{2}, \coord{v}{i}{3})$ as $\varedge{v_i^+}$.
+		\item Compose the graph in the following way.
+		Connect each clause gadget one by one, let the vertex $\coord{C}{i}{4}$ is connected to $\coord{C}{i+1}{1}$ by and edge denoted as $\sepedge{i}$.
+		Let us denote such an edge from this set as "separator edge".
+		Connect $\coord{C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $\sepedge{|C|}$, $C$-th separator edge.
+		Continue with variable gadgets in the same way; hence the total number of separator edges is $|C| + |V| - 1$.
 	\end{enumerate}
 	To define the order on the edges:
 	\begin{enumerate}
-		\item There are exactly $1+2+\ldots+2^{k}$ separator edges.
+		\item There are exactly $1+2+\ldots+2^{k}$ separator edges, for some $k > 0$.
 		Hence easily one can make an order corresponding to binary tree, to force the queries.
 		\item Force all other edges to be preceded by the separator edges.
-		\item For every clause $C_i$ and every $j \in \{1,2,3\}$ make $\litedge{i, v_i^j}$ dependent on $\varedge{v_i^j}$
+		\item For every clause $C_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$ make $\litedge{i, v}$ dependent on $\varedge{v^+}$ if $v$ is positive literal; make it dependent on $\varedge{v^-}$ otherwise.
+		\item For every clause $C_i$, make $\litedge{i, 0}$ and $\litedge{i, 0'}$ dependent on all variable edges.
 	\end{enumerate}
+	Now, to prove that the problem is \NPhard we prove the decision version of the problem is \NPcomplete, 
+	i.e. the problem to determine if for a given input $(P, O, t)$ there exists a strategy of maximum search time less than or equal to $t$.
+	
+	To prove that the problem is in \NP we observe that given search tree certifies maximum search time.
+	
+	Now, assume that the instance of $(C, V)$ \ProblemThreeSat is of 'YES' type.
+	Hence let $f: V \leftarrow \{T, F\}$ be a valuation which satisfies all the clauses.
+	Then, we build the strategy:
+	\begin{itemize}
+		\item Query the separator edges in time up to $k$.
+		\item For every variable-vertex $v$, if variable was assigned $T$, query $\varedge{v^+}$ it in time $k+1$; otherwise query $\varedge{v^-}$.
+		      Hence, they are queried in times $k+1$ and $k+2$, respectively. 
+		\item Now all the clause gadgets have at least one precondition met in time $k+1$.
+		      Due to this we can query at least one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ in time $k+2$.
+		      Due to the fact that for each clause there are up to $4$ candidate vertices, and each edge can be queried freely in time $k+3$ or later we can complete the queries in time up to $k+4$.
+	\end{itemize}
+	Due to this for the constructed graph there exists a strategy of time $k+4$.
+	
+	Assume now that the answer for the constructed instance, i.e. path graph, order, and time $k+4$ the answer is 'YES'.
+	We perform the following observations.
+	\begin{itemize}
+		\item For a given clause-gadget corresponding, due to the fact that there are $5$ edges, we need at least $3$ time units to query it. 
+		\item The earliest possible time to finish querying the separator edges is $k$.
+		\item Due to this we have to perform at least one query in time $k+2$ for every clause-gadget $c_i$.
+		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be queried before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was queried.
+		Hence, at for at least one of the edges preconditions were met (edge was queried) in time $k+1$.
+		This clearly corresponds to a valuation of the variables matching all the clauses.
+	\end{itemize}
 	
 \end{proof}
 
 \begin{theorem}
-    Average-Case Binary Search With Precedence Caseonstrains is NP-hard.
+    Average-Case Binary Search With Precedence Caseonstrains is \APXhard.
 \end{theorem}
+\begin{proof}
+	content...
+\end{proof}
+
 \subsection{Outforest precendce constrains}
 \begin{theorem}
     PCWCAL with outforest precedence constraints is NP-hard to approximate within a factor of $O\br{\log^2 n}$ unless P = NP.
