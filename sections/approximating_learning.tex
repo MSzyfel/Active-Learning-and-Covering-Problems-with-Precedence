@@ -8,19 +8,20 @@
 The following definition gives a basic tool for our algorithm.
 \begin{definition}[Sepcover]
   Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
-  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ nodes.
+  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ hypotheses as potential targets.
   Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
   If $\COSTW\br{D}=\OPTW\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
 \end{definition}
 Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
 Let initially $v$ be the root.
-If $\spr{\cH_v}>\spr{\cH}/2$, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
-Continue until $\spr{\cH_v}\leq\spr{\cH}/2$.
+If more that $\spr{\cH}/2$ hypotheses are potential targets after the query to $v$, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
+Otherwise the process is over.
 This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
 
+\DD{byc moze przesunac boundy do podrozdzialow ponizej}
 We will use sepcovers to lowerbound optimal solutions both for $\ProblemPCWCAL$ and $\ProblemPCACAL$.
 Since $P_D$ is a subpath of $D$, we immediately have the following.
-\begin{observation}
+\begin{observation} \label{obs:sepcover}
     Let $\cI$ be any instance of $\ProblemPCAL$.
     Then, $\spr{\sepcover{\cI}} \leq \OPTW\br{\cI}$.
 \end{observation}
@@ -31,19 +32,21 @@ $$
 \COSTA\br{S, \cI} = \sum_{t \in S} \spr{\cH_t}.
 $$
 This allows us to decompose the cost criterion as follows.
-\DD{TODO: fix notation in these lemmas}
 \begin{observation}
-    Let $D$ be any decision tree for an instace $\cI$ of $\ProblemPCACAL$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
+    Let $D$ be any decision tree for an instance $\cI$ of $\ProblemPCACAL$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
     $$
-    \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D-S} \COSTA\br{D', \cI}.
+    \COSTA\br{D} = \COSTA\br{S} + \sum_{D'\in D-S} \COSTA\br{D'}.
     $$
+%     $$
+%     \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D-S} \COSTA\br{D', \cI}.
+%     $$
 \end{observation}
-Here, $D-S$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
+Here, $D\setminus S$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
 As an immediate corollary, when taking an optimal $D$ and the corresponding $S=\sepcover{\cI}$ we have:
 \begin{observation}
     Let $\cI$ be any instance of $\ProblemPCACAL$.
-    Then, $\COSTA\br{\sepcover{\cI}, \cI} \leq \OPTA\br{\cI}$.
+    Then, $\COSTA\br{\sepcover{\cI}} \leq \OPTA\br{\cI}$.
 \end{observation}
 %Figure \ref{fig:sepcover} illustrates the definition of sepcover.
 % \begin{figure}[h]
@@ -55,49 +58,96 @@ As an immediate corollary, when taking an optimal $D$ and the corresponding $S=\
 
 %We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
 
+Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
+For each test $t\in\cT$
+$$
+\xi(t)=\brc{h\in\cH \mid h\in U \textup{ for some }U\in t\textup{ s.t. }  \spr{U}\leq\frac{3}{4}\spr{\cU}}.
+$$
+Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
+By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
+In our construction, in order to solve a $\ProblemPCAL$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+
 \subsection{Worst Case}
 
-We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPTW\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCAL$. We have the following lemma:
+%We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPTW\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCAL$.
 \begin{lemma}\label{lemma:cover_sep_worst_case}
-    Let $\cI=\br{\cH, \cT, \cF}$ be any $\ProblemPCWCAL$ instance. Let $S^*$ be the optimal solution for the PCSC on instance $\br{\cH, \cT, \cF, f}$ where $f=1/4$ and a test $t$ covers $h\in \cH$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$. Then, $\spr{S^*} \leq \spr{\sepcover{\cI}}$.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCAL$ instance.
+    Let $S^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+    %and a test $t$ covers $h\in \cH$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$.
+    Then, $\spr{S^*} \leq \spr{\sepcover{\cI}}$.
 \end{lemma}
     \begin{proof}
-        We show that $\sepcover{\cI}$ is a feasible solution for the PCSC instance $\br{\cH, \cT, \cF,K}$. Assume towards a contradiction that this is not the case, i. e. less than $\spr{\cH}/4$ are covered by $\sepcover{\cI}$. Therefore there exists $t\in \sepcover{\cI}$ and a response $\cH'$ of size $\spr{\cH'}\leq \spr{\cH}/2$ such that hypotheses in $\cH'$ are not covered by $\sepcover{\cI}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\cH'\subseteq U_{t,j}$ (since $\cH'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\cH'} < \spr{\cH}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\cH'}+\spr{U_{t,j}-\cH'}<3/4\cdot \spr{\cH}$ which by definition means that $h$ is covered by $\sepcover{\cI}$, a contradiction.
+        It is enough to argue that $\xi(\sepcover{\cI})$ covers at least $\spr{\cH/4}$ elements from $\cH$.
+        Assume towards a contradiction that this is not the case, i. e. less than $\spr{\cH}/4$ elements are covered by $\xi(\sepcover{\cI})$.
+%Therefore there exists $t\in \sepcover{\cI}$ and a response $\cH'$ of size $\spr{\cH'}\leq \spr{\cH}/2$ such that hypotheses in $\cH'$ are not covered by $\sepcover{\cI}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\cH'\subseteq U_{t,j}$ (since $\cH'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\cH'} < \spr{\cH}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\cH'}+\spr{U_{t,j}-\cH'}<3/4\cdot \spr{\cH}$ which by definition means that $h$ is covered by $\sepcover{\cI}$, a contradiction.
+        Therefore there exists $t\in \sepcover{\cI}$ and a response $U\in t$ that corresponds to a child $u$ of $t$ such that hypotheses in $U$ are not covered by $\xi(\sepcover{\cI})$ and $\spr{\cH_u}\leq\spr{\cH}/2$.
+        (Here we refer to a decision tree $D$ such that $\sepcover{D}=\sepcover{\cI}$).
+        Otherwise the claim holds trivially, since all hypotheses would be covered.
+        Note that $\cH_u\subseteq U$.
+        We have that $U\setminus\cH_u$ is a subset of hypotheses covered by other tests in $\sepcover{\cI}$ and hence by assumption, $\spr{U\setminus\cH_u}\leq \spr{\cH}/4$.
+        Therefore, we have that $\spr{U} = \spr{\cH_u}+\spr{U\setminus\cH_u}<3/4\cdot \spr{\cH}$ which by definition means that all elements in $U$ are covered by $\sepcover{\cI}$, a contradiction.
     \end{proof}
 
+
+\newcommand{\ProcWorstDecisionTree}{\textsc{WorstDecisionTree} }
+\DD{I tak bedziemy oszczedzac miejsce, wiec moze nie warto parafrazowac algorytmu, a dac jakas intuicje jako klej?}
+We now state an algorithm (Algorithm~\ref{alg:worstDecisionTree}) that outputs a decision tree for an input instance $\cI=\br{\cH, \cT, \cF}$ of $\ProblemPCWCAL$.
+It uses a $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ as a black-box subroutine, in order to find a set cover $S$ for  $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+    Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$ is used to split the instance and make recursive calls.
+    Note that the $S$ is supposed to play the role of $\sepcover{\cI}$ according to the bound in Lemma~\ref{lemma:cover_sep_worst_case} and hence we indeed can afford constructing an arbitrary decision tree on the tests in $S$.
+
+%     Algorithm \ref{alg:worstDecisionTree} is recursive and works as follows.
+%     Given an instance $\cI=\br{\cH, \cT, \cF}$, if $\spr{\cH}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+%     Let $S\subseteq\cT$ be the output. We build a decision tree $D_S$ on tests from $S$ closed under $\preceq_{\xi}$.
+%     For each $\cH' \in \cH-S$, we recursively call \ProcWorstDecisionTree on instance $\br{\cH', \cT-S, \cF-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
+\input{pseudocodes/worst_case_learning.tex}
+
+
+The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}.:
+    \begin{observation} \label{obs:DS}
+        Consider $S$ and $D_S$ computed in Algorithm~\ref{alg:worstDecisionTree}.
+        %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\cF$.
+        Then, $\COSTW\br{D_S} \leq \alpha \cdot \spr{\sepcover{\cI}}$.
+    \end{observation}
+
+
 \begin{theorem}
-    If there is an $\br{\gamma, \alpha}$-bicriteria approximation algorithm for PCSC then there is an
+If there is an $\br{\gamma, \alpha}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
 $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCAL$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
-    The algorithm \ref{alg:worstDecisionTree} is recursive and works as follows: Given an instance $\cI=\br{\cH, \cT, \cF}$, if $\spr{\cH}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $\br{\cH, \cT, \cF, f}$ with $f=1/4$, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$. Let $S$ be the returned set of tests. We build a decision tree $D_S$ on tests from $S$ closed under $\cF$. For each $\cH' \in \cH-S$, we recursively call \textsc{WorstDecisionTree} on instance $\br{\cH', \cT-S, \cF-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
-\input{pseudocodes/worst_case_learning.tex}
-The following observation follows by Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}.:
-    \begin{observation}
-        Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\cF$. Then, $\COSTW\br{D_S} \leq \alpha \cdot \spr{\sepcover{\cI}}$.
-    \end{observation}
-    We are now ready to prove the theorem.
-    \begin{lemma}
-        Let $D$ be the decision tree returned by \textsc{WorstDecisionTree} on input $\cI=\br{\cH, \cT, \cF}$. Then, $\COSTW\br{D, \cI} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI}$.
-    \end{lemma}
-    \begin{proof}
-        We prove the lemma by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0. Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \in \cH-S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D', \cI'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'}$, where $D'$ is the decision tree returned by \textsc{WorstDecisionTree} on input $\cI'$. We have that:
+     Let $D$ be the decision tree returned by \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF}$.
+     In order to prove the theorem it is enough to argue that
+     \begin{equation} \label{eq:D}
+     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI}.
+     \end{equation}
+
+     The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
+     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'}$, where $D'$ is the decision tree returned by \ProcWorstDecisionTree on input $\cI'$.
+     To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
+     We have
+%         \begin{align*}
+%             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{\cH' \in \cH - S} \COSTW\br{D', \cI'} \\
+%             \leq & \alpha \cdot \spr{S^*} + \max_{\cH' \in \cH - S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'} \\
+%             \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{\cI} \\
+%             = & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} - \alpha\cdot \OPTW\br{\cI} \\
+%             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} \\
+%        \end{align*}
         \begin{align*}
-            \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{\cH' \in \cH - S} \COSTW\br{D', \cI'} \\
-            \leq & \alpha \cdot \spr{S^*} + \max_{\cH' \in \cH - S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{I'} \\
-            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{\cI} \\
+            \COSTW\br{D} \leq & \COSTW\br{D_S} + \max_{\cH' \in \cH \setminus S} \COSTW\br{D'(\cH')} \\
+            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'} \\
+            \leq & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{\cI} \\
             = & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} - \alpha\cdot \OPTW\br{\cI} \\
-            = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} \\
+            = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI},
         \end{align*}
-        
-        where the second inequality follows by the induction hypothesis, the third inequality follows by Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\cH'} \leq \frac{(4\gamma -1)}{4\gamma}\cdot n$ for every $\cH' \in \cH-S$ and the equalities follow by rearranging terms. This concludes the proof of the lemma.
-    \end{proof}
+        where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcover}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \frac{(4\gamma -1)}{4\gamma}\cdot n$ for every $\cH' \in \cH\setminus S$.
+        This concludes the proof of the theorem.
 \end{proof}
 
 
 \subsection{Average Case}
 
-We follow a similar idea, however we use the connection to PCMSSC instead of PCSC.
+We follow a similar idea, however we use the connection to PCMSSC instead of $\ProblemPCSC$.
 
 
 This allows to use $\COSTA\br{\sepcover{\cI}, \cI}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for PCACAL. We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
@@ -118,7 +168,7 @@ This allows to use $\COSTA\br{\sepcover{\cI}, \cI}$ as a lower bound on $\OPTA\b
 $O\br{\beta \cdot \log n}$-approximation algorithm for PCACAL.
 \end{theorem}
 \begin{proof}
-The idea behind Algorithm \ref{alg:averageDecisionTree} is the same as for the worst case version of the problem except the fact that we use a solution to PCMSSC instead of PCSC. 
+The idea behind Algorithm \ref{alg:averageDecisionTree} is the same as for the worst case version of the problem except the fact that we use a solution to PCMSSC instead of $\ProblemPCSC$.
 \input{pseudocodes/average_case_learning.tex}
 \begin{observation}
     Let $D_S$ be the decision tree consisting of the sequence of tests $S$. Then, $\COSTA\br{D_S, \cI} \leq \beta \cdot \COSTA\br{\sepcover{\cI}, \cI}$.

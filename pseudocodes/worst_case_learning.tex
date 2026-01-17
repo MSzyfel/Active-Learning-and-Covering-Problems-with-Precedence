@@ -1,24 +1,25 @@
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \LinesNumbered
-\caption{The $O(\alpha\cdot\log n)$-approximation algorithm for the PCWCAL}
+
+\caption{The $O(\alpha\cdot\log n)$-approximation algorithm for $\ProblemPCWCAL$}
 \label{alg:worstDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\textsc{WorstDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
-\If{$\spr{\mathcal{H}} = 1$}{
-    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$.
+\Proc{\ProcWorstDecisionTree$(\cH, \cT, \cF)$}{
+\If{$\spr{\cH} = 1$}{
+    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
 }
-\ForEach{$t \in \mathcal{T}$}{
-Set $t$ to cover $u\in \mathcal{H}$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\mathcal{H}}$.
-}
-$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for PCSC on instance $(\mathcal{H}, \mathcal{T}, \mathcal{F}, f)$ with $f=1/4$.
+%\ForEach{$t \in \cT$}{
+%Set $t$ to cover $u\in \cH$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\cH}$.
+%}
+$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
 
-$D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\mathcal{F}$.
+$D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
 
-\ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
-$D' \gets$ \textsc{WorstDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
+\ForEach{\textup{leaf }$v$\textup{ of }$D$}{%$\cH' \in \cH - S$}{
+$D_u \gets$ \ProcWorstDecisionTree$(\cH_v, \cT \setminus  S, (\cT\setminus S,\preceq))$.
 
-Attach $D'$ to the leaf of $D$ corresponding to $\mathcal{H}'$.
+Attach $D_u$ to the leaf of $D$ corresponding to $\cH'$.
 }
 \Return $D$.
 }
