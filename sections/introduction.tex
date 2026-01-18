@@ -73,32 +73,16 @@ In order to show a full picture of our method we introduce three remaining probl
 Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
 \end{definition}
 
-The \emph{density} $\Delta$ of a nonempty subfamily $\mathcal{A}$ on an universum $X$ ($A\subseteq X$ for each $A\in\mathcal{A}$) is
-\[
-\Delta\br{\mathcal{A}, X} \equiv \frac{\spr{\bigcup\mathcal{A}\cap X}}{\spr{\mathcal{A}}}
-\]
-For convenience, we define $\Delta\br{\emptyset, X} < 0$.
-\begin{definition}[Max-Density Precedence-Closed Subfamily (MDPCS)]
-Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\prec$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the MDPCS problem asks to find a precedence-closed subfamily $\mathcal{A} \subseteq \mathcal{G}$ that maximizes $\Delta\br{\mathcal{A}, R}$.
-\end{definition}
-
 \begin{definition}[Precedence constrained test cover (PCTC)]
 Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
 \end{definition}
 \DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
-\DD{co dokładnie znaczy ``distinguishing a pair''?}
 
-\begin{figure}[h]
-\centering
-\input{figures/pcal_example}
-\caption{Example of a PCAL instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\input{figures/pccp_example}
-\caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \input{figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \end{figure}
 
 
 \begin{table}[htb!]

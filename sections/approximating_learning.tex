@@ -160,22 +160,22 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
 \begin{lemma}\label{lemma:cover_sep_average_case}
     Let $\cI=\br{\cH, \cT, \cF}$ be any $\ProblemPCACAL$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
-    Then, $\coverage\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
+    Then, $\coverageTime\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
 \begin{proof}
-    Assume towards a contradiction that $\coverage\br{S^*} > \COSTA\br{\sepcover{\cI}}$.
-    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverage\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $S^*$.
+    Assume towards a contradiction that $\coverageTime\br{S^*} > \COSTA\br{\sepcover{\cI}}$.
+    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $S^*$.
     Let $\sigma$ be the shortest prefix of $\sepcover{\cI}$ that covers at least $\spr{\cH}/4$ elements, $\spr{\bigcup\br{\sigma}}\geq \spr{\cH}/4$.
     Note that because we consider a prefix, the precedence constraints are satisfied.
     Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}. \DD{W sumie moze sie powolac na lemma \ref{lemma:cover_sep_worst_case} bo ma w sformulowaniu ten bound (?)}
     Take an arbitrary $h \in \cH$.
     There are two cases to consider:
     \begin{itemize}
-        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, tests previous to $t$ in $\sigma$ cover at most $\spr{\cH}/4$ elements. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\cH}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverage\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
-        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverage\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $\spr{\sigma}$.
+        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, tests previous to $t$ in $\sigma$ cover at most $\spr{\cH}/4$ elements. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\cH}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
+        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $\spr{\sigma}$.
         \DD{fix w def. kryterium: niepokryte elementy kontrybuuja dlugosc sekwencji}
     \end{itemize}
-    Thus, we have that $\coverage\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
+    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
     
 \begin{theorem}

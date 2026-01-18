@@ -1,34 +1,41 @@
 \section{Set covering with constraints}
 
-For a subset $X$ of the universe, the coverage on $X$ is:
+For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$.
+For $S \in \mathcal{G}$, let $\closure{S}$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$, i.e., $x\in\closure{S}$ if and only if $x\in S$ or $x\preceq y$ for some $y\in S$.
+\DD{te definicje byc moze do przodu...}
+
+The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A\subseteq X$ for each $A\in\cA$) is
 \[
-\cov\br{\mathcal{A}, X} = \cov\br{\mathcal{A}} \cap X
+\Delta\br{\cA, X} \equiv \frac{\spr{\bigcup\cA\cap X}}{\spr{\cA}}
 \]
-For $S \in \mathcal{G}$, let $P[S]$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$ (i.e., the ancestors of $S$ including $S$ itself).
+For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+\begin{definition}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
+Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the $\ProblemMDPCS$ problem asks to find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA, R}$.
+\end{definition}
+
 
 \subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
 
-The key to solce PCSC and PCMSSC is to solve the MDPCS problem. An approximation algorithm for MDPCS can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{InsertCitHere}, the following greedy algorithm achieves an $O\br{\sqrt{m}}$-approximation for MDPCS: 
-
+The key to solce PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
 \input{pseudocodes/mdpcs_greedy.tex}
 
-Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{P[S], R}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. We show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation .
+Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}, R}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. We show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation .
 
- For each $S \in \mathcal{G}$, let $p(S) = \spr{P[S]}$ and $c(S, R) = \spr{\cov\br{P[S], R}}$. 
+ For each $S \in \mathcal{G}$, let $p(S) = \spr{\closure{S}}$ and $c(S, R) = \spr{\cov\br{\closure{S}, R}}$.
 \begin{theorem}
 Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
 $
 p(S) \leq C \cdot c(S)^\epsilon
 $ ($\epsilon$-shallow ancestry).
-Then MDPCS-Greedy provides an $O(n^\epsilon)$-approximation.
+Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
 \end{theorem}
 
 \begin{proof}
- Let $\mathcal{A}^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
 \begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\mathcal{A}, R} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\mathcal{A}^*, R} \leq n$. Therefore:
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, R} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, R} \leq n$. Therefore:
 $$
-\frac{\Delta\br{\mathcal{A}^*, R}}{\Delta\br{\mathcal{A}, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 $$
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
 c(S) \leq \delta \cdot C \cdot c(S)^\epsilon
@@ -36,17 +43,17 @@ $. Rearraning this inequality, we get that $
 c(S) \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 $. We have that:
 \[
-\spr{\cov\br{\mathcal{A}^*}} = \spr{\bigcup_{j=1}^k\cov\br{S_j, R}} \leq \sum_{j=1}^{k} c(S_j) \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\spr{\cov\br{\cA^*}} = \spr{\bigcup_{j=1}^k\cov\br{S_j, R}} \leq \sum_{j=1}^{k} c(S_j) \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 \]
 
 Therefore:
 \[
-\Delta\br{\mathcal{A}^*, R}= \frac{\spr{\cov\br{\mathcal{A}^*, R}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\Delta\br{\cA^*, R}= \frac{\spr{\cov\br{\cA^*, R}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 \]
 
-By the greedy choice, $\Delta\br{\mathcal{A}, R} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+By the greedy choice, $\Delta\br{\cA, R} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
 \[
-\frac{\Delta\br{\mathcal{A}^*, R}}{\Delta\br{\mathcal{A}, R}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
 \]
 \end{enumerate}
 Since $C$ is constant, the theorem follows.
@@ -58,7 +65,7 @@ Since $C$ is constant, the theorem follows.
 We show the following:
 
 \begin{theorem}
-    If there exists an $\gamma$ approximation algorithm for the MDPCS problem, then there exists an $\br{H_K+1} \cdot \gamma$ - approximate algorithm for the PCSC problem.
+    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $\br{H_K+1} \cdot \gamma$ - approximate algorithm for the PCSC problem.
 
 \end{theorem}
 \begin{proof}
@@ -73,7 +80,7 @@ We show the following:
 \subsection{Precedence constrained min sum set cover}
 By \cite{citehere}:
 \begin{theorem}
-    If there exists an $\gamma$ approximation algorithm for the MDPCS problem, then there exists an $4\cdot \gamma$ - approximate algorithm for the PCMSSC problem.
+    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $4\cdot \gamma$ - approximate algorithm for the PCMSSC problem.
 \end{theorem}
 \begin{theorem}
     If the precedence constraints form an outforest, then there exists an $\br{O\br{\log n}}$-approximation algorithm for PCMSSC.

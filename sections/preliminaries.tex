@@ -37,8 +37,8 @@ $$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
 Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
 
 
-For a sequence $S$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverage\br{S}$ to denote the sum of coverage times of all elements in $\bigcup S$ (in case of dealing with sequences, with a slight abuse of notation we use the set notaion).
-Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$, $\OPTA\br{\cI}=\min\brc{\coverage\br{S} \mid \spr{\bigcup S}\geq k }$.
+For a sequence $S$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverageTime\br{S}$ to denote the sum of coverage times of all elements in $\bigcup S$ (in case of dealing with sequences, with a slight abuse of notation we use the set notaion).
+Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$, $\OPTA\br{\cI}=\min\brc{\coverageTime\br{S} \mid \spr{\bigcup S}\geq k }$.
 % \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
 % Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a DAG $\cF = \brc{\cT, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\cH$ while minimizing the worst-case depth of the tree.
 % \end{definition}
