@@ -1,44 +1,74 @@
 \section{Preliminaries}
-\begin{definition}[Precedence constrained set cover (PCSC)]
-Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
-\end{definition}
-\begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
-Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
-\end{definition}
-\begin{definition}[Precedence constrained test cover (PCTC)]
-Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
-\end{definition}
+% \begin{definition}[Precedence constrained set cover (PCSC)]
+% Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
+% \end{definition}
+% \begin{definition}[Precedence constrained min-sum set cover (PCMSSC)]
+% Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
+% \end{definition}
 
-In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
+% In the active learning problems, we are given a set of hypotheses $\mathcal{H}$ and a set of tests $\mathcal{T}$. Each test $t$ is an arbitrary partition of $\mathcal{H}$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \mathcal{H}$. The tests are subject to precedence constraints encoded by a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\mathcal{F}$ have already been performed.
 
-The goal is to design a \textit{strategy} of learning which is an adaptive algorithm, that based on the previous responses provides the searcher with the next test to be performed. We represent this strategy as a rooted tree called a \textit{decision tree} $D$, where each internal node represents a test to be performed and each leaf represents a hypothesis. We demand that each edge outgoing from the root $r$ of $D$ is associated with a unique response to a test $r$ and that the same holds for all decision subtrees of $D-r$ (which are not leafs). It should be remarked that it is possible for a test to appear multiple times in the decision tree. Therefore, by $\mathcal{T}_D$ we denote subset of $\mathcal{T}$ that appear in decision tree $D$ and by $T_D$ we denote the set of inner nodes of $D$, so that each usage of a test in $D$ corresponds to a unique element of $T_D$.
+\DD{Propozycje do notacji:
+\begin{itemize}
+ \item odnosnie czesciowych porzadkow, to moze pozostac przy akademickim $(\cT,\preceq)$
+ \item drzewo decyzyjne to $D$, to niech $D_v$ oznacza poddrzewo ukorzenione w tescie $v$; wowczas $V(D_v)$ donosiloby sie do wierzcholkow/testow ponizej $v$, wlacznie z $v$
+ \item moze cos w rodzaju leaves($D'$) oraz internal($D'$) do oznaczanie lisci i wierzch. wewnetrznych drzewa
+ \item do oznaczania sekwencji zapytan do wierzcholka $v$ w $D$ moznaby uzywac standardowego $D_{r\rightarrow v}$
+ \item proponuje, aby wszelkie parametry byly komendami latex ($cov()$, nazwy problemow (to juz wprowadzilem).
+\end{itemize}
+}
 
-Let $T_{D, h}$ denote the sequence of tests performed when the hidden hypothesis is $h$ and the learner follows the strategy represented by decision tree $D$. The cost of identifying hypothesis $h$ using decision tree $D$ is defined as $\COST\br{D, h} = \spr{T_{D, h}}$. We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \mathcal{H}} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \mathcal{H}} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\mathcal{H}}$).
+In all adaptive learning problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous responses provides the \questioner with the next test to be performed.
+We represent this strategy as a rooted tree $D$ called a \textit{decision tree}, where each internal node represents a test to be performed and each leaf represents a hypothesis.
+Formally, a decision tree is defined recursively as follows.
+If $r=\br{R_1,\ldots,R_l}\in\cT$ is the first test performed by $\cS$, then $r$ is the root of $D$.
+For each reply $R_i$, $i\in\brc{1,\ldots,l}$, take inductively defined decision tree $D_i$ derived from the queries done by $\cS$ when the reply to $r$ is $R_i$.
+Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r$.
+To complete the inductive definition, whenever $\cS$ finalizes the search by declaring that $h\in\cH$ is the target, the corresponding decistion subtree is the vertex $h$.
+Hence, each edge outgoing from the root $r$ of $D$ is associated with a unique response to a test $r$, and the same holds for all internal
+It should be remarked that it is possible for a test to appear multiple times in the decision tree.
+Hence, with a slight abuse of notation we use tests as vertices of $D$ but whenever a given test provides many vertices in $D$ we make clear which one we refer to.
 
-\begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
-Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the worst-case depth of the tree.
-\end{definition}
-\begin{definition}[Precedence constrained average case active learning (PCACAL)]
-Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, 
-% and a probability distribution over $\mathcal{H}$, 
-construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
-\end{definition}
 
-Let $\mathcal{H}_t$ denote the set of hypotheses that are not yet distinguished by the tests selected before test $t\in T_D$ in the decision tree. Then we immediately obtain the following simple observation:
+\DD{Let $\tests{D}{h}$, denote the sequence of tests performed when the hidden hypothesis is $h$ and the learner follows the strategy represented by decision tree $D$. $\leftarrow$ to chyba nie jest uzywane (check todo).}
+The cost of identifying hypothesis $h$ using a decision tree $D$ is denoted by $\COST\br{D, h}$ and defined as the number of tests performed by $D$ when the target is $h$.
+We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \mathcal{H}} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \mathcal{H}} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\mathcal{H}}$).
+The criteria we consider for any $\ProblemPCAL$ instance $I$ are denoted by
+$$\OPTA\br{I}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
+$$\OPTW\br{I}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
+\DD{Skoro mamy już te problemy $\ProblemPCWCAL$ oraz $\ProblemPCACAL$ zdefiniowane, to tutaj aby nie powtarzac w nowej notacji drze decyzyjnych zamienie to na uwage/obserwacje w ramach jednego paragrafu do optymalizacji czego to sie sprowadza odnosnie drzew dec.}
+Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{I}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{I}$.
+% \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
+% Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests, and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the worst-case depth of the tree.
+% \end{definition}
+% \begin{definition}[Precedence constrained average case active learning (PCACAL)]
+% Given a set $\mathcal{H}$ of $n$ hypotheses, a set $\mathcal{T}$ of $m$ tests and a DAG $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding precedence constraints,
+% % and a probability distribution over $\mathcal{H}$,
+% construct a decision tree respecting precedence constraints that identifies any hypothesis from $\mathcal{H}$ while minimizing the expected depth (average case cost).
+% \end{definition}
+
+\DD{For any subtree $D'$ of $D$, $\tests{D'}$ denotes the subset of $\mathcal{T}$ that appear in $D'$. $\leftarrow$ to chyba nie jest uzywane (check todo)}
+We write $\inner{D}$ we denote the set of nodes in $D$ that are not leaves.
+Hence, each usage of a test in $D$ corresponds to a unique element of $\inner{D}$.
+\DD{W sumie sie wole upewnic co mamy na mysli piszac ``not distinguished''? Ja to czytam jako zbior hipotez bedacych potencjalnymi targetami?}
+Let $\mathcal{H}_t$ denote the set of hypotheses that are not yet distinguished by the tests selected before test $t\in \inner{D}$ in the decision tree.
+\DD{Trzebaby zrobic jaki fix na tą notację, może $\cH(D_v)$ jako zbiór hipotez gdy dochodzimy do podrzewa $D_v$. Odnoszenie się do wierzchołka drzewa zamiast hipotezy ma tą zaletę, że czasem mamy warianty gdzie jedna hipoteza jest w wielu miejscach w drzewie, a wówczas ta notacja się psuje.}
+Then we immediately obtain the following simple observation:
 \begin{observation}
     Let $D$ be any decision tree for $\mathcal{I}=\br{\mathcal{H}, \mathcal{T}, \mathcal{F}}$. Then we have that:
     $$
-    \COSTA\br{D} = \sum_{t \in T_D} \spr{\mathcal{H}_t}
+    \COSTA\br{D} = \sum_{t \in \inner{D}} \spr{\mathcal{H}_t}
     $$
 \end{observation}
+\DD{unifikacja $I$ vs $\cI$}
 
 We will also make use of the following folklore lemmas which are due to the fact that any decision tree for $I$ can be restricted to a decision tree for each subproblem $\br{\mathcal{H}_i, \mathcal{T}, \mathcal{F}}$ without increasing the cost:
 
 \begin{lemma}\label{lemma:subspace_opt}
-    Let $I=\br{\mathcal{H}, \mathcal{T},\mathcal{F}}$ be any PCAL instance. Let $\mathcal{H}'\subseteq \mathcal{H}$. Then $\OPT\br{\mathcal{H}', \mathcal{T}, \mathcal{F}} \leq \OPT\br{I}$.
+    Let $I=\br{\mathcal{H}, \mathcal{T},\mathcal{F}}$ be any $\ProblemPCAL$ instance. Let $\mathcal{H}'\subseteq \mathcal{H}$. Then $\OPT\br{\br{\mathcal{H}', \mathcal{T}, \mathcal{F}}} \leq \OPT\br{I}$.
 \end{lemma}
 \begin{lemma}\label{lemma:subinstances_avg}
-    Let $I=(\mathcal{H}, \mathcal{T}, \mathcal{F})$ be an instance of $PCACAL$. Let $\mathcal{H}_1,\dots,\mathcal{H}_t\subseteq \mathcal{H}$ such that $\bigcup_{i=1}^t \mathcal{H}_i \subseteq \mathcal{H}$ and for any $i\neq j$, $\mathcal{H}_i\cap \mathcal{H}_j = \emptyset$. Then we have that:
+    Let $I=(\mathcal{H}, \mathcal{T}, \mathcal{F})$ be an instance of $\ProblemPCACAL$. Let $\mathcal{H}_1,\dots,\mathcal{H}_t\subseteq \mathcal{H}$ such that $\bigcup_{i=1}^t \mathcal{H}_i \subseteq \mathcal{H}$ and for any $i\neq j$, $\mathcal{H}_i\cap \mathcal{H}_j = \emptyset$. Then we have that:
     $$
     \OPTA\br{I} \geq \sum_{i=1}^t \OPTA\br{\br{\mathcal{H}_i, \mathcal{T}, \mathcal{F}}}
     $$

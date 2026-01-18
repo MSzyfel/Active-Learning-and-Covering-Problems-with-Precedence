@@ -12,9 +12,9 @@ Without formally stating an optimization criterion we refer to  the above as the
 The goal for the \questioner is to output $\target$.
 
 Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
-This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecesors had to be performed previously.
-Hence we have the \emph{Worst Case Adaptive Learing with Precedences} ($\ProblemWCALP$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
-Similarly, in the \emph{Average Case Adaptive Learing with Precedences} ($\ProblemACALP$) the optimization criterion changes to minimizing the number of queries done on average.
+This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecessors had to be performed previously.
+Hence we have the \emph{Worst Case Adaptive Learning with Precedences} ($\ProblemPCWCAL$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
+Similarly, in the \emph{Average Case Adaptive Learning with Precedences} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
 
 
 In this work we study connections between adaptive lerning with precedences and the covering problems defined as follows.
@@ -73,10 +73,10 @@ inforest & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
 \hline
 outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
 \hline
-general & $O(\sqrt{n}\log n)$* & $O(\sqrt{n})$ & $O(\sqrt{n}\log n)$* & $O(\sqrt{n}\log n)$* \\
+general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt{m}\log n)$* \\
 \hline
 \end{tabular}
-\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results)}\label{tab:results}
+\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
 \end{table}
 
 \begin{figure}[h]
