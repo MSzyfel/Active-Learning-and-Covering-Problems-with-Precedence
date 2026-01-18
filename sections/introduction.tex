@@ -25,9 +25,8 @@ We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and for
 In the \emph{Precedence Constrained Set Cover} ($\ProblemPCSC$) the goal is to minimize $\spr{\cC}$.
 A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
 The \emph{coverage time} of a $x\in\bigcup\cC$ is the minimum index $i$ such that $x\in C_i$.
-In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_l)$ that covers at least $k$ items in $\cU$ and minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
+In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_k)$ that minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
 
-\DD{czy powyzsze jest dobrze zdefiniowane? tzn. jest pewna subtelnosc w tym, ze do coverage time wliczone sa wszystkie elementy, ktore pokrywa sekwencja. Chodzi o to, ze moze ich byc duzo wiecej niz $k$, wiec niejako placimy kare za pokrywanie za duzo. Nie do konca to intuicyjne, wiec chcialem przedyskutowac.}
 
 % Consider following problems:
 % \begin{itemize}
@@ -54,7 +53,7 @@ Hence we start with stating the main results of this work.
 
 
 \DD{Ten przykład jest super, ale chyba musimy znaleźć sposób na jego kompresję, tzn. nie stać nas na zapłacenie całej strony; około 1/3 strony byłaby ok (może tabelka obok drzewa decyzyjnego (moze zamiana kolumn vs wierszy aby ją powęzić, a może mocno zminimalizować przestrzeń między kolumnami, a partial order jako łuki pomiędzy etykietami wierszy tabelki?); też do przemyślenia gdzie ten przykład umieścić (raczej nie w ``contribution'', ale albo w intro, albo w preliminaries chyba}
-\begin{figure}[htb]
+\begin{figure}[htb!]
 \centering
 \input{figures/pcal_example}
 \caption{Example of a $\ProblemPCAL$ instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
@@ -91,13 +90,18 @@ Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial ord
 
 \begin{figure}[h]
 \centering
-\input{figures/reduction_diagram}
-\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
+\input{figures/pcal_example}
+\caption{Example of a PCAL instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\input{figures/pccp_example}
+\caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
 \end{figure}
 
 
-
-\begin{table}[h]
+\begin{table}[htb!]
 \centering
 \begin{tabular}{|l|c|c|c|c|}
 \hline
@@ -111,9 +115,15 @@ inforest & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
 \hline
 outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
 \hline
-general & $O(\sqrt{n}\log n)$* & $O(\sqrt{n})$ & $O(\sqrt{n}\log n)$* & $O(\sqrt{n}\log n)$* \\
+general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt{m}\log n)$* \\
 \hline
 \end{tabular}
-\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results)}\label{tab:results}
+\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
 \end{table}
+
+\begin{figure}[h]
+\centering
+\input{figures/reduction_diagram}
+\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
+\end{figure}
 
