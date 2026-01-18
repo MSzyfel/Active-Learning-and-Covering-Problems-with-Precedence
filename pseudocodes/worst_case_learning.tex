@@ -5,14 +5,15 @@
 \caption{The $O(\alpha\cdot\log n)$-approximation algorithm for $\ProblemPCWCAL$}
 \label{alg:worstDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\ProcWorstDecisionTree$(\cH, \cT, \cF)$}{
+\Proc{\ProcWorstDecisionTree$(\cH, \cT, \cF, \blackBox)$}{
 \If{$\spr{\cH} = 1$}{
     \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
 }
 %\ForEach{$t \in \cT$}{
 %Set $t$ to cover $u\in \cH$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\cH}$.
 %}
-$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
+%$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
+$S \gets$ Call $\blackBox$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
 
 $D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
 

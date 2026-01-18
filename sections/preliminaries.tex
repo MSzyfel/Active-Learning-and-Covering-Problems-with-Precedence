@@ -31,10 +31,14 @@ In other words, $\tests{D}{v}$ consists of the nodes of the path from the root t
 The cost of identifying hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}$, where $v$ is the leaf of $D$ that represent the event of declaring that $h$ is the target.
 We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\cH}$).
 The criteria we consider for any $\ProblemPCAL$ instance $I$ are denoted by
-$$\OPTA\br{I}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
-$$\OPTW\br{I}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
+$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
+$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
 \DD{Skoro mamy już te problemy $\ProblemPCWCAL$ oraz $\ProblemPCACAL$ zdefiniowane, to tutaj aby nie powtarzac w nowej notacji drze decyzyjnych zamienie to na uwage/obserwacje w ramach jednego paragrafu do optymalizacji czego to sie sprowadza odnosnie drzew dec.}
-Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{I}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{I}$.
+Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
+
+
+For a sequence $S$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverage\br{S}$ to denote the sum of coverage times of all elements in $\bigcup S$ (in case of dealing with sequences, with a slight abuse of notation we use the set notaion).
+Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$, $\OPTA\br{\cI}=\min\brc{\coverage\br{S} \mid \spr{\bigcup S}\geq k }$.
 % \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
 % Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a DAG $\cF = \brc{\cT, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\cH$ while minimizing the worst-case depth of the tree.
 % \end{definition}
@@ -67,14 +71,14 @@ The next lemma gives a `monotonicity' property for $\ProblemPCAL$ with respect t
 
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\cF}$ and $\cI'=\br{\cH', \cT, \cF}$ be two instances of $\ProblemPCAL$, where $\cH'\subseteq \cH$.
-    Then, $\OPT\br{I'} \leq \OPT\br{I}$.
+    Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
 \end{lemma}
 \begin{lemma}\label{lemma:subinstances_avg}
     Let $I=(\cH, \cT, \cF)$ be an instance of $\ProblemPCAL$.
     Let $\cH_1,\dots,\cH_t\subseteq \cH$ be such that $\bigcup_{i=1}^t \cH_i \subseteq \cH$ and for any $i\neq j$, $\cH_i\cap \cH_j = \emptyset$.
     Then,
     $$
-    \OPTA\br{I} \geq \sum_{i=1}^t \OPTA\br{\br{\cH_i, \cT, \cF}}.
+    \OPTA\br{\cI} \geq \sum_{i=1}^t \OPTA\br{\br{\cH_i, \cT, \cF}}.
     $$
 \end{lemma}
 
