@@ -6,9 +6,10 @@ For $S \in \mathcal{G}$, let $\closure{S}$ denote the minimal precedence-closed 
 
 The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A\subseteq X$ for each $A\in\cA$) is
 \[
-\Delta\br{\cA, X} \equiv \frac{\spr{\bigcup\cA\cap X}}{\spr{\cA}}
+\Delta\br{\cA, X} \equiv \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}
 \]
 For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+We also write $\Delta\br{\cA}$ when $X$ is the universum.
 \begin{definition}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
 Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the $\ProblemMDPCS$ problem asks to find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA, R}$.
 \end{definition}
@@ -58,22 +59,61 @@ By the greedy choice, $\Delta\br{\cA, R} \geq \delta$ and by assumption $\delta 
 \end{enumerate}
 Since $C$ is constant, the theorem follows.
 \end{proof}
+
+
+
 \subsection{Precedence constrained set cover}
+
+
+\input{pseudocodes/set_cover.tex}
+
+Denote by $\cA_i$ the set $\cA$ that is the output of the $\gamma$-approximation algorithm for $\ProblemMDPCS$ from the $i$-th iteration of Algorithm~\ref{alg:PCSC} for $i\in\brc{1,\ldots,l}$.
+For brevity let $\cC_i$, $i\in\br{1,\ldots,l}$ be the set $\cC$ obtained at the end of the iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
+Let $R_i=\cU\setminus\cov\br{\cA_1\cup\cdots\cup\cA_i}$ for $i\in\brc{1,\ldots,l}$.
+Let for the border case $R_0=\emptyset$ and $\cC_0=\emptyset$.
+% For each $u\in\cov(\cA)$ we associate the \emph{value} of $u$,
+% $$
+% c(u):=\frac{\spr{\cA_i}}{\spr{\cov(\cA_i,R_i)}},
+% $$
+% where $i$ is the first iteration that covered $u$, i.e., $u\in\cov(\cA_i)\setminus R_{i-1}$.
+
+Consider first the case when $l=1$, i.e., there is only one iteration.
+Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cC_{opt}}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
+From this we obtain
+$\spr{\cA_l}  \leq \frac{1}{\gamma}\cdot \cov\br{\cA_l}\spr{\cC_{opt}}/k \leq \frac{n}{\gamma k}\spr{\cC_{opt}}$.
+
+
+Let now $l>1$.
+Note that $\spr{\cA_1\cup\cdots\cup\cA_{l-1}}<k$.
+Hence, via a standard value-measure argument, we obtain that
+$$
+\spr{\cC_l\setminus\cA_{l}} \leq \gamma\cdot H_n \cdot OPT = \bigo(\gamma\cdot\log n\cdot OPT),
+$$
+where $H_n=\sum_{j=0}^n 1/j$.
+This bounds the number of sets except for the ones in $\cA_l\setminus\cC_{i-1}$.
+Consider the $\ProblemPCSC$ instance $\cI'=\br{R_l,\brc{S'\mid S'=S\cap R_i,S\in\cS},\preceq,k'=k-\cov\br{\cC_{l-1}}}$ that is obtained from the original instance by eliminating elements that are already coverted.
+(In the above notation we omit empty sets $S'$).
+Let $\cC_{opt}'$ be an optimal solution to $\cI'$.
+By the analyis of the case $l=1$, $\spr{\cA_l\setminus\cC_{l-1}}\leq\frac{n}{\gamma k'}\spr{\cC_{opt}'}$.
+
+\DD{w powyzszym rozumowanie sie zalamuje, gdyz $k'$ moze byc male i mamy $\bigo(n/\gamma)$-approx.}
+
+
+
+\begin{theorem} \label{thm:MDPCStoPCSC}
+    If there exists an $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists an $(\gamma\cdot\log n +1/(\gamma f))$-approximation algorithm for $\ProblemPCSC$, where $f=k/n$.
+\end{theorem}
+\begin{proof}
+
+    % \begin{lemma}
+    %     Let $u_1,\dots, u_p$ be the ele
+    % \end{lemma}
+\end{proof}
 
 \MS{Tu poniżej miałem jakąś próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
 
 We show the following:
 
-\begin{theorem}
-    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $\br{H_K+1} \cdot \gamma$ - approximate algorithm for the PCSC problem.
-
-\end{theorem}
-\begin{proof}
-    \input{pseudocodes/set_cover.tex}
-    % \begin{lemma}
-    %     Let $u_1,\dots, u_p$ be the ele
-    % \end{lemma}
-\end{proof}
 \begin{theorem}
     If the precedence constraints form an outforest, then there exists an bicriteria $\br{4, O\br{\log n}}$-approximation algorithm for PCSC which be converted to an $O\br{\log^2 n}$ approximation algorithm.
 \end{theorem}

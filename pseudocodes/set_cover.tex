@@ -1,32 +1,66 @@
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \LinesNumbered
-\caption{The $\gamma$-greedy algorithm for PCSC}
+\caption{The $\gamma$-greedy algorithm for $\ProblemPCSC$}
 \label{alg:PCSC}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\textsc{PCSC}$(\mathcal{U}, \mathcal{S}, \mathcal{F}, K)$}{
-$\mathcal{C} \gets \emptyset$\;
+\Proc{$\ProcedurePCSC(\cU, \cS, \preceq, k)$}{
+$\cC \gets \emptyset$\;
 
-\While{$\spr{\cov\br{\mathcal{C}, \mathcal{U}}} < K$}{
-$\mathcal{A} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\mathcal{U} - \mathcal{C}, \mathcal{S}-\mathcal{C}, \mathcal{F}-\mathcal{C}, m)$\;
+\While{$\spr{\cov\br{\cC, \cU}} < k$}{
+$\mathcal{A} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC)$\;
 
-\If{$\spr{\cov\br{\mathcal{C}\cup \mathcal{A}, \mathcal{U}}} \geq K$}
-{
-    Find the minimum budget $B \in [\spr{\mathcal{A}}]$, such that the $\gamma$-approx. algorithm for MDPCS on $(\mathcal{U} - \mathcal{C}, \mathcal{S}-\mathcal{C}, \mathcal{F}-\mathcal{C}, B)$ returns a set 
-    $\mathcal{B}$ with $\spr{\cov\br{\mathcal{B}, \mathcal{U}-\mathcal{C}}} \geq \frac{K-\cov\br{\mathcal{C}, \mathcal{U}}}{\alpha}$\;
+% \If{$\spr{\cov\br{\cC\cup \mathcal{A}, \cU}} \geq k$}
+% {
+%     Find the minimum budget $B \in [\spr{\mathcal{A}}]$, such that the $\gamma$-approx. algorithm for MDPCS on $(\cU - \cC, \cS-\cC, \mathcal{F}-\cC, B)$ returns a set
+%     $\mathcal{B}$ with $\spr{\cov\br{\mathcal{B}, \cU-\cC}} \geq \frac{k-\cov\br{\cC, \cU}}{\alpha}$\;
+%
+%     \While{$\spr{\cov\br{\cC, \cU}} < k$}{
+%         $\mathcal{B} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\cU - \cC, \cS-\cC, \mathcal{F}-\cC, B)$\;
+%
+%         $\cC\gets \cC \cup \mathcal{B}$\;
+%     }
+%
+%}
 
-    \While{$\spr{\cov\br{\mathcal{C}, \mathcal{U}}} < K$}{
-        $\mathcal{B} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\mathcal{U} - \mathcal{C}, \mathcal{S}-\mathcal{C}, \mathcal{F}-\mathcal{C}, B)$\;
-        
-        $\mathcal{C}\gets \mathcal{C} \cup \mathcal{B}$\;
-    }
-
-    \Return $\mathcal{C}$
+% \ForEach{$u \in \cov\br{\mathcal{A}, \cU-\cC}$}{
+%     $c\br{u}\gets \Delta\br{\mathcal{A}, \cU-\cC}$\;
+% }
+$\cC \gets \cC \cup \mathcal{A}$\;
 }
-\ForEach{$u \in \cov\br{\mathcal{A}, \mathcal{U}-\mathcal{C}}$}{
-    $c\br{u}\gets \Delta\br{\mathcal{A}, \mathcal{U}-\mathcal{C}}$\;
-}
-$\mathcal{C} \gets \mathcal{C} \cup \mathcal{A}$\;
-}
+\Return $\cC$
 }
 \end{algorithm}
+
+% \begin{algorithm}[h]
+% \DontPrintSemicolon
+% \LinesNumbered
+% \caption{The $\gamma$-greedy algorithm for PCSC}
+% \label{alg:PCSC}
+% \SetKwProg{Proc}{procedure}{}{}
+% \Proc{\textsc{PCSC}$(\cU, \cS, \mathcal{F}, K)$}{
+% $\cC \gets \emptyset$\;
+%
+% \While{$\spr{\cov\br{\cC, \cU}} < K$}{
+% $\mathcal{A} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\cU - \cC, \cS-\cC, \mathcal{F}-\cC, m)$\;
+%
+% \If{$\spr{\cov\br{\cC\cup \mathcal{A}, \cU}} \geq K$}
+% {
+%     Find the minimum budget $B \in [\spr{\mathcal{A}}]$, such that the $\gamma$-approx. algorithm for MDPCS on $(\cU - \cC, \cS-\cC, \mathcal{F}-\cC, B)$ returns a set
+%     $\mathcal{B}$ with $\spr{\cov\br{\mathcal{B}, \cU-\cC}} \geq \frac{K-\cov\br{\cC, \cU}}{\alpha}$\;
+%
+%     \While{$\spr{\cov\br{\cC, \cU}} < K$}{
+%         $\mathcal{B} \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\cU - \cC, \cS-\cC, \mathcal{F}-\cC, B)$\;
+%
+%         $\cC\gets \cC \cup \mathcal{B}$\;
+%     }
+%
+%     \Return $\cC$
+% }
+% \ForEach{$u \in \cov\br{\mathcal{A}, \cU-\cC}$}{
+%     $c\br{u}\gets \Delta\br{\mathcal{A}, \cU-\cC}$\;
+% }
+% $\cC \gets \cC \cup \mathcal{A}$\;
+% }
+% }
+% \end{algorithm}
