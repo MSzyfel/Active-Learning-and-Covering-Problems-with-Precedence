@@ -32,9 +32,11 @@
 \newcommand{\Anc}{\operatorname{Anc}}
 \newcommand{\cov}{\operatorname{cov}}
 
-\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}}
-\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}}
-\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}}
+\newcommand{\NP}{\textnormal{$\mathcal{NP}$}\xspace}
+\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}\xspace}
+\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}\xspace}
+\newcommand{\APXhard}{\textnormal{$\mathcal{APX}$-Hard}\xspace}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}\xspace}
 
 \newcommand{\Cent}{\texttt{Cent}}
 \newcommand{\APP}{\texttt{APP}}
@@ -55,8 +57,10 @@
 
 \usepackage{xcolor}
 \newcommand{\DD}[1]{\textbf{\textcolor{violet}{#1}}}
+\usepackage{xcolor}
 \newcommand{\MS}[1]{\textbf{\textcolor{red}{#1}}}
-
+\usepackage{xcolor}
+\newcommand{\TP}[1]{\textbf{\textcolor{green}{#1}}}
 \newcommand{\cH}{\mathcal{H}}
 \newcommand{\cL}{\mathcal{L}}
 \newcommand{\cS}{\mathcal{S}}
@@ -70,9 +74,14 @@
 \newcommand{\ProblemAL}{\textsc{AL}}
 \newcommand{\ProblemPCWCAL}{\textsc{PCWCAL}}
 \newcommand{\ProblemPCACAL}{\textsc{PCACAL}}
+\newcommand{\ProblemPCWAL}{\textsc{PCWAL}}
 \newcommand{\ProblemPCAL}{\textsc{PCAL}}
 \newcommand{\ProblemPCSC}{\textsc{PCSC}}
 \newcommand{\ProblemPCMSSC}{\textsc{PCMSSC}}
+\newcommand{\ProblemThreeSat}{\textsc{3-SAT}\xspace}
+\newcommand{\ProblemMaxThreeSat}{\textsc{MAX3-SAT}\xspace}
+\newcommand{\ProblemAverageCaseBinarySearchPrecedanceConstraints}{\textsc{Average Case Binary Search with Precedence Constraints}\xspace}
+
 \newcommand{\cTinD}[1]{\cT[#1]}  % tests in decision tree #1
 \newcommand{\inner}[1]{\operatorname{inner}(#1)}  %inner nodes in a decision tree
 \newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 when #2 is the hypothesis
