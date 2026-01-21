@@ -47,7 +47,7 @@
 		\item Compose the graph in the following way.
 		Connect each clause gadget one by one, let the vertex $\coord{C}{i}{4}$ is connected to $\coord{C}{i+1}{1}$ by and edge denoted as $\sepedge{i}$.
 		Let us denote such an edge from this set as "separator edge".
-		Connect $\coord{C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $\sepedge{|C|}$, $C$-th separator edge.
+		Connect $\coord{ M_{SAT}^*(I_S)C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $\sepedge{|C|}$, $C$-th separator edge.
 		Continue with variable gadgets in the same way; hence the total number of separator edges is $|C| + |V| - 1$.
 	\end{enumerate}
 	To define the order on the edges:
@@ -84,16 +84,43 @@
 		\item Due to this we have to perform at least one query in time $k+2$ for every clause-gadget $c_i$.
 		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be queried before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was queried.
 		Hence, at for at least one of the edges preconditions were met (edge was queried) in time $k+1$.
-		This clearly corresponds to a valuation of the variables matching all the clauses.
+		The variable-edges queried in $k+1$ to a valuation of the variables matching all the clauses.
 	\end{itemize}
 	
 \end{proof}
 
 \begin{theorem}
-    Average-Case Binary Search With Precedence Caseonstrains is \APXhard.
+    Average-Case Binary Search With Precedence Constraints is \APXhard.
 \end{theorem}
 \begin{proof}
-	content...
+	The reduction is almost the same as in the worst-case variant.
+	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
+	For the formal definition of the reduction we recommend \cite{Ausiello}.
+	Namely, the problem where we would like to maximize the number of fulfilled clauses.
+	To prove this we have to provide functions:
+	\begin{itemize}
+		\item $f$ -- mapping from the instances of \ProblemMaxThreeSat to Binary Search.
+		\item $g$ -- mapping from the solutions of Binary Search to the solutions of \ProblemMaxThreeSat. 
+	\end{itemize}
+	And we need to prove the 2 crucial properties (other properties mentioned in the referenced definition are straightforward).
+	For the first one, 
+	let $I_S$ be any instance of \ProblemMaxThreeSat,
+	let $f(I_S)$ -- the constructed instance of \ProblemAverageCaseBinarySearchPrecedanceConstraints,
+	and let, $M_{SEARCH}$ and $M_{SAT}$ be the optimality measures for the respective problems (for the respective problems), also let $M_{SEARCH}^*$ and $M_{SEARCH}^*$ be the values of the optimal solutions for the instance.
+	The property to prove is
+	\[
+	M_{SEARCH}^*(f(I_S)) \le \beta M_{SAT}^*(I_S)
+	\]
+	for some fixed $\beta > 0$.
+	To prove this, we observe: 
+	\begin{itemize}
+		\item On one hand for any $I_S$ composed of $m$ clauses, we can observe at once that $M_{SAT}^*(I_S) \ge m/2$.
+		\item On the other hand for such an instance, we can drop all variables which do not appear in any clause. 
+		Due to this the number of variables is bounded by $3m$.
+		Hence, for the instance, due to the dummy variables, $|C| + |V| \le 8m$.
+		As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
+		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = $
+	\end{itemize}
 \end{proof}
 
 \subsection{Outforest precendce constrains}
