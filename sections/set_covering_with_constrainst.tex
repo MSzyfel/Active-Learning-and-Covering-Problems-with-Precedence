@@ -63,52 +63,41 @@ Since $C$ is constant, the theorem follows.
 
 
 \subsection{Precedence constrained set cover}
+\newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-
+In ourder to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
 \input{pseudocodes/set_cover.tex}
+Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in\brc{1,\ldots,l}$.
+For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
+Let $R_i=\cU\setminus\cov\br{\cC_i}$ for $i\in\brc{1,\ldots,l}$ and $R_0=\cU$, $\cC_0=\emptyset$.
+Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and let $\cCopt$ be an optimal solution to $\ProblemPCSC$ on $\cI$, i.e., $\cov\br{\cCopt}\geq k$ and $\spr{\cCopt}=\optPCSC{\cI}$.
 
-Denote by $\cA_i$ the set $\cA$ that is the output of the $\gamma$-approximation algorithm for $\ProblemMDPCS$ from the $i$-th iteration of Algorithm~\ref{alg:PCSC} for $i\in\brc{1,\ldots,l}$.
-For brevity let $\cC_i$, $i\in\br{1,\ldots,l}$ be the set $\cC$ obtained at the end of the iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
-Let $R_i=\cU\setminus\cov\br{\cA_1\cup\cdots\cup\cA_i}$ for $i\in\brc{1,\ldots,l}$.
-Let for the border case $R_0=\emptyset$ and $\cC_0=\emptyset$.
-% For each $u\in\cov(\cA)$ we associate the \emph{value} of $u$,
-% $$
-% c(u):=\frac{\spr{\cA_i}}{\spr{\cov(\cA_i,R_i)}},
-% $$
-% where $i$ is the first iteration that covered $u$, i.e., $u\in\cov(\cA_i)\setminus R_{i-1}$.
-
-Consider first the case when $l=1$, i.e., there is only one iteration.
-Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cC_{opt}}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
-From this we obtain
-$\spr{\cA_l}  \leq \frac{1}{\gamma}\cdot \cov\br{\cA_l}\spr{\cC_{opt}}/k \leq \frac{n}{\gamma k}\spr{\cC_{opt}}$.
-
-
-Let now $l>1$.
-Note that $\spr{\cA_1\cup\cdots\cup\cA_{l-1}}<k$.
-Hence, via a standard value-measure argument, we obtain that
+\DD{tutaj mam zakomentowan jakas analize dla $l=1$, gdyz przez chwile myslalem, ze to da ostatecznie lepszy wynik}
+% Consider first the case when $l=1$, i.e., there is only one iteration.
+% Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cCopt}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
+% From this we obtain
+% $\spr{\cA_l}  \leq \frac{1}{\gamma}\cdot \spr{\cov\br{\cA_l}}\cdot\spr{\cCopt}/k \leq \frac{n}{\gamma k}\spr{\cCopt}$, where the latter is by a trivial upper bound $\spr{\cov\br{\cA_l}}\leq n$.
+Note that for each $i\in\brc{1,\ldots,l}$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
+Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in\brc{1,\ldots,l}$.
+Thus, $\Delta(\cA_i,R_{i-1}) \geq \gamma\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$,
 $$
-\spr{\cC_l\setminus\cA_{l}} \leq \gamma\cdot H_n \cdot OPT = \bigo(\gamma\cdot\log n\cdot OPT),
+\frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \gamma\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in\brc{1,\ldots,l}.
 $$
-where $H_n=\sum_{j=0}^n 1/j$.
-This bounds the number of sets except for the ones in $\cA_l\setminus\cC_{i-1}$.
-Consider the $\ProblemPCSC$ instance $\cI'=\br{R_l,\brc{S'\mid S'=S\cap R_i,S\in\cS},\preceq,k'=k-\cov\br{\cC_{l-1}}}$ that is obtained from the original instance by eliminating elements that are already coverted.
-(In the above notation we omit empty sets $S'$).
-Let $\cC_{opt}'$ be an optimal solution to $\cI'$.
-By the analyis of the case $l=1$, $\spr{\cA_l\setminus\cC_{l-1}}\leq\frac{n}{\gamma k'}\spr{\cC_{opt}'}$.
-
-\DD{w powyzszym rozumowanie sie zalamuje, gdyz $k'$ moze byc male i mamy $\bigo(n/\gamma)$-approx.}
-
-
-
+$$
+\spr{\cA_i} \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
+            \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} } \cdot \spr{\cCopt}.
+$$
+For each $i\in\brc{1,\ldots,l-1}$ it holds $\spr{\cov\br{\cCopt,R_{i-1}}}\geq k/2$.
+Thus,
+$$
+\sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2}{k\gamma} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2n}{k\gamma} \cdot \spr{\cCopt}.
+$$
+For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq k/2$ and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$, we get $\spr{\cA_l}\leq \frac{1}{\gamma}\spr{\cCopt}$.
+Hence, we obtain $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{3n}{k\gamma}\cdot\spr{\cCopt}$.
+Hence we obtain the following theorem.
 \begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists an $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists an $(\gamma\cdot\log n +1/(\gamma f))$-approximation algorithm for $\ProblemPCSC$, where $f=k/n$.
+    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{3n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
-\begin{proof}
-
-    % \begin{lemma}
-    %     Let $u_1,\dots, u_p$ be the ele
-    % \end{lemma}
-\end{proof}
 
 \MS{Tu poniżej miałem jakąś próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
 

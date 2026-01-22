@@ -49,6 +49,10 @@ Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$, $\OPTA\b
 % \end{definition}
 
 \medskip
+\paraTitle{Approximation measures.}
+We say that an algoritm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$ if for any input instance $\cI=(\cU,\cS,\preceq,k)$ it returns a solution $\cC$ that covers at least $\alpha k$ items and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$.
+
+\medskip
 \paraTitle{Other notation.}
 Suppose that a search strategy performed some tests $T\subseteq\cT$.
 If a hypothesis $h\in\cH$ has the property for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$, then we cay that $h$ is a \emph{potential target}.
