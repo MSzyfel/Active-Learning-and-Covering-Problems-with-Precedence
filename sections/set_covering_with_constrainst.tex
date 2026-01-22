@@ -26,7 +26,8 @@ Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}, R}$. When $\delta\
 \begin{theorem}
 Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
 $
-p(S) \leq C \cdot c(S)^\epsilon
+p(S) \leq C \cdot \MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
+c(S)^\epsilon
 $ ($\epsilon$-shallow ancestry).
 Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
 \end{theorem}
@@ -38,7 +39,8 @@ Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
 $$
 \frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 $$
-    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in\MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
+     \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
 c(S) \leq \delta \cdot C \cdot c(S)^\epsilon
 $. Rearraning this inequality, we get that $
 c(S) \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
@@ -99,7 +101,7 @@ Hence we obtain the following theorem.
     If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{3n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 
-\MS{Tu poniżej miałem jakąś próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
+\MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
 
 We show the following:
 
