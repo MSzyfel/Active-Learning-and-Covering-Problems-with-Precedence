@@ -1,5 +1,9 @@
 \section{Hardness}
-\subsection{Binary search with precedence constraints}\begin{theorem}
+\subsection{Binary search with precedence constraints}
+We begin by showing that the active learning problem is NP-hard even for the very special of binary searching with precedence. In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2 \prec \ldots \prec h_n$ and tests that correspond to binary queries of the form ``Is the unknown hypothesis $h_i$ less than or equal to $h_k$?''. Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
+
+Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is NP-hard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is NP-hard as well.
+\begin{theorem}
     Worst-Case Binary Search With Precedence Constraints is NP-hard.
 \end{theorem}
 \begin{theorem}
@@ -64,7 +68,12 @@ We have the following theorem:
 
     The idea is as follows: We pick $p$ to be smallest value for which if planted component exists then with high probability it covers $U$ in which case we can showcase a good solution to PCSC. On the other hand, if no planted component exists then we show that it pushes the cost of any solution to PCSC high enough to obtain the desired inapproximability ratio. 
     
-    Let $\mathcal{P}$ be the planted component if it exists. Since $\mathcal{P}$ consists of $\sqrt{N}$ vertices we have that  $\mathbb{E}[\spr{v\colon j\in U_v, v \in V\brc{\mathcal{P}}}] = p\sqrt{N}$. Therefore, we also have that $\mathbb{E}[\spr{\brc{v, u}\colon j\in U_v, j\in U_u, v,u \in V\brc{\mathcal{P}}}] = \binom{p\sqrt{N}}{2}$. Since each edge in $\mathcal{P}$ exists independently with probability $k^{\beta - 1} = \sqrt{N}^{-1/2 - \gamma}=N^{-1/4-\gamma/2}$ we have that $\mathbb{E}[\spr{E_{uv}\colon j\in E_{uv}}] = \binom{p\sqrt{N}}{2} \cdot N^{-1/4-\gamma/2}\geq p^2N/4 \cdot N^{-1/4-\gamma/2}=N^{3/4-\gamma/2}p^2$. So that this is large enough we pick $p=32\cdot N^{-3/8+\gamma/4}\cdot \log n$.
+    Let $\mathcal{P}$ be the planted component if it exists. Since $\mathcal{P}$ consists of $\sqrt{N}$ vertices we have that  $\mathbb{E}[\spr{v\colon j\in U_v, v \in V\brc{\mathcal{P}}}] = p\sqrt{N}$. Therefore, we also have that 
+    $$
+    \mathbb{E}[\spr{\brc{v, u}\colon j\in U_v, j\in U_u, v,u \in V\brc{\mathcal{P}}}] = \binom{p\sqrt{N}}
+    {2}.$$
+    
+    Since each edge in $\mathcal{P}$ exists independently with probability $k^{\beta - 1} = \sqrt{N}^{-1/2 - \gamma}=N^{-1/4-\gamma/2}$ we have that $\mathbb{E}[\spr{E_{uv}\colon j\in E_{uv}}] = \binom{p\sqrt{N}}{2} \cdot N^{-1/4-\gamma/2}\geq p^2N/4 \cdot N^{-1/4-\gamma/2}=N^{3/4-\gamma/2}p^2$. So that this is large enough we pick $p=32\cdot N^{-3/8+\gamma/4}\cdot \log n$.
 
     Assume that the planted component exists. Then we show that by taking all edge representatives corresponding to edges in the planted component (and all of their predecessors) we can cheapily cover all items in $U$ with high probability. Since we have that $\mathbb{E}[\spr{v\colon j\in U_v, v \in V\brc{\mathcal{P}}}] = p\sqrt{N}$ by Chernoff's bound we have that:
     $$
