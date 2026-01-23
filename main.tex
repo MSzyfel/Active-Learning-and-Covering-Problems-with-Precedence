@@ -32,9 +32,11 @@
 \newcommand{\Anc}{\operatorname{Anc}}
 \newcommand{\cov}{\operatorname{cov}}
 
-\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}}
-\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}}
-\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}}
+\newcommand{\NP}{\textnormal{$\mathcal{NP}$}\xspace}
+\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}\xspace}
+\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}\xspace}
+\newcommand{\APXhard}{\textnormal{$\mathcal{APX}$-Hard}\xspace}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}\xspace}
 
 \newcommand{\Cent}{\texttt{Cent}}
 \newcommand{\APP}{\texttt{APP}}
@@ -56,7 +58,9 @@
 \usepackage{xcolor}
 \newcommand{\DD}[1]{\textbf{\textcolor{violet}{#1}}}
 \newcommand{\MS}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\TP}[1]{\textbf{\textcolor{green}{#1}}}
 
+% symbols
 \newcommand{\cH}{\mathcal{H}}
 \newcommand{\cL}{\mathcal{L}}
 \newcommand{\cS}{\mathcal{S}}
@@ -65,17 +69,42 @@
 \newcommand{\cF}{\mathcal{F}}
 \newcommand{\cU}{\mathcal{U}}
 \newcommand{\cI}{\mathcal{I}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cZ}{\mathcal{Z}}
 \newcommand{\questioner}{questioner }
 \newcommand{\target}{h^*}
+\newcommand{\bigo}{\mathcal{O}}
+
+% problem and algorithm names
 \newcommand{\ProblemAL}{\textsc{AL}}
 \newcommand{\ProblemPCWCAL}{\textsc{PCWCAL}}
 \newcommand{\ProblemPCACAL}{\textsc{PCACAL}}
+\newcommand{\ProblemPCWAL}{\textsc{PCWAL}}
 \newcommand{\ProblemPCAL}{\textsc{PCAL}}
 \newcommand{\ProblemPCSC}{\textsc{PCSC}}
 \newcommand{\ProblemPCMSSC}{\textsc{PCMSSC}}
+\newcommand{\ProblemMDPCS}{\textsc{MDPCS}}
+\newcommand{\ProcWorstDecisionTree}{\textsc{WorstDecisionTree}{} }
+\newcommand{\blackBox}{\textsc{FindCover}{} }
+\newcommand{\ProcedureMDPCSGreedy}{\textsc{MDPCS-Greedy}}
+\newcommand{\ProcedurePCSC}{\textsc{Greedy-PCSC}}
+
+% opt parameters
+\newcommand{\optPCSC}[1]{\OPT\br{#1}}
+\newcommand{\optPCMSSC}[1]{\OPT_{\sum}\br{#1}}
+
+% functions and parameters
+\newcommand{\ProblemThreeSat}{\textsc{3-SAT}\xspace}
+\newcommand{\ProblemMaxThreeSat}{\textsc{MAX3-SAT}\xspace}
+\newcommand{\ProblemAverageCaseBinarySearchPrecedanceConstraints}{\textsc{Average Case Binary Search with Precedence Constraints}\xspace}
+
 \newcommand{\cTinD}[1]{\cT[#1]}  % tests in decision tree #1
 \newcommand{\inner}[1]{\operatorname{inner}(#1)}  %inner nodes in a decision tree
-\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 when #2 is the hypothesis
+\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 to arrive at node #2
+\newcommand{\paraTitle}[1]{\noindent\textbf{#1}}   %paragraph titles (to eliminate more sub-sub-subsections
+\newcommand{\sepcover}[1]{P^*\br{#1}}
+\newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
+\newcommand{\closure}[1]{\operatorname{closure}[#1]}
 
 
 \usepackage[T1]{fontenc}
@@ -149,13 +178,13 @@
 \end{itemize}
 }
 
-\include{sections/introduction}
-\include{sections/preliminaries}
-\include{sections/binary_search}
-\include{sections/approximating_learning}
-\include{sections/set_covering_with_constrainst}
-\include{sections/hardness}
-\include{sections/conclusions}
+\input{sections/introduction}
+\input{sections/preliminaries}
+\input{sections/binary_search}
+\input{sections/approximating_learning}
+\input{sections/set_covering_with_constrainst}
+\input{sections/hardness}
+\input{sections/conclusions}
 
 % Acknowledgments---Will not appear in anonymized version
 \acks{We thank a bunch of people and funding agency.}

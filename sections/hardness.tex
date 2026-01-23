@@ -1,16 +1,133 @@
 \section{Hardness}
-\subsection{Binary search with precedence constraints}
+\newcommand{\coord}[3]{v[#1, #2, #3]}
+\newcommand{\sepedge}[1]{e^{sep}[#1]}
+\newcommand{\varedge}[1]{e^{var}[#1]}
+\newcommand{\litedge}[1]{e^{cla}[#1]}
+
+\subsection{Binary search with precedence constrains}
+
 We begin by showing that the active learning problem is NP-hard even for the very special of binary searching with precedence. In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2 \prec \ldots \prec h_n$ and tests that correspond to binary queries of the form ``Is the unknown hypothesis $h_i$ less than or equal to $h_k$?''. Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
 
 Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is NP-hard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is NP-hard as well.
 \begin{theorem}
     Worst-Case Binary Search With Precedence Constraints is NP-hard.
 \end{theorem}
+\begin{proof}
+	\TP{Bajzel}
+	Consider an instance of \ProblemThreeSat given as: a set of variables $V$, and a set of clauses $C$.
+	Each clause consist of exactly $3$ literals.
+	Moreover, the variant where any $v \in V$ appears at most $5$ times as $v$ or $\overline{v}$ in the clauses is still \NPcomplete \cite{GareyAndJohnson}. 
+	Obviously, in this variant $|C| = O(|V|)$.
+	The idea is to:
+	\begin{itemize}
+		\item Divide the line into $2$ modules: variables and clauses. 
+		Moreover, divide the modules into small segments, so each corresponds to a single variable, clause, respectively.
+		Use precedence constraints to force this separation.
+		\item All the variable vertices can be queried at the same time.
+		Hence, either the variable or it's negation is quarried in a given turn.
+		And the negation (or the variable) can be queried in the next.
+		\item Make every literal dependent on the corresponding variable.
+		\item Now, if at least one variable vertex was queried in the time $t$, then at least one literal vertex can be queried in $t+1$.
+		\item If at least one literal vertex was queried then a clause gadget can be quarried in "short" time, because some "middle" vertex of the component was quarried. 
+	\end{itemize}
+	
+	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $C$, and variables, denoted by $V$, is as follows.
+	To construct all other edges e graph:
+	\begin{enumerate}
+		\item Let $d > 0$ be smallest value such a value that $\log_2(|C| + |V| - 2 + d) \in Z$.
+		Add $d$ dummy variables -- i.e. variables unrelated to any clause.
+		From now, we assume that $|V| + |C| - 1 = 2^k-1$, for some $k > 0$.
+		\item For every $c_i = \{v_i^1, v_i^2, v_i^3\}$, construct a gadget given as a path graph on vertices
+		\[
+			\coord{C}{i}{1}, \coord{C}{i}{v_i^1}, \coord{C}{i}{v_i^{12}}, \coord{C}{i}{v_i^{23}}, \coord{C}{i}{v_i^3}, \coord{C}{i}{2}.
+		\]
+		Denote the edges between the consecutive pairs of vertices as: $\litedge{i, 0}$, $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$, $\litedge{i, 0'}$.
+		\item For a variable $v_i$, construct a gadget compose of $3$ vertices as a path
+		\[
+			\coord{v}{i}{1}, \coord{v}{i}{2}, \coord{v}{i}{3}
+		\]
+		Denote the edge $(\coord{v}{i}{1}, \coord{v}{i}{2})$ as $\varedge{v_i^-}$.
+		Denote the edge $(\coord{V}{v}{2}, \coord{v}{i}{3})$ as $\varedge{v_i^+}$.
+		\item Compose the graph in the following way.
+		Connect each clause gadget one by one, let the vertex $\coord{C}{i}{4}$ is connected to $\coord{C}{i+1}{1}$ by and edge denoted as $\sepedge{i}$.
+		Let us denote such an edge from this set as "separator edge".
+		Connect $\coord{ M_{SAT}^*(I_S)C}{|C|}{4}$ to $\coord{V}{i}{1}$ by $\sepedge{|C|}$, $C$-th separator edge.
+		Continue with variable gadgets in the same way; hence the total number of separator edges is $|C| + |V| - 1$.
+	\end{enumerate}
+	To define the order on the edges:
+	\begin{enumerate}
+		\item There are exactly $1+2+\ldots+2^{k}$ separator edges, for some $k > 0$.
+		Hence easily one can make an order corresponding to binary tree, to force the queries.
+		\item Force all other edges to be preceded by the separator edges.
+		\item For every clause $C_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$ make $\litedge{i, v}$ dependent on $\varedge{v^+}$ if $v$ is positive literal; make it dependent on $\varedge{v^-}$ otherwise.
+		\item For every clause $C_i$, make $\litedge{i, 0}$ and $\litedge{i, 0'}$ dependent on all variable edges.
+	\end{enumerate}
+	Now, to prove that the problem is \NPhard we prove the decision version of the problem is \NPcomplete, 
+	i.e. the problem to determine if for a given input $(P, O, t)$ there exists a strategy of maximum search time less than or equal to $t$.
+	
+	To prove that the problem is in \NP we observe that given search tree certifies maximum search time.
+	
+	Now, assume that the instance of $(C, V)$ \ProblemThreeSat is of 'YES' type.
+	Hence let $f: V \leftarrow \{T, F\}$ be a valuation which satisfies all the clauses.
+	Then, we build the strategy:
+	\begin{itemize}
+		\item Query the separator edges in time up to $k$.
+		\item For every variable-vertex $v$, if variable was assigned $T$, query $\varedge{v^+}$ it in time $k+1$; otherwise query $\varedge{v^-}$.
+		      Hence, they are queried in times $k+1$ and $k+2$, respectively. 
+		\item Now all the clause gadgets have at least one precondition met in time $k+1$.
+		      Due to this we can query at least one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ in time $k+2$.
+		      Due to the fact that for each clause there are up to $4$ candidate vertices, and each edge can be queried freely in time $k+3$ or later we can complete the queries in time up to $k+4$.
+	\end{itemize}
+	Due to this for the constructed graph there exists a strategy of time $k+4$.
+	
+	Assume now that the answer for the constructed instance, i.e. path graph, order, and time $k+4$ the answer is 'YES'.
+	We perform the following observations.
+	\begin{itemize}
+		\item For a given clause-gadget corresponding, due to the fact that there are $5$ edges, we need at least $3$ time units to query it. 
+		\item The earliest possible time to finish querying the separator edges is $k$.
+		\item Due to this we have to perform at least one query in time $k+2$ for every clause-gadget $c_i$.
+		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be queried before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was queried.
+		Hence, at for at least one of the edges preconditions were met (edge was queried) in time $k+1$.
+		The variable-edges queried in $k+1$ to a valuation of the variables matching all the clauses.
+	\end{itemize}
+	
+\end{proof}
+
 \begin{theorem}
-    Average-Case Binary Search With Precedence Constraints is NP-hard.
+    Average-Case Binary Search With Precedence Constraints is \APXhard.
 \end{theorem}
-\subsection{Reducing set covering to active learning}
-To show inapproximability results for PCWCAL and PCACAL, we exploit a well known reduction from Set Cover to the problem of Active Learning. Although similar reductions are known in the literature for the unprecedented case \cite{DTsforEntIdent,HardnessOfMinHeightDTP,DiagnosisDetermination} we show that it can also be established even when precedence constraints are present. Therefore to obtain inapproximability results for PCWCAL and PCACAL, it suffices to show inapproximability results for the relevant version of Set Cover with precedence constraints.
+\begin{proof}
+	The reduction is almost the same as in the worst-case variant.
+	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
+	For the formal definition of the reduction we recommend \cite{Ausiello}.
+	Namely, the problem where we would like to maximize the number of fulfilled clauses.
+	To prove this we have to provide functions:
+	\begin{itemize}
+		\item $f$ -- mapping from the instances of \ProblemMaxThreeSat to Binary Search.
+		\item $g$ -- mapping from the solutions of Binary Search to the solutions of \ProblemMaxThreeSat. 
+	\end{itemize}
+	And we need to prove the 2 crucial properties (other properties mentioned in the referenced definition are straightforward).
+	For the first one, 
+	let $I_S$ be any instance of \ProblemMaxThreeSat,
+	let $f(I_S)$ -- the constructed instance of \ProblemAverageCaseBinarySearchPrecedanceConstraints,
+	and let, $M_{SEARCH}$ and $M_{SAT}$ be the optimality measures for the respective problems (for the respective problems), also let $M_{SEARCH}^*$ and $M_{SEARCH}^*$ be the values of the optimal solutions for the instance.
+	The property to prove is
+	\[
+	M_{SEARCH}^*(f(I_S)) \le \beta M_{SAT}^*(I_S)
+	\]
+	for some fixed $\beta > 0$.
+	To prove this, we observe: 
+	\begin{itemize}
+		\item On one hand for any $I_S$ composed of $m$ clauses, we can observe at once that $M_{SAT}^*(I_S) \ge m/2$.
+		\item On the other hand for such an instance, we can drop all variables which do not appear in any clause. 
+		Due to this the number of variables is bounded by $3m$.
+		Hence, for the instance, due to the dummy variables, $|C| + |V| \le 8m$.
+		As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
+		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = $
+	\end{itemize}
+\end{proof}
+
+\subsection{Outforest precendce constrains}
 \begin{theorem}
     If there is no $\alpha$-approximation for PCSC, then there is no $O\br{\alpha}$-approximation for PCWCAL.
 \end{theorem}
