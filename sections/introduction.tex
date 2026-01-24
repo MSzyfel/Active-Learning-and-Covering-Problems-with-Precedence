@@ -1,87 +1,137 @@
 \section{Introduction}
 
-\DD{pomysl na intro: zdefiniowac dwa glowne problemy: learning + set cover; zapowiedziec, ze sa powiazane ze soba i celem papieru jest przestudiowanie tych zaleznosci plus usyskanie konkretnych wynikow; pytanie/do sprawdzenia: czy ktores wyniki przypadkiem poprawiaja lub sa tozsame z najlepszymi znanymi bez precedensow; ewentualne inna ``marketingowe'' uwagi.}
-
-Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an adaptive learning process.
-Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x.y\in t$ and $\bigcup t=\cH$.
+Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an active learning process.
+Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup_{x\in t} x=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
 That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
 Each subsequent test is selected by \questioner by taking into acocunt replies from all test to date.
-Without formally stating an optimization criterion we refer to  the above as the \emph{Adaptive Learing Process} ($\ProblemAL$).
+Without formally stating an optimization criterion we refer to  the above as the \emph{Active Learing} ($\ProblemAL$).
 (Another widely used name in the literature is the decision tree construction).
-The goal for the \questioner is to output $\target$.
+The goal of \questioner is to output $\target$.
 
 Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
-This leads us to the two adaptive learning problems in which order to perform a test $t$, all its predecessors had to be performed previously.
-Hence we have the \emph{Worst Case Adaptive Learning with Precedences} ($\ProblemPCWCAL$) in which the goal is to compute the $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
-Similarly, in the \emph{Average Case Adaptive Learning with Precedences} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
+Then, a test $t$ can be performed only when all its predecesors had to be performed previously (to which we refer as \emph{precedence closed} solution).
+This leads us to two active learning problems studied in this work.
+In the \emph{Precedence Constrained Worst Case Active Learing} ($\ProblemPCWCAL$) the goal is to execute $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
+Similarly, in the \emph{Precedence Constrained Average Case Active Learing} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
+Whenever the criterion is not important or we want to make a claim that applies to both we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
 
 
-In this work we study connections between adaptive lerning with precedences and the covering problems defined as follows.
-We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup\cS=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
-We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup\cC}\geq k$.
-We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
+In this work we study connections between $\ProblemPCAL$ and covering problems defined as follows.
+We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup_{S\in\cS}S=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
+We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup_{C\in\cC}C}\geq k$.
+We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and is \emph{precedence closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
 In the \emph{Precedence Constrained Set Cover} ($\ProblemPCSC$) the goal is to minimize $\spr{\cC}$.
-A permutation $C_1,\ldots,C_k)$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
-The \emph{coverage time} of a $x\in\bigcup\cC$ is the minimum index $i$ such that $x\in C_i$.
-In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_k)$ that minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_k$.
+A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+The \emph{coverage time} of a $x\in\bigcup_{C\in\cC}C$ is the minimum index $i$ such that $x\in C_i$.
+In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_l)$ that covers at least $k$ elements, is precedence closed and minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_l$.
 
-
-\subsection{Our contribution}
-
-\DD{Pomysl na rozdzial:
-\begin{itemize}
- \item zajawka, że wprpwadzimy nowe inne problemy (raz - jak pomocnicze; dwa - jako dopelnienie obrazu roznych rzeczy z litearatury)
- \item zdefiniowac pozostałe problemy z ``diagramu'' zaleznosci miedzy nimi
- \item diagram
- \item najwazniejsze twierdzenia
- \item tabelka na podsumowanie
-\end{itemize}
-}
-
-Consider following problems:
-\begin{itemize}
-  \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\mathcal{T}$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\mathcal{T}, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
-  \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
-\end{itemize}
-
-\begin{figure}[h]
-\centering
-\input{figures/pcal_example}
-\caption{Example of a PCAL instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\input{figures/pccp_example}
-\caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
-\end{figure}
+% Consider following problems:
+% \begin{itemize}
+%   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner actively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
+%   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
+% \end{itemize}
 
 \subsection{Our results and techniques}
 
-\begin{table}[h]
+Our first theorem is due to Theorem~\ref{thm:alphaPCWCAL}.
+\begin{theorem} \label{thm:generalPCWCAL}
+There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for the $\ProblemPCWCAL$, where $n$ is the number of hypotheses and $m$ is the number of tests.
+\end{theorem}
+Theorem~\ref{thm:alphaPCWCAL} relies on a bicriteria optimization algorithm for $\ProblemPCSC$ stated in Theorem~\ref{thm:MDPCStoPCSC} which in turn is obtained via an approximation algorithm for a problem called \emph{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$) given in \cite{PCMSSC}.
+\DD{(byc moze definicja MDPCS)}
+As a corollary of Theorem~\ref{thm:MDPCStoPCSC}, we obtain the following result regarding $\ProblemPCSC$.
+\begin{theorem} \label{thm:generalPCSC}
+There exists a polynomial-time $\bigo(\sqrt{m}f)$-approximation algorithm for $\ProblemPCSC$, where $m$ is the number of subsets over the universum of size $n$ and $f=k/n$, where $k$ is the required number of elements to be covered.
+\end{theorem}
+
+
+\begin{theorem} \label{thm:generalPCACAL}
+There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for $\ProblemPCACAL$, where $m$ is the number of sets over the universum of size $n$.
+\end{theorem}
+
+\begin{theorem} \label{thm:generalPCMSSC}
+There exists a polynomial-time $\bigo(\sqrt{m})$-approximation algorithm for $\ProblemPCMSSC$, where $m$ is the number of sets over the universum.
+\end{theorem}
+
+
+
+% \DD{Ten przykład jest super, ale chyba musimy znaleźć sposób na jego kompresję, tzn. nie stać nas na zapłacenie całej strony; około 1/3 strony byłaby ok (może tabelka obok drzewa decyzyjnego (moze zamiana kolumn vs wierszy aby ją powęzić, a może mocno zminimalizować przestrzeń między kolumnami, a partial order jako łuki pomiędzy etykietami wierszy tabelki?); też do przemyślenia gdzie ten przykład umieścić (raczej nie w ``contribution'', ale albo w intro, albo w preliminaries chyba}
+% \begin{figure}[htb!]
+% \centering
+% \input{figures/pcal_example}
+% \caption{Example of a $\ProblemPCAL$ instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
+% \end{figure}
+%
+% \DD{na razie zakomentowałem rysunek dot zbiorów}
+% \begin{figure}[h]
+% \centering
+% \input{figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \end{figure}
+
+% \begin{figure}[h]
+% \centering
+% \input{figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \end{figure}
+
+Table~\ref{tab:results} summarizes all results, also including best known from literature.
+\begin{table}[htb]
+\caption{State of the art summary. (** denotes previously unmentioned corollaries of known results).}
+\label{tab:results}
+\centering
+{
+\small
+\begin{tabular}{p{0.12\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}}
+\toprule
+\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCAL$}                                & $\ProblemPCACAL$                & $\ProblemPCSC$                                          & $\ProblemPCMSSC$    \\
+\midrule
+general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCAL})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACAL})    & $\bigo(\sqrt{m}/f)$ (Thm.~\ref{thm:generalPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
+\cdashline{2-5}
+empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $\bigo(\log n)$ [\cite{Feige98}] & $4$ [\cite{FeigeLT04}]\\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\DD{Uwagi do wyjasnienia: \cite{Feige98} nieco inaczej definiuje set cover.}
+
+\begin{table}[htb!]
 \centering
 \begin{tabular}{|l|c|c|c|c|}
-\hline
+%\midrule
 \textbf{precedence/problem} & \textbf{PCSC} & \textbf{PCMSSC} & \textbf{PCWCAL} & \textbf{PCACAL} \\
-\hline
+\midrule
 none & $O(\log n)$ & 4 & $O(\log n)$ & $O(\log n)$ \\
-% \hline
+% \midrule
 % paths & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
-\hline
+\midrule
 inforest & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
-\hline
+\midrule
 outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
-\hline
+\midrule
 general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt{m}\log n)$* \\
-\hline
+\midrule
 \end{tabular}
 \caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
 \end{table}
 
-\begin{figure}[h]
-\centering
-\input{figures/reduction_diagram}
-\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \input{figures/reduction_diagram}
+% \caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
+% \end{figure}
 
+\DD{tutaj bylby jakis wywod i intuicje jakie techniki sa nowe, generalnie trzebaby sie pochwalic pomyslami roznymi}
+
+
+\DD{A te dwa problemy to na razie resztowka, ktora gdzies powinna trafic}
+\begin{definition}[Group Steiner Tree (GST)]
+Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
+\end{definition}
+
+\begin{definition}[Precedence constrained test cover (PCTC)]
+Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
+\end{definition}
+\DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
