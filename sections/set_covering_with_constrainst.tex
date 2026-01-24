@@ -15,55 +15,6 @@ Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a
 \end{definition}
 
 
-\subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
-
-The key to solce PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
-\input{pseudocodes/mdpcs_greedy.tex}
-
-Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}, R}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. We show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation .
-
- For each $S \in \mathcal{G}$, let $p(S) = \spr{\closure{S}}$ and $c(S, R) = \spr{\cov\br{\closure{S}, R}}$.
-\begin{theorem}
-Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
-$
-p(S) \leq C \cdot \MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
-c(S)^\epsilon
-$ ($\epsilon$-shallow ancestry).
-Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
-\end{theorem}
-
-\begin{proof}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
-\begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, R} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, R} \leq n$. Therefore:
-$$
-\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
-$$
-    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in\MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
-     \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
-c(S) \leq \delta \cdot C \cdot c(S)^\epsilon
-$. Rearraning this inequality, we get that $
-c(S) \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-$. We have that:
-\[
-\spr{\cov\br{\cA^*}} = \spr{\bigcup_{j=1}^k\cov\br{S_j, R}} \leq \sum_{j=1}^{k} c(S_j) \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-Therefore:
-\[
-\Delta\br{\cA^*, R}= \frac{\spr{\cov\br{\cA^*, R}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-By the greedy choice, $\Delta\br{\cA, R} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
-\[
-\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
-\]
-\end{enumerate}
-Since $C$ is constant, the theorem follows.
-\end{proof}
-
-
-
 \subsection{Precedence constrained set cover}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
@@ -116,3 +67,52 @@ By \cite{citehere}:
 \begin{theorem}
     If the precedence constraints form an outforest, then there exists an $\br{O\br{\log n}}$-approximation algorithm for PCMSSC.
 \end{theorem}
+
+
+\subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
+
+The key to solve PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
+\input{pseudocodes/mdpcs_greedy.tex}
+
+Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}, R}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. In our application we will sometimes be interested in a version in which the elements of the universe can have arbitrary weight $w$ associated to them. Observe, that by scaling the weights up by a common denominator, we can transform weight to take integer values. By replacing each element $u \in \mathcal{U}$ with $w\br{u}$ representatives of $u$, we obtain an equivalent instance of unweighted MDPCS. Therefore, we observe that MDPCS-Greedy also achieves $O\br{\sqrt{m}}$and $\sqrt{w\br{\mathcal{U}}}$-approximation for the weighted MDPCS. 
+
+We show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation. For each $S \in \mathcal{G}$, let $p(S) = \spr{\closure{S}}$ and $c(S, R) = \spr{\cov\br{\closure{S}, R}}$.
+\begin{theorem}
+Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
+$
+p(S) \leq C \cdot 
+c(S)^\epsilon
+$ ($\epsilon$-shallow ancestry).
+Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
+\end{theorem}
+
+\begin{proof}
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+\begin{enumerate}
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, R} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, R} \leq n$. Therefore:
+$$
+\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+$$
+    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
+     \mathcal{G}$, $c(S) \leq \delta \cdot p(S)$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+c(S) \leq \delta \cdot C \cdot c(S)^\epsilon
+$. Rearraning this inequality, we get that $
+c(S) \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+$. We have that:
+\[
+\spr{\cov\br{\cA^*}} = \spr{\bigcup_{j=1}^k\cov\br{S_j, R}} \leq \sum_{j=1}^{k} c(S_j) \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+Therefore:
+\[
+\Delta\br{\cA^*, R}= \frac{\spr{\cov\br{\cA^*, R}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+By the greedy choice, $\Delta\br{\cA, R} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+\[
+\frac{\Delta\br{\cA^*, R}}{\Delta\br{\cA, R}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\]
+\end{enumerate}
+Since $C$ is constant, the theorem follows.
+\end{proof}
+
