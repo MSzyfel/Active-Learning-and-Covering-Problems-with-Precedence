@@ -83,22 +83,23 @@ Note that for each $i\in\brc{1,\ldots,l}$, $\cCopt\setminus\cC_{i-1}\neq\emptyse
 Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in\brc{1,\ldots,l}$.
 Thus, $\Delta(\cA_i,R_{i-1}) \geq \gamma\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$,
 $$
-\frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \gamma\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in\brc{1,\ldots,l}.
+\frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \gamma\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in\brc{1,\ldots,l},
 $$
-$$
+which gives
+\begin{equation} \label{eq:Ai}
 \spr{\cA_i} \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
             \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} } \cdot \spr{\cCopt}.
-$$
+\end{equation}
 For each $i\in\brc{1,\ldots,l-1}$ it holds $\spr{\cov\br{\cCopt,R_{i-1}}}\geq k/2$.
 Thus,
 $$
 \sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2}{k\gamma} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2n}{k\gamma} \cdot \spr{\cCopt}.
 $$
-For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq k/2$ and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$, we get $\spr{\cA_l}\leq \frac{1}{\gamma}\spr{\cCopt}$.
-Hence, we obtain $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{3n}{k\gamma}\cdot\spr{\cCopt}$.
-Hence we obtain the following theorem.
+For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
+Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2n}{k\gamma}\spr{\cCopt}$.
+This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\cCopt}$ and proves the following theorem.
 \begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{3n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
+    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{4n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 
 \MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
