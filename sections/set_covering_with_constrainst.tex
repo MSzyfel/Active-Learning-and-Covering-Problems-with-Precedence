@@ -1,4 +1,5 @@
 \section{Set covering with constraints}
+\newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
 For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$.
 For $S \in \mathcal{G}$, let $\closure{S}$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$, i.e., $x\in\closure{S}$ if and only if $x\in S$ or $x\preceq y$ for some $y\in S$.
@@ -14,9 +15,30 @@ We also write $\Delta\br{\cA}$ when $X$ is the universum.
 Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a set of $n$ items to be covered $R \subseteq \cov\br{\mathcal{G}}$, the $\ProblemMDPCS$ problem asks to find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA, R}$.
 \end{definition}
 
-
-\subsection{Precedence constrained set cover}
-\newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
+\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$}
+\begin{theorem}
+    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
+\end{theorem}
+\begin{proof}
+\include{pseudocodes/B_PCSC}
+\begin{lemma}
+    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+\end{lemma}
+\begin{proof}
+    We consider two cases:
+    \begin{enumerate}
+        \item If $B\geq \sqrt{m/H_n}$, then the algorithm returns $\cS$ and $\spr{\cS} \leq m \leq \sqrt{m\cdot H_n}\cdot B$.
+        \item Else, when $B < \sqrt{m/H_n}$, we have that before the last iteration of the while loop, $\spr{\cC} < \sqrt{m\cdot H_n}\cdot B$. Since in the last iteration we add to $\cC$ a set $\cA$ such that $\spr{\cA} \leq B$, we have that $\spr{\cC} \leq \sqrt{m\cdot H_n}\cdot B + B = \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+    \end{enumerate}
+\end{proof}
+\begin{lemma}
+    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cov\br{\cC, \cU}} \geq \spr{\cov\br{\cCopt, \cU}}$.
+\end{lemma}
+\begin{proof}
+    \MS{Idea jest taka: pokazujemy za pomocą szeregu harmonicznego, że jesli dodajemy zbiory do momentu az pokryjemy optymalna liczbe elementow, to koszt czegos takiego bedzie nie wiekszy niz $H_n\cdot B$ ponieważ na każdym etapie mamy $B$-aproksymacje do $\ProblemBMDPCS$. Przez to, że w naszym algorytmie zatrzymujemy sie dopiero gdy koszt przekroczy $\sqrt{m\cdot H_n}\cdot B$, to znaczy, że pokryliśmy co najmniej optymalna liczbe elementow.}
+\end{proof}
+\end{proof}
+\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}
 
 In ourder to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
 \input{pseudocodes/set_cover.tex}
@@ -52,24 +74,14 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
 \begin{theorem} \label{thm:MDPCStoPCSC}
     If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{4n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
-
-\MS{Tu poniżej miałem jakas próbe pisania tego, ale sie pokomplikowało więc ten pseuudokod jest niekompletny. To jest do zmiany wszystko. Zostawiam na razie te sekcje tobie Darku.}
-
-We show the following:
-
+\subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$}
 \begin{theorem}
-    If the precedence constraints form an outforest, then there exists an bicriteria $\br{4, O\br{\log n}}$-approximation algorithm for PCSC which be converted to an $O\br{\log^2 n}$ approximation algorithm.
+    If there exists a $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
-\subsection{Precedence constrained min sum set cover}
-By \cite{citehere}:
-\begin{theorem}
-    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $4\cdot \gamma$ - approximate algorithm for the PCMSSC problem.
-\end{theorem}
-\begin{theorem}
-    If the precedence constraints form an outforest, then there exists an $\br{O\br{\log n}}$-approximation algorithm for PCMSSC.
-\end{theorem}
-
-
+\begin{proof}
+    \input{pseudocodes/f_PCMSSC}
+    \MS{Analiza do przepisania z \url{https://arxiv.org/abs/1003.0722}, Sekcja 3.2. Uwaga!, trzeba sprawdzić jaka jest wartość $a$ w zależności od $alpha$.}
+\end{proof}
 \subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
 
 The key to solve PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
@@ -117,3 +129,15 @@ By the greedy choice, $\Delta\br{\cA, R} \geq \delta$ and by assumption $\delta 
 Since $C$ is constant, the theorem follows.
 \end{proof}
 
+\subsection{Special cases of the precedence relationships}
+By \cite{citehere}:
+\begin{theorem}
+    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $4\cdot \gamma$ - approximate algorithm for the PCMSSC problem.
+\end{theorem}
+\begin{theorem}
+    If the precedence constraints form an outforest, then there exists an $\br{O\br{\log n}}$-approximation algorithm for PCMSSC.
+\end{theorem}
+
+\begin{theorem}
+    If the precedence constraints form an outforest, then there exists an bicriteria $\br{4, O\br{\log n}}$-approximation algorithm for PCSC which be converted to an $O\br{\log^2 n}$ approximation algorithm.
+\end{theorem}
