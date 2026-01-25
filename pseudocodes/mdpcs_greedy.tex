@@ -4,11 +4,11 @@
 \caption{The greedy algorithm for MDPCS}
 \label{alg:MDPCS}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{$\ProcedureMDPCSGreedy(\mathcal{G}, \preceq, R)$}{
+\Proc{$\ProcedureMDPCSGreedy(\mathcal{G}, \preceq, \cU)$}{
 $\mathcal{A} \gets \mathcal{G}$\;
 
 \ForEach{$S \in \mathcal{G}$}{
-\If{$\Delta\br{\closure{S}, R} > \Delta\br{\mathcal{A}, R}$}{
+\If{$\Delta\br{\closure{S}, \cU} > \Delta\br{\mathcal{A}, \cU}$}{
 $\mathcal{A} \gets \closure{S}$\;
 }
 }
