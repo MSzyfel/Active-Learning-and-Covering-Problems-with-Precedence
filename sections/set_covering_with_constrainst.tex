@@ -41,7 +41,7 @@ The Algorithm \ref{alg:BPCSC} is greedy and consists of two cases. If the budget
 
     Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot B$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot B$, the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$. 
     
-    We employ a modified version of the standard analsysis of the greedy algorithm for set cover \cite{Chvatal1979}.
+    We employ a modified version of the standard analsysis of the greedy algorithm for set cover \cite{SetCover}.
     Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$. Let $R_i = \cU \setminus \cov\br{\cC_i, \cU}$ be the set of uncovered elements after the $i$-th iteration. Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$. Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the cost of $u$ to be $c(u) = \spr{\cA_{i(u)}}/\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}$. Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt, \cU}}$. Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt, \cU}}$. Order the elements of $\cov\br{\cCopt, \cU}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily. 
 
     \begin{lemma}\label{lem:cost-per-element}
