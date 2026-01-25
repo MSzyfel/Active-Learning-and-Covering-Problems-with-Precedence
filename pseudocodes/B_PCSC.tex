@@ -5,11 +5,6 @@
 \label{alg:BPCSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedureBPCSC(\cU, \cS, \preceq, B)$}{
-    \If{$B\geq \sqrt{m/H_n}$}
-    {
-        \Return $\cS$.
-    }
-  \Else{
   $\cC \gets \emptyset$.
 
   \While{$\spr{\cC} < \sqrt{m\cdot H_n}\cdot B$}{
@@ -24,6 +19,5 @@
 
   \Return $\cC$.
   }
-}
 \end{algorithm}
 
