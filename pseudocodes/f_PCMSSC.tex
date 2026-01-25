@@ -4,16 +4,16 @@
 \caption{The algorithm for $\ProblemPCMSSC$}
 \label{alg:PCSC}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{$\ProcedureFPCMSSC(\cU, \cS, \preceq, w, f)$}{
+\Proc{$\ProcedureFPCMSSC(\cU, \cS, \preceq, f)$}{
     $\cO\gets \emptyset$.
 
-    \For{$1\leq l\leq \cl{\log{w\br{\cU}}}$}{
+    \For{$1\leq l\leq \cl{\log{n}}$}{
         $U\gets \cU$.
 
         $\pi_l\gets \emptyset$.
 
         \For{$1\leq i\leq l$}{
-            $\tau\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, w, B=a^i)$.
+            $\tau\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^i)$.
 
             $U \gets U \setminus \cov(\pi)$.
 
@@ -22,11 +22,11 @@
         
         Extend $\pi_l$ to ensure that $\spr{\pi_l} \geq \alpha\cdot a^l$.
 
-        $\sigma\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, 1, B=a^l)$.
+        $\sigma\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^l)$.
 
         $\pi_l \gets \pi_l \circ \sigma$.
 
-        $\cO \gets \cO \cup \br{\pi_l}$.
+        $\cO \gets \cO \cup \brc{\pi_l}$.
     }
     \Return $\argmin_{\pi\in \cO} \brc{\cost(\pi)}$.
 }
