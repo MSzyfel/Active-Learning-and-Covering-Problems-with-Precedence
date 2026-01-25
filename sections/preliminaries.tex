@@ -26,7 +26,9 @@ For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and al
 Let $\tests{D}{v}$, denote the sequence of tests performed in order to arrive at the node $v$ in $D$, including $v$.
 In other words, $\tests{D}{v}$ consists of the nodes of the path from the root to $v$ in $D$.
 The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}-1$, where $v$ is the leaf of $D$ that represent the event of declaring that $h$ is the target.
-We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}$ (up to a multiplicative factor of $1/\spr{\cH}$).
+
+Let $p: \cH \to [0,1]$ be a probability distribution over the hypotheses, where $\sum_{h \in \cH} p(h) = 1$.
+We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \mathbb{E}_{h \sim p}\left[\COST\br{D, h}\right] = \sum_{h \in \cH} p(h) \cdot \COST\br{D, h}$.
 The criteria we consider for any $\ProblemPCAL$ instance $I$ are denoted by
 $$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 $$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$

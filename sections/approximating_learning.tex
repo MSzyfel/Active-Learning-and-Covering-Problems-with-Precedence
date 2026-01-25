@@ -156,6 +156,31 @@ $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approxim
 We follow a similar idea, however we use the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
 This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACAL$.
 \DD{do rozwazenia fix notacyjny: $\sepcover{\cI}$ to jest zbior, a tutaj mamy do czynienia z suma zalezna od kolejnosci}
+However, since in this case we have arbitrary probability distrubution on hypotheses, we firstly emply a rounding technique which firstly scales the probabilities to polynomial size integers. Below we present which does so, by incurring only a 2-factor loss in the approximation.
+\begin{lemma} \label{lemma:rounding}
+    Let $\cI=\br{\cH, \cT, \cF, p}$ be any instance of $\ProblemPCACAL$ with $n=\spr{\cH}$.
+    Then, there exists an instance $\cI'=\br{\cH, \cT, \cF, p'}$ such that for each $h\in\cH$, $p'(h)\in \mathbb{N}$ and $p\br{\cH}=O(nm)$ and $\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$.
+\end{lemma}
+\begin{proof}
+    Let $K=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/K}$. Therefore, $p'(h) \leq p(h)/K + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{K} + 1} = \frac{1}{K} \sum_{h \in \cH} p(h) + n = nm + n = O(nm)$. 
+
+    We now argue that $\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
+    \begin{align*}
+    \COSTA\br{D', \cI} &\leq K\cdot \COSTA\br{D', \cI'}\\&\leq 
+    K\cdot \COSTA\br{D, \cI'}
+    \\&\leq
+    \COSTA\br{D, \cI} + K\cdot\sum_{h\in\cH} \COST\br{D, \cI', h}
+    \\&\leq
+    \COSTA\br{D, \cI} + K\cdot n\cdot m
+    \\&=
+    \COSTA\br{D, \cI} + 1
+    \\&\leq
+    2 \cdot \COSTA\br{D, \cI}
+    \end{align*}
+    where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq K\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $K\cdot p'(h) \leq p(h) + K$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $K$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
+\end{proof}
+
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACAL$ is such that for each $h\in\cH$, $p(h)\in \mathbb{N}$ and $p\br{\cH}=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
     Let $\cI=\br{\cH, \cT, \cF}$ be any $\ProblemPCACAL$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
