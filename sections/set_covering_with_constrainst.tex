@@ -21,7 +21,7 @@ Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a
 \end{theorem}
 \begin{proof}
 The Algorithm \ref{alg:BPCSC} is greedy and consists of two cases. If the budget $B$ is large enough, i.e., $B\geq \sqrt{m/H_n}$, then the algorithm returns the whole family $\cS$. Otherwise, the algorithm iteratively adds to the cover $\cC$ a set $\cA$ returned by the $B$-approximation algorithm for $\ProblemBMDPCS$ with budget $B$ until the cost of the cover exceeds $\sqrt{m\cdot H_n}\cdot B$.
-\include{pseudocodes/B_PCSC}
+\input{pseudocodes/B_PCSC}
 \begin{lemma}\label{lem:BPCSC-cost}
     Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
 \end{lemma}
@@ -118,11 +118,100 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
 \end{theorem}
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$}
 \begin{theorem}
-    If there exists a $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
+    If there exists a $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha\cdot\beta}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
 \begin{proof}
+    Let $a=\frac{3\beta-1}{3\beta-2}<2$.
+    Consider the procedure shown in Algorithm~\ref{alg:fPCMSSC}.
     \input{pseudocodes/f_PCMSSC.tex}
-    \MS{Analiza do przepisania z \url{https://arxiv.org/abs/1003.0722}, Sekcja 3.2. Uwaga!, trzeba sprawdzić jaka jest wartość $a$ w zależności od $alpha$.}
+    % \MS{Analiza do przepisania z \url{https://arxiv.org/abs/1003.0722}, Sekcja 3.2. Uwaga!, trzeba sprawdzić jaka jest wartość $a$ w zależności od $alpha$, ale wydaje mi się że nadal 5/4 działa. Poniżej zrobiłem mały boilerplate analizy do uzupełnienia.}
+
+    Denote by $\zeta^*$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
+    Let $l^*$ be the value of $l$ such that $\COST\br{\pi_{l^*}\circ\sigma}=\min_{\pi\in \cO} \brc{\COST(\pi)}$. Observe that $a^{l^*-1} < \spr{\zeta^*} \leq a^{l^*}$. We start with the following lemma.
+    \begin{lemma}\label{lem:pi-spread-cost}
+        We have that $\spr{\pi_{l^*}} = \Theta\br{\alpha }\cdot \spr{\zeta^*}$ and $\COST\br{\pi_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
+    \end{lemma}
+    \begin{proof}
+        We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. We observe that before the extension step of $\pi_{l^*}$, we have that:
+        $$
+        \spr{\pi_{l^*}} \leq \alpha\cdot \sum_{i=1}^{l^*} a^{i+1}\leq \frac{\alpha\cdot a^{l^*+2}}{a-1}\leq \frac{\alpha\cdot a^{3}\spr{\zeta^*}}{a-1}=O\br{\alpha}\cdot\spr{\zeta^*}.
+        $$
+
+        Since in the extension step we ansure that $\spr{\pi_{l^*}} \geq \alpha\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha}\cdot \spr{\zeta^*}$ and the first part of the lemma follows.
+
+        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, \cU}}$ and note that $n_{l^*}^* = \spr{\cov\br{\zeta^*, \cU}}$. Similarly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i, \cU}}$. Additionally, define $n_0=n_0^*=0$. We have:
+        \begin{align*}
+            \COST\br{\pi}&\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
+            \\&\leq 
+            \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
+            \\&=
+            \sum_{i=1}^{l^*}\br{\br{n-n_{i-1}}-\br{n-n_i}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
+            \\&\leq
+            \sum_{i=0}^{l^*}\br{n-n_i}\cdot \frac{\alpha\cdot a^{i+3}}{a-1} =: Q.
+        \end{align*}
+
+        Moreover, we have that:
+        \begin{align*}
+        \COST\br{\zeta^*}&\geq \sum_{i=1}^{l^*-1}a^{i-1}\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\zeta^*}
+        \\&\geq
+        \sum_{i=1}^{l^*-1}a^{i-1}\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
+        \\&\geq 
+        \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
+        \end{align*}
+
+        Consider any iteration $i\in [l^*]$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\zeta^*}{a^{i-1}}, \cU}$ be the universe of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\zeta^*}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}^*$. Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}^*}$. As a consequence we see that $n-n_i\geq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$ so that:
+        \begin{align*}
+            \frac{\br{a-1}\cdot Q}{\alpha}
+            &=
+            \sum_{i=0}^{l^*}a^{i+3}\cdot \br{n-n_i}
+            \\&\leq 
+            a^3\cdot n + \frac{1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_i^*} + \frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
+            \\&\leq
+            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}} 
+            \\&=
+            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}}
+            \\&\leq 
+            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}
+        \end{align*}
+
+        By rearranging the above inequality we obtain:
+        \begin{align*}
+            Q&\leq \alpha\cdot\COST\br{\zeta^*}\cdot\frac{a^4}{\br{a-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot a}{\beta}}}
+            \\&=
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
+        \end{align*}
+        
+        by our choice of $a$. 
+        \begin{enumerate}
+            \item If $\beta=1$, then we have:
+        \begin{align*}
+            Q&\leq
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2}=O\br{\alpha}\cdot\COST\br{\zeta^*}
+        \end{align*}
+        \item Assume that $\beta\neq 1$. Then:
+        \begin{align*}
+            Q&\leq 
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2\cdot\br{1-\frac{\br{\beta-1/3}}{\beta}}}
+            \\&=
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{3\beta\cdot \br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2}
+            =O\br{\alpha\cdot\beta}\cdot\COST\br{\zeta^*}
+        \end{align*}
+
+        \end{enumerate}
+        The lemma follows.
+    \end{proof}
+    \begin{lemma}\label{lem:sigma-coverage}
+        We have that $\spr{\cov\br{\sigma_{l^*}, \cU}} \geq \frac{f\cdot n}{\beta}$ and $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$.
+    \end{lemma}
+    \begin{proof}
+        Since for the optimal cover $\zeta^*$, $\spr{\zeta^*}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI_{l^*+1}$. Therefore we know that $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$ and $\spr{\cov\br{\sigma_{l^*}, \cU}} \geq \frac{f\cdot n}{\beta}$.
+    \end{proof}
+    \begin{lemma}\label{lem:combined-coverage-cost}
+        We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}, \cU}}\geq \frac{f\cdot n}{\beta}$ and $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
+    \end{lemma}
+    \begin{proof}
+        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, we have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}, \cU}}\geq \frac{f\cdot n}{\beta}$. For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$. Lemma \ref{lem:pi-spread-cost} implies that $\COST\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$. Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is $t_u$. For each $u\notin\cU$ its cover time in $\pi_{l^*}$ is $t_u\geq \alpha\cdot a^{l^*}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most $\spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*} + O\br{\alpha}\cdot a^{l^*} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*}$. Therefore, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most a constant factor larger than its cover time in $\pi_{l^*}$. As a consequence we have that $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
+    \end{proof}
 \end{proof}
 \subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
 

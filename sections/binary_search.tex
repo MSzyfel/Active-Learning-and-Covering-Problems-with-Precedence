@@ -6,7 +6,7 @@ The algorithm for a worst case is simple. We use the equivalence between binary 
 To obtain an algorithm for the average case, we use a different approach.
 A precedence constrained $1/2$-cut in a path is a subset of edges whose removal splits the path into subpaths of size at most $n/2$, such that the subset is precedence-closed. We wish to minimize the size of this set. We have the following observation:
 \DD{troche nie widze tego lematu: co jesli precedensy to dwa lancuchy biegnace od srodka sciezki do jej konca/poczatku? Być może źle czytam, gdyz nie bylo zdefiniowane jak rozumiemy zbior krawedzi bedacy precedence closed?}
-\begin{lemma}
+\begin{lemma}\label{lemma:optimal_half_cut}
     Let $S^*$ be the optimal precedence constrained $1/2$-cut in a path $P=\angl{v_1,\dots, v_n}$. Then either $S^* = F[\brc{\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}}]$ or there exist edges $e_1, e_2$ such that $S^*=F[\brc{e_1, e_2}]$.
 \end{lemma}
 \begin{proof}
