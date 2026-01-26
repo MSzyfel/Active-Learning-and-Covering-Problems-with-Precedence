@@ -1,19 +1,6 @@
-\section{Set covering with constraints}
+\section{Set covering with constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$.
-For $S \in \mathcal{G}$, let $\closure{S}$ denote the minimal precedence-closed subfamily of $\mathcal{G}$ containing $S$, i.e., $x\in\closure{S}$ if and only if $x\in S$ or $x\preceq y$ for some $y\in S$.
-\DD{te definicje byc moze do przodu...}
-
-The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A\subseteq X$ for each $A\in\cA$) is
-\[
-\Delta\br{\cA, X} \equiv \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}
-\]
-For convenience, we define $\Delta\br{\emptyset, X} < 0$.
-We also write $\Delta\br{\cA}$ when $X$ is the universum.
-\begin{definition}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
-Given a family of $m$ sets $\mathcal{G}$, a precedence relation $\preceq$, and a set of $n$ items to be covered $\cU \subseteq \cov\br{\mathcal{G}}$, the $\ProblemMDPCS$ problem asks to find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA, \cU}$.
-\end{definition}
 
 \subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$}
 \begin{theorem}
@@ -123,7 +110,9 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
     \input{pseudocodes/f_PCMSSC.tex}
     \MS{Analiza do przepisania z \url{https://arxiv.org/abs/1003.0722}, Sekcja 3.2. Uwaga!, trzeba sprawdzić jaka jest wartość $a$ w zależności od $alpha$.}
 \end{proof}
-\subsection{Max-Density Precedence-Closed Subfamily (MDPCS)}
+
+
+\section{Max-Density Precedence-Closed Subfamily (MDPCS)} \label{sec:MDPCS}
 
 The key to solve PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
 \input{pseudocodes/mdpcs_greedy.tex}

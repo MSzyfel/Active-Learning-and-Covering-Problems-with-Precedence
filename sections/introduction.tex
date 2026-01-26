@@ -4,27 +4,35 @@ Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} a
 Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup_{x\in t} x=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
 That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
-Each subsequent test is selected by \questioner by taking into acocunt replies from all test to date.
-Without formally stating an optimization criterion we refer to  the above as the \emph{Active Learing} ($\ProblemAL$).
+Each subsequent test is selected by \questioner by taking into acocunt replies from all tests to date.
+Without formally stating an optimization criterion we refer to the above as the \emph{Active Learing} ($\ProblemAL$).
 (Another widely used name in the literature is the decision tree construction).
-The goal of \questioner is to output $\target$.
+The goal of \questioner is to output $\target$ while minimizing either the number of tests done in the worst case or on average.
+(For formal statemets of our problems see the next section).
 
-Consider an arbitrary partial order $(\cT,\preceq)$ that introduces a precedence relation between tests.
-Then, a test $t$ can be performed only when all its predecesors had to be performed previously (to which we refer as \emph{precedence closed} solution).
-This leads us to two active learning problems studied in this work.
-In the \emph{Precedence Constrained Worst Case Active Learing} ($\ProblemPCWCAL$) the goal is to execute $\ProblemAL$ that respects the precedence constraints and outputs the target $\target$ by performing the minimum number of tests in the worst case.
-Similarly, in the \emph{Precedence Constrained Average Case Active Learing} ($\ProblemPCACAL$) the optimization criterion changes to minimizing the number of queries done on average.
-Whenever the criterion is not important or we want to make a claim that applies to both we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
+We note that the above statement generalizes the classical binary search in (fully or partially) sorted data.
+In this work we generalize this proces by considering precedence relation between tests given as an arbitrary partial order $(\cT,\preceq)$.
+Then, a test $t$ can be performed only when all its predecesors had to be performed previously (to which we refer as \emph{precedence-closed} solution).
+On the applicability side, the binary search itself includes numerous use cases, some of them in the area of biology \cite{Ben-OrH08}.
+For example, if hypotheses were to represent possible conditions or deseases, and each test distinguishes between some pairs of hypotheses, then precedence constaints would represent some ordering on performing tests.
+These may be enforced e.g. by cost measures (like executing several `cheaper' tests whose outcome may eliminate the need of executing a more expensive one), or by an expert.
 
-
-In this work we study connections between $\ProblemPCAL$ and covering problems defined as follows.
+The method to address the active learning problems is through a series of `reductions' between other optimization problems.
+By this we mean an approach, where a particular algorithm for one problem implies existence of an algorithm for the other.
+Particularly, we study a set cover problem with precedences:
 We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup_{S\in\cS}S=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from $\cU$ if $\spr{\bigcup_{C\in\cC}C}\geq k$.
-We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and is \emph{precedence closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
-In the \emph{Precedence Constrained Set Cover} ($\ProblemPCSC$) the goal is to minimize $\spr{\cC}$.
-A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
-The \emph{coverage time} of a $x\in\bigcup_{C\in\cC}C$ is the minimum index $i$ such that $x\in C_i$.
-In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the goal is to find a sequence $(C_1,\ldots,C_l)$ that covers at least $k$ elements, is precedence closed and minimizes the total coverage time of all items in $C_1\cup\cdots\cup C_l$.
+We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
+The approximation algorithms that we propose en route, e.g. for precedence constrained set cover, are of independent interest.
+
+\medskip
+\paraTitle{Outline.}
+In the next section we formally state all problems we address in this work.
+Section~\ref{sec:our-results} gives an overview of the main results of this work.
+Section~\ref{sec:AL} provides approximation algorithm for the above active learning problem, assuming there exist certain approximations for variants of set cover.
+The latter are developed in Section~\ref{sec:SC}.
+Finally, set cover is solved via dense subfamily approximation from Section~\ref{sec:MDPCS}.
+The algorithms are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
 
 % Consider following problems:
 % \begin{itemize}
@@ -32,7 +40,62 @@ In the \emph{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$) the go
 %   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
 % \end{itemize}
 
-\subsection{Our results and techniques}
+\subsection{Problem formulations} \label{sec:problems}
+
+\begin{problem}[Precedence Constrained Worst Case Active Learing ($\ProblemPCWCAL$)] \label{problem:PCWCAL}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed active learning strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case.
+\end{problem}
+\begin{problem}[Precedence Constrained Average Case Active Learing ($\ProblemPCACAL$)] \label{problem:PCACAL}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed active learning strategy that outputs the target hypothesis $\target$ and minimizes the sum $\sum_{h\in\cH}c(h)$, where $c(h)$ is the number of tests performed when $h=\target$.
+\end{problem}
+Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCAL$ and $\ProblemPCACAL$, we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
+
+%For any partial order $(X,\preceq)$ we say that $S\subseteq X$ is \emph{precedence-closed} if $x\in S$ implies $y\in S$ for each $y$ such that $y\preceq x$.
+Also, let $\closure{S}$ denote the minimal precedence-closed subset of $X$ such that $S\subseteq X$.
+For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
+
+\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)]
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $k>0$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $k$ items and minimizes $\spr{\cC}$.
+\end{problem}
+A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+The \emph{coverage time} of a $x\in\cov\br{\cC}$ is the minimum index $i$ such that $x\in C_i$.
+\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)]
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $k>0$, find a precedence-closed sequence $(C_1,\ldots,C_l)$ that covers at least $k$ items and minimizes the sum of coverage times of the elements in $C_1\cup\cdots\cup C_l$.
+\end{problem}
+
+\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)]
+Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$ and a budget $B>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq B$.
+\end{problem}
+
+The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A\subseteq X$ for each $A\in\cA$) is
+\[
+\Delta\br{\cA, X} \equiv \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}
+\]
+For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+We also write $\Delta\br{\cA}$ when $X$ is the universum.
+\begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
+Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
+\end{problem}
+
+
+
+\begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)]
+Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $B>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and is size-bounded $\spr{\cA}\leq B$.
+\end{problem}
+
+
+\DD{A te dwa problemy to na razie resztowka, ktora gdzies powinna trafic}
+\begin{problem}[Group Steiner Tree (GST)]
+Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
+\end{problem}
+
+\begin{problem}[Precedence constrained test cover (PCTC)]
+Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
+\end{problem}
+
+
+\subsection{Our results and techniques} \label{sec:our-results}
+
 
 Our first theorem is due to Theorem~\ref{thm:alphaPCWCAL}.
 \begin{theorem} \label{thm:generalPCWCAL}
@@ -125,13 +188,3 @@ general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt
 
 \DD{tutaj bylby jakis wywod i intuicje jakie techniki sa nowe, generalnie trzebaby sie pochwalic pomyslami roznymi}
 
-
-\DD{A te dwa problemy to na razie resztowka, ktora gdzies powinna trafic}
-\begin{definition}[Group Steiner Tree (GST)]
-Given an undirected graph $G = (V, E)$ with edge costs, a root vertex $r \in V$, and groups $g_1, \ldots, g_k \subseteq V$, find a minimum-cost tree $T$ rooted at $r$ that contains at least one vertex from each group $g_i$.
-\end{definition}
-
-\begin{definition}[Precedence constrained test cover (PCTC)]
-Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial order $\brc{\cT, \preceq}$ encoding precedence constraints for $\cT$, find a precedence-closed subfamily of tests that distinguishes all pairs of hypotheses.
-\end{definition}
-\DD{czyli taka inna nazwa na test cover zaaplikowany bezposrednio do hipotez?}
