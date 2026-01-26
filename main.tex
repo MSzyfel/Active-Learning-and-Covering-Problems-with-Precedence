@@ -103,6 +103,8 @@
 \newcommand{\ProblemBMDPCS}{\textsc{B-MDPCS}}
 \newcommand{\ProblemLPGST}{\textsc{LPGST}}
 \newcommand{\ProblemGSO}{\textsc{GSO}}
+\newcommand{\ProblemGST}{\textsc{GST}}
+\newcommand{\ProblemPDS}{\textsc{PDS}}
 \newcommand{\ProcWorstDecisionTree}{\textsc{WorstDecisionTree}{} }
 \newcommand{\blackBox}{\textsc{FindCover}{} }
 \newcommand{\ProcedureMDPCSGreedy}{\textsc{MDPCS-Greedy}}
@@ -173,14 +175,16 @@
 
 \begin{abstract}%
 
-  In the Bayesian Active Learning a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
+  In the Generalized Bayesian Active Learning a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner can discard hypothesis inconsistent with the test outcome and then adaptively selects the next test to be performed. The goal is to create a strategy of testing enabling learner to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
 
-  In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
+  In the covering problems, we are given a set of items and a family of subsets that cover these items. The objective is to select a sequence of subsets that covers certain amount of items (usually all), while minimizing the worst or average covering cost.
 
   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
   This paper explores the connection of active learning and covering problems under such constraints. 
   
-  We show that given any bicriteria $\br{O\br{1}, \alpha}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Active Learning with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $O\br{\beta}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the Average Case Active Learning with Precedence Constraints. In particular we obtain $O^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. Then, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithm result with general $O\br{m^{1/6}}$ hardness of approximation results for both vesions of the active learning, as well as $O\br{\log^2n}$-inapproximability results for outforest precedence constraints and NP-hardness for the special case of binary searching with precedence constraints.
+  We show that given any bicriteria $\br{\alpha, O\br{1}}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Active Learning with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $O\br{\beta, O\br{1}}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $O\br{\beta\cdot \log \br{m+n}}$-approximation ratio for the Average Case Active Learning with Precedence Constraints. Then, we provide several approximation algorithms for Precedence Contrained Set Cover and Precedence Contrained Min-Sum Set Cover problems which include $O\br{\sqrt{m}/f, 2}$-bicriteria approximation algorithm for PCSC where $f$ is the fraction required to be covered as well as an $O\br{\sqrt{m\log n}}$-approximation algorithms for both PCSC ans PCMSSC. As a consequence, we obtain an $O\br{\sqrt{m}\cdot\log n}$-approximation for $\ProblemPCWCAL$ and $O\br{\sqrt{m}\cdot\log^{3/2} \br{m+n}}$-approximation for $\ProblemPCACAL$, where $m$ is the number of tests. Furthermore, we provide improved approximation algorithms for special cases of precedence constraints including $O\br{\log^2n}$-approximation guarantees for outforests and $O\br{\log n}$ for inforests for both criterions.  
+  
+  We complement algorithmic results with $O\br{m^{1/6-\epsilon}}$-hardness of approximation results for both vesions of the active learning and PCSC, as well as $O\br{\log^{2-\epsilon}n}$-inapproximability results for outforest precedence constraints. At last we showcase NP-hardness for the special case of binary searching in a linearly ordered set with precedence constraints and APX-hardness for the special case of searching in tree-like partially ordered sets.
 \end{abstract}
 
 \begin{keywords}%
@@ -196,6 +200,12 @@
  \item front we wszystkich miejcach zawiera zwykle odnosniki do literatury a sekcja ``related work'' jest czesto tytulowana ``other related work'' lub cos w tym rodzaju
  \item czytelnik powiniem poza dowodami rozumiec baze przeczytawszy front (czyli rozumiec wyniki, widziec co papier robi) a jesli chce sie dowiedziec jak/dlaczego (dowody) to idzie dalej. Czesto recenzent jest leniwy i nie zajrzy dalej niz front... niestety.
  \item W zwiazku z powyzszym sekcja ``our contribution'' (potencjalnie w tytule dodamy ``and techniques'' jak Michal sugeruje) powinna sie pochwalic takze jakimis ciekawszymi trickami lub technikami uzytymi pozniej w dowodach.
+\end{itemize}
+}
+\MS{Spis konwencji:
+\begin{itemize}
+  \item Proponuję ustalić konwencje bikryterialnbych aproksymacji. $\br{\alpha, \beta}$ niech zawsze oznacza aproksymację, gdzie pierwszy parametr dotyczy kosztu rozwiązania, a drugi paramter dotyczy spełnienia wymagań (np. liczby pokrytych elementów). W niektórych miejscach w tekście jest odwrotnie.
+  \item Należy ustalić czy $O$ czy $\cO$.
 \end{itemize}
 }
 

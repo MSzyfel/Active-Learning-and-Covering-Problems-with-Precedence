@@ -81,7 +81,7 @@ By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delt
 Since $C$ is constant, the theorem follows.
 \end{proof}
 
-\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$}
+\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
 \begin{theorem}
     There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
 \end{theorem}
@@ -146,7 +146,7 @@ Therefore, if the procedure allows the while loop to run until the size of the c
 \end{proof}
 By Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage}, the procedure is a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
 \end{proof}
-\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}
+\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$} \label{subsection:PCSC}
 
 In ourder to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
 \input{pseudocodes/set_cover.tex}
@@ -184,7 +184,7 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
 \end{theorem}
 
 It should also be observed that if we would like to achieve an approximation algorithm for $\ProblemPCSC$ with an approximation ratio independent of $f$, we can simply utilize the $\br{O\br{\sqrt{m\log\br{n}}}, 1}$-approximatio ratio for $\ProblemPCSC$ presented in the previous section. To do so, one simply needs to find the minimal value of $B$ which suffices to cover $k$ elements using the $\br{O\br{\sqrt{m\log\br{n}}}, 1}$-approximation algorithm for $\ProblemBPCSC$. This can be done via binary search. The resulting approximation ratio will be $O\br{\sqrt{m\log\br{n}}}$. Note that however, since in our applications $1/f=O\br{1}$ this yields worse approximation ratio then the $\br{\sqrt{m}/f, 2}$-approximation algorithm presented in this section.
-\subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$}
+\subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
 Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{O\br{\alpha\cdot\beta}, \beta}$-approximation algorithm for $\ProblemPCMSSC$. This results seem counterintuitive at first glance, since we are using an algorithm for a problem wwhere the budget denotes the maximal allowed size of the cover to solve a problem where the budget denotes the sum of covering times. Our algorithm and its analysis are a direct generalization of the approach of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems} which showed a similar algorithm to solve $\ProblemLPGST$ using $\ProblemGSO$ as a subroutine. Furthermore, their result is based on techniques used in solving \textit{the minimum latency Travelling Salesman Problem} \cite{PsTsandMinLatencyTours,Thek-TravelingRepairmenProblem}.
 \begin{theorem}
     If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
@@ -277,15 +277,19 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
 
 It should be noted, that in all of our algorithms we will have $\beta=O\br{1}$, thus yielding an $\br{O\br{\alpha}, O\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
-\subsection{Special cases of the precedence relationships}
-By \cite{citehere}:
+\subsection{Special cases of the precedence relationships} \label{subsection:SpecialCases}
 \begin{theorem}
-    If there exists an $\gamma$ approximation algorithm for the $\ProblemMDPCS$ problem, then there exists an $4\cdot \gamma$ - approximate algorithm for the PCMSSC problem.
+    There exists an $\br{1, \br{1-1/e}}$-approximation algorithm for $\ProblemBPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
+\begin{proof}
+    The proof is by showing that this problem is reducible to a case with no precedence constraints, however taking a set $S$ may impose cost $c\br{S}$. This problem is equivalent to the standard budgeted maximum coverage problem, for which a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Notice that in this case, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the original instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, the theorem follows.
+\end{proof}
 \begin{theorem}
-    If the precedence constraints form an outforest, then there exists an $\br{O\br{\log n}}$-approximation algorithm for PCMSSC.
+    There exists an $\br{O\br{\log n}, 4}$-approximation algorithm for $\ProblemBPCSC$ when the precedence constraints form an outforest.
 \end{theorem}
+\begin{proof}
+    The proof is by showing that this problem is reducible to GSO on tree metrics. This problem admits an $\br{O\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. It should be noted that they give a worse approximation ratio of $\br{O\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $O\br{\log n}$ distortion. Since our metrics is already a tree metric, we can skip this step and obtain the improved approximation ratio.
+    
+    We create the metric as follows: we create a root node $r$ and for each set $S\in\cS$ we create a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$. Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group which consists of all repersentatives of vertices covering $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times. Since traversing an edge $(v_S, v_W)$ results in visiting a set $W$ which is a succesor of $S$ in the outforest, we have that if a tour visits a repersentative of a set $W$, it must have visited the repersentative of all of its predecessors in the outforest. Therefore, any feasible solution to GSO on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, the theorem follows.
+\end{proof}
 
-\begin{theorem}
-    If the precedence constraints form an outforest, then there exists an bicriteria $\br{4, O\br{\log n}}$-approximation algorithm for PCSC which be converted to an $O\br{\log^2 n}$ approximation algorithm.
-\end{theorem}

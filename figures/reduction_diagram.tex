@@ -1,31 +1,38 @@
 \begin{tikzpicture}[
-    node distance=2.5cm and 3cm,
-    problem/.style={rectangle, draw, very thick, minimum width=2.2cm, minimum height=1cm, align=center, font=\small},
+    node distance=1.1cm and 2cm,
+    problem/.style={rectangle, draw, very thick, minimum width=1.8cm, minimum height=0.8cm, align=center, font=\scriptsize},
     arrow/.style={->, very thick}
 ]
 
-% Third row (define first for positioning)
-\node[problem] (pcmssc) {PCMSSC};
-\node[problem, right=3cm of pcmssc] (pcsc) {PCSC};
+% Define positions based on the hand-drawn diagram
+% Top level
+\node[problem] (bmdpcs) {$\ProblemBMDPCS$};
 
-% Second row (above pcsc)
-\node[problem, above right=0.7cm and 2cm of pcsc] (gst) {GST};
+% Second level - left and center
+\node[problem, below left=1.1cm and 2.5cm of bmdpcs] (mdpcs) {$\ProblemMDPCS$};
+\node[problem, below=1.1cm of bmdpcs] (bpcsc) {$\ProblemBPCSC$};
 
-% Top row (above gst)
-\node[problem, above left=0.6cm and 1.5cm of gst] (mdpcs) {MDPCS};
+% Second level - right
+\node[problem, above right=0cm and 1.5cm of bpcsc] (gso) {$\ProblemGSO$};
+\node[problem, below right=1.1cm and 1.5cm of gso] (lpgst) {$\ProblemLPGST$};
 
-% Bottom row
-\node[problem, below=0.6cm of pcmssc] (pcacal) {PCACAL};
-\node[problem, below=0.6cm of pcsc] (pcwcal) {PCWCAL};
-\node[problem, right=3cm of pcwcal] (pctc) {PCTC};
+% Third level
+\node[problem, below left=1.1cm and 0.8cm of bpcsc] (fpcsc) {$\ProblemPCSC$};
+\node[problem, below right=1.1cm and 0.8cm of bpcsc] (fpcmssc) {$\ProblemPCMSSC$};
 
-% Arrows
-\draw[arrow] (mdpcs) -- (gst);
-\draw[arrow] (mdpcs) -- (pcsc);
-\draw[arrow] (mdpcs) -- (pcmssc);
-\draw[arrow] (gst) -- (pcsc);
-\draw[arrow] (pcsc) -- (pctc);
-\draw[arrow] (pcsc) -- (pcwcal);
-\draw[arrow] (pcmssc) -- (pcacal);
+% Bottom level
+\node[problem, below=1.1cm of fpcsc] (pcwcal) {$\ProblemPCWCAL$};
+\node[problem, below=1.1cm of fpcmssc] (pcacal) {$\ProblemPCACAL$};
+
+% Arrows with hyperlinks to sections
+\draw[arrow] (bmdpcs) -- (bpcsc) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}};
+\draw[arrow] (mdpcs) -- (fpcsc) node[midway, above, font=\scriptsize\upshape, sloped] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}};
+\draw[arrow] (bpcsc) -- (fpcsc) node[midway, above left, font=\scriptsize\upshape] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}};
+\draw[arrow] (bpcsc) -- (fpcmssc) node[midway, above right, font=\scriptsize\upshape] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}};
+\draw[arrow] (gso) -- (bpcsc) node[midway, above, font=\scriptsize\upshape, sloped] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
+\draw[arrow] (gso) -- (lpgst) node[midway, right, font=\scriptsize\upshape] {\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}};
+\draw[arrow] (lpgst) -- (fpcmssc) node[pos=0.5, above, sloped, font=\scriptsize\upshape] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
+\draw[arrow] (fpcsc) -- (pcwcal) node[midway, left, font=\scriptsize\upshape] {\hyperref[subsection:PCWCAL]{Sec.~\ref*{subsection:PCWCAL}}};
+\draw[arrow] (fpcmssc) -- (pcacal) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:PCACAL]{Sec.~\ref*{subsection:PCACAL}}};
 
 \end{tikzpicture}
