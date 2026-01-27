@@ -25,14 +25,14 @@ We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $k$ items from 
 We ask for a $\cC\subseteq\cS$ that covers at least $k$ items from $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$.
 The approximation algorithms that we propose en route, e.g. for precedence constrained set cover, are of independent interest.
 
-\medskip
-\paraTitle{Outline.}
-In the next section we formally state all problems we address in this work.
-Section~\ref{sec:our-results} gives an overview of the main results of this work.
-Section~\ref{sec:AL} provides approximation algorithm for the above active learning problem, assuming there exist certain approximations for variants of set cover.
-The latter are developed in Section~\ref{sec:SC}.
-Finally, set cover is solved via dense subfamily approximation from Section~\ref{sec:MDPCS}.
-The algorithms are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
+% \medskip
+% \paraTitle{Outline.}
+% In the next section we formally state all problems we address in this work.
+% Section~\ref{sec:our-results} gives an overview of the main results of this work.
+% Section~\ref{sec:AL} provides approximation algorithm for the above active learning problem, assuming there exist certain approximations for variants of set cover.
+% The latter are developed in Section~\ref{sec:SC}.
+% Finally, set cover is solved via dense subfamily approximation from Section~\ref{sec:MDPCS}.
+% The algorithms are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
 
 % Consider following problems:
 % \begin{itemize}
@@ -40,8 +40,11 @@ The algorithms are supplemented with a number of inapproximability results in Se
 %   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
 % \end{itemize}
 
-\subsection{Problem formulations} \label{sec:problems}
+\subsection{Problem formulations and outline} \label{sec:problems}
 
+\DD{ta sekcja jest w miare ulozona pod ustalenia na discord; z wyjatkiem dwoch ostatnich problemow -- do decyzji czy potrzebne}
+
+After introducing necessary notation in Section~\ref{sec:preliminaries}, we provide algorithms (cf. Section~\ref{sec:AL}) for the active learning problems.
 \begin{problem}[Precedence Constrained Worst Case Active Learing ($\ProblemPCWCAL$)] \label{problem:PCWCAL}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed active learning strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case.
 \end{problem}
@@ -50,23 +53,8 @@ Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation 
 \end{problem}
 Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCAL$ and $\ProblemPCACAL$, we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
 
-%For any partial order $(X,\preceq)$ we say that $S\subseteq X$ is \emph{precedence-closed} if $x\in S$ implies $y\in S$ for each $y$ such that $y\preceq x$.
-Also, let $\closure{S}$ denote the minimal precedence-closed subset of $X$ such that $S\subseteq X$.
-For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
-
-\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)]
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $k>0$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $k$ items and minimizes $\spr{\cC}$.
-\end{problem}
-A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
-The \emph{coverage time} of a $x\in\cov\br{\cC}$ is the minimum index $i$ such that $x\in C_i$.
-\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)]
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $k>0$, find a precedence-closed sequence $(C_1,\ldots,C_l)$ that covers at least $k$ items and minimizes the sum of coverage times of the elements in $C_1\cup\cdots\cup C_l$.
-\end{problem}
-
-\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)]
-Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$ and a budget $B>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq B$.
-\end{problem}
-
+The algorithms for the above are conditioned on existence of approximations for the set cover.
+These in turn are obtained via a reduction from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
 The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A\subseteq X$ for each $A\in\cA$) is
 \[
 \Delta\br{\cA, X} \equiv \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}
@@ -74,14 +62,29 @@ The \emph{density} $\Delta$ of a nonempty subfamily $\cA$ on a universum $X$ ($A
 For convenience, we define $\Delta\br{\emptyset, X} < 0$.
 We also write $\Delta\br{\cA}$ when $X$ is the universum.
 \begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
-Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
+Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$ and a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
 \end{problem}
-
-
-
+We will also need a `bounded' version:
 \begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)]
-Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $B>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and is size-bounded $\spr{\cA}\leq B$.
+Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $B>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and $\spr{\cA}\leq B$.
 \end{problem}
+
+Having proved the necessary claims on $\ProblemMDPCS$ and $\ProblemBMDPCS$, we develop in Section~\ref{sec:SC} the algorithms for set cover variants introduced below.
+For any partial order $(X,\preceq)$ and $S\subseteq X$ let $\closure{S}$ denote the minimal precedence-closed subset of $X$.
+For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
+\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)]
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $fn$ items and minimizes $\spr{\cC}$.
+\end{problem}
+A permutation $\br{C_1,\ldots,C_l}$ of the elements in $\cC$ is \emph{consistent} with the partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+The \emph{coverage time} of a $x\in\cov\br{\cC}$ is the minimum index $i$ such that $x\in C_i$.
+\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)]
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $(C_1,\ldots,C_l)$ that covers at least $fn$ items and minimizes the sum of coverage times of the elements in $C_1\cup\cdots\cup C_l$.
+\end{problem}
+\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)]
+Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$ and a budget $B>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq B$.
+\end{problem}
+
+Our results are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
 
 
 \DD{A te dwa problemy to na razie resztowka, ktora gdzies powinna trafic}
@@ -95,7 +98,7 @@ Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial ord
 
 
 \subsection{Our results and techniques} \label{sec:our-results}
-
+\DD{ta sekcja jest under construction; do mocniejszego przerobienia}
 
 Our first theorem is due to Theorem~\ref{thm:alphaPCWCAL}.
 \begin{theorem} \label{thm:generalPCWCAL}
@@ -148,9 +151,9 @@ Table~\ref{tab:results} summarizes all results, also including best known from l
 \small
 \begin{tabular}{p{0.12\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}}
 \toprule
-\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCAL$}                                & $\ProblemPCACAL$                & $\ProblemPCSC$                                          & $\ProblemPCMSSC$    \\
+\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCAL$}                                & $\ProblemPCACAL$                & $\ProblemBPCSC$                                          & $\ProblemPCMSSC$    \\
 \midrule
-general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCAL})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACAL})    & $\bigo(\sqrt{m}/f)$ (Thm.~\ref{thm:generalPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
+general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCAL})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACAL})    & $\sqrt{m\cdot H_n}+1$ (Thm.~\ref{thm:BPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
 \cdashline{2-5}
 empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $\bigo(\log n)$ [\cite{Feige98}] & $4$ [\cite{FeigeLT04}]\\
 \bottomrule
@@ -158,7 +161,6 @@ empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $
 }
 \end{table}
 
-\DD{Uwagi do wyjasnienia: \cite{Feige98} nieco inaczej definiuje set cover.}
 
 \begin{table}[htb!]
 \centering

@@ -1,74 +1,173 @@
+\section{Max-Density Precedence-Closed Subfamily (MDPCS)} \label{sec:MDPCS}
+
+The key to solve PCSC and PCMSSC is to obtain appropriate approximations for $\ProblemMDPCS$ and $\ProblemBMDPCS$
+%An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
+By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cG}$ provides a $O\br{\sqrt{m}}$-approximation:
+$\cA = \argmax_{S\in\cG} \brc{\Delta\br{\closure{S}}}$.
+We will refer to such $\cA$ as a \emph{greedy} solution.
+%\input{pseudocodes/mdpcs_greedy.tex}
+
+Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
+When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$.
+Additionally, we show that a slightly modified greedy rule achieves an $B$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
+An $\cA$ that satisfies
+    $$
+    \cA=\argmax_{S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}}}.
+    $$
+will be called a \emph{$B$-greedy} solution to $\ProblemBMDPCS$.
+\begin{theorem}
+    Let $\cA^*$ be any optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $B$-greedy.
+    Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{B}$.
+\end{theorem}
+\begin{proof}
+    \DD{tutaj staralem sie uproscic, pozbywajac sie symbolu $\delta_B$, gdyz to jest po prostu $\Delta(\cA)$. Takze zmienialem $\cov\br{\cA,\cU}$ na $\cov\br{\cA}$, tu i dalej takze.}
+    We utilize a partial argument of \cite{PCMSSC} for the $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq B$.
+    Denote $\cA^*=\brc{S_1,\ldots,S_k}$.
+    For each $S_i\in \cA^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S_i}}\leq \Delta\br{\cA}$.
+    Therefore:
+    $$
+    \spr{\cov\br{\cA^*}} \leq \sum_{i=1}^{k}\spr{\cov\br{\closure{S_i}}}\leq \Delta\br{\cA}\sum_{i=1}^k \spr{\closure{S_i}} \leq \Delta\br{\cA} \cdot k^2,
+    $$
+    where the first inequality is by the definition of union. We have that:
+    $$
+    \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}}=\frac{\spr{\cov\br{\cA^*}}}{k\cdot\Delta\br{\cA}}\leq k\leq B,
+    $$
+    which by rearranging gives the desired inequality.
+\end{proof}
+The above theorem gives an $B$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $B$ this might be much worse then the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $B$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$.
+
+As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $O\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
+\begin{theorem}
+Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
+$
+\spr{\closure{S}} \leq C \cdot
+\spr{\cov\br{\closure{S}, \cU}}^\epsilon
+$ ($\epsilon$-shallow ancestry).
+Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
+\end{theorem}
+
+\begin{proof} \DD{todo: check}
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+\begin{enumerate}
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, \cU} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, \cU} \leq n$. Therefore:
+$$
+\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+$$
+    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
+     \mathcal{G}$, $\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}, \cU}}^\epsilon
+$. Rearranging this inequality, we get that $
+\spr{\cov\br{\closure{S}, \cU}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+$. We have that:
+\[
+\spr{\cov\br{\cA^*, \cU}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}, \cU}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}, \cU}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+Therefore:
+\[
+\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*, \cU}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+\[
+\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\]
+\end{enumerate}
+Since $C$ is constant, the theorem follows.
+\end{proof}
+
+
+
 \section{Set covering with constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-
 \subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$}
-\begin{theorem}
-    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
-\end{theorem}
-\begin{proof}
-The Algorithm \ref{alg:BPCSC} is greedy and consists of two cases. If the budget $B$ is large enough, i.e., $B\geq \sqrt{m/H_n}$, then the algorithm returns the whole family $\cS$. Otherwise, the algorithm iteratively adds to the cover $\cC$ a set $\cA$ returned by the $B$-approximation algorithm for $\ProblemBMDPCS$ with budget $B$ until the cost of the cover exceeds $\sqrt{m\cdot H_n}\cdot B$.
-\include{pseudocodes/B_PCSC}
+\DD{wyjalem troche z dowodu tw, gdyz wowczas latwiej bedzie przycinac skrocona wersje.}
+
+The approximation algorithm is the greedy procedure shown in Algorithm~\ref{alg:BPCSC}.
+For the analysis, let $\cC_i$ and $\cA_i$, $i\in\brc{1,\ldots,l}$, be the sets $\cC$ and $\cA$ obtained in the $i$-th iteration; $\cC_0=\emptyset$.
+Note that $\cov\br{\cA_i,\cU\setminus\cov\br{\cC_{i-1}}}$ is the set of element in $\cU$ that are being covered in the $i$-th iteration. %, and for each $u\in\cov\br{\cA_i,\cU\setminus\cC_{i-1}}$ denote $c(u):=\Delta\br{\cA_i,\cU\setminus\cC_{i-1}}$.
+\input{pseudocodes/B_PCSC}
+
+First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem:BPCSC-cost}) and then we estimate how much it covers (cf. Lemma~\ref{lem:BPCSC-coverage}).
 \begin{lemma}\label{lem:BPCSC-cost}
-    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
 \end{lemma}
 \begin{proof}
     We consider two cases:
     \begin{enumerate}
-        \item If $B\geq \sqrt{m/H_n}$, then the algorithm returns $\cS$ and $\spr{\cS} \leq m \leq \sqrt{m\cdot H_n}\cdot B$.
-        \item Else, when $B < \sqrt{m/H_n}$, we have that before the last iteration of the while loop, $\spr{\cC} < \sqrt{m\cdot H_n}\cdot B$. Since in the last iteration we add to $\cC$ a set $\cA$ such that $\spr{\cA} \leq B$, we have that $\spr{\cC} \leq \sqrt{m\cdot H_n}\cdot B + B = \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+        \item If $B\geq \sqrt{m/H_n}$, then for any $\cC$ it holds:$\spr{\cC} \leq m \leq \sqrt{m\cdot H_n}\cdot B$.
+        \item Else, when $B < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot B$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq B$, we have that $\spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot B + B = \br{\sqrt{m\cdot H_n}+1}\cdot B$.
     \end{enumerate}
 \end{proof}
+
+
+
 \begin{lemma}\label{lem:BPCSC-coverage}
-    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cov\br{\cC, \cU}} \geq \spr{\cov\br{\cCopt, \cU}}$.
+    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cov\br{\cC}} \geq \spr{\cov\br{\cCopt}}$.
 \end{lemma}
 \begin{proof}
-    If $B \geq \sqrt{m/H_n}$, then the algorithm returns $\cS$ and trivially covers at least as many elements as $\cCopt$. 
+    If $B \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
 
-
-    Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot B$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot B$, the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$. 
+    Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot B$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot B$, the number of covered elements is at least $\spr{\cov\br{\cCopt}}$.
     
-    Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$. Let $R_i = \cU \setminus \cov\br{\cC_i, \cU}$ be the set of uncovered elements after the $i$-th iteration. Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$. Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the cost of $u$ to be $c(u) = \spr{\cA_{i(u)}}/\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}$. Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt, \cU}}$. Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt, \cU}}$. Order the elements of $\cov\br{\cCopt, \cU}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily. 
+    %Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$.
+    Let $R_i = \cU \setminus \cov\br{\cC_i}$ be the set of uncovered elements after the $i$-th iteration; take $R_0=\emptyset$.
+    %Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$.
+    Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the \emph{price} of $u$ to be $c(u) = \spr{\cA_{i(u)}}/\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}$.
+    Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt}}$.
+    (Note that such $t$ exists since we are analyzing Algorithm~\ref{alg:BPCSC} under the assumption that the loop works indefinitely, i.e., until all items are covered).
+    Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt}}$.
+    Order the elements of $\cov\br{\cCopt}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily (i.e., if $i(u_j)<i(u_{j'})$, then $j<j'$).
 
-    \begin{lemma}\label{lem:cost-per-element}
+    \begin{claim}\label{lem:cost-per-element}
         For each $j \in \brc{1, \ldots, k}$, $c(u_j) \leq B^2/(k-j+1)$.
-    \end{lemma}
+    \end{claim}
     \begin{proof}
      Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq B$. Since the algorithm selects a $B$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
     $$
-    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{B} \geq \frac{k-j+1}{\spr{\cCopt} \cdot B} \geq \frac{(k-j+1)}{B^2}.
+    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{B} \geq \frac{k-j+1}{\spr{\cCopt} \cdot B} \geq \frac{k-j+1}{B^2},
     $$ 
     where the first inequality is by the approximation guarantee of the algorithm and the greedy choice, the second inequality is by definition of density, and the last inequality is by the budget constraint on $\cCopt$. Rearranging the above inequality yields:
     $$
     c(u_j) = \frac{\spr{\cA_{i(u_j)}}}{\spr{\cov\br{\cA_{i(u_j)}, R_{i(u_j)-1}}}} = 
-    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{B^2}{k-j+1}.
+    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{B^2}{k-j+1}
     $$
-    and the lemma follows.
+    and the claim follows.
     \end{proof}
 
-    We therefore have that:
-    \begin{align*}
-        \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t} 
-    \\&\leq
-    \sum_{u \in \cov\br{\cC_{t-1}, \cU}} c(u) + B
-    \\&\leq
-    \sum_{j=1}^{k} \frac{B^2}{k-j+1} + B
-    \\&=
-    B^2 \cdot H_k + B
-    \\&\leq
-    B^2 \cdot H_n + B
-    \\&\leq
-    \br{\sqrt{m\cdot H_n}+1}\cdot B,
-    \end{align*}
-    where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq B$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $B < \sqrt{m/H_n}$.
+    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq B^2H_k$.
+    By the price definition, $\sum_{j-1}^k c(u_j)=\spr{\cC_{t-1}}$.
+    Since $\spr{\cA_t}\leq B$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq B^2H_n+B$.
+    Recall that we are considering the case when $B\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}B$.
+    This completes the proof of the lemma.
 
-Therefore, if the procedure allows the while loop to run until the size of the cover exceeds $\sqrt{m\cdot H_n}\cdot B$, then the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$ and the lemma follows.
+%     \begin{align*}
+%         \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t}
+%     \\&\leq
+%     \sum_{u \in \cov\br{\cC_{t-1}}} c(u) + B
+%     \\&\leq
+%     \sum_{j=1}^{k} \frac{B^2}{k-j+1} + B
+%     \\&=
+%     B^2 \cdot H_k + B
+%     \\&\leq
+%     B^2 \cdot H_n + B
+%     \\&\leq
+%     \br{\sqrt{m\cdot H_n}+1}\cdot B,
+%     \end{align*}
+%     where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq B$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $B < \sqrt{m/H_n}$.
 \end{proof}
-By Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage}, the procedure is a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
-\end{proof}
+
+\DD{zmienilem 2-kryterialny claim na 1-kryterialny}
+Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage} prove the following.
+\begin{theorem} \label{thm:BPCSC}
+    There exists a $\br{\sqrt{m\cdot H_n}+1}$-approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$.
+\end{theorem}
+
+
 \subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}
 
-In ourder to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
+In order to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
 \input{pseudocodes/set_cover.tex}
 Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in\brc{1,\ldots,l}$.
 For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
@@ -112,72 +211,6 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
 \end{proof}
 
 
-\section{Max-Density Precedence-Closed Subfamily (MDPCS)} \label{sec:MDPCS}
-
-The key to solve PCSC and PCMSSC is to solve the $\ProblemMDPCS$ problem. An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC. By \cite{PCMSSC}, a greedy prodecure show in Algorithm~\ref{alg:MDPCS} achieves an $O\br{\sqrt{m}}$-approximation for $\ProblemMDPCS$.
-\input{pseudocodes/mdpcs_greedy.tex}
-
-Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}, \cU}$. When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $O\br{\sqrt{n}}$. Additionally, we show that a slightly modified greedy rule achieves an $B$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$, where the size of the selected subfamily is upper bounded by a budget $B$.
-\begin{theorem}
-    Let $\cA^*$ be any optimal solution for $\ProblemBMDPCS$ and let: 
-    $$
-    \cA=\argmax_{S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}, \cU}}.
-    $$ 
-    
-    Then, $\Delta\br{\cA, \cU} \geq \frac{\Delta\br{\cA^*, \cU}}{B}$. 
-\end{theorem}
-\begin{proof}
-    We utilize a partial argument of \cite{PCMSSC} for the $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq B$ and $\delta_B=\max_{S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}, \cU}}$. For each $S_i\in \cA^*$ ($i\in[k]$), by the greedy rule we trivially have that $\Delta\br{\closure{S_i}, \cU}\leq \delta_B$. Therefore:
-    $$
-    \spr{\cov\br{\cA^*, \cU}} \leq \sum_{i=1}^{k}\spr{\cov\br{\closure{S_i}, \cU}}\leq \delta_B\sum_{i=1}^k \spr{\closure{S_i}} \leq \delta_B \cdot k^2
-    $$
-    where the first inequality is by the definition of union. We have that:
-    $$
-    \frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}}=\frac{\Delta\br{\cA^*, \cU}}{\delta_B}=\frac{\spr{\cov\br{\cA^*, \cU}}}{k\cdot\delta_B}\leq k\leq B 
-    $$
-    which by rearranging gives the desired inequality
-\end{proof}
-The above theorem gives an $B$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $B$ this might be much worse then the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $B$-approximation will be sufficient. We live as an open question whether one can obtain an $o\br{m}$ approximation for $\ProblemBMDPCS$.
-
-As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy algorithm achieves an $O\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
-\begin{theorem}
-Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
-$
-\spr{\closure{S}} \leq C \cdot 
-\spr{\cov\br{\closure{S}, \cU}}^\epsilon
-$ ($\epsilon$-shallow ancestry).
-Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
-\end{theorem}
-
-\begin{proof}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
-\begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, \cU} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, \cU} \leq n$. Therefore:
-$$
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
-$$
-    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-     \mathcal{G}$, $\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
-\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}, \cU}}^\epsilon
-$. Rearranging this inequality, we get that $
-\spr{\cov\br{\closure{S}, \cU}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-$. We have that:
-\[
-\spr{\cov\br{\cA^*, \cU}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}, \cU}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}, \cU}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-Therefore:
-\[
-\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*, \cU}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
-\[
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
-\]
-\end{enumerate}
-Since $C$ is constant, the theorem follows.
-\end{proof}
 
 \subsection{Special cases of the precedence relationships}
 By \cite{citehere}:
