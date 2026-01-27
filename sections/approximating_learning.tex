@@ -117,11 +117,11 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
 
 
 \begin{theorem} \label{thm:alphaPCWCAL}
-If there is an $\br{\gamma, \alpha}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
+If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
 $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCAL$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
-     Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$.
+     Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
      Let $D$ be the decision tree returned by this call.
      In order to prove the theorem it is enough to argue that
      \begin{equation} \label{eq:D}
@@ -204,9 +204,10 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
 \end{proof}
     
 \begin{theorem}
-    If there is a $\beta$-approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\beta \cdot \log n}$-approximation algorithm for $\ProblemPCACAL$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
 \end{theorem}
 \begin{proof}
+    \MS{Jak wroci tutaj pseudokod na average case to trzeba poprawic ta analize i pseudokod}
     Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\beta$-approximation algorithm for $\ProblemPCMSSC$ for the instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
     Let $D$ be the output and let $D_S$ be the decision tree consisting of the sequence of tests $S$, where $S$ is the result of the call to the $\blackBox$.
     Then we have
