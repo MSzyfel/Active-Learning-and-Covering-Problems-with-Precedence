@@ -1,9 +1,9 @@
 \section{Max-Density Precedence-Closed Subfamily (MDPCS)} \label{sec:MDPCS}
 
-The key to solve PCSC and PCMSSC is to obtain appropriate approximations for $\ProblemMDPCS$ and $\ProblemBMDPCS$
+In order to solve $\ProblemPCSC$ and $\ProblemPCMSSC$ we firstly solve two essential problems: $\ProblemMDPCS$ and $\ProblemBMDPCS$ which serve as a way to find precedence-closed subfamilies of sets which cover many elements with respect to their size. We will then use such subroutines as an oracle in order to construct greedy, set-cover like approximation algorithms for our problems.
 %An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
-By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cG}$ provides a $O\br{\sqrt{m}}$-approximation:
-$\cA = \argmax_{S\in\cG} \brc{\Delta\br{\closure{S}}}$.
+By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cG}$ provides a $O\br{\sqrt{m}}$-approximation: we pick $\cA$ to be the best solution among
+$\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}$ and $\cS$.
 We will refer to such $\cA$ as a \emph{greedy} solution.
 %\input{pseudocodes/mdpcs_greedy.tex}
 
@@ -12,7 +12,7 @@ When $\delta\geq 1$, then the approximation factor of the greedy can also be bou
 Additionally, we show that a slightly modified greedy rule achieves an $B$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
 An $\cA$ that satisfies
     $$
-    \cA=\argmax_{S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}}}.
+    \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}}}.
     $$
 will be called a \emph{$B$-greedy} solution to $\ProblemBMDPCS$.
 \begin{theorem}
@@ -35,48 +35,6 @@ will be called a \emph{$B$-greedy} solution to $\ProblemBMDPCS$.
     which by rearranging gives the desired inequality.
 \end{proof}
 The above theorem gives an $B$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $B$ this might be much worse then the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $B$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$.
-
-As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $O\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
-\begin{theorem}
-Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
-$
-\spr{\closure{S}} \leq C \cdot
-\spr{\cov\br{\closure{S}, \cU}}^\epsilon
-$ ($\epsilon$-shallow ancestry).
-Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
-\end{theorem}
-
-\begin{proof} \DD{todo: check}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
-\begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, \cU} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, \cU} \leq n$. Therefore:
-$$
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
-$$
-    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-     \mathcal{G}$, $\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
-\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}, \cU}}^\epsilon
-$. Rearranging this inequality, we get that $
-\spr{\cov\br{\closure{S}, \cU}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-$. We have that:
-\[
-\spr{\cov\br{\cA^*, \cU}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}, \cU}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}, \cU}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-Therefore:
-\[
-\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*, \cU}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-\]
-
-By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
-\[
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
-\]
-\end{enumerate}
-Since $C$ is constant, the theorem follows.
-\end{proof}
-
-
 
 \section{Set covering with constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
@@ -423,4 +381,46 @@ It should be noted, that in all of our algorithms we will have $\beta=O\br{1}$, 
     
     We create the metric as follows: we create a root node $r$ and for each set $S\in\cS$ we create a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$. Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group which consists of all repersentatives of vertices covering $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times. Since traversing an edge $(v_S, v_W)$ results in visiting a set $W$ which is a succesor of $S$ in the outforest, we have that if a tour visits a repersentative of a set $W$, it must have visited the repersentative of all of its predecessors in the outforest. Therefore, any feasible solution to GSO on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, the theorem follows.
 \end{proof}
+
+
+As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $O\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
+\begin{theorem}
+Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
+$
+\spr{\closure{S}} \leq C \cdot
+\spr{\cov\br{\closure{S}, \cU}}^\epsilon
+$ ($\epsilon$-shallow ancestry).
+Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
+\end{theorem}
+
+\begin{proof} \DD{todo: check}
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+\begin{enumerate}
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, \cU} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, \cU} \leq n$. Therefore:
+$$
+\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+$$
+    \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
+     \mathcal{G}$, $\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}, \cU}}^\epsilon
+$. Rearranging this inequality, we get that $
+\spr{\cov\br{\closure{S}, \cU}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+$. We have that:
+\[
+\spr{\cov\br{\cA^*, \cU}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}, \cU}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}, \cU}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+Therefore:
+\[
+\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*, \cU}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\]
+
+By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+\[
+\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\]
+\end{enumerate}
+Since $C$ is constant, the theorem follows.
+\end{proof}
+
 
