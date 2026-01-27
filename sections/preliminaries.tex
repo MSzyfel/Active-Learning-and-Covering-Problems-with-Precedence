@@ -1,4 +1,4 @@
-\section{Preliminaries}
+\section{Preliminaries} \label{sec:preliminaries}
 % \begin{definition}[Precedence constrained set cover (PCSC)]
 % Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\cF = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed subfamily $\mathcal{C} \subseteq \mathcal{S}$ that covers at least $K$ items while minimizing $\spr{\mathcal{C}}$.
 % \end{definition}
@@ -32,9 +32,10 @@ We consider two cost measures for decision trees: the worst-case cost $\COSTW\br
 The criteria we consider for any $\ProblemPCAL$ instance $I$ are denoted by
 $$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 $$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
-%\DD{Skoro mamy już te problemy $\ProblemPCWCAL$ oraz $\ProblemPCACAL$ zdefiniowane, to tutaj aby nie powtarzac w nowej notacji drze decyzyjnych zamienie to na uwage/obserwacje w ramach jednego paragrafu do optymalizacji czego to sie sprowadza odnosnie drzew dec.}
 Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
+For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.
 
+\DD{ponizsze do przeformulowania...}
 Denote by $\optPCSC{\cI}$, for an instance $\cI$, the size of a set $\cC$ that is a valid solution to $\ProblemPCSC$ and has minimum size.
 For a sequence $\cC$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverageTime\br{\cC}$ to denote the sum of coverage times of all elements in $\bigcup_{S\in \cC} S$ (with a slight abuse of notation we use the set notaion for a sequence).
 Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$ define $\optPCMSSC{\cI}=\min\brc{\coverageTime\br{\bigcup_{S\in\cC}} \mid \spr{\bigcup_{S\in\cC} S}\geq k\textup{ and $S$ is precedence closed} }$.
@@ -53,21 +54,14 @@ We say that an algoritm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$ (r
 
 \medskip
 \paraTitle{Other notation.}
-Suppose that a search strategy performed some tests $T\subseteq\cT$.
+Suppose that an active learning strategy performed some tests $T\subseteq\cT$.
 If a hypothesis $h\in\cH$ has the property for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$, then we cay that $h$ is a \emph{potential target}.
 Denote by $\cH_T$ the set of all potential targets after the tests in $T$.
 Note that $\cH_T$ does not depend on the order of performing these tests.
 Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v$ consists of all hypotheses that are potential targets after the tests $\tests{D}{v}$.
 
 \medskip
-We finish this section with a few simple facts.
-\begin{observation}
-    If $D$ is a decision tree for a $\ProblemPCAL$ instance with hypotheses $\cH$, then:
-    $$
-    \COSTA\br{D} = \sum_{t \in \inner{D}} \spr{\cH_t},
-    $$
-    where $\inner{D}$ is the set of non-leaf vertices of $D$.
-\end{observation}
+We finish this section with two monotonicity properties that apply both to $\ProblemPCACAL$ and $\ProblemPCWCAL$.
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCAL$, where $\cH'\subseteq \cH$.
     Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
