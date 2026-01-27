@@ -204,10 +204,10 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 \end{proof}
 
-Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACAL$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACAL$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \cF}$ be any $\ProblemPCACAL$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
+    Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACAL$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
     Then, $\coverageTime\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
@@ -227,8 +227,8 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
     Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
     
-\begin{theorem}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
+\begin{theorem}\label{thm:PCMSSC-to-PCACAL}
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
 \end{theorem}
 \begin{proof}
     \MS{Jak wroci tutaj pseudokod na average case to trzeba poprawic ta analize i pseudokod}
@@ -258,3 +258,8 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
 where the first inequality is due to Observation~\ref{obs:WCdecomposition}, the second inequality follows from \eqref{eq:ACinduction} and Observation~\ref{obs:sepcoverAC}, and the third inequality follows from Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\cH'} \leq \frac{3}{4}\cdot n$ for every $\cH' \in \cH\setminus S$.
 This concludes the proof.
 \end{proof}
+
+By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACAL}, we immediately obtain the following corollary.
+\begin{corollary}
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log \br{m+n}}$.
+\end{corollary}

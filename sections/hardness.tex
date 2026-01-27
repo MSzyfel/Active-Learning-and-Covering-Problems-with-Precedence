@@ -9,7 +9,7 @@
 We begin by showing that the active learning problem is NP-hard even for the very special of binary searching with precedence. In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2 \prec \ldots \prec h_n$ and tests that correspond to binary queries of the form ``Is the unknown hypothesis $h_i$ less than or equal to $h_k$?''. Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
 
 Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is NP-hard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is NP-hard as well.
-\begin{theorem}
+\begin{theorem}\label{thm:PCWCAL-NP-hard}
     Worst-Case Binary Search With Precedence Constraints is NP-hard.
 \end{theorem}
 \begin{proof}
@@ -93,7 +93,7 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 	
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}\label{thm:PCACAL-APX-hard}
     Average-Case Binary Search With Precedence Constraints is \APXhard.
 \end{theorem}
 \begin{proof}
@@ -128,7 +128,7 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 \end{proof}
 
 \subsection{Outforest precendce constrains}
-\begin{theorem}
+\begin{theorem}\label{thm:PCSC-to-PCWCAL-hardness}
     If there is no $\alpha$-approximation for PCSC, then there is no $O\br{\alpha}$-approximation for PCWCAL.
 \end{theorem}
 \begin{proof}
@@ -142,7 +142,7 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
     We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of PCACAL is twice the number of selected sets in PCMSC. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for PCACAL would yield an $O\br{\alpha}$-approximation for PCMSSC.
 \end{proof}
 \subsection{Outforest precedence constraints}
-\begin{theorem}
+\begin{theorem}\label{thm:PCWCAL-outforest-hardness}
     PCWCAL with outforest precedence constraints is NP-hard to approximate within a factor of $O\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
@@ -157,16 +157,16 @@ The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \a
     \item With probability 1/2, $G_2$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
 \end{itemize}
 Using this conjecture one can show the following inapproximability results for PCMSSC \cite{PCMSSC}:
-\begin{theorem}
+\begin{theorem}\label{thm:PCMSSC-PDS-hardness}
     For any $\epsilon>0$ PCMSSC cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 Using the reduction from PCMSSC to PCACAL and PCWCAL from the previous section we immediately obtain the following results:
-\begin{theorem}
+\begin{theorem}\label{thm:PCACAL-PDS-hardness}
     For any $\epsilon>0$ PCACAL cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{theorem}
 
 Below we show that a similar reduction can also be used to obtain the same inapproximability result for PCSC. In the reduction we will often make use of the Chernoff Bound which is as follows:
-\begin{theorem}[Chernoff Bound]
+\begin{theorem}[Chernoff Bound]\label{thm:chernoff}
     Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in[n]$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
     \begin{align*}
         \mathbb{P}[X\leq (1-\delta)\mu] &\leq e^{-\frac{\delta^2\mu}{2}},\\
@@ -175,7 +175,7 @@ Below we show that a similar reduction can also be used to obtain the same inapp
 \end{theorem}
 
 We have the following theorem:
-\begin{theorem}
+\begin{theorem}\label{thm:PCSC-PDS-hardness}
     For any $\epsilon>0$ PCSC cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 \begin{proof}
@@ -229,6 +229,6 @@ We have the following theorem:
     \MS{Tutaj dowod jest jeszcze enigmatyczny dla mnie dlatego zostawiam to na razie. TODO: pokazac, ze jak nie ma komponentu to koszt rozwiazania mocno rosnie}
 \end{proof}
 Therefore we immediately have that:
-\begin{theorem}
+\begin{theorem}\label{thm:PCWCAL-PDS-hardness}
     For any $\epsilon>0$ PCWCAL cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{theorem}

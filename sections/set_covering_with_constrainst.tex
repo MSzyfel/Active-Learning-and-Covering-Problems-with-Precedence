@@ -15,7 +15,7 @@ An $\cA$ that satisfies
     \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}}}.
     $$
 will be called a \emph{$B$-greedy} solution to $\ProblemBMDPCS$.
-\begin{theorem}
+\begin{theorem}\label{thm:BMDPCS-greedy}
     Let $\cA^*$ be any optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $B$-greedy.
     Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{B}$.
 \end{theorem}
@@ -39,7 +39,7 @@ The above theorem gives an $B$-approximation algorithm for the $\ProblemBMDPCS$.
 \section{Set covering with constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$}
+\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
 \DD{wyjalem troche z dowodu tw, gdyz wowczas latwiej bedzie przycinac skrocona wersje.}
 
 The approximation algorithm is the greedy procedure shown in Algorithm~\ref{alg:BPCSC}.
@@ -122,8 +122,7 @@ Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage} prove the following.
     There exists a $\br{\sqrt{m\cdot H_n}+1}$-approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$.
 \end{theorem}
 
-
-\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}
+\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}\label{subsection:PCSC}
 
 In order to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
 \input{pseudocodes/set_cover.tex}
@@ -159,123 +158,10 @@ This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\
 \begin{theorem} \label{thm:MDPCStoPCSC}
     If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{4n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
-\subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$}
-\begin{theorem}
-    If there exists a $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
-\end{theorem}
-\begin{proof}
-    \input{pseudocodes/f_PCMSSC.tex}
-    \MS{Analiza do przepisania z \url{https://arxiv.org/abs/1003.0722}, Sekcja 3.2. Uwaga!, trzeba sprawdzić jaka jest wartość $a$ w zależności od $alpha$.}
-\end{proof}
 
-
-
-\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
-\begin{theorem}
-    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
-\end{theorem}
-\begin{proof}
-The Algorithm \ref{alg:BPCSC} is greedy and consists of two cases. If the budget $B$ is large enough, i.e., $B\geq \sqrt{m/H_n}$, then the algorithm returns the whole family $\cS$. Otherwise, the algorithm iteratively adds to the cover $\cC$ a set $\cA$ returned by the $B$-approximation algorithm for $\ProblemBMDPCS$ with budget $B$ until the cost of the cover exceeds $\sqrt{m\cdot H_n}\cdot B$.
-\input{pseudocodes/B_PCSC}
-\begin{lemma}\label{lem:BPCSC-cost}
-    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
-\end{lemma}
-\begin{proof}
-    We consider two cases:
-    \begin{enumerate}
-        \item If $B\geq \sqrt{m/H_n}$, then the algorithm returns $\cS$ and $\spr{\cS} \leq m \leq \sqrt{m\cdot H_n}\cdot B$.
-        \item Else, when $B < \sqrt{m/H_n}$, we have that before the last iteration of the while loop, $\spr{\cC} < \sqrt{m\cdot H_n}\cdot B$. Since in the last iteration we add to $\cC$ a set $\cA$ such that $\spr{\cA} \leq B$, we have that $\spr{\cC} \leq \sqrt{m\cdot H_n}\cdot B + B = \br{\sqrt{m\cdot H_n}+1}\cdot B$.
-    \end{enumerate}
-\end{proof}
-\begin{lemma}\label{lem:BPCSC-coverage}
-    Let $\cC$ be the cover returned by the procedure. Then, $\spr{\cov\br{\cC, \cU}} \geq \spr{\cov\br{\cCopt, \cU}}$.
-\end{lemma}
-\begin{proof}
-    If $B \geq \sqrt{m/H_n}$, then the algorithm returns $\cS$ and trivially covers at least as many elements as $\cCopt$. 
-
-
-    Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot B$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot B$, the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$. 
-    
-    We employ a modified version of the standard analsysis of the greedy algorithm for set cover \cite{SetCover}.
-    Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$. Let $R_i = \cU \setminus \cov\br{\cC_i, \cU}$ be the set of uncovered elements after the $i$-th iteration. Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$. Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the cost of $u$ to be $c(u) = \spr{\cA_{i(u)}}/\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}$. Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt, \cU}}$. Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt, \cU}}$. Order the elements of $\cov\br{\cCopt, \cU}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily. 
-
-    \begin{lemma}\label{lem:cost-per-element}
-        For each $j \in [k]$, $c(u_j) \leq B^2/(k-j+1)$.
-    \end{lemma}
-    \begin{proof}
-     Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq B$. Since the algorithm selects a $B$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
-    $$
-    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{B} \geq \frac{k-j+1}{\spr{\cCopt} \cdot B} \geq \frac{(k-j+1)}{B^2}.
-    $$ 
-    where the first inequality is by the approximation guarantee of the algorithm and the greedy choice, the second inequality is by definition of density, and the last inequality is by the budget constraint on $\cCopt$. Rearranging the above inequality yields:
-    $$
-    c(u_j) = \frac{\spr{\cA_{i(u_j)}}}{\spr{\cov\br{\cA_{i(u_j)}, R_{i(u_j)-1}}}} = 
-    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{B^2}{k-j+1}.
-    $$
-    and the lemma follows.
-    \end{proof}
-
-    We therefore have that:
-    \begin{align*}
-        \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t} 
-    \leq
-    \sum_{u \in \cov\br{\cC_{t-1}, \cU}} c(u) + B
-    \leq
-    \sum_{j=1}^{k} \frac{B^2}{k-j+1} + B
-    \\&=
-    B^2 \cdot H_k + B
-    \leq
-    B^2 \cdot H_n + B
-    \leq
-    \br{\sqrt{m\cdot H_n}+1}\cdot B,
-    \end{align*}
-    where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq B$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $B < \sqrt{m/H_n}$.
-
-Therefore, if the procedure allows the while loop to run until the size of the cover exceeds $\sqrt{m\cdot H_n}\cdot B$, then the number of covered elements is at least $\spr{\cov\br{\cCopt, \cU}}$ and the lemma follows.
-\end{proof}
-By Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage}, the procedure is a $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$.
-\end{proof}
-\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$} \label{subsection:PCSC}
-
-In ourder to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
-\input{pseudocodes/set_cover.tex}
-Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in\brc{1,\ldots,l}$.
-For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
-Let $R_i=\cU\setminus\cov\br{\cC_i}$ for $i\in\brc{1,\ldots,l}$ and $R_0=\cU$, $\cC_0=\emptyset$.
-Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and let $\cCopt$ be an optimal solution to $\ProblemPCSC$ on $\cI$, i.e., $\cov\br{\cCopt}\geq k$ and $\spr{\cCopt}=\optPCSC{\cI}$.
-
-\DD{tutaj mam zakomentowan jakas analize dla $l=1$, gdyz przez chwile myslalem, ze to da ostatecznie lepszy wynik}
-% Consider first the case when $l=1$, i.e., there is only one iteration.
-% Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cCopt}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
-% From this we obtain
-% $\spr{\cA_l}  \leq \frac{1}{\gamma}\cdot \spr{\cov\br{\cA_l}}\cdot\spr{\cCopt}/k \leq \frac{n}{\gamma k}\spr{\cCopt}$, where the latter is by a trivial upper bound $\spr{\cov\br{\cA_l}}\leq n$.
-Note that for each $i\in\brc{1,\ldots,l}$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
-Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in\brc{1,\ldots,l}$.
-Thus, $\Delta(\cA_i,R_{i-1}) \geq \gamma\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$,
-$$
-\frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \gamma\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in\brc{1,\ldots,l},
-$$
-which gives
-\begin{equation} \label{eq:Ai}
-\spr{\cA_i} \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
-            \leq \frac{1}{\gamma} \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} } \cdot \spr{\cCopt}.
-\end{equation}
-For each $i\in\brc{1,\ldots,l-1}$ it holds $\spr{\cov\br{\cCopt,R_{i-1}}}\geq k/2$.
-Thus,
-$$
-\sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2}{k\gamma} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2n}{k\gamma} \cdot \spr{\cCopt}.
-$$
-For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
-Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2n}{k\gamma}\spr{\cCopt}$.
-This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k\gamma}\cdot\spr{\cCopt}$ and proves the following theorem.
-\begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $(\frac{4n}{k\gamma},\frac{1}{2})$-approximation algorithm for $\ProblemPCSC$.
-\end{theorem}
-
-It should also be observed that if we would like to achieve an approximation algorithm for $\ProblemPCSC$ with an approximation ratio independent of $f$, we can simply utilize the $\br{O\br{\sqrt{m\log\br{n}}}, 1}$-approximatio ratio for $\ProblemPCSC$ presented in the previous section. To do so, one simply needs to find the minimal value of $B$ which suffices to cover $k$ elements using the $\br{O\br{\sqrt{m\log\br{n}}}, 1}$-approximation algorithm for $\ProblemBPCSC$. This can be done via binary search. The resulting approximation ratio will be $O\br{\sqrt{m\log\br{n}}}$. Note that however, since in our applications $1/f=O\br{1}$ this yields worse approximation ratio then the $\br{\sqrt{m}/f, 2}$-approximation algorithm presented in this section.
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
 Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{O\br{\alpha\cdot\beta}, \beta}$-approximation algorithm for $\ProblemPCMSSC$. This results seem counterintuitive at first glance, since we are using an algorithm for a problem wwhere the budget denotes the maximal allowed size of the cover to solve a problem where the budget denotes the sum of covering times. Our algorithm and its analysis are a direct generalization of the approach of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems} which showed a similar algorithm to solve $\ProblemLPGST$ using $\ProblemGSO$ as a subroutine. Furthermore, their result is based on techniques used in solving \textit{the minimum latency Travelling Salesman Problem} \cite{PsTsandMinLatencyTours,Thek-TravelingRepairmenProblem}.
-\begin{theorem}
+\begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$, then there exists an $\br{O\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
 \begin{proof}
@@ -366,8 +252,8 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
 
 It should be noted, that in all of our algorithms we will have $\beta=O\br{1}$, thus yielding an $\br{O\br{\alpha}, O\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
-\subsection{Special cases of the precedence relationships} \label{subsection:SpecialCases}
-\begin{theorem}
+\subsection{Special cases of the precedence constraints} \label{subsection:SpecialCases}
+\begin{theorem}\label{thm:BPCSC-inforest}
     There exists an $\br{1, \br{1-1/e}}$-approximation algorithm for $\ProblemBPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
@@ -384,7 +270,7 @@ It should be noted, that in all of our algorithms we will have $\beta=O\br{1}$, 
 
 
 As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $O\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
-\begin{theorem}
+\begin{theorem}\label{thm:MDPCS-shallow-ancestry}
 Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
 $
 \spr{\closure{S}} \leq C \cdot

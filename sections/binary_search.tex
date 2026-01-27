@@ -22,7 +22,7 @@ Therefore one can easily compute such a cut in polynomial time by checking all p
 \end{proof}
 
 The two lemmas above suggest a natural approach to finding a good strategy. Find the optimal precedence constrained $1/2$-cut $S^*$ in $P$ and use the tests in $S^*$ to build any precedence-respecting decision tree $D$ that splits the hypotheses into subproblems of size at most $n/2$. Then, recursively build decision trees for each subproblem and attach them to the leaves of $D$. It is easy to see that the resulting decision tree respects precedence constraints. We have the following theorem:
-\begin{theorem}
+\begin{theorem}\label{thm:binary-search-approximation}
     The above algorithm is an $O\br{\log n}$-approximation for the $\ProblemPCACAL$ in the case of binary search with precedence constraints.
 \end{theorem}
 \begin{proof}
