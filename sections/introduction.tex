@@ -12,7 +12,7 @@ The goal of \questioner is to output $\target$ while minimizing either the numbe
 We note that the above statement generalizes the classical binary search in (fully or partially) sorted data.
 In this work we generalize this proces by considering precedence relation between tests given as an arbitrary partial order $(\cT,\preceq)$.
 Then, a test $t$ can be performed only when all its predecesors had to be performed previously (to which we refer as \emph{precedence-closed} solution).
-On the applicability side, the binary search itself includes numerous use cases, some of them in the area of biology \cite{Ben-OrH08}.
+On the applicability side, the binary search itself includes numerous use cases, some of them in the area of biology \cite{BayesianLearnerOptimalNoisyBinarySearch}.
 For example, if hypotheses were to represent possible conditions or deseases, and each test distinguishes between some pairs of hypotheses, then precedence constaints would represent some ordering on performing tests.
 These may be enforced e.g. by cost measures (like executing several `cheaper' tests whose outcome may eliminate the need of executing a more expensive one), or by an expert.
 
@@ -103,11 +103,21 @@ Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial ord
 \subsection{Related Work}
 
 \paragraph{Optimal Decision Tree}
+Optimal decision tree is among the classical problems in computer science and has been studied extensively, starting with Garey \cite{GareyPerfBoundsOnSplittingAlgForBinTesting} in the 1970s. 
+Since that time, it has gathered a lot of attention due to its numerous applications which include medical diagnosis, troubleshooting, active learning, and information retrieval. 
+This problem is usually studied under two different optimization criteria: minimizing the worst-case cost and minimizing the average-case cost. 
+Both versions of the problem are known to be NP-hard and cannot be approximated within an $o\br{\log n}$ factor \cite{ConstructOptimalBinaryDecisionTreesIsNPComplete,HardnessOfMinHeightDTP,ApproximatingDecisionTreesMultiwayBranches,DiagnosisDetermination}. Moreover, this bound is known to be tight and several $O(\log n)$-approximation algorithms for both non-uniform probabilities and cost average-case \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Despite the hardness of the problem several special cases are known to have $o\br{\log n}$-approximation algorithms. For average case, this includes when tests have a constant number of possible outcomes and all probabilities and costs are uniform an $O\br{\log n/\log \log n}$-approximation is known \cite{TightAnalysisGreedyUniformDecisionTree}. This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}. Moreover achieving any approximation factor above $9$ is not NP-hard assuming ETH \cite{TightAnalysisGreedyUniformDecisionTree}.
+For worst case, when the underlying search space is a partially ordered set with a maximum element and costs are uniform an $O\br{\log n/\log \log n}$-approximation is known \cite{EdgeRankingSearchingPartialOrders}.
 
 
 \paragraph{Searching in Trees}
+For a special case when the instance represents searching in a tree, i.e., the set of hypothesis represents vertices of a tree and tests inform about the direction of the target placement with respect to the queried element (depending on the model, either vertices or edges can be queried), the problem has also been extensively studied. For uniform costs and worst-case criterion, a linear time exact algorithm is known for both edge query and vertex query variant \cite{Schaffer1989OptNodeRankOfTsInLinTime,OnakParys2006GenOfBSSInTsAndFLikePosets,Mozes_Onak2008FindOptTSStartInLinTime}. For average case, uniform costs and vertex queries an FPTAS is known \cite{SearchTreesOnGraphs}. For edge queries the problem is known to be NP-hard \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization} and a greedy strategy achieves $3/2$-approximation \cite{TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees}. For the case of non-uniform costs, the vertex query model generalizes edge query model. For worst case, the problem is known to be NP-hard \cite{EdgeRankingOfWeightedTrees,TheBinaryIdentificationProblemForWeightedTrees,OnTheTreeSearchProblemWithNonUniformCosts} and the best known approximation ratio is $\br{\sqrt{\log n}}$ \cite{ApproximationStrategiesforGeneralizedBinarySearchinWeightedTrees}.
+The average case is also known to be NP-hard and an $\br{4+\epsilon}$-approximation FPTAS is known \cite{szyfelbein2025approximatingaveragecasegraphsearch}.
 
-\paragraph{Set Cover and Variants}
+\paragraph{Set Cover with precedence constraints}
+
+Set cover is the most important problem in combinatorial approximation algorithms.
+It is well known that the greedy algorithm achieves an $H_n$-approximation for set cover \cite{GreedyHeuristicSetCoverProblem}, where $H_n=O\br{\log n}$ is the $n$-th harmonic number. Converesely, this is tight as set cover cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}. The Min-Sum Set Cover is a version of the problem in which the goal is to minimize the average cover time of element. For this version, the greedy algorithm achieves $4$-approximation algorithm \cite{ApproximatingMinSumSetCover}, which is tight. When allowing arbitrary precedence constraints the problem admits an $O\br{\sqrt{m}}$-approximation algorithm and cannot be approximated within a $O\br{m^{1/6-\epsilon}}$ factor \cite{PCMSSC} subject to the Planted Dense Subgraph Conjecture \cite{OnApproxTargetSetSelection}.
 
 \subsection{Our results and techniques} \label{sec:our-results}
 \DD{ta sekcja jest under construction; do mocniejszego przerobienia}
@@ -167,7 +177,7 @@ Table~\ref{tab:results} summarizes all results, also including best known from l
 \midrule
 general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCDT})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACDT})    & $\sqrt{m\cdot H_n}+1$ (Thm.~\ref{thm:BPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
 \cdashline{2-5}
-empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $\bigo(\log n)$ [\cite{Feige98}] & $4$ [\cite{FeigeLT04}]\\
+empty $\preceq$              & & $\bigo(\log n)$ [\cite{ApproximatingDecisionTreesMultiwayBranches}] & $\bigo(\log n)$ [\cite{ThresholdLnNSetCover}] & $4$ [\cite{ApproximatingMinSumSetCover}]\\
 \bottomrule
 \end{tabular}
 }
