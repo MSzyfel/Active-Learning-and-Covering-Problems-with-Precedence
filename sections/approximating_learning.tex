@@ -95,7 +95,7 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
 
 \begin{theorem} \label{thm:alphaPCWCDT}
 If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
+$\cO\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
      Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
@@ -127,6 +127,15 @@ $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approxim
         This concludes the proof of the theorem.
 \end{proof}
 
+We therefore obtain the following corollary:
+\begin{corollary}
+    There exist polynomial time approximation algorithms for $\ProblemPCWCDT$ with the following guarantees:
+    \begin{itemize}
+        \item $\cO\br{\log n}$-approximation algorithm for inforests,
+        \item $\cO\br{\log^2n}$-approximation algorithm for outforests,
+        \item $\cO\br{\sqrt{m}\cdot\log n}$-approximation algorithm for general precedence constraints.
+    \end{itemize}
+\end{corollary}
 
 \subsection{Precedence Constrained Average Case Decision Tree} \label{subsection:PCACDT}
 
@@ -186,7 +195,7 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
     2 \cdot \COSTA\br{D, \cI}
     \end{align*}
     where the second inequality is by Observation~\ref{obs:dec-tree-averaging} again and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
-%     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = O(nm)$.
+%     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \cO(nm)$.
 %
 %     We now argue that $\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
 %     \begin{align*}
@@ -204,7 +213,7 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 \end{proof}
 
-Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
     Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
@@ -228,7 +237,7 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
 \end{proof}
     
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACDT$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log n}$.
 \end{theorem}
 \begin{proof}
     \MS{Jak wroci tutaj pseudokod na average case to trzeba poprawic ta analize i pseudokod}
@@ -261,5 +270,10 @@ This concludes the proof.
 
 By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACDT}, we immediately obtain the following corollary.
 \begin{corollary}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log \br{m+n}}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$. This yields the following approximation ratios:
+    \begin{itemize}
+        \item $\cO\br{\log\br{m+n}}$-approximation algorithm for inforests,
+        \item $\cO\br{\log^2\br{m+n}}$-approximation algorithm for outforests,
+        \item $\cO\br{\sqrt{m}\cdot\log^{3/2}\br{m+n}}$-approximation algorithm for general precedence constraints.
+    \end{itemize}
 \end{corollary}

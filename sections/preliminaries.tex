@@ -52,6 +52,8 @@ Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$ define $\
 \paraTitle{Approximation measures.}
 We say that an algoritm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$ (respectively $\ProblemPCMSSC$), where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,k)$ it returns a solution $\cC$ that covers at least $k/\alpha$ items and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$ (resectively $\coverageTime\br{\bigcup_{S\in\cC}S}\leq\gamma\cdot\optPCMSSC{\cI}$).
 
+For $\ProblemBPCSC$, which is a maximization problem with a budget constraint, we say that an algorithm is a $(\gamma,\alpha)$-approximation, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,B)$ it returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\alpha}\cdot\OPT\br{\cI}$ (where $\OPT\br{\cI}$ is the maximum coverage achievable with budget $B$) and $\spr{\cC}\leq \gamma\cdot B$.
+
 \medskip
 \paraTitle{Other notation.}
 Suppose that a decision tree strategy performed some tests $T\subseteq\cT$.

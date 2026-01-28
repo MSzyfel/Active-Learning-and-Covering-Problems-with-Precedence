@@ -106,8 +106,8 @@ Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial ord
 Optimal decision tree is among the classical problems in computer science and has been studied extensively, starting with Garey \cite{GareyPerfBoundsOnSplittingAlgForBinTesting} in the 1970s. 
 Since that time, it has gathered a lot of attention due to its numerous applications which include medical diagnosis, troubleshooting, active learning, and information retrieval. 
 This problem is usually studied under two different optimization criteria: minimizing the worst-case cost and minimizing the average-case cost. 
-Both versions of the problem are known to be NP-hard and cannot be approximated within an $o\br{\log n}$ factor \cite{ConstructOptimalBinaryDecisionTreesIsNPComplete,HardnessOfMinHeightDTP,ApproximatingDecisionTreesMultiwayBranches,DiagnosisDetermination}. Moreover, this bound is known to be tight and several $O(\log n)$-approximation algorithms for both non-uniform probabilities and cost average-case \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Despite the hardness of the problem several special cases are known to have $o\br{\log n}$-approximation algorithms. For average case, this includes when tests have a constant number of possible outcomes and all probabilities and costs are uniform an $O\br{\log n/\log \log n}$-approximation is known \cite{TightAnalysisGreedyUniformDecisionTree}. This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}. Moreover achieving any approximation factor above $9$ is not NP-hard assuming ETH \cite{TightAnalysisGreedyUniformDecisionTree}.
-For worst case, when the underlying search space is a partially ordered set with a maximum element and costs are uniform an $O\br{\log n/\log \log n}$-approximation is known \cite{EdgeRankingSearchingPartialOrders}.
+Both versions of the problem are known to be NP-hard and cannot be approximated within an $o\br{\log n}$ factor \cite{ConstructOptimalBinaryDecisionTreesIsNPComplete,HardnessOfMinHeightDTP,ApproximatingDecisionTreesMultiwayBranches,DiagnosisDetermination}. Moreover, this bound is known to be tight and several $\cO(\log n)$-approximation algorithms for both non-uniform probabilities and cost average-case \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Despite the hardness of the problem several special cases are known to have $o\br{\log n}$-approximation algorithms. For average case, this includes when tests have a constant number of possible outcomes and all probabilities and costs are uniform an $\cO\br{\log n/\log \log n}$-approximation is known \cite{TightAnalysisGreedyUniformDecisionTree}. This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}. Moreover achieving any approximation factor above $9$ is not NP-hard assuming ETH \cite{TightAnalysisGreedyUniformDecisionTree}.
+For worst case, when the underlying search space is a partially ordered set with a maximum element and costs are uniform an $\cO\br{\log n/\log \log n}$-approximation is known \cite{EdgeRankingSearchingPartialOrders}.
 
 
 \paragraph{Searching in Trees}
@@ -117,7 +117,7 @@ The average case is also known to be NP-hard and an $\br{4+\epsilon}$-approximat
 \paragraph{Set Cover with precedence constraints}
 
 Set cover is the most important problem in combinatorial approximation algorithms.
-It is well known that the greedy algorithm achieves an $H_n$-approximation for set cover \cite{GreedyHeuristicSetCoverProblem}, where $H_n=O\br{\log n}$ is the $n$-th harmonic number. Converesely, this is tight as set cover cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}. The Min-Sum Set Cover is a version of the problem in which the goal is to minimize the average cover time of element. For this version, the greedy algorithm achieves $4$-approximation algorithm \cite{ApproximatingMinSumSetCover}, which is tight. When allowing arbitrary precedence constraints the problem admits an $O\br{\sqrt{m}}$-approximation algorithm and cannot be approximated within a $O\br{m^{1/6-\epsilon}}$ factor \cite{PCMSSC} subject to the Planted Dense Subgraph Conjecture \cite{OnApproxTargetSetSelection}.
+It is well known that the greedy algorithm achieves an $H_n$-approximation for set cover \cite{GreedyHeuristicSetCoverProblem}, where $H_n=\cO\br{\log n}$ is the $n$-th harmonic number. Converesely, this is tight as set cover cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}. The Min-Sum Set Cover is a version of the problem in which the goal is to minimize the average cover time of element. For this version, the greedy algorithm achieves $4$-approximation algorithm \cite{ApproximatingMinSumSetCover}, which is tight. When allowing arbitrary precedence constraints the problem admits an $\cO\br{\sqrt{m}}$-approximation algorithm and cannot be approximated within a $\cO\br{m^{1/6-\epsilon}}$ factor \cite{PCMSSC} subject to the Planted Dense Subgraph Conjecture \cite{OnApproxTargetSetSelection}.
 
 \subsection{Our results and techniques} \label{sec:our-results}
 \DD{ta sekcja jest under construction; do mocniejszego przerobienia}
@@ -166,42 +166,25 @@ There exists a polynomial-time $\bigo(\sqrt{m})$-approximation algorithm for $\P
 
 Table~\ref{tab:results} summarizes all results, also including best known from literature.
 \begin{table}[htb]
-\caption{State of the art summary. (** denotes previously unmentioned corollaries of known results).}
+\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}
 \label{tab:results}
 \centering
 {
 \small
-\begin{tabular}{p{0.12\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}}
+\begin{tabular}{lC{0.14\linewidth}C{0.14\linewidth}C{0.14\linewidth}C{0.14\linewidth}C{0.14\linewidth}}
 \toprule
-\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCDT$}                                & $\ProblemPCACDT$                & $\ProblemBPCSC$                                          & $\ProblemPCMSSC$    \\
+\textbf{precedence} & \textbf{$\ProblemPCSC$} & \textbf{$\ProblemBPCSC$} & \textbf{$\ProblemPCMSSC$} & \textbf{$\ProblemPCWCDT$} & \textbf{$\ProblemPCACDT$} \\
 \midrule
-general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCDT})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACDT})    & $\sqrt{m\cdot H_n}+1$ (Thm.~\ref{thm:BPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
-\cdashline{2-5}
-empty $\preceq$              & & $\bigo(\log n)$ [\cite{ApproximatingDecisionTreesMultiwayBranches}] & $\bigo(\log n)$ [\cite{ThresholdLnNSetCover}] & $4$ [\cite{ApproximatingMinSumSetCover}]\\
+none & $\cO(\log n)$ \cite{ThresholdLnNSetCover} & $\br{1, \frac{e}{e-1}}$ \cite{TheBudgetedMaximumCoverageProblem} & $4$ \cite{ApproximatingMinSumSetCover} & $\cO(\log n)$** & $\cO(\log n)$ \cite{ApproximatingDecisionTreesMultiwayBranches} \\
+\midrule
+inforest & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\cO(1)$* & $\cO(\log n)$* & $\cO(\log(m\!+\!n))$* \\
+\midrule
+outforest & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$* & $\cO(\log^2 n)$* & $\cO(\log^2(m\!+\!n))$* \\
+\midrule
+general & $\cO(\sqrt{m}f)$ (Thm.~\ref{thm:generalPCSC}) & $\br{\sqrt{m\cdot H_n}\!+\!1, 1}$ (Thm.~\ref{thm:BPCSC}) & $\cO(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) & $\cO(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCDT}) & $\cO(\sqrt{m}\log^{3/2}(m\!+\!n))$ (Thm.~\ref{thm:generalPCACDT}) \\
 \bottomrule
 \end{tabular}
 }
-\end{table}
-
-
-\begin{table}[htb!]
-\centering
-\begin{tabular}{|l|c|c|c|c|}
-%\midrule
-\textbf{precedence/problem} & \textbf{PCSC} & \textbf{PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
-\midrule
-none & $O(\log n)$ & 4 & $O(\log n)$ & $O(\log n)$ \\
-% \midrule
-% paths & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
-\midrule
-inforest & $O(\log n)$* & 4 & $O(\log n)$* & $O(\log n)$* \\
-\midrule
-outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
-\midrule
-general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt{m}\log n)$* \\
-\midrule
-\end{tabular}
-\caption{Approximation algorithms for various covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
 \end{table}
 
 \begin{figure}[h]

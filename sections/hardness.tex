@@ -17,7 +17,7 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 	Consider an instance of \ProblemThreeSat given as: a set of variables $V$, and a set of clauses $C$.
 	Each clause consist of exactly $3$ literals.
 	Moreover, the variant where any $v \in V$ appears at most $5$ times as $v$ or $\overline{v}$ in the clauses is still \NPcomplete \cite{GareyAndJohnson}. 
-	Obviously, in this variant $|C| = O(|V|)$.
+	Obviously, in this variant $|C| = \cO(|V|)$.
 	The idea is to:
 	\begin{itemize}
 		\item Divide the line into $2$ modules: variables and clauses. 
@@ -158,24 +158,24 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 
 \subsection{Outforest precendce constrains}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
-    If there is no $\alpha$-approximation for PCSC, then there is no $O\br{\alpha}$-approximation for PCWCDT.
+    If there is no $\alpha$-approximation for PCSC, then there is no $\cO\br{\alpha}$-approximation for PCWCDT.
 \end{theorem}
 \begin{proof}
     Let $(U, \mathcal{S}, P)$ be an instance of PCSC where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of PCWCDT as follows. For each element $u \in U$, we create two representative hypotheses $h_u^0$ and $h_u^1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u^i) = h_u^i$ if $u \in S$ and $t_S(h_u^i) = 0$ otherwise. The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in PCSC, then $t_{S_1}$ must be selected before $t_{S_2}$ in PCWCDT. Notice, that any valid decision tree for the constructed instance of PCWCDT is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u^i$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Note that even when the candidate set contains only representatives of one element $u$, we still need to perform a test to distinguish between $h_u^0$ and $h_u^1$, which could not be a case if there was only one hypothesis per element.
-    Therefore, any valid decision tree for the constructed instance of PCWCDT corresponds to a valid selection of sets in PCSC and vice versa. Moreover, the cost of the decision tree is equal to the number of selected sets. Thus, since the size of the reduction is linear any $\alpha$-approximation for PCWCDT would yield an $O\br{\alpha}$-approximation for PCSC.
+    Therefore, any valid decision tree for the constructed instance of PCWCDT corresponds to a valid selection of sets in PCSC and vice versa. Moreover, the cost of the decision tree is equal to the number of selected sets. Thus, since the size of the reduction is linear any $\alpha$-approximation for PCWCDT would yield an $\cO\br{\alpha}$-approximation for PCSC.
 \end{proof}
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT-hardness}
-    If there is no $\alpha$-approximation for PCMSSC, then there is no $O\br{\alpha}$-approximation for PCACDT.
+    If there is no $\alpha$-approximation for PCMSSC, then there is no $\cO\br{\alpha}$-approximation for PCACDT.
 \end{theorem}
 \begin{proof}
-    We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of PCACDT is twice the number of selected sets in PCMSC. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for PCACDT would yield an $O\br{\alpha}$-approximation for PCMSSC.
+    We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of PCACDT is twice the number of selected sets in PCMSC. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for PCACDT would yield an $\cO\br{\alpha}$-approximation for PCMSSC.
 \end{proof}
 \subsection{Outforest precedence constraints}
 \begin{theorem}\label{thm:PCWCDT-outforest-hardness}
-    PCWCDT with outforest precedence constraints is NP-hard to approximate within a factor of $O\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    PCWCDT with outforest precedence constraints is NP-hard to approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    To show this we prove that Group Steiner Tree on tree metrics is reducible to Set Cover with outforest precedence constraints. Since GST on trees cannot be approximated within a factor of $O\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{PolylogarithmicInapproximability}. Note that in the latter reduction all of the weights are of form $2^{-h}$ with exponent ranging from $0$ to $h=O\br{\log^{1-\epsilon} n}$. Therefore, we can scale all weights by $2^h=\text{poly}\br{n}$ to obtain integer weights without affecting the approximation ratio. Let $T, w, \mathcal{G}$ be an instance of GST where $T$ is a tree metric with root $r$, $w$ are the weights on the edges of $T$ and $\mathcal{G}=\br{G_1, \ldots, G_k}$ are the groups. We construct an instance of PCSC with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $w_e$, for each vertex $v\neq r$ we create its $w_e$ representatives $S_v^1 \preceq \ldots \preceq S_v^{w_e}$ so that taking $S^{w_e}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{w_e}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $G_i$ we create a universe element $u_i$. If $v \in G_i$ and $e$ is the parent edge of $v$, we set $S_{w_e}$ to cover $u_i$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of PCSC corresponds to a valid Steiner Tree in the instance of GST and vice versa. Moreover, the cost of the selected sets is equal to the cost of the Steiner Tree. Thus, PCSC with outforest precedence constraints cannot be approximated within a factor of $O\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ and the same holds for PCWCDT with outforest precedence constraints.
+    To show this we prove that Group Steiner Tree on tree metrics is reducible to Set Cover with outforest precedence constraints. Since GST on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{PolylogarithmicInapproximability}. Note that in the latter reduction all of the weights are of form $2^{-h}$ with exponent ranging from $0$ to $h=\cO\br{\log^{1-\epsilon} n}$. Therefore, we can scale all weights by $2^h=\text{poly}\br{n}$ to obtain integer weights without affecting the approximation ratio. Let $T, w, \mathcal{G}$ be an instance of GST where $T$ is a tree metric with root $r$, $w$ are the weights on the edges of $T$ and $\mathcal{G}=\br{G_1, \ldots, G_k}$ are the groups. We construct an instance of PCSC with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $w_e$, for each vertex $v\neq r$ we create its $w_e$ representatives $S_v^1 \preceq \ldots \preceq S_v^{w_e}$ so that taking $S^{w_e}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{w_e}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $G_i$ we create a universe element $u_i$. If $v \in G_i$ and $e$ is the parent edge of $v$, we set $S_{w_e}$ to cover $u_i$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of PCSC corresponds to a valid Steiner Tree in the instance of GST and vice versa. Moreover, the cost of the selected sets is equal to the cost of the Steiner Tree. Thus, PCSC with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ and the same holds for PCWCDT with outforest precedence constraints.
 \end{proof}
 \subsection{General precedence constraints}
 In this section we show strong inapproximability results for PCWCDT and PCACDT with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
@@ -187,11 +187,11 @@ The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \a
 \end{itemize}
 Using this conjecture one can show the following inapproximability results for PCMSSC \cite{PCMSSC}:
 \begin{theorem}\label{thm:PCMSSC-PDS-hardness}
-    For any $\epsilon>0$ PCMSSC cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
+    For any $\epsilon>0$ PCMSSC cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 Using the reduction from PCMSSC to PCACDT and PCWCDT from the previous section we immediately obtain the following results:
 \begin{theorem}\label{thm:PCACDT-PDS-hardness}
-    For any $\epsilon>0$ PCACDT cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
+    For any $\epsilon>0$ PCACDT cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{theorem}
 
 Below we show that a similar reduction can also be used to obtain the same inapproximability result for PCSC. In the reduction we will often make use of the Chernoff Bound which is as follows:
@@ -205,7 +205,7 @@ Below we show that a similar reduction can also be used to obtain the same inapp
 
 We have the following theorem:
 \begin{theorem}\label{thm:PCSC-PDS-hardness}
-    For any $\epsilon>0$ PCSC cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
+    For any $\epsilon>0$ PCSC cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 \begin{proof}
     We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$. In our reduction we will embded the structure of the graph into the precedence constraints, while the universe elements will merely enforce the covering requirement. Given a graph $G=\brc{[N], \mathcal{E}}$ we firstly convert each vertex $v$ of $G$ into $\lambda$ representative sets $V_{u, i}$ for $i \in [\lambda]$ where $\lambda$ is appropriately chosen natural number. We then convert each edge $uv\in\mathcal{E}$ into one representative set $E_{uv}$ which is a successor of all representatives of $u$ and $v$, i.e., $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$ for all $i \in [\lambda]$. 
@@ -241,7 +241,7 @@ We have the following theorem:
     \mathbb{P}[\spr{E_{uv}\colon j\in E_{uv}, uv\in V\br{\mathcal{P}}} \leq \mu/2] \leq e^{-\mu/8} = e^{-8\log^2 N} = N^{-8\log N}.
     $$
 
-    By applying the union bound, the probability that there exists an item $j\in[n]$ that is not covered by the representatives of the planted component is at most $n/N^{8\log N}$ which by our (future) choice of $n=O\br{N}$ is very small. Therefore, with high probability all items in $U$ are covered by taking all edge representatives corresponding to edges in the planted component (and all of their predecessors). Observe that:
+    By applying the union bound, the probability that there exists an item $j\in[n]$ that is not covered by the representatives of the planted component is at most $n/N^{8\log N}$ which by our (future) choice of $n=\cO\br{N}$ is very small. Therefore, with high probability all items in $U$ are covered by taking all edge representatives corresponding to edges in the planted component (and all of their predecessors). Observe that:
     $$
     \mathbb{E}[\spr{E\br{\mathcal{P}}}]=\binom{\sqrt{N}}{2}\cdot N^{-1/4-\gamma/2}\leq N^{3/4-\gamma/2}/2.
     $$
@@ -259,5 +259,5 @@ We have the following theorem:
 \end{proof}
 Therefore we immediately have that:
 \begin{theorem}\label{thm:PCWCDT-PDS-hardness}
-    For any $\epsilon>0$ PCWCDT cannot be approximated within a factor of $O\br{m^{1/6-\epsilon}}$ nor $o\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
+    For any $\epsilon>0$ PCWCDT cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{theorem}
