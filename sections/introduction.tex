@@ -1,12 +1,11 @@
 \section{Introduction}
 
-Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through an active learning process.
+Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} and  an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through testing.
 Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup_{x\in t} x=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $x\in t$ such that $\target\in x$.
 That is, the \questioner learns which subset of $\cH$ that belongs to $t$ contains the target.
 Each subsequent test is selected by \questioner by taking into acocunt replies from all tests to date.
-Without formally stating an optimization criterion we refer to the above as the \emph{Active Learing} ($\ProblemAL$).
-(Another widely used name in the literature is the decision tree construction).
+Without formally stating an optimization criterion we refer to the above as the \emph{Optimal Decision Tree} ($\ProblemDT$) problem.
 The goal of \questioner is to output $\target$ while minimizing either the number of tests done in the worst case or on average.
 (For formal statemets of our problems see the next section).
 
@@ -17,7 +16,7 @@ On the applicability side, the binary search itself includes numerous use cases,
 For example, if hypotheses were to represent possible conditions or deseases, and each test distinguishes between some pairs of hypotheses, then precedence constaints would represent some ordering on performing tests.
 These may be enforced e.g. by cost measures (like executing several `cheaper' tests whose outcome may eliminate the need of executing a more expensive one), or by an expert.
 
-The method to address the active learning problems is through a series of `reductions' between other optimization problems.
+The method to address the optimal decision tree problems is through a series of `reductions' between other optimization problems.
 By this we mean an approach, where a particular algorithm for one problem implies existence of an algorithm for the other.
 Particularly, we study a set cover problem with precedences:
 We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup_{S\in\cS}S=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and an integer $k$.
@@ -29,14 +28,14 @@ The approximation algorithms that we propose en route, e.g. for precedence const
 % \paraTitle{Outline.}
 % In the next section we formally state all problems we address in this work.
 % Section~\ref{sec:our-results} gives an overview of the main results of this work.
-% Section~\ref{sec:AL} provides approximation algorithm for the above active learning problem, assuming there exist certain approximations for variants of set cover.
+% Section~\ref{sec:AL} provides approximation algorithm for the above decision tree problem, assuming there exist certain approximations for variants of set cover.
 % The latter are developed in Section~\ref{sec:SC}.
 % Finally, set cover is solved via dense subfamily approximation from Section~\ref{sec:MDPCS}.
 % The algorithms are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
 
 % Consider following problems:
 % \begin{itemize}
-%   \item  The \emph{Precedence Constrained Bayesian Active Learning Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner actively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Active Learning} (PCWCAL) and \emph{Precedence Constrained Average Case Active Learning} (PCACAL) problems.
+%   \item  The \emph{Precedence Constrained Bayesian Decision Tree Problem} consists a set of $\mathcal{H}$ of $n$ hypothesis, a set $\cT$ of $m$ tests and a DAG (directed acyclic graph) $\mathcal{F} = \brc{\cT, \preceq}$ encoding the precedence constraints between available tests. Among $\mathcal{H}$ a hidden hypothesis is required to be encovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner actively selects the next test to be performed. Importantly, in order to perform such test the learner needs to perform all of its predecesors in $\mathcal{F}$ first. The goal is to uncover the hidden hypothesis while performing as few tests as possible. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Worst Case Decision Tree} (PCWCDT) and \emph{Precedence Constrained Average Case Decision Tree} (PCACDT) problems.
 %   \item The \emph{Precedence Constrained Covering Problem} consists of a set of $n$ items $\mathcal{U}$, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$ that cover these items, and a DAG $\mathcal{F} = \brc{\mathcal{S}, \preceq}$ encoding the precedence constraints between available subsets. The goal is to select a sequence of tests that covers at least $K$ items. Depending on the chosen criterion we distinguish between the \emph{Precedence Constrained Set Cover} (PCSC) and \emph{Precedence Constrained Min-Sum Set Cover} (PCMSSC) problems. In the first we are only interested in minimizing the number of selected subsets, while in the second we want to minimize the average time it takes to cover an item.
 % \end{itemize}
 
@@ -44,14 +43,14 @@ The approximation algorithms that we propose en route, e.g. for precedence const
 
 \DD{ta sekcja jest w miare ulozona pod ustalenia na discord; z wyjatkiem dwoch ostatnich problemow -- do decyzji czy potrzebne}
 
-After introducing necessary notation in Section~\ref{sec:preliminaries}, we provide algorithms (cf. Section~\ref{sec:AL}) for the active learning problems.
-\begin{problem}[Precedence Constrained Worst Case Active Learing ($\ProblemPCWCAL$)] \label{problem:PCWCAL}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed active learning strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case.
+After introducing necessary notation in Section~\ref{sec:preliminaries}, we provide algorithms (cf. Section~\ref{sec:AL}) for the decision tree problems.
+\begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case.
 \end{problem}
-\begin{problem}[Precedence Constrained Average Case Active Learing ($\ProblemPCACAL$)] \label{problem:PCACAL}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed active learning strategy that outputs the target hypothesis $\target$ and minimizes the sum $\sum_{h\in\cH}c(h)$, where $c(h)$ is the number of tests performed when $h=\target$.
+\begin{problem}[Precedence Constrained Average Case Decision Tree ($\ProblemPCACDT$)] \label{problem:PCACDT}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis $\target$ and minimizes the sum $\sum_{h\in\cH}c(h)$, where $c(h)$ is the number of tests performed when $h=\target$.
 \end{problem}
-Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCAL$ and $\ProblemPCACAL$, we use the symbol $\ProblemPCAL$ to refer to a \emph{Precedence Constrained Active Learning} instance.
+Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCDT$ and $\ProblemPCACDT$, we use the symbol $\ProblemPCDT$ to refer to a \emph{Precedence Constrained Decision Tree} instance.
 
 The algorithms for the above are conditioned on existence of approximations for the set cover.
 These in turn are obtained via a reduction from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
@@ -103,14 +102,21 @@ Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a partial ord
 
 \subsection{Related Work}
 
+\paragraph{Optimal Decision Tree}
+
+
+\paragraph{Searching in Trees}
+
+\paragraph{Set Cover and Variants}
+
 \subsection{Our results and techniques} \label{sec:our-results}
 \DD{ta sekcja jest under construction; do mocniejszego przerobienia}
 
-Our first theorem is due to Theorem~\ref{thm:alphaPCWCAL}.
-\begin{theorem} \label{thm:generalPCWCAL}
-There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for the $\ProblemPCWCAL$, where $n$ is the number of hypotheses and $m$ is the number of tests.
+Our first theorem is due to Theorem~\ref{thm:alphaPCWCDT}.
+\begin{theorem} \label{thm:generalPCWCDT}
+There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for the $\ProblemPCWCDT$, where $n$ is the number of hypotheses and $m$ is the number of tests.
 \end{theorem}
-Theorem~\ref{thm:alphaPCWCAL} relies on a bicriteria optimization algorithm for $\ProblemPCSC$ stated in Theorem~\ref{thm:MDPCStoPCSC} which in turn is obtained via an approximation algorithm for a problem called \emph{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$) given in \cite{PCMSSC}.
+Theorem~\ref{thm:alphaPCWCDT} relies on a bicriteria optimization algorithm for $\ProblemPCSC$ stated in Theorem~\ref{thm:MDPCStoPCSC} which in turn is obtained via an approximation algorithm for a problem called \emph{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$) given in \cite{PCMSSC}.
 \DD{(byc moze definicja MDPCS)}
 As a corollary of Theorem~\ref{thm:MDPCStoPCSC}, we obtain the following result regarding $\ProblemPCSC$.
 \begin{theorem} \label{thm:generalPCSC}
@@ -118,8 +124,8 @@ There exists a polynomial-time $\bigo(\sqrt{m}f)$-approximation algorithm for $\
 \end{theorem}
 
 
-\begin{theorem} \label{thm:generalPCACAL}
-There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for $\ProblemPCACAL$, where $m$ is the number of sets over the universum of size $n$.
+\begin{theorem} \label{thm:generalPCACDT}
+There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for $\ProblemPCACDT$, where $m$ is the number of sets over the universum of size $n$.
 \end{theorem}
 
 \begin{theorem} \label{thm:generalPCMSSC}
@@ -157,9 +163,9 @@ Table~\ref{tab:results} summarizes all results, also including best known from l
 \small
 \begin{tabular}{p{0.12\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}C{0.16\linewidth}}
 \toprule
-\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCAL$}                                & $\ProblemPCACAL$                & $\ProblemBPCSC$                                          & $\ProblemPCMSSC$    \\
+\emph{problem$\rightarrow$}  & \emph{$\ProblemPCWCDT$}                                & $\ProblemPCACDT$                & $\ProblemBPCSC$                                          & $\ProblemPCMSSC$    \\
 \midrule
-general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCAL})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACAL})    & $\sqrt{m\cdot H_n}+1$ (Thm.~\ref{thm:BPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
+general $\preceq$            & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCWCDT})  & $\bigo(\sqrt{m}\log n)$ (Thm.~\ref{thm:generalPCACDT})    & $\sqrt{m\cdot H_n}+1$ (Thm.~\ref{thm:BPCSC})  & $\bigo(\sqrt{m})$ (Thm.~\ref{thm:generalPCMSSC}) \\
 \cdashline{2-5}
 empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $\bigo(\log n)$ [\cite{Feige98}] & $4$ [\cite{FeigeLT04}]\\
 \bottomrule
@@ -172,7 +178,7 @@ empty $\preceq$              & & $\bigo(\log n)$ [\cite{ChakaravarthyPRS09}] & $
 \centering
 \begin{tabular}{|l|c|c|c|c|}
 %\midrule
-\textbf{precedence/problem} & \textbf{PCSC} & \textbf{PCMSSC} & \textbf{PCWCAL} & \textbf{PCACAL} \\
+\textbf{precedence/problem} & \textbf{PCSC} & \textbf{PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
 \midrule
 none & $O(\log n)$ & 4 & $O(\log n)$ & $O(\log n)$ \\
 % \midrule
@@ -185,13 +191,13 @@ outforest & $O(\log^2 n)$** & $O(\log n)$** & $O(\log^2 n)$* & $O(\log^2 n)$* \\
 general & $O(\sqrt{m}\log n)$* & $O(\sqrt{m})$ & $O(\sqrt{m}\log n)$* & $O(\sqrt{m}\log n)$* \\
 \midrule
 \end{tabular}
-\caption{Approximation algorithms for various covering and active learning problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
+\caption{Approximation algorithms for various covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}\label{tab:results}
 \end{table}
 
 \begin{figure}[h]
 \centering
 \input{figures/reduction_diagram}
-\caption{Relationships between covering and active learning problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
+\caption{Relationships between covering and decision tree problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
 \end{figure}
 
 \begin{figure}[h]

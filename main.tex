@@ -93,11 +93,11 @@
 \newcommand{\bigo}{\mathcal{O}}
 
 % problem and algorithm names
-\newcommand{\ProblemAL}{\textsc{AL}}
-\newcommand{\ProblemPCWCAL}{\textsc{PCWCAL}}
-\newcommand{\ProblemPCACAL}{\textsc{PCACAL}}
-\newcommand{\ProblemPCWAL}{\textsc{PCWAL}}
-\newcommand{\ProblemPCAL}{\textsc{PCAL}}
+\newcommand{\ProblemDT}{\textsc{DT}}
+\newcommand{\ProblemPCWCDT}{\textsc{PCWCDT}}
+\newcommand{\ProblemPCACDT}{\textsc{PCACDT}}
+\newcommand{\ProblemPCWDT}{\textsc{PCWDT}}
+\newcommand{\ProblemPCDT}{\textsc{PCDT}}
 \newcommand{\ProblemPCSC}{\textsc{f-PCSC}}
 \newcommand{\ProblemBPCSC}{\textsc{B-PCSC}}
 \newcommand{\ProblemPCMSSC}{\textsc{f-PCMSSC}}
@@ -141,7 +141,7 @@
 \newtheorem{claim}{Claim}
 
 
-\title[Active Learning and Covering Problems with Precedence]{Active Learning and Covering Problems with Precedence}
+\title[Optimal Decision Trees and Covering Problems with Precedence]{Optimal Decision Trees and Covering Problems with Precedence}
 \usepackage{times}
 % Use \Name{Author Name} to specify the name.
 % If the surname contains spaces, enclose the surname
@@ -179,18 +179,18 @@
 
 \begin{abstract}%
 
-  In the Bayesian Active Learning a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
+  In the Optimal Decision Tree problem, a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
 
   In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
 
   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
-  This paper explores the connection of active learning and covering problems under such constraints. 
+  This paper explores the connection of optimal decision trees and covering problems under such constraints. 
   
-  We show that given any bicriteria $\br{O\br{1}, \alpha}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Active Learning with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $O\br{\beta}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the Average Case Active Learning with Precedence Constraints. In particular we obtain $O^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. Then, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithm results with general $O\br{m^{1/6}}$ hardness of approximation results for both vesions of the active learning subject to the Planted Dense Subgraph Conjecture, as well as $O\br{\log^2n}$-inapproximability results for outforest precedence constraints and NP-hardness for the special case of binary searching with precedence constraints.
+  We show that given any bicriteria $\br{O\br{1}, \alpha}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $O\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $O\br{\beta}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $O\br{\beta\cdot \log n}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $O^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. Then, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithm results with general $O\br{m^{1/6}}$ hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $O\br{\log^2n}$-inapproximability results for outforest precedence constraints and NP-hardness for the special case of binary searching with precedence constraints.
 \end{abstract}
 
 \begin{keywords}%
-  Bayesian active learning, Set cover, Precedence constraints, Approximation Algorithms, Decision Trees%
+  Optimal decision trees, Set cover, Precedence constraints, Approximation Algorithms%
 \end{keywords}
 
 \DD{Ogolne uwagi:

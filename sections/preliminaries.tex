@@ -6,7 +6,7 @@
 % Given a universe $\mathcal{U}$ of $n$ items, a collection $\mathcal{S}$ of $m$ subsets of $\mathcal{U}$, a DAG $\cF = \brc{\mathcal{S}, \preceq}$ encoding precedence constraints, and a coverage requirement $K$, find a precedence-closed sequence of sets that covers at least $K$ items while minimizing the average time (position in sequence) at which items are covered.
 % \end{definition}
 
-% In the active learning problems, we are given a set of hypotheses $\cH$ and a set of tests $\cT$. Each test $t$ is an arbitrary partition of $\cH$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \cH$. The tests are subject to precedence constraints encoded by a DAG $\cF = \brc{\cT, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\cF$ have already been performed.
+% In the decision tree problems, we are given a set of hypotheses $\cH$ and a set of tests $\cT$. Each test $t$ is an arbitrary partition of $\cH$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \cH$. The tests are subject to precedence constraints encoded by a DAG $\cF = \brc{\cT, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\cF$ have already been performed.
 
 \paraTitle{Decision trees.}
 In all adaptive learning problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous replies, gives \questioner the next test to be performed.
@@ -29,20 +29,20 @@ The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{
 
 Let $p: \cH \to [0,1]$ be a probability distribution over the hypotheses, where $\sum_{h \in \cH} p(h) = 1$.
 We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \mathbb{E}_{h \sim p}\left[\COST\br{D, h}\right] = \sum_{h \in \cH} p(h) \cdot \COST\br{D, h}$.
-The criteria we consider for any $\ProblemPCAL$ instance $I$ are denoted by
+The criteria we consider for any $\ProblemPCDT$ instance $I$ are denoted by
 $$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 $$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
-Hence the $\ProblemPCACAL$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$ and in case of $\ProblemPCWCAL$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
+Hence the $\ProblemPCACDT$ aims at finding a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$ and in case of $\ProblemPCWCDT$ the goal is to find $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
 For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.
 
 \DD{ponizsze do przeformulowania...}
 Denote by $\optPCSC{\cI}$, for an instance $\cI$, the size of a set $\cC$ that is a valid solution to $\ProblemPCSC$ and has minimum size.
 For a sequence $\cC$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverageTime\br{\cC}$ to denote the sum of coverage times of all elements in $\bigcup_{S\in \cC} S$ (with a slight abuse of notation we use the set notaion for a sequence).
 Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$ define $\optPCMSSC{\cI}=\min\brc{\coverageTime\br{\bigcup_{S\in\cC}} \mid \spr{\bigcup_{S\in\cC} S}\geq k\textup{ and $S$ is precedence closed} }$.
-% \begin{definition}[Precedence constrained worst case active learning (PCWCAL)]
+% \begin{definition}[Precedence constrained worst case decision tree (PCWCDT)]
 % Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests, and a DAG $\cF = \brc{\cT, \preceq}$ encoding precedence constraints, construct a decision tree respecting precedence constraints that identifies any hypothesis from $\cH$ while minimizing the worst-case depth of the tree.
 % \end{definition}
-% \begin{definition}[Precedence constrained average case active learning (PCACAL)]
+% \begin{definition}[Precedence constrained average case decision tree (PCACDT)]
 % Given a set $\cH$ of $n$ hypotheses, a set $\cT$ of $m$ tests and a DAG $\cF = \brc{\cT, \preceq}$ encoding precedence constraints,
 % % and a probability distribution over $\cH$,
 % construct a decision tree respecting precedence constraints that identifies any hypothesis from $\cH$ while minimizing the expected depth (average case cost).
@@ -54,20 +54,20 @@ We say that an algoritm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$ (r
 
 \medskip
 \paraTitle{Other notation.}
-Suppose that an active learning strategy performed some tests $T\subseteq\cT$.
+Suppose that a decision tree strategy performed some tests $T\subseteq\cT$.
 If a hypothesis $h\in\cH$ has the property for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$, then we cay that $h$ is a \emph{potential target}.
 Denote by $\cH_T$ the set of all potential targets after the tests in $T$.
 Note that $\cH_T$ does not depend on the order of performing these tests.
 Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v$ consists of all hypotheses that are potential targets after the tests $\tests{D}{v}$.
 
 \medskip
-We finish this section with two monotonicity properties that apply both to $\ProblemPCACAL$ and $\ProblemPCWCAL$.
+We finish this section with two monotonicity properties that apply both to $\ProblemPCACDT$ and $\ProblemPCWCDT$.
 \begin{lemma}\label{lemma:subspace_opt}
-    Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCAL$, where $\cH'\subseteq \cH$.
+    Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCDT$, where $\cH'\subseteq \cH$.
     Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
 \end{lemma}
 \begin{lemma}\label{lemma:subinstances_avg}
-    Let $\cI=(\cH, \cT, \preceq)$ be an instance of $\ProblemPCAL$.
+    Let $\cI=(\cH, \cT, \preceq)$ be an instance of $\ProblemPCDT$.
     Let $\cH_1,\dots,\cH_t\subseteq \cH$ be such that $\bigcup_{i=1}^t \cH_i \subseteq \cH$ and for any $i\neq j$, $\cH_i\cap \cH_j = \emptyset$.
     Then,
     $$

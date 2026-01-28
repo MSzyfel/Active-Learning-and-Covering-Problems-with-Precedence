@@ -21,8 +21,8 @@
 \node[problem, below right=1.1cm and 0.8cm of bpcsc] (fpcmssc) {$\ProblemPCMSSC$};
 
 % Bottom level
-\node[problem, below=1.1cm of fpcsc] (pcwcal) {$\ProblemPCWCAL$};
-\node[problem, below=1.1cm of fpcmssc] (pcacal) {$\ProblemPCACAL$};
+\node[problem, below=1.1cm of fpcsc] (pcwcdt) {$\ProblemPCWCDT$};
+\node[problem, below=1.1cm of fpcmssc] (pcacdt) {$\ProblemPCACDT$};
 
 % Arrows with hyperlinks to sections
 \draw[arrow] (bmdpcs) -- (bpcsc) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}};
@@ -32,7 +32,7 @@
 \draw[arrow] (gso) -- (bpcsc) node[midway, above, font=\scriptsize\upshape, sloped] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
 \draw[arrow] (gso) -- (lpgst) node[midway, right, font=\scriptsize\upshape] {\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}};
 \draw[arrow] (lpgst) -- (fpcmssc) node[pos=0.5, above, sloped, font=\scriptsize\upshape] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
-\draw[arrow] (fpcsc) -- (pcwcal) node[midway, left, font=\scriptsize\upshape] {\hyperref[subsection:PCWCAL]{Sec.~\ref*{subsection:PCWCAL}}};
-\draw[arrow] (fpcmssc) -- (pcacal) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:PCACAL]{Sec.~\ref*{subsection:PCACAL}}};
+\draw[arrow] (fpcsc) -- (pcwcdt) node[midway, left, font=\scriptsize\upshape] {\hyperref[subsection:PCWCDT]{Sec.~\ref*{subsection:PCWCDT}}};
+\draw[arrow] (fpcmssc) -- (pcacdt) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:PCACDT]{Sec.~\ref*{subsection:PCACDT}}};
 
 \end{tikzpicture}

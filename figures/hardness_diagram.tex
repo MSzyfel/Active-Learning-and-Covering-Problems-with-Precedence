@@ -14,15 +14,15 @@
 \node[problem, below right=1.1cm and 0.5cm of pds] (fpcmssc) {$\ProblemPCMSSC$};
 
 % Bottom level
-\node[problem, below=1.1cm of fpcsc] (pcwcal) {$\ProblemPCWCAL$};
-\node[problem, below=1.1cm of fpcmssc] (pcacal) {$\ProblemPCACAL$};
+\node[problem, below=1.1cm of fpcsc] (pcwcdt) {$\ProblemPCWCDT$};
+\node[problem, below=1.1cm of fpcmssc] (pcacdt) {$\ProblemPCACDT$};
 
 % Arrows with hyperlinks to sections
 \draw[arrow] (gst) -- (fpcsc);
 \draw[arrow] (pds) -- (fpcsc);
 \draw[arrow] (pds) -- (fpcmssc);
-\draw[arrow] (fpcsc) -- (pcwcal);
-\draw[arrow] (fpcsc) -- (pcacal);
-\draw[arrow] (fpcmssc) -- (pcacal);
+\draw[arrow] (fpcsc) -- (pcwcdt);
+\draw[arrow] (fpcsc) -- (pcacdt);
+\draw[arrow] (fpcmssc) -- (pcacdt);
 
 \end{tikzpicture}

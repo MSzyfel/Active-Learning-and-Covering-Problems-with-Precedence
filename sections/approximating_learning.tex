@@ -1,4 +1,4 @@
-\section{Active Learning via Covering Problems} \label{sec:AL}
+\section{Decision Trees via Covering Problems} \label{sec:AL}
 
 % To build our algorithm we will make use of the following definition:
 % \begin{definition}[Sepcover]
@@ -36,10 +36,10 @@ $$
 $$
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
-In our construction, in order to solve a $\ProblemPCAL$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
 
 \medskip
-The ide behind the algorithms for the worst case (Section~\ref{subsection:PCWCAL}) and average case (Section~\ref{subsection:PCACAL}) is similar.
+The ide behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) that will be used in both cases.
 The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$.
 Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$ is used to split the instance and make recursive calls.
@@ -48,17 +48,17 @@ Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the 
 \input{pseudocodes/worst_case_learning.tex}
 
 
-\subsection{Precedence Constrained Worst Case Active Learning} \label{subsection:PCWCAL}
+\subsection{Precedence Constrained Worst Case Decision Tree} \label{subsection:PCWCDT}
 
 We will use sepcovers to lowerbound optimal solution:
 \begin{observation} \label{obs:sepcoverWC}
-    Let $\cI$ be any instance of $\ProblemPCWCAL$.
+    Let $\cI$ be any instance of $\ProblemPCWCDT$.
     Then, $\spr{\sepcover{\cI}} \leq \OPTW\br{\cI}$.
 \end{observation}
 
-%We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPTW\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCAL$.
+%We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPTW\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCDT$.
 \begin{lemma}\label{lemma:cover_sep_worst_case}
-    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCAL$ instance.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCDT$ instance.
     Let $S^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
     %and a test $t$ covers $h\in \cH$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$.
     Then, $\spr{S^*} \leq \spr{\sepcover{\cI}}$.
@@ -93,9 +93,9 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
     \end{observation}
 
 
-\begin{theorem} \label{thm:alphaPCWCAL}
+\begin{theorem} \label{thm:alphaPCWCDT}
 If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCAL$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
+$O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = O\br{1}$, the approximation is $O\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
      Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
@@ -128,12 +128,12 @@ $O\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approxim
 \end{proof}
 
 
-\subsection{Precedence Constrained Average Case Active Learning} \label{subsection:PCACAL}
+\subsection{Precedence Constrained Average Case Decision Tree} \label{subsection:PCACDT}
 
 We start with few observations that will be used for a lower bound on an optimal solution.
 %For a decision tree $D$ and its node $v$, let $c\br{D, v} = p(v)\cdot\spr{\cH_v}$.
 \begin{observation} \label{obs:dec-tree-averaging}
-    If $D$ is a decision tree for a $\ProblemPCACAL$ instance with hypotheses $\cH$ with probability distribution $p$, then $\COSTA\br{D}=\sum_{v\in V(D)}p(v)\cdot\spr{\cH_v}$.
+    If $D$ is a decision tree for a $\ProblemPCACDT$ instance with hypotheses $\cH$ with probability distribution $p$, then $\COSTA\br{D}=\sum_{v\in V(D)}p(v)\cdot\spr{\cH_v}$.
 %    $$
 %    \COSTA\br{D} = \sum_{t \in X} p(\cH_t)\cdot\spr{\cH_t},
 %    $$
@@ -141,7 +141,7 @@ We start with few observations that will be used for a lower bound on an optimal
 \end{observation}
 Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criterion as follows.
 \begin{observation} \label{obs:WCdecomposition}
-    Let $D$ be any decision tree for an instance of $\ProblemPCACAL$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
+    Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
     $$
     \COSTA\br{D} = \COSTA\br{S} + \sum_{D'\in D-S} \COSTA\br{D'}.
@@ -153,12 +153,12 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
 Here, $D-S$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
 As an immediate corollary, by taking an optimal $D$ and the corresponding $S=\sepcover{\cI}$ we have:
 \begin{observation} \label{obs:sepcoverAC}
-    Let $\cI$ be any instance of $\ProblemPCACAL$.
+    Let $\cI$ be any instance of $\ProblemPCACDT$.
     Then, $\COSTA\br{\sepcover{\cI}} \leq \OPTA\br{\cI}$.
 \end{observation}
 
 We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
-This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACAL$.
+This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
 \DD{do rozwazenia fix notacyjny: $\sepcover{\cI}$ to jest zbior, a tutaj mamy do czynienia z suma zalezna od kolejnosci}
 However, since in this case we have arbitrary probability distrubution on hypotheses, we firstly emply a rounding technique which firstly scales the probabilities to polynomial size integers. Below we present which does so, by incurring only a 2-factor loss in the approximation.
 For an instance $\cI=\br{\cH, \cT, \cF, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
@@ -166,7 +166,7 @@ We say that $p'$ is a \emph{$q$-rounding} of $p$.
 Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over $\cH$.
 \DD{dodalem lower bound dla lemma}
 \begin{lemma} \label{lemma:rounding}
-    Let $\cI=\br{\cH, \cT, \cF, p}$ be any instance of $\ProblemPCACAL$ and let $p'$ be the $q$-rounding of $p$.
+    Let $\cI=\br{\cH, \cT, \cF, p}$ be any instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$.
     Then, for the instance $\cI'=\br{\cH, \cT, \cF, p'}$ it holds $z(h)\in \mathbb{N}$ and $\OPTA\br{\cI}\leq\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$.
 \end{lemma}
 \begin{proof}
@@ -204,10 +204,10 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 \end{proof}
 
-Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACAL$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=O(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACAL$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
+    Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
     Then, $\coverageTime\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
@@ -227,8 +227,8 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
     Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
     
-\begin{theorem}\label{thm:PCMSSC-to-PCACAL}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
+\begin{theorem}\label{thm:PCMSSC-to-PCACDT}
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACDT$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log n}$.
 \end{theorem}
 \begin{proof}
     \MS{Jak wroci tutaj pseudokod na average case to trzeba poprawic ta analize i pseudokod}
@@ -259,7 +259,7 @@ where the first inequality is due to Observation~\ref{obs:WCdecomposition}, the 
 This concludes the proof.
 \end{proof}
 
-By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACAL}, we immediately obtain the following corollary.
+By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACDT}, we immediately obtain the following corollary.
 \begin{corollary}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACAL$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log \br{m+n}}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $O\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = O\br{1}$, the approximation is $O\br{\beta \cdot \log \br{m+n}}$.
 \end{corollary}
