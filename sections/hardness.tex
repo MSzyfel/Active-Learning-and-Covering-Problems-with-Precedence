@@ -93,11 +93,31 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 	
 \end{proof}
 
-\begin{theorem}\label{thm:PCACAL-APX-hard}
-    Average-Case Binary Search With Precedence Constraints is \APXhard.
+
+\begin{theorem}
+    Average-Case Binary Search With Precedence Constraints is \NPhard.
 \end{theorem}
 \begin{proof}
-	The reduction is almost the same as in the worst-case variant.
+	The reduction is the same as in the worst-case variant; except that we have to consider the total query time.
+	Again assume that the instance of \ProblemThreeSat is of 'YES' type.
+	As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
+	Hence:
+	\begin{itemize}
+	\item In any reasonable solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k$, denoted by $T_{sep}$.
+	\item 	Now, the $|V|$ variable-edges correspond to total quarry time $|V| (2k+3)$, denoted by $T_{var}$.
+	\item After this, consider the total quarry time of clause edges. 
+	For a satisfied clause, there can be one quarry in time $k+2$ and other quarries $4$ can be done in time $k+3, k+3, k+4, k+4$. 
+	Hence this gives total quarry time $|C|(5k + 16)$, denoted by $T_{clauses}$.  
+	\end{itemize} 
+	Together it gives the total quarry time $T_{sep} + T_{var} + T_{clauses}$ in a search tree corresponding to a valuation of variables satisfying all the clauses.
+	The reverse direction, that a search tree of total quarry time $T_{sep} + T_{var} + T_{clauses}$ corresponds to a valuation satisfying all the clauses, is left to the reader.
+	
+\end{proof}
+	
+\begin{theorem}
+		Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
+\end{theorem}
+\begin{proof}
 	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
 	For the formal definition of the reduction we recommend \cite{Ausiello}.
 	Namely, the problem where we would like to maximize the number of fulfilled clauses.
@@ -123,9 +143,18 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 		Due to this the number of variables is bounded by $3m$.
 		Hence, for the instance, due to the dummy variables, $|C| + |V| \le 8m$.
 		As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
-		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = $
+		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = C_{sep}$.
+		\item Now, the $|V|$ variable-edges correspond to total quarry time $|V| (2k+3) = C_{var}$.
+		\item After this, consider the total quarry time of clause edges. 
+		For a satisfied clause, there can be one quarry in time $k+2$ and other quarries $4$ can be done in time $k+3, k+3, k+4, k+4$. 
+		Hence this gives total quarry time $|C|(5k + 16)$ = $C_{clauses}$. 
 	\end{itemize}
+	Due to this if 
 \end{proof}
+
+\begin{theorem}
+	Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
+\end{theorem}
 
 \subsection{Outforest precendce constrains}
 \begin{theorem}\label{thm:PCSC-to-PCWCAL-hardness}
