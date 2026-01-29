@@ -39,9 +39,9 @@ By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
 
 \medskip
-The ide behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
+The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) that will be used in both cases.
-The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$.
+The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance might also include probabilities which we also pass to the black-box.
 Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$ is used to split the instance and make recursive calls.
 Note that the $S$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
 Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests in $S$.
@@ -95,10 +95,10 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
 
 \begin{theorem} \label{thm:alphaPCWCDT}
 If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$\cO\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
+$\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
-     Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
+     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
      Let $D$ be the decision tree returned by this call.
      In order to prove the theorem it is enough to argue that
      \begin{equation} \label{eq:D}
@@ -106,7 +106,7 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approx
      \end{equation}
 
      The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'}$, where $D'$ is the decision tree returned by \ProcWorstDecisionTree on input $\cI'$.
+     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI'$.
      To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
      We have
 %         \begin{align*}
@@ -213,7 +213,7 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 \end{proof}
 
-Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm. Moreover, we replace each hypotheses $h$ by $z(h)$ copies of $h$ with uniform distribution.
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm. 
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
     Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
@@ -235,36 +235,45 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
     \end{itemize}
     Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
-    
+
+The following observation is analogous to Observation~\ref{obs:DS}:
+\begin{observation} \label{obs:DS-average}
+    Consider $D_S$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses a $\br{\beta,\mu}$-approximation algorithm for $\ProblemPCMSSC$ as the $\blackBox$ subroutine.
+    Then, $\COSTA\br{D_S} \leq \beta \cdot \COSTA\br{\sepcover{\cI}}$.
+\end{observation}
+
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log n}$-approximation algorithm for the uniform distribution $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log n}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$.
 \end{theorem}
 \begin{proof}
-    \MS{Jak wroci tutaj pseudokod na average case to trzeba poprawic ta analize i pseudokod}
-    Consider a call to \ProcWorstDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\beta$-approximation algorithm for $\ProblemPCMSSC$ for the instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
-    Let $D$ be the output and let $D_S$ be the decision tree consisting of the sequence of tests $S$, where $S$ is the result of the call to the $\blackBox$.
-    Then we have
-    \begin{equation} \label{eq:DSaverage}
-    \COSTA\br{D_S} \leq \beta \cdot \COSTA\br{\sepcover{\cI}}
-    \end{equation}
-% The idea behind Algorithm \ref{alg:averageDecisionTree} is the same as for the worst case version of the problem except the fact that we use a solution to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
-% \input{pseudocodes/average_case_learning.tex}
-
-    We prove by induction on $n$ that
-    \begin{equation} \label{eq:ACinduction}
-     \COSTA\br{D} \leq \beta \cdot \log_{4/3} n \cdot \OPTA\br{\cI}.
+    Let $\cI=\br{\cH, \cT, \cF, p}$ be an instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$ with $q=\frac{1}{nm}$.
+    By Lemma~\ref{lemma:rounding}, for the rounded instance $\cI'=\br{\cH, \cT, \cF, p'}$ we have $\OPTA\br{\cI}\leq\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$ and $z(h)\in \mathbb{N}$ for each $h\in\cH$, where $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$.
+    
+    Consider a call to \ProcDecisionTree on input $\cI'=\br{\cH, \cT, \cF, p', \blackBox}$, where $\blackBox$ is a $\br{\beta,\mu}$-approximation algorithm for $\ProblemPCMSSC$.
+    Let $D$ be the decision tree returned by this call.
+    We will prove by induction on $s_z$ that
+    \begin{equation} \label{eq:ACinduction-sz}
+     \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'}.
     \end{equation}
 
-    The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-    Assume by induction that \eqref{eq:ACinduction} holds for smaller $n$, in particular for every $\cI' = \br{\cH', \xi(\cT), \preceq_{\xi}}$ such that $\cH' \in \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \beta \cdot \log_{4/3} n' \cdot \OPTA\br{\cI'}$, where $D'$ is any of the decision trees returned by the recursive calls to \ProcWorstDecisionTree on input $\cI'$. We have that:
+    The base case when $s_z=1$ (equivalently, $\spr{\cH}=1$) is trivial since the cost of the decision tree is 0.
+    Assume by induction that for every $\cI'' = \br{\cH', \cT, \cF, p'}$ such that $\cH' \subseteq \cH\setminus S$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPTA\br{\cI''}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
+    We have
 \begin{align*}
-    \COSTA\br{D} \leq & \COSTA\br{D_S} + \sum_{\cH' \in \cH \setminus S} \COSTA\br{D'} \\
-    \leq & \beta \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH' \in \cH \setminus S} \beta \cdot \log_{4/3} n' \cdot \OPTA\br{\cI'} \\
-    \leq & \beta \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH' \in \cH \setminus S} \beta \cdot \log_{4/3} \br{\frac{3}{4}\cdot n} \cdot \OPTA\br{\cI} \\
-    = & \beta \cdot \COSTA\br{\sepcover{\cI}} + \beta\cdot \br{\log_{4/3} n - 1} \cdot \OPTA\br{\cI} \\
-    \leq & \beta\cdot \log_{4/3} n \cdot \OPTA\br{\cI},
+    \COSTA\br{D, \cI'} \leq & \COSTA\br{D_S, \cI'} + \sum_{\cH' \in \cH \setminus S} \COSTA\br{D'(\cH'), \cI''} \\
+    \leq & \beta \cdot \COSTA\br{\sepcover{\cI'}, \cI'} + \sum_{\cH' \in \cH \setminus S} \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPTA\br{\cI''} \\
+    \leq & \beta \cdot \OPTA\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{\frac{\br{4\mu-1}\cdot s_z}{4\mu}} \cdot \OPTA\br{\cI'} \\
+    = & \beta \cdot \OPTA\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'} - \beta\cdot \OPTA\br{\cI'} \\
+    = & \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'},
 \end{align*}
-where the first inequality is due to Observation~\ref{obs:WCdecomposition}, the second inequality follows from \eqref{eq:ACinduction} and Observation~\ref{obs:sepcoverAC}, and the third inequality follows from Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\cH'} \leq \frac{3}{4}\cdot n$ for every $\cH' \in \cH\setminus S$.
+where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $s_z'\leq \frac{(4\mu -1)}{4\mu}\cdot s_z$ for every $\cH' \in \cH\setminus S$ (since the $\blackBox$ covers a $1/(4\mu)$ fraction of the total probability mass).
+
+Since $s_z \leq nm + n$ and by Lemma~\ref{lemma:rounding}, we have
+\begin{align*}
+\COSTA\br{D, \cI} &\leq \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPTA\br{\cI'} 
+\\&\leq 
+\frac{2\cdot\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPTA\br{\cI}\leq \frac{4\cdot \beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n} \cdot \OPTA\br{\cI}
+\end{align*}
 This concludes the proof.
 \end{proof}
 
