@@ -95,7 +95,7 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     \end{proof}
 
     Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq B^2H_k$.
-    By the price definition, $\sum_{j-1}^k c(u_j)=\spr{\cC_{t-1}}$.
+    By the price definition, $\sum_{j=1}^k c(u_j)=\spr{\cC_{t-1}}$.
     Since $\spr{\cA_t}\leq B$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq B^2H_n+B$.
     Recall that we are considering the case when $B\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}B$.
     This completes the proof of the lemma.
@@ -131,7 +131,6 @@ For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in th
 Let $R_i=\cU\setminus\cov\br{\cC_i}$ for $i\in\brc{1,\ldots,l}$ and $R_0=\cU$, $\cC_0=\emptyset$.
 Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and let $\cCopt$ be an optimal solution to $\ProblemPCSC$ on $\cI$, i.e., $\cov\br{\cCopt}\geq k$ and $\spr{\cCopt}=\optPCSC{\cI}$.
 
-\DD{tutaj mam zakomentowan jakas analize dla $l=1$, gdyz przez chwile myslalem, ze to da ostatecznie lepszy wynik}
 % Consider first the case when $l=1$, i.e., there is only one iteration.
 % Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cCopt}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
 % From this we obtain
@@ -166,22 +165,24 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
 \end{theorem}
 \begin{proof}
     \input{pseudocodes/f_PCMSSC.tex}
-    Let $a=\frac{3\beta-1}{3\beta-2}<2$.
+    Let $a=\frac{3\beta-1}{3\beta-2}<2$. \DD{Możemy mieć $a=2$ dla $\beta=1$.}
     Consider the procedure shown in Algorithm~\ref{alg:fPCMSSC}.
     Denote by $\zeta^*$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
-    Let $l^*$ be the value of $l$ such that $\COST\br{\pi_{l^*}\circ\sigma}=\min_{\pi\in \cO} \brc{\COST(\pi)}$. Observe that $a^{l^*-1} < \spr{\zeta^*} \leq a^{l^*}$. We start with the following lemma.
+    Let $l^*$ be the value of $l$ such that $\COST\br{\pi_{l^*}\circ\sigma}=\min_{\pi\in \cO} \brc{\COST(\pi)}$. Observe that $a^{l^*-1} < \spr{\zeta^*} \leq a^{l^*}$. \DD{$\leftarrow$ dlaczego? ($l^*$ nie wydaje się miec związku z OPT-em)} We start with the following lemma.
     \begin{lemma}\label{lem:pi-spread-cost}
         We have that $\spr{\pi_{l^*}} = \Theta\br{\alpha }\cdot \spr{\zeta^*}$ and $\COST\br{\pi_{l^*}} = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\zeta^*}$.
     \end{lemma}
     \begin{proof}
-        We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. We observe that before the extension step of $\pi_{l^*}$, we have that:
+        We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. \DD{Dlaczego $a^{i+1}$ a nie $a^i$?} We observe that before the extension step of $\pi_{l^*}$, we have that:
         $$
         \spr{\pi_{l^*}} \leq \alpha\cdot \sum_{i=1}^{l^*} a^{i+1}\leq \frac{\alpha\cdot a^{l^*+2}}{a-1}\leq \frac{\alpha\cdot a^{3}\spr{\zeta^*}}{a-1}=O\br{\alpha}\cdot\spr{\zeta^*}.
         $$
+        \DD{Tutaj w sumie taka uwaga, że $a-1$ w mianowniku jest ok, ale dla dużych $\beta$ nie można ukryć w $\bigo(1)$ (np. $\beta=1+1/n$).}
 
-        Since in the extension step we ansure that $\spr{\pi_{l^*}} \geq \alpha\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha}\cdot \spr{\zeta^*}$ and the first part of the lemma follows.
+        \DD{W sumie ten extension step w pseudokodzie nie jest jasny (Za pierszym razem przeczytałem linię ``Extend $\pi_l$ (..)'' w pseudokodzie jako taki komentarz, sugeurący, że rozszerzamy robiąc jeszcze jeden call do $\ProblemBPCSC$, ale między werszami dowodu widzę, że tak chyba nie jest.}
+        Since in the extension step we ensure that $\spr{\pi_{l^*}} \geq \alpha\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha}\cdot \spr{\zeta^*}$ and the first part of the lemma follows.
 
-        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, \cU}}$ and note that $n_{l^*}^* = \spr{\cov\br{\zeta^*, \cU}}$. Similarly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i, \cU}}$. Additionally, define $n_0=n_0^*=0$. We have:
+        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\zeta^*}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\zeta^*}}$. Similarly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i}}$. Additionally, define $n_0=n_0^*=0$. We have:
         \begin{align*}
             \COST\br{\pi}&\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&\leq 
@@ -201,7 +202,10 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
 
-        Consider any iteration $i\in [l^*]$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\zeta^*}{a^{i-1}}, \cU}$ be the universe of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\zeta^*}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}^*$. Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}^*}$. As a consequence we see that $n-n_i\geq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$ so that:
+        Consider any iteration $i\in [l^*]$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\zeta^*}{a^{i-1}}}$ be the universe of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\zeta^*}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}^*$.
+        \DD{ok, ale nie widzę jak to ogranicza $n_i^*-n_{i-1}$, tzn. nie widzę jak OPT ma się do $\zeta^*$ oraz jak $n_{i-1}$ ma się do $n_{i-1}^*$}
+        Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}^*}$. As a consequence we see that $n-n_i\geq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$ \DD{ta nierówność w druga strone, oraz tutaj użyliśy $n_{i-1}*\leq n_{i-1}$, które z czego wynika?} so that:
+        \DD{coś nie mogę dostrzeć skąd 2-ga nierówność się bierze. Gdzie się $1/\beta$ podziało?}
         \begin{align*}
             \frac{\br{a-1}\cdot Q}{\alpha}
             &=
@@ -236,16 +240,16 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
         The lemma follows.
     \end{proof}
     \begin{lemma}\label{lem:sigma-coverage}
-        We have that $\spr{\cov\br{\sigma_{l^*}, \cU}} \geq \frac{f\cdot n}{\beta}$ and $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$.
+        We have that $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$ and $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$.
     \end{lemma}
     \begin{proof}
-        Since for the optimal cover $\zeta^*$, $\spr{\zeta^*}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI_{l^*+1}$. Therefore we know that $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$ and $\spr{\cov\br{\sigma_{l^*}, \cU}} \geq \frac{f\cdot n}{\beta}$.
+        Since for the optimal cover $\zeta^*$, $\spr{\zeta^*}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI_{l^*+1}$. Therefore we know that $\spr{\sigma_{l}} = O\br{\alpha}\cdot \spr{\zeta^*}$ and $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$.
     \end{proof}
     \begin{lemma}\label{lem:combined-coverage-cost}
-        We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}, \cU}}\geq \frac{f\cdot n}{\beta}$ and $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
+        We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$ and $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
     \end{lemma}
     \begin{proof}
-        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, we have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}, \cU}}\geq \frac{f\cdot n}{\beta}$. For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$. Lemma \ref{lem:pi-spread-cost} implies that $\COST\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$. Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is $t_u$. For each $u\notin\cU$ its cover time in $\pi_{l^*}$ is $t_u\geq \alpha\cdot a^{l^*}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most $\spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*} + O\br{\alpha}\cdot a^{l^*} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*}$. Therefore, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most a constant factor larger than its cover time in $\pi_{l^*}$. As a consequence we have that $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
+        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, we have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$. For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$. Lemma \ref{lem:pi-spread-cost} implies that $\COST\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$. Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is $t_u$. For each $u\notin\cU$ its cover time in $\pi_{l^*}$ is $t_u\geq \alpha\cdot a^{l^*}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most $\spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*} + O\br{\alpha}\cdot a^{l^*} = O\br{\alpha\cdot\beta}\cdot \spr{\zeta^*}$. Therefore, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most a constant factor larger than its cover time in $\pi_{l^*}$. As a consequence we have that $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta}\cdot \COST\br{\zeta^*}$.
     \end{proof}
     Lemma \ref{lem:combined-coverage-cost} directly implies the theorem.
 \end{proof}
@@ -274,7 +278,7 @@ As of independent interest, we additionally show that if we enforce a certain co
 Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
 $
 \spr{\closure{S}} \leq C \cdot
-\spr{\cov\br{\closure{S}, \cU}}^\epsilon
+\spr{\cov\br{\closure{S}}}^\epsilon
 $ ($\epsilon$-shallow ancestry).
 Then $\ProblemMDPCS$-Greedy provides an $O(n^\epsilon)$-approximation.
 \end{theorem}
@@ -287,18 +291,18 @@ $$
 \frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 $$
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-     \mathcal{G}$, $\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
-\spr{\cov\br{\closure{S}, \cU}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}, \cU}}^\epsilon
+     \mathcal{G}$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+\spr{\cov\br{\closure{S}}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}}}^\epsilon
 $. Rearranging this inequality, we get that $
-\spr{\cov\br{\closure{S}, \cU}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\spr{\cov\br{\closure{S}}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 $. We have that:
 \[
-\spr{\cov\br{\cA^*, \cU}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}, \cU}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}, \cU}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\spr{\cov\br{\cA^*}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 \]
 
 Therefore:
 \[
-\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*, \cU}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 \]
 
 By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
