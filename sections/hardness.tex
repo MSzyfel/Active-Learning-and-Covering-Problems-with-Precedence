@@ -118,6 +118,13 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 		Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
 \end{theorem}
 \begin{proof}
+	The reduction is very similar to the previous ones, albeit we the path graph with a tree graph.  
+\end{proof}
+
+\begin{theorem}
+	Average-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
+\end{theorem}
+\begin{proof}
 	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
 	For the formal definition of the reduction we recommend \cite{Ausiello}.
 	Namely, the problem where we would like to maximize the number of fulfilled clauses.
@@ -149,12 +156,8 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 		For a satisfied clause, there can be one quarry in time $k+2$ and other quarries $4$ can be done in time $k+3, k+3, k+4, k+4$. 
 		Hence this gives total quarry time $|C|(5k + 16)$ = $C_{clauses}$. 
 	\end{itemize}
-	Due to this if 
 \end{proof}
 
-\begin{theorem}
-	Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
-\end{theorem}
 
 \subsection{Outforest precendce constrains}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
