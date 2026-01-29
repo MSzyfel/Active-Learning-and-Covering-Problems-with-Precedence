@@ -18,6 +18,16 @@ If more that $\spr{\cH}/2$ hypotheses are potential targets after the query to $
 Otherwise the process is over.
 This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
 
+We will use two immediate monotonicity properties.
+\begin{lemma}\label{lemma:subspace_opt}
+    Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
+    Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
+\end{lemma}
+\begin{lemma}\label{lemma:subinstances_avg}
+    Let $\cI=(\cH, \cT, \preceq)$ be an instance of $\ProblemPCACDT$.
+    Let $\cH_1,\dots,\cH_t\subseteq \cH$ be such that $\bigcup_{i=1}^t \cH_i \subseteq \cH$ and for any $i\neq j$, $\cH_i\cap \cH_j = \emptyset$.
+    Then, $\OPT\br{\cI} \geq \sum_{i=1}^t \OPT\br{\br{\cH_i, \cT, \preceq}}$.
+\end{lemma}
 
 %Figure \ref{fig:sepcover} illustrates the definition of sepcover.
 % \begin{figure}[h]
@@ -36,7 +46,7 @@ $$
 $$
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
-In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+%In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
 
 \medskip
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
@@ -53,10 +63,10 @@ Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the 
 We will use sepcovers to lowerbound optimal solution:
 \begin{observation} \label{obs:sepcoverWC}
     Let $\cI$ be any instance of $\ProblemPCWCDT$.
-    Then, $\spr{\sepcover{\cI}} \leq \OPTW\br{\cI}$.
+    Then, $\spr{\sepcover{\cI}} \leq \OPT\br{\cI}$.
 \end{observation}
 
-%We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPTW\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCDT$.
+%We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCDT$.
 \begin{lemma}\label{lemma:cover_sep_worst_case}
     Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCDT$ instance.
     Let $S^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
@@ -102,26 +112,26 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approx
      Let $D$ be the decision tree returned by this call.
      In order to prove the theorem it is enough to argue that
      \begin{equation} \label{eq:D}
-     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI}.
+     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI}.
      \end{equation}
 
      The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI'$.
+     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI'$.
      To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
      We have
 %         \begin{align*}
 %             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{\cH' \in \cH \setminus S} \COSTW\br{D', \cI'} \\
-%             \leq & \alpha \cdot \spr{S^*} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'} \\
-%             \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{\cI} \\
-%             = & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} - \alpha\cdot \OPTW\br{\cI} \\
-%             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} \\
+%             \leq & \alpha \cdot \spr{S^*} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+%             \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPT\br{\cI} \\
+%             = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
+%             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} \\
 %        \end{align*}
         \begin{align*}
             \COSTW\br{D} \leq & \COSTW\br{D_S} + \max_{\cH' \in \cH \setminus S} \COSTW\br{D'(\cH')} \\
-            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPTW\br{\cI'} \\
-            \leq & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPTW\br{\cI} \\
-            = & \alpha \cdot \OPTW\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI} - \alpha\cdot \OPTW\br{\cI} \\
-            = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPTW\br{\cI},
+            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+            \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPT\br{\cI} \\
+            = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
+            = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI},
         \end{align*}
         where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \frac{(4\gamma -1)}{4\gamma}\cdot n$ for every $\cH' \in \cH\setminus S$.
         This concludes the proof of the theorem.

@@ -176,7 +176,7 @@ Below we show how to use an $(\alpha,\beta)$-approximation algorithm for $\Probl
 \end{theorem}
 \begin{proof}
     \input{pseudocodes/f_PCMSSC.tex}
-    Let $a=\frac{3\beta-1}{3\beta-2}<2$. \DD{Możemy mieć $a=2$ dla $\beta=1$.}
+    Let $a=\frac{3\beta-1}{3\beta-2}\leq 2$.
     Consider the procedure shown in Algorithm~\ref{alg:fPCMSSC}.
     Denote by $\zeta^*$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
     Let $l^*$ be the value of $l$ such that $\COST\br{\pi_{l^*}\circ\sigma}=\min_{\pi\in \cO} \brc{\COST(\pi)}$. Observe that $a^{l^*-1} < \spr{\zeta^*} \leq a^{l^*}$. \DD{$\leftarrow$ dlaczego? ($l^*$ nie wydaje się miec związku z OPT-em)} We start with the following lemma.

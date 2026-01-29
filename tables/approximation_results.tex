@@ -1,4 +1,4 @@
-\begin{table}[t!]
+\begin{table}[ht!]
 \caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}
 \label{tab:results}
 \centering
@@ -8,7 +8,8 @@
 \toprule
 \textbf{prec} & \textbf{B-PCSC} & \textbf{F-PCSC} & \textbf{F-PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
 \midrule
-none & $\br{1, \frac{e}{e-1}}$ \cite{TheBudgetedMaximumCoverageProblem} & $\br{1, \frac{e}{e-1}}$ \cite{TheBudgetedMaximumCoverageProblem} & $\br{\frac{4e}{e-1},1}$ \cite{EfficientSequencesOfTrials} & $\cO(\log n)$ \cite{DiagnosisDetermination} & $\cO(\log n)$ \cite{DiagnosisDetermination} \\
+\multirow{2}{\linewidth}{none} & $\br{1, \frac{e}{e-1}}$ & $\br{1, \frac{e}{e-1}}$  & $\br{\frac{4e}{e-1},1}$ & $\cO(\log n)$  & $\cO(\log n)$  \\
+      &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & \cite{EfficientSequencesOfTrials} &  \cite{DiagnosisDetermination} & \cite{DiagnosisDetermination} \\
 \cdashline{2-6}
 inforest & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1711.35, \frac{e}{e-1}}$ (Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC})* & $\cO(\log n)$ (Cor.~\ref{cor:PCWCDT-special-cases})* & $\cO(\log(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
 \cdashline{2-6}
