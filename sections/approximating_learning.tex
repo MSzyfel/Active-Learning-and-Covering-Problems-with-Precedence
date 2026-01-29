@@ -166,9 +166,13 @@ As an immediate corollary, by taking an optimal $D$ and the corresponding $S=\se
     Then, $\COSTA\br{\sepcover{\cI}} \leq \OPTA\br{\cI}$.
 \end{observation}
 
+\paraTitle{Remark on notation.}
+Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
+
 We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
 This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
 \DD{do rozwazenia fix notacyjny: $\sepcover{\cI}$ to jest zbior, a tutaj mamy do czynienia z suma zalezna od kolejnosci}
+
 However, since in this case we have arbitrary probability distrubution on hypotheses, we firstly emply a rounding technique which firstly scales the probabilities to polynomial size integers. Below we present which does so, by incurring only a 2-factor loss in the approximation.
 For an instance $\cI=\br{\cH, \cT, \cF, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
 We say that $p'$ is a \emph{$q$-rounding} of $p$.
