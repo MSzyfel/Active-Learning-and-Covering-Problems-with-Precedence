@@ -153,12 +153,12 @@ $$
 \sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2\gamma}{k} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2\gamma n}{k} \cdot \spr{\cCopt}.
 $$
 For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
-Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2n}{k}\spr{\cCopt}$.
-This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4n}{k}\cdot\spr{\cCopt} = \frac{4}{f}\cdot\spr{\cCopt}$.
+Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2\gamma n}{k}\spr{\cCopt}$.
+This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}$.
 Moreover, $\spr{\cov\br{\cC_l}}\geq k/2$, which means the algorithm covers at least half of the required elements.
 This proves the following theorem.
 \begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{\frac{4\gamma}{f}, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
+    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{4\gamma/f, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 
 Additionally, observer that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $B^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $B^*$. We have the following corollary.
@@ -268,7 +268,7 @@ It should be noted, that in all of our algorithms we will have $\beta=\cO\br{1}$
 \end{proof}
 
 This implies the following result for $\ProblemPCMSSC$ via carefull examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}.
-\begin{corollary}
+\begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     There exists an $\br{432\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{1711.35, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{theorem}\label{thm:BPCSC-outforest}

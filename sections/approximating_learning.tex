@@ -128,7 +128,7 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{2\gamma}{2\gamma -1}}} \cdot \log n}$-approx
 \end{proof}
 
 We therefore obtain the following corollary:
-\begin{corollary}
+\begin{corollary}\label{cor:PCWCDT-special-cases}
     There exist polynomial time approximation algorithms for $\ProblemPCWCDT$ with the following guarantees:
     \begin{itemize}
         \item $\cO\br{\log n}$-approximation algorithm for inforests,
@@ -269,7 +269,7 @@ This concludes the proof.
 \end{proof}
 
 By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACDT}, we immediately obtain the following corollary.
-\begin{corollary}
+\begin{corollary}\label{cor:PCACDT-special-cases}
     If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$. This yields the following approximation ratios:
     \begin{itemize}
         \item $\cO\br{\log\br{m+n}}$-approximation algorithm for inforests,
