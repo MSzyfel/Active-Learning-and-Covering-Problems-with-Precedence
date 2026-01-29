@@ -76,27 +76,7 @@ Our approximation results, including best known results from the literature, are
 \caption{Relationships between covering and decision tree problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
 \end{figure}
 
-\begin{table}[t!]
-\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}
-\label{tab:results}
-\centering
-{
-\small
-\begin{tabular}{p{0.08\linewidth}C{0.15\linewidth}C{0.15\linewidth}C{0.16\linewidth}C{0.13\linewidth}C{0.2075\linewidth}}
-\toprule
-\textbf{prec} & \textbf{B-PCSC} & \textbf{F-PCSC} & \textbf{F-PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
-\midrule
-none & $\br{1, \frac{e}{e-1}}$ \cite{TheBudgetedMaximumCoverageProblem} & $\br{1, \frac{e}{e-1}}$ \cite{TheBudgetedMaximumCoverageProblem} & $\br{\frac{4e}{e-1},1}$ \cite{EfficientSequencesOfTrials} & $\cO(\log n)$ \cite{DiagnosisDetermination} & $\cO(\log n)$ \cite{DiagnosisDetermination} \\
-\cdashline{2-6}
-inforest & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1711.35, \frac{e}{e-1}}$ (Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC})* & $\cO(\log n)$ (Cor.~\ref{cor:PCWCDT-special-cases})* & $\cO(\log(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
-\cdashline{2-6}
-outforest & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest})* & $\cO(\log^2 n)$ (Cor.~\ref{cor:PCWCDT-special-cases})* & $\cO(\log^2(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
-\cdashline{2-6}
-general & $\br{\sqrt{m \cdot H_n}+1, 1}$ (Thm.~\ref{thm:BPCSC})* & $\br{\cO(\sqrt{m}/f), 2}$ (Thm.~\ref{thm:MDPCStoPCSC}), $\br{\sqrt{m \cdot H_n}+1, 1}$ (Cor.~\ref{cor:BPCSC-to-PCSC})* & $(\sqrt{m \cdot H_n}+1, 1)$ (Thm.~\ref{thm:BPCSC-to-PCMSSC})* & $\cO(\sqrt{m}\log n)$ (Thm.~\ref{thm:alphaPCWCDT})* & $\cO(\sqrt{m}\log^{3/2}\!(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+\input{tables/approximation_results.tex}
 
 For the most general case of arbitrary precedence constraints, we achieve $\cO(\sqrt{m}\log n)$-approximation for $\ProblemPCWCDT$ and $\cO(\sqrt{m}\log^{3/2}(m+n))$-approximation for $\ProblemPCACDT$, where $m$ is the number of tests and $n$ is the number of hypotheses. These results are obtained through a novel reduction to budgeted set cover problems ($\ProblemBPCSC$), for which we develop a $(\sqrt{m \cdot H_n}+1, 1)$-bicriteria approximation algorithm. The key technical innovation is an algorithm for the Max-Density Precedence-Closed Subfamily problem ($\ProblemMDPCS$), which iteratively selects precedence-closed subfamilies with high density (ratio of covered elements to subfamily size).
 
@@ -113,29 +93,7 @@ When the precedence constraints form special structures, we obtain significantly
     \label{fig:hardness_diagram}
 \end{figure}
 
-\begin{table}[t!]
-\caption{Hardness and inapproximability results for covering and decision tree problems. All results are from Section~\ref{sec:hardness}. PDS denotes results conditional on the Planted Dense Subgraph Conjecture.}
-\label{tab:hardness}
-\centering
-{
-\small
-\begin{tabular}{lcccc}
-\toprule
-\textbf{prec} & \textbf{F-PCSC} & \textbf{PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
-\midrule
-none & $(1-o(1))H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $o(\log n)$ \\
-& \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
-\cdashline{2-5}
-outforest & $o(\log^{2} n)$ & $(4-\epsilon)$ & $o(\log^{2} n)$ & $o(\log^{2} n)$ \\
-& (Thm.~\ref{thm:PCSC-outforest-hardness}) & \cite{ApproximatingMinSumSetCover} & (Cor.~\ref{thm:PCWCDT-outforest-hardness}) & (Cor.~\ref{thm:PCACDT-outforest-hardness}) \\
-\cdashline{2-5}
-general & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ \\
-& (Thm.~\ref{thm:PCSC-PDS-hardness}) & (Thm.~\ref{thm:PCMSSC-PDS-hardness}) & (Thm.~\ref{thm:PCWCDT-PDS-hardness}) & (Thm.~\ref{thm:PCACDT-PDS-hardness}) \\
-& PDS & PDS & PDS & PDS \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+\input{tables/hardness_results.tex}
 
 For arbitrary precedence constraints, we prove that under the Planted Dense Subgraph Conjecture, no algorithm can achieve $o(m^{1/6})$-approximation for $\ProblemPCSC$, $\ProblemPCMSSC$, $\ProblemPCWCDT$, or $\ProblemPCACDT$. This demonstrates a polynomial gap between our upper bounds and the hardness threshold. For outforest constraints, we establish $o(\log^2 n)$ hardness for $\ProblemPCSC$ by reducing from Group Steiner Tree on trees, which is known to be hard to approximate within $\cO(\log^2 n)$ unless $\text{NP}\subseteq \text{ZTIME}(n^{\text{polylog}(n)})$. This hardness naturally extends to decision tree problems via our reduction hierarchy.
 
