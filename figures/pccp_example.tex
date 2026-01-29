@@ -1,7 +1,8 @@
 \centering
 
-\begin{minipage}[t]{0.48\textwidth}
+\begin{minipage}[t]{0.6\textwidth}
 \centering
+\scalebox{0.57}{
 \begin{tikzpicture}[
     scale=1.3,
     node distance=1cm,
@@ -102,11 +103,14 @@
 \node[below] at (2.3,3.2) {\textcolor{teal}{$S_9$}};
 
 \end{tikzpicture}
-\caption*{(a) Universe and covering sets}
+}
+\normalsize
+\caption*{(a) Universe and sets}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.48\textwidth}
+\begin{minipage}[t]{0.35\textwidth}
 \centering
+\scalebox{0.57}{
 \begin{tikzpicture}[
     scale=1.15,
     node distance=1cm,
@@ -118,18 +122,18 @@
 
 % Component with S6 (left, wider)
 \node[set, fill=cyan!30] (s6) at (0,0) {$S_6$};
-\node[set, fill=yellow!70!red!30] (s8) at (-1,-1.5) {$S_8$};
-\node[set, fill=magenta!30] (s7) at (1.5,-3) {$S_7$};
-\node[set, fill=purple!30] (s5) at (0.5,-4.5) {$S_5$};
+\node[set, fill=yellow!70!red!30] (s8) at (-0.7,-1.5) {$S_8$};
+\node[set, fill=magenta!30] (s7) at (1,-3) {$S_7$};
+\node[set, fill=purple!30] (s5) at (0.3,-4.5) {$S_5$};
 
 % Component with S3 (right top)
-\node[set, fill=green!30] (s3) at (3,0) {$S_3$};
-\node[set, fill=red!30] (s1) at (2.5,-1.5) {$S_1$};
-\node[set, fill=orange!30] (s4) at (3.5,-1.5) {$S_4$};
+\node[set, fill=green!30] (s3) at (1.8,0) {$S_3$};
+\node[set, fill=red!30] (s1) at (1.3,-1.5) {$S_1$};
+\node[set, fill=orange!30] (s4) at (2.3,-1.5) {$S_4$};
 
 % Component with S2 (right bottom)
-\node[set, fill=blue!30] (s2) at (3,-3) {$S_2$};
-\node[set, fill=teal!30] (s9) at (3,-4.5) {$S_9$};
+\node[set, fill=blue!30] (s2) at (2.1,-3) {$S_2$};
+\node[set, fill=teal!30] (s9) at (2.1,-4.5) {$S_9$};
 
 % Precedence constraints (all arrows go down)
 \draw[arrow] (s3) -- (s1);
@@ -142,13 +146,16 @@
 \draw[arrow] (s2) -- (s9);
 
 \end{tikzpicture}
-\caption*{(b) Precedence DAG}
+}
+\normalsize
+\caption*{(b) Precedence}
 \end{minipage}
 
 \vspace{0.5cm}
 
 \begin{minipage}[t]{\textwidth}
 \centering
+\scalebox{0.765}{
 \begin{tikzpicture}[
     scale=1.3,
     node distance=1cm,
@@ -249,6 +256,8 @@
 \node[below] at (2.3,3.2) {\textcolor{teal}{\textbf{$S_9$}}};
 
 \end{tikzpicture}
-\caption*{(c) Solution: selected sets $\{S_1, S_2, S_6, S_8, S_9\}$ (in color)}
+}
+\normalsize
+\caption*{(c) Solution: $\{S_1, S_2, S_6, S_8, S_9\}$ (in color)}
 \end{minipage}
 
