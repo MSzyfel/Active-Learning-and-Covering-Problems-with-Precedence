@@ -5,7 +5,7 @@
 \caption{The $\cO(\alpha\cdot\log n)$-approximation algorithm for $\ProblemPCDT$ problems.}
 \label{alg:worstDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\ProcWorstDecisionTree$(\cH, \cT, \cF, \blackBox)$}{
+\Proc{\ProcDecisionTree$(\cH, \cT, \cF, \blackBox)$}{
 \If{$\spr{\cH} = 1$}{
     \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
 }
@@ -18,7 +18,7 @@ $S \gets$ Call $\blackBox$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}
 $D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
 
 \ForEach{\textup{leaf }$v$\textup{ of }$D$}{%$\cH' \in \cH - S$}{
-$D_u \gets$ \ProcWorstDecisionTree$(\cH_v, \cT \setminus  S, (\cT\setminus S,\preceq))$.
+$D_u \gets$ \ProcDecisionTree$(\cH_v, \cT \setminus  S, (\cT\setminus S,\preceq))$.
 
 Attach $D_u$ to the leaf of $D$ corresponding to $\cH'$.
 }

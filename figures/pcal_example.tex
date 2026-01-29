@@ -2,6 +2,7 @@
 
 \begin{minipage}[t]{\textwidth}
 \centering
+\scalebox{0.76}{
 \begin{tikzpicture}[
     node distance=1cm,
     test/.style={circle, draw, thick, minimum size=0.6cm},
@@ -29,11 +30,14 @@ $h_{10}$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
 };
 
 \end{tikzpicture}
+}
+\normalsize
 \caption*{(a) Hypotheses and tests table}
 \end{minipage}
 
-\begin{minipage}[t]{0.38\textwidth}
+\begin{minipage}[t]{0.43\textwidth}
 \centering
+\scalebox{0.78}{
 \begin{tikzpicture}[
     node distance=1cm,
     test/.style={circle, draw, thick, minimum size=0.6cm},
@@ -49,10 +53,10 @@ $h_{10}$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
 \draw[arrow] (t3) -- (t6);
 
 % Component 2 (top right)
-\node[test] (t2) at (3.5,0) {$t_2$};
-\node[test] (t4) at (3,-1.5) {$t_4$};
-\node[test] (t5) at (4,-1.5) {$t_5$};
-\node[test] (t7) at (3.5,-3) {$t_7$};
+\node[test] (t2) at (2.5,0) {$t_2$};
+\node[test] (t4) at (1.9,-1.5) {$t_4$};
+\node[test] (t5) at (3.1,-1.5) {$t_5$};
+\node[test] (t7) at (2.5,-3) {$t_7$};
 \draw[arrow] (t2) -- (t4);
 \draw[arrow] (t2) -- (t5);
 \draw[arrow] (t4) -- (t7);
@@ -68,13 +72,17 @@ $h_{10}$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
 \draw[arrow] (t8) -- (t12);
 
 % Component 4 (isolated node, bottom right)
-\node[test] (t10) at (3.5,-6) {$t_{10}$};
+\node[test] (t10) at (2.5,-6) {$t_{10}$};
 
 \end{tikzpicture}
-\caption*{(b) Precedence DAG}
+}
+\normalsize
+\caption*{(b) Precedence}
 \end{minipage}
-\begin{minipage}[t]{0.59\textwidth}
+\hfill
+\begin{minipage}[t]{0.55\textwidth}
 \centering
+\scalebox{0.78}{
 \begin{tikzpicture}[
     node distance=1cm,
     decision/.style={circle, draw, thick, minimum size=0.55cm},
@@ -84,44 +92,44 @@ $h_{10}$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
 
 % Decision tree built from table analysis
 % Root: t10 (separates: h5→1, h6→1, h7→2, h8→3, rest→0)
-\node[decision] (root) at (5,0) {$t_{10}$};
+\node[decision] (root) at (4.25,0) {$t_{10}$};
 
 % t10=0: {h1,h2,h3,h4,h9,h10}
-\node[decision] (n1) at (3,-1.5) {$t_2$};
+\node[decision] (n1) at (2.55,-1.5) {$t_2$};
 % t10=1: {h5,h6}
-\node[decision] (n2) at (5.5,-1.5) {$t_1$};
+\node[decision] (n2) at (4.7,-1.5) {$t_1$};
 % t10=2: {h7}
-\node[leaf] (h7) at (7,-1.5) {$h_7$};
+\node[leaf] (h7) at (6,-1.5) {$h_7$};
 % t10=3: {h8}
-\node[leaf] (h8) at (8.5,-1.5) {$h_8$};
+\node[leaf] (h8) at (7.2,-1.5) {$h_8$};
 
 % t10=0, t2=0: {h1,h2,h4,h9,h10}
-\node[decision] (n3) at (2,-3) {$t_{11}$};
+\node[decision] (n3) at (3.4,-3) {$t_{11}$};
 % t10=0, t2=1: {h3}
-\node[leaf] (h3) at (4,-3) {$h_3$};
+\node[leaf] (h3) at (2.2,-3) {$h_3$};
 
 % t10=1, t1=0: {h5}
-\node[leaf] (h5) at (5.3,-3) {$h_5$};
+\node[leaf] (h5) at (4.5,-3) {$h_5$};
 % t10=1, t1=1: {h6}
-\node[leaf] (h6) at (6.5,-3) {$h_6$};
+\node[leaf] (h6) at (5.5,-3) {$h_6$};
 
 % t10=0, t2=0, t11=0: {h1,h2,h4,h10}
-\node[decision] (n4) at (1,-4.5) {$t_8$};
+\node[decision] (n4) at (3.8,-4.5) {$t_8$};
 % t10=0, t2=0, t11=1: {h5} - but h5 already separated
 % t10=0, t2=0, t11=2: {h9}
-\node[leaf] (h9) at (3,-4.5) {$h_9$};
+\node[leaf] (h9) at (2.2,-4.5) {$h_9$};
 
 % t10=0, t2=0, t11=0, t8=0: {h1,h2,h10}
-\node[decision] (n5) at (0.5,-6) {$t_{12}$};
+\node[decision] (n5) at (5,-6) {$t_{12}$};
 % t10=0, t2=0, t11=0, t8=1: {h4}
-\node[leaf] (h4) at (2.0,-6) {$h_4$};
+\node[leaf] (h4) at (3.4,-6) {$h_4$};
 
 % t10=0, t2=0, t11=0, t8=0, t12=0: {h2}
-\node[leaf] (h2) at (-0.2,-7.5) {$h_2$};
+\node[leaf] (h2) at (4,-7.5) {$h_2$};
 % t10=0, t2=0, t11=0, t8=0, t12=1: {h1}
-\node[leaf] (h1) at (1,-7.5) {$h_1$};
+\node[leaf] (h1) at (5.5,-7.5) {$h_1$};
 % t10=0, t2=0, t11=0, t8=0, t12=2: {h10}
-\node[leaf] (h10) at (2.2,-7.5) {$h_{10}$};
+\node[leaf] (h10) at (6.5,-7.5) {$h_{10}$};
 
 % Edges
 \draw[arrow] (root) -- (n1) node[midway, left, font=\tiny] {0};
@@ -146,5 +154,7 @@ $h_{10}$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
 \draw[arrow] (n5) -- (h10) node[midway, right, font=\tiny] {2};
 
 \end{tikzpicture}
+}
+\normalsize
 \caption*{(c) Valid decision tree}
 \end{minipage}

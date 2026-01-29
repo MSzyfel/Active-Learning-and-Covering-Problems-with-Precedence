@@ -1,5 +1,5 @@
 \begin{table}[t!]
-\caption{Hardness and inapproximability results for covering and decision tree problems. All results are from Section~\ref{sec:hardness}. PDS denotes results conditional on the Planted Dense Subgraph Conjecture.}
+\caption{Hardness and inapproximability results for covering and decision tree problems. All results are from Section~\ref{sec:hardness}. PDS denotes results conditional on the Planted Dense Subgraph Conjecture. For general precedence constraints, $n$ denotes the universe size (or number of hypotheses) and $m$ denotes the number of sets (or tests).}
 \label{tab:hardness}
 \centering
 {
@@ -11,11 +11,11 @@
 none & $(1-o(1))H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $o(\log n)$ \\
 & \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
 \cdashline{2-5}
-outforest & $o(\log^{2} n)$ & $(4-\epsilon)$ & $o(\log^{2} n)$ & $o(\log^{2} n)$ \\
-& (Thm.~\ref{thm:PCSC-outforest-hardness}) & \cite{ApproximatingMinSumSetCover} & (Cor.~\ref{thm:PCWCDT-outforest-hardness}) & (Cor.~\ref{thm:PCACDT-outforest-hardness}) \\
+outforest & $o(\log^{2} n)$ & $o(\log^{2-\epsilon} n)$ & $o(\log^{2} n)$ & $o(\log^{2} n)$ \\
+& (Thm.~\ref{thm:PCSC-outforest-hardness}) & \cite{ApproxAlgsForOptDTsAndAdapTSPProblems} & (Cor.~\ref{thm:PCWCDT-outforest-hardness}) & (Cor.~\ref{thm:PCACDT-outforest-hardness}) \\
 \cdashline{2-5}
-general & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ \\
-& (Thm.~\ref{thm:PCSC-PDS-hardness}) & (Thm.~\ref{thm:PCMSSC-PDS-hardness}) & (Thm.~\ref{thm:PCWCDT-PDS-hardness}) & (Thm.~\ref{thm:PCACDT-PDS-hardness}) \\
+general & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ \\
+& (Thm.~\ref{thm:PCSC-PDS-hardness}) & (Thm.~\ref{thm:PCMSSC-PDS-hardness}) & (Cor.~\ref{thm:PCWCDT-PDS-hardness}) & (Cor.~\ref{thm:PCACDT-PDS-hardness}) \\
 & PDS & PDS & PDS & PDS \\
 \bottomrule
 \end{tabular}

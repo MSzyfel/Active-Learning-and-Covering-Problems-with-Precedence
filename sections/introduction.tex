@@ -14,7 +14,19 @@ In this work we generalize this proces by considering precedence relation betwee
 Then, a test $t$ can be performed only when all its predecesors had to be performed previously (to which we refer as \emph{precedence-closed} solution).
 On the applicability side, the binary search itself includes numerous use cases, some of them in the area of biology \cite{BayesianLearnerOptimalNoisyBinarySearch}.
 For example, if hypotheses were to represent possible conditions or deseases, and each test distinguishes between some pairs of hypotheses, then precedence constaints would represent some ordering on performing tests.
-Such contraints may arise due to multiple reasons. For example if the tests are medical procedures, then it may happen that some tests are more invasive or expensive than others, and thus should be performed only after less invasive ones. Similarly, since some tests may be more costly, the hospital policy may enforce performing cheaper tests first. Additionally, it can also happen that a given test is a prerequisite for another test, e.g., a blood test may be required before performing a biopsy. At last it might also be a case that a large test consists of multiple stages, each with its own outcomes, and the later stages can be performed only after the earlier ones.
+Such contraints may arise due to multiple reasons. For example if the tests are medical procedures, then it may happen that some tests are more invasive or expensive than others, and thus should be performed only after less invasive ones. Similarly, since some tests may be more costly, the hospital policy may enforce performing cheaper tests first. Additionally, it can also happen that a given test is a prerequisite for another test, e.g., a blood test may be required before performing a biopsy. At last it might also be a case that a large test consists of multiple stages, each with its own outcomes, and the later stages can be performed only after the earlier ones. To see a visual example of such a scenario consider Figure~\ref{fig:pcal_example}.
+
+\begin{figure}[t!]
+\begin{minipage}[t]{0.47\textwidth}
+\input{figures/pcal_example}
+\caption{Decision tree with precedence.}\label{fig:pcal_example}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.47\textwidth}
+\input{figures/pccp_example}
+\caption{Set cover with precedence.}\label{fig:pccp_example}
+\end{minipage}
+\end{figure}
 
 The aforementioned precedence constraints make the decision tree problem significantly more challenging. In a classical setup (without precedence constraints) the usual way of proceeding is to select at each step a test that maximizes some measure of information gain (e.g., reduction in entropy or number of remaining hypotheses). However, when precedence constraints are present, it may happen that the most informative test is not available at the current step, as some of its predecesors have not been performed yet. This requires more global planning and careful selection of tests to ensure that the decision tree remains valid with respect to the precedence constraints.
 The method to address this issue is through a series of `reductions' between other optimization problems.
@@ -22,7 +34,7 @@ By this we mean an approach, where a particular algorithm for one problem uses a
 Particularly, we study a set covering problems with precedences:
 We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup_{S\in\cS}S=\cU$, an arbitrary partial order $(\cS,\preceq)$ on these subsets and a parameter $f$, $0<f<1$.
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $f$-fraction of items from $\cU$ if $\spr{\bigcup_{C\in\cC}C}\geq f\cdot n$.
-We ask for a $\cC\subseteq\cS$ that covers at least $f\cdot n$ items from $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$. We measure the quality of such $\cC$ by either its size $\spr{\cC}$ or the average time it takes to cover an item from $\cU$ (assuming some order of selecting sets from $\cC$ consistent with the precedence constraints).
+We ask for a $\cC\subseteq\cS$ that covers at least $f\cdot n$ items from $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$. We measure the quality of such $\cC$ by either its size $\spr{\cC}$ or the average time it takes to cover an item from $\cU$ (assuming some order of selecting sets from $\cC$ consistent with the precedence constraints). For a visual example of such a scenario consider Figure~\ref{fig:pccp_example}.
 We show how to reduce the decision tree problem with precedences to the above set covering problems with precedences. Then we develop approximation algorithms for the set covering problems themselves. The approximation algorithms that we propose en route, e.g. for precedence constrained set cover, are of independent interest.
 
 % \medskip
