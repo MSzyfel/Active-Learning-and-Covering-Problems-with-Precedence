@@ -33,6 +33,34 @@ Interestingly, this problem is connected to a seemingly unrelated problem of par
 		\item If at least one literal vertex was queried then a clause gadget can be quarried in "short" time, because some "middle" vertex of the component was quarried. 
 	\end{itemize}
 	
+	\begin{figure}[htbp]
+		\centering
+		\input{figures/clause_gadget.tex}
+		\caption{Clause gadget for $c_i = \{v_i^1, v_i^2, v_i^3\}$.}
+		\label{fig:clause_gadget}
+	\end{figure}
+	
+	\begin{figure}[htbp]
+		\centering
+		\input{figures/variable_gadget.tex}
+		\caption{Variable gadget for $v_i$.}
+		\label{fig:variable_gadget}
+	\end{figure}
+	
+	\begin{figure}[htbp]
+		\centering
+		\input{figures/reduction_example.tex}
+		\caption{Overall path structure in the reduction. Clause gadgets are connected by separator edges into a clause module, followed by variable gadgets connected into a variable module. The entire structure forms a single path.}
+		\label{fig:reduction_path}
+	\end{figure}
+	
+	\begin{figure}[htbp]
+		\centering
+		\input{figures/reduction_precedence.tex}
+		\caption{Precedence constraints DAG. Separator edges form a binary tree (top), which precede all variable edges (middle) and clause edges (bottom). Blue dashed arrows show precedence from variable edges to clause literal edges, green dashed arrows show that all variable edges precede clause boundary edges.}
+		\label{fig:reduction_precedence}
+	\end{figure}
+	
 	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $C$, and variables, denoted by $V$, is as follows.
 	To construct all other edges e graph:
 	\begin{enumerate}
