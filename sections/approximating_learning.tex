@@ -2,19 +2,19 @@
 
 % To build our algorithm we will make use of the following definition:
 % \begin{definition}[Sepcover]
-%     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPTW\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
+%     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPT\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
 % \end{definition}
 
 The following definition gives a basic tool for our algorithm.
 \begin{definition}[Sepcover]
   Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
-  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ hypotheses as potential targets.
+  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
   Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $\COSTW\br{D}=\OPTW\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
 \end{definition}
 Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
 Let initially $v$ be the root.
-If more that $\spr{\cH}/2$ hypotheses are potential targets after the query to $v$, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
+If more than $\spr{\cH}/2$ hypotheses are potential targets after the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
 Otherwise the process is over.
 This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
 
@@ -51,7 +51,7 @@ By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 \medskip
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) that will be used in both cases.
-The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance might also include probabilities which we also pass to the black-box.
+The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance also includes probabilities which we also pass to the black-box.
 Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$ is used to split the instance and make recursive calls.
 Note that the $S$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
 Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests in $S$.
@@ -147,6 +147,8 @@ We therefore obtain the following corollary:
     \end{itemize}
 \end{corollary}
 
+
+
 \subsection{Precedence Constrained Average Case Decision Tree} \label{subsection:PCACDT}
 
 We start with few observations that will be used for a lower bound on an optimal solution.
@@ -173,14 +175,14 @@ Here, $D-S$ is the collection of subtrees (a forest) obtained by the removal of 
 As an immediate corollary, by taking an optimal $D$ and the corresponding $S=\sepcover{\cI}$ we have:
 \begin{observation} \label{obs:sepcoverAC}
     Let $\cI$ be any instance of $\ProblemPCACDT$.
-    Then, $\COSTA\br{\sepcover{\cI}} \leq \OPTA\br{\cI}$.
+    Then, $\COSTA\br{\sepcover{\cI}} \leq \OPT\br{\cI}$.
 \end{observation}
 
 \paraTitle{Remark on notation.}
 Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
 
 We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
-This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPTA\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
+This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
 \DD{do rozwazenia fix notacyjny: $\sepcover{\cI}$ to jest zbior, a tutaj mamy do czynienia z suma zalezna od kolejnosci}
 
 However, since in this case we have arbitrary probability distrubution on hypotheses, we firstly emply a rounding technique which firstly scales the probabilities to polynomial size integers. Below we present which does so, by incurring only a 2-factor loss in the approximation.
@@ -190,10 +192,10 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 \DD{dodalem lower bound dla lemma}
 \begin{lemma} \label{lemma:rounding}
     Let $\cI=\br{\cH, \cT, \cF, p}$ be any instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$.
-    Then, for the instance $\cI'=\br{\cH, \cT, \cF, p'}$ it holds $z(h)\in \mathbb{N}$ and $\OPTA\br{\cI}\leq\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$.
+    Then, for the instance $\cI'=\br{\cH, \cT, \cF, p'}$ it holds $z(h)\in \mathbb{N}$ and $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$.
 \end{lemma}
 \begin{proof}
-    Note that the lower bound $\OPTA\br{\cI}\leq\OPTA\br{\cI'}$ follows from $p\leq p'$, and it remains to upper bound $\OPTA\br{\cI'}$.
+    Note that the lower bound $\OPT\br{\cI}\leq\OPT\br{\cI'}$ follows from $p\leq p'$, and it remains to upper bound $\OPT\br{\cI'}$.
     Since $z(h) \leq p(h)/q + 1$, $s_z \leq \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n$.
     Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
     By $p\leq p'$ and the optimality of $D'$ for $\cI'$, we get $\COSTA\br{D', \cI} \leq \COSTA\br{D', \cI'}\leq \COSTA\br{D, \cI'}$.
@@ -211,7 +213,7 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
     where the second inequality is by Observation~\ref{obs:dec-tree-averaging} again and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \cO(nm)$.
 %
-%     We now argue that $\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
+%     We now argue that $\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
 %     \begin{align*}
 %     \COSTA\br{D', \cI} &\leq q\cdot \COSTA\br{D', \cI'}\\&\leq
 %     q\cdot \COSTA\br{D, \cI'}
@@ -261,32 +263,32 @@ The following observation is analogous to Observation~\ref{obs:DS}:
 \end{theorem}
 \begin{proof}
     Let $\cI=\br{\cH, \cT, \cF, p}$ be an instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$ with $q=\frac{1}{nm}$.
-    By Lemma~\ref{lemma:rounding}, for the rounded instance $\cI'=\br{\cH, \cT, \cF, p'}$ we have $\OPTA\br{\cI}\leq\OPTA\br{\cI'} \leq 2 \cdot \OPTA\br{\cI}$ and $z(h)\in \mathbb{N}$ for each $h\in\cH$, where $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$.
+    By Lemma~\ref{lemma:rounding}, for the rounded instance $\cI'=\br{\cH, \cT, \cF, p'}$ we have $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$ and $z(h)\in \mathbb{N}$ for each $h\in\cH$, where $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$.
     
     Consider a call to \ProcDecisionTree on input $\cI'=\br{\cH, \cT, \cF, p', \blackBox}$, where $\blackBox$ is a $\br{\beta,\mu}$-approximation algorithm for $\ProblemPCMSSC$.
     Let $D$ be the decision tree returned by this call.
     We will prove by induction on $s_z$ that
     \begin{equation} \label{eq:ACinduction-sz}
-     \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'}.
+     \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'}.
     \end{equation}
 
     The base case when $s_z=1$ (equivalently, $\spr{\cH}=1$) is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI'' = \br{\cH', \cT, \cF, p'}$ such that $\cH' \subseteq \cH\setminus S$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPTA\br{\cI''}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
+    Assume by induction that for every $\cI'' = \br{\cH', \cT, \cF, p'}$ such that $\cH' \subseteq \cH\setminus S$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
     We have
 \begin{align*}
     \COSTA\br{D, \cI'} \leq & \COSTA\br{D_S, \cI'} + \sum_{\cH' \in \cH \setminus S} \COSTA\br{D'(\cH'), \cI''} \\
-    \leq & \beta \cdot \COSTA\br{\sepcover{\cI'}, \cI'} + \sum_{\cH' \in \cH \setminus S} \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPTA\br{\cI''} \\
-    \leq & \beta \cdot \OPTA\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{\frac{\br{4\mu-1}\cdot s_z}{4\mu}} \cdot \OPTA\br{\cI'} \\
-    = & \beta \cdot \OPTA\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'} - \beta\cdot \OPTA\br{\cI'} \\
-    = & \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPTA\br{\cI'},
+    \leq & \beta \cdot \COSTA\br{\sepcover{\cI'}, \cI'} + \sum_{\cH' \in \cH \setminus S} \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''} \\
+    \leq & \beta \cdot \OPT\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{\frac{\br{4\mu-1}\cdot s_z}{4\mu}} \cdot \OPT\br{\cI'} \\
+    = & \beta \cdot \OPT\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'} - \beta\cdot \OPT\br{\cI'} \\
+    = & \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'},
 \end{align*}
 where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $s_z'\leq \frac{(4\mu -1)}{4\mu}\cdot s_z$ for every $\cH' \in \cH\setminus S$ (since the $\blackBox$ covers a $1/(4\mu)$ fraction of the total probability mass).
 
 Since $s_z \leq nm + n$ and by Lemma~\ref{lemma:rounding}, we have
 \begin{align*}
-\COSTA\br{D, \cI} &\leq \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPTA\br{\cI'} 
+\COSTA\br{D, \cI} &\leq \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPT\br{\cI'}
 \\&\leq 
-\frac{2\cdot\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPTA\br{\cI}\leq \frac{4\cdot \beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n} \cdot \OPTA\br{\cI}
+\frac{2\cdot\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPT\br{\cI}\leq \frac{4\cdot \beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n} \cdot \OPT\br{\cI}
 \end{align*}
 This concludes the proof.
 \end{proof}

@@ -6,7 +6,6 @@
 For any set $X$, we denote by $\spr{X}$ its cardinality.
 For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1, 2, \ldots, k}$.
 Throughout this paper, $n$ denotes the number of elements in a universe or the number of hypotheses, and $m$ denotes the number of sets or tests.
-The $n$-th \emph{harmonic number} is $H_n = \sum_{i=1}^{n} \frac{1}{i} = \Theta(\log n)$.
 
 \paraTitle{Precedence constraints and coverage.}
 For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
@@ -17,15 +16,6 @@ For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA
 We use $\cI$ to denote an instance of a problem.
 For optimization problems, $\OPT\br{\cI}$ denotes the value of an optimal solution to instance $\cI$.
 
-\paraTitle{Density.}
-The \emph{density} of a nonempty subfamily $\cA$ on a universum $X$ (where $A\subseteq X$ for each $A\in\cA$) is
-\[
-\Delta\br{\cA, X} = \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}.
-\]
-For convenience, we define $\Delta\br{\emptyset, X} < 0$.
-We write $\Delta\br{\cA}$ when $X$ is clear from the context.
-
-\medskip
 \subsection{Problem Definitions}
 
 \paraTitle{Decision tree problems.}
@@ -60,11 +50,11 @@ For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms (cf. Section~\ref{sec:AL}).
 
 \begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case. That is, find a decision tree $D$ such that $\COSTW\br{D}=\OPTW\br{\cI}$.
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case. That is, find a decision tree $D$ such that $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
 \begin{problem}[Precedence Constrained Average Case Decision Tree ($\ProblemPCACDT$)] \label{problem:PCACDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\cT,\preceq)$ on tests, and a probability distribution $p: \cH \to [0,1]$ over the hypotheses (where $\sum_{h \in \cH} p(h) = 1$), find a precedence-closed decision tree strategy that outputs the target hypothesis $\target$ and minimizes the expected number of tests. That is, find a decision tree $D$ such that $\COSTA\br{D}=\OPTA\br{\cI}$.
+Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\cT,\preceq)$ on tests, and a probability distribution $p: \cH \to [0,1]$ over the hypotheses (where $\sum_{h \in \cH} p(h) = 1$), find a precedence-closed decision tree strategy that outputs the target hypothesis $\target$ and minimizes the expected number of tests. That is, find a decision tree $D$ such that $\COSTA\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
 \paraTitle{Additional notation for decision trees.}
@@ -102,6 +92,12 @@ For $\ProblemBPCSC$, which is a maximization problem with a budget constraint, w
 \medskip
 \paraTitle{Maximum density problems.}
 The algorithms for set covering are in turn obtained via a reduction from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
+The \emph{density} of a nonempty subfamily $\cA$ on a universum $X$ (where $A\subseteq X$ for each $A\in\cA$) is
+\[
+\Delta\br{\cA, X} = \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}.
+\]
+For convenience, we define $\Delta\br{\emptyset, X} < 0$.
+We write $\Delta\br{\cA}$ when $X$ is clear from the context.
 
 \begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
 Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$ and a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
