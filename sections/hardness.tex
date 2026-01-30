@@ -197,14 +197,18 @@ As an immediate corollaries of Theorem \ref{thm:PCSC-to-PCWCDT-hardness} and \re
 \begin{corollary}\label{thm:PCACDT-outforest-hardness}
     $\ProblemPCACDT$ with outforest precedence constraints is NP-hard to approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{corollary}
+
 \subsection{General precedence constraints}
 In this section we show strong inapproximability results for \ProblemPCWCDT\ and \ProblemPCACDT\ with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
-
-The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \alpha $ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$:
-\begin{itemize}
-    \item With probability 1/2, $G_1$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$,
-    \item With probability 1/2, $G_2$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
-\end{itemize}
+\begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture]
+For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: (1) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$, (2) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
+\end{conjecture}
+\DD{DD: tutaj wkleiłem conjecture i zakomentowałem jej parafrezę (możemy podmienić, ale nie ma sensu mieć obu).}
+% The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \alpha $ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$:
+% \begin{itemize}
+%     \item With probability 1/2, $G_1$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$,
+%     \item With probability 1/2, $G_2$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
+% \end{itemize}
 Using this conjecture one can show the following inapproximability results for \ProblemPCMSSC\ \cite{PCMSSC}:
 \begin{theorem}\label{thm:PCMSSC-PDS-hardness}
     For any $\epsilon>0$ \ProblemPCMSSC\ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.

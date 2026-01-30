@@ -1,20 +1,34 @@
 \begin{table}[ht!]
-\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. (* denotes new results, ** denotes previously unmentioned corollaries of known results).}
+\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. (* denotes new results, \DD{** denotes previously unmentioned corollaries of known results)}.}
 \label{tab:results}
 \centering
 {
-\small
-\begin{tabular}{p{0.08\linewidth}C{0.15\linewidth}C{0.15\linewidth}C{0.16\linewidth}C{0.13\linewidth}C{0.2075\linewidth}}
+\footnotesize
+\begin{tabular}{p{0.077\linewidth}C{0.14\linewidth}C{0.14\linewidth}C{0.15\linewidth}C{0.13\linewidth}C{0.19\linewidth}}
 \toprule
-\textbf{prec} & \textbf{B-PCSC} & \textbf{F-PCSC} & \textbf{F-PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
+\textbf{prec.} & \textbf{B-PCSC} & \textbf{F-PCSC} & \textbf{F-PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
 \midrule
 \multirow{2}{\linewidth}{none} & $\br{1, \frac{e}{e-1}}$ & $\br{1, \frac{e}{e-1}}$  & $\br{\frac{4e}{e-1},1}$ & $\cO(\log n)$  & $\cO(\log n)$  \\
       &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & \cite{EfficientSequencesOfTrials} &  \cite{DiagnosisDetermination} & \cite{DiagnosisDetermination} \\
+
+\addlinespace[2pt]
 \cdashline{2-6}
+\addlinespace[2pt]
+
 inforest & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1711.35, \frac{e}{e-1}}$ (Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC})* & $\cO(\log n)$ (Cor.~\ref{cor:PCWCDT-special-cases})* & $\cO(\log(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
+
+
+\addlinespace[2pt]
 \cdashline{2-6}
+\addlinespace[2pt]
+
 outforest & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\cO(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest})* & $\cO(\log^2 n)$ (Cor.~\ref{cor:PCWCDT-special-cases})* & $\cO(\log^2(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
+
+
+\addlinespace[2pt]
 \cdashline{2-6}
+\addlinespace[2pt]
+
 general & $\br{\sqrt{m \cdot H_n}+1, 1}$ (Thm.~\ref{thm:BPCSC})* & $\br{\cO(\sqrt{m}/f), 2}$ (Thm.~\ref{thm:MDPCStoPCSC}), $\br{\sqrt{m \cdot H_n}+1, 1}$ (Cor.~\ref{cor:BPCSC-to-PCSC})* & $(\sqrt{m \cdot H_n}+1, 1)$ (Thm.~\ref{thm:BPCSC-to-PCMSSC})* & $\cO(\sqrt{m}\log n)$ (Thm.~\ref{thm:alphaPCWCDT})* & $\cO(\sqrt{m}\log^{3/2}\!(m+n))$ (Cor.~\ref{cor:PCACDT-special-cases})* \\
 \bottomrule
 \end{tabular}

@@ -210,7 +210,7 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
     \leq
     2 \cdot \COSTA\br{D, \cI}
     \end{align*}
-    where the second inequality is by Observation~\ref{obs:dec-tree-averaging} again and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
+    where the second inequality is by Observation~\ref{obs:dec-tree-averaging} and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq \sum_{h\in\cH}p\br{h} = 1$.
 %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \cO(nm)$.
 %
 %     We now argue that $\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.

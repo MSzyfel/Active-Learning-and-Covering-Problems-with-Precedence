@@ -128,6 +128,7 @@
 \newcommand{\sepcover}[1]{P^*\br{#1}}
 \newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
 \newcommand{\closure}[1]{\operatorname{closure}[#1]}
+\newcommand{\budget}{b}
 
 
 \usepackage[T1]{fontenc}
@@ -175,19 +176,34 @@
 
 \maketitle
 
-\begin{abstract}%
+\begin{abstract}
+This work considers a number of optimization problems and reductive relations between them.
+The two main problems we are interested in are the \emph{Optimal Decision Tree} problems and \emph{Set Cover}.
+These two fundamental tasks are studied under precedence constraints, that is, if a query (or set) $X$ is a predecessor of $Y$, then $Y$ needs to have $X$ as an ancestor in a feasible decision tree (or respectively, if $Y$ is added to set cover, then so must be $X$).
+For the Optimal Decision Tree we study two optimization criteria: worst case search time (height of the tree) or the average search time.
+For Set Cover the criteria are the number of items covered, the number of subsets chosen for the cover, or the average coverage time, giving $2$-criteria optimization problems.
 
-  We consider the Optimal Decision Tree problem in which a hidden hypothesis is required to be uncovered by performing a series of tests, each of which reveals partial information about the hidden hypothesis. 
-  Upon receiving this information, the learner adaptively selects the next test to be performed. 
-  The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
-
-  In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
-
-  For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
-  This paper explores the connection of optimal decision trees and covering problems under such constraints. 
-  
-  We show that given any bicriteria $\br{\alpha, \cO\br{1}}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $\cO\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any bicriteria $\cO\br{\beta,O\br{1}}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $\cO\br{\beta\cdot \log \br{m+n}}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $\cO^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. To do so, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithmic results with a general $\cO\br{m^{1/12-\epsilon}}$ and $\cO\br{n^{1/6-\epsilon}}$-hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $\cO\br{\log^2n}$-inapproximability results for outforest precedence constraints. We also give NP-hardness results for the special case of babelinary searching in linearly ordered sets with precedence as well as APX-hardness for binary searching in tree-like POSETs with precedence.
+Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides via a black-box usage an approximation for another.
+En route we introduce other optimization problem either to complete the `reduction landscape' or because they hold the essence of the algorithmic method.
+The latter is brought by a problem of finding a maximum density subfamily, where the density is defined as the ratio of the number of items the family covers to its size.
+The picture is complemented by a number of hardness reductions that provide inapproximability gaps for the decision tree and covering problems.
+Besides giving a complete set of results for general precedence constraints, we also provide stronger results for two most typically studied and applicable precedence relations, inforest and outforest.
 \end{abstract}
+
+
+% \begin{abstract}%
+%
+%   We consider the Optimal Decision Tree problem in which a hidden hypothesis is required to be uncovered by performing a series of tests, each of which reveals partial information about the hidden hypothesis.
+%   Upon receiving this information, the learner adaptively selects the next test to be performed.
+%   The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case.
+%
+%   In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
+%
+%   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets.
+%   This paper explores the connection of optimal decision trees and covering problems under such constraints.
+%
+%   We show that given any bicriteria $\br{\alpha, \cO\br{1}}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $\cO\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any bicriteria $\cO\br{\beta,O\br{1}}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $\cO\br{\beta\cdot \log \br{m+n}}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $\cO^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. To do so, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithmic results with a general $\cO\br{m^{1/12-\epsilon}}$ and $\cO\br{n^{1/6-\epsilon}}$-hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $\cO\br{\log^2n}$-inapproximability results for outforest precedence constraints. We also give NP-hardness results for the special case of babelinary searching in linearly ordered sets with precedence as well as APX-hardness for binary searching in tree-like POSETs with precedence.
+% \end{abstract}
 
 \begin{keywords}%
   Optimal decision trees, Set cover, Precedence constraints, Approximation Algorithms%

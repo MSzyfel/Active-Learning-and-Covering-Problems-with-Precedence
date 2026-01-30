@@ -1,27 +1,13 @@
-\section{Preliminaries} \label{sec:preliminaries}
+\section{Preliminaries and problem definitions} \label{sec:preliminaries}
 
-\subsection{Notation}
+\DD{DD:proponuję nie definiować $[k]$, gdyż jest używane w Tw.39, a wcześniej ze 3 razy. A i w Tw. 30 czasem tez jest $\{1,\ldots,x\}$, więc uspójniłbym do tego pełnego.}
+%For any set $X$, we denote by $\spr{X}$ its cardinality.
+%For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1, 2, \ldots, k}$.
 
-\paraTitle{Basic notation.}
-For any set $X$, we denote by $\spr{X}$ its cardinality.
-For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1, 2, \ldots, k}$.
-Throughout this paper, $n$ denotes the number of elements in a universe or the number of hypotheses, and $m$ denotes the number of sets or tests.
+% \paraTitle{Decision tree problems.}
+% In the decision tree problems, we are given a set of hypotheses $\cH$ and a set of tests $\cT$. Each test $t$ is an arbitrary partition of $\cH$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \cH$. The tests are subject to precedence constraints encoded by a DAG $\cF = \brc{\cT, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\cF$ have already been performed.
 
-\paraTitle{Precedence constraints and coverage.}
-For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
-Let $\closure{S}$ denote the minimal precedence-closed subset of $X$.
-For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
-
-\paraTitle{Problem instances and optimal values.}
-We use $\cI$ to denote an instance of a problem.
-For optimization problems, $\OPT\br{\cI}$ denotes the value of an optimal solution to instance $\cI$.
-
-\subsection{Problem Definitions}
-
-\paraTitle{Decision tree problems.}
-In the decision tree problems, we are given a set of hypotheses $\cH$ and a set of tests $\cT$. Each test $t$ is an arbitrary partition of $\cH$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \cH$. The tests are subject to precedence constraints encoded by a DAG $\cF = \brc{\cT, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\cF$ have already been performed.
-
-\paraTitle{Decision tree representation.}
+\paraTitle{Decision trees.}
 In all adaptive learning problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous replies, gives \questioner the next test to be performed.
 This strategy is typically represented as a \textit{decision tree}, a rooted tree $D$ in which internal nodes represent tests to be performed, edges represent replies and each leaf represents a hypothesis.
 Formally, a decision tree is defined recursively as follows.
@@ -31,8 +17,6 @@ Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r
 To complete the inductive definition, if $\cS$ is a trivial strategy that outputs the target, then the corresponding tree $D$ is a leaf labeled with the target.
 It should be remarked that it is possible for a test to appear multiple times in the decision tree.
 However, with a slight abuse of notation we use tests as nodes of $D$ whenever there is no ambiguity.
-
-For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
 
 \paraTitle{Cost measures for decision trees.}
 Let $\tests{D}{v}$ denote the sequence of tests performed in order to arrive at the node $v$ in $D$, including $v$.
@@ -44,54 +28,60 @@ We consider two cost measures for decision trees: the worst-case cost $\COSTW\br
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
 %$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 %$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
-For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.
+%\DD{For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.}
 %(Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCDT$ and $\ProblemPCACDT$, we use the symbol $\ProblemPCDT$ to refer to a \emph{Precedence Constrained Decision Tree} instance).
 
-Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms (cf. Section~\ref{sec:AL}).
-
+\medskip
+Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
+Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution on instance $\cI$.
 \begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case. That is, find a decision tree $D$ such that $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
-
 \begin{problem}[Precedence Constrained Average Case Decision Tree ($\ProblemPCACDT$)] \label{problem:PCACDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\cT,\preceq)$ on tests, and a probability distribution $p: \cH \to [0,1]$ over the hypotheses (where $\sum_{h \in \cH} p(h) = 1$), find a precedence-closed decision tree strategy that outputs the target hypothesis $\target$ and minimizes the expected number of tests. That is, find a decision tree $D$ such that $\COSTA\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
 \paraTitle{Additional notation for decision trees.}
-Suppose that a decision tree strategy performed some tests $T\subseteq\cT$.
-The set $\cH_T\subseteq\cH$ consists of all hypotheses $h$ such that for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$.
-Note that $\cH_T$ does not depend on the order of performing these tests.
-Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v=\cH_T$, where $T=\tests{D}{v}$.
+Suppose that a decision tree strategy $D$ performed some tests $T\subseteq\cT$.
+The set $\cH_T(D)\subseteq\cH$ consists of all hypotheses $h$ such that for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$.
+Note that $\cH_T(D)$ does not depend on the order of performing these tests.
+Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v(D)=\cH_T(D)$, where $T=\tests{D}{v}$.
+We usually write $\cH_T$ when $D$ is clear from the context.
+For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
 
 \medskip
 \paraTitle{Set covering problems.}
-The algorithms for decision tree problems are conditioned on existence of approximations for the set covering variants (cf. Section~\ref{sec:SC}) introduced below.
-
-A permutation $\br{C_1,\ldots,C_l}$ of the elements in a subfamily $\cC$ is \emph{consistent} with a partial order $(\cS,\preceq)$ if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
-The \emph{coverage time} of an element $x\in\cov\br{\cC}$ with respect to a consistent sequence $\br{C_1,\ldots,C_l}$ is the minimum index $i$ such that $x\in C_i$.
+We start by defining the remaining notation.
+%For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
+Let $\closure{S}$, where $S\in\cS$ for a family of sets $(\cS,\preceq)$, be the minimal precedence-closed subset of $\cS$ containing $S$.
+For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
+For a sequence $\cC$ of sets we analogously define $\cov\br{\cC}$ to be the union of all elements in $\cC$.
+A permutation $\br{C_1,\ldots,C_l}$ of the elements in a family $\cC\subseteq\cS$ is \emph{precedence-closed} if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+The \emph{coverage time} of an element $x\in\cov\br{\cC}$ in such precedence-closed sequence $\cC=\br{C_1,\ldots,C_l}$ is the minimum index $i$ such that $x\in C_i$.
+The symbol $\coverageTime\br{\cC}$ denotes the sum of coverage times of all elements in $\cov\br{\cC}$.
+\DD{Uwaga, do wyjaśnienia: $\coverageTime$ nie zlicza sumy dla elementów poza $\cC$.}
 
 \begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)]
 Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $fn$ items and minimizes $\spr{\cC}$.
 \end{problem}
-
 \begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)]
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $(C_1,\ldots,C_l)$ that covers at least $fn$ items and minimizes the sum of coverage times of the elements in $C_1\cup\cdots\cup C_l$.
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $\cC$ that covers at least $fn$ items and \DD{minimizes $\coverageTime\br{\cC}$.}
 \end{problem}
-
-For a sequence $\cC$ being a solution to $\ProblemPCMSSC$, we use the symbol $\coverageTime\br{\cC}$ to denote the sum of coverage times of all elements in $\bigcup_{S\in \cC} S$ (with a slight abuse of notation we use the set notation for a sequence).
-Then, for an instance $\cI=\br{\cU,\cS,\preceq,k}$ of $\ProblemPCMSSC$ define $\optPCMSSC{\cI}=\min\brc{\coverageTime\br{\bigcup_{S\in\cC}} \mid \spr{\bigcup_{S\in\cC} S}\geq k\textup{ and $\cC$ is precedence closed} }$.
-
 \begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)]
-Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $B>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq B$.
+Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 
-We say that an algorithm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$ (respectively $\ProblemPCMSSC$), where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,k)$ it returns a solution $\cC$ that covers at least $k/\alpha$ items and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$ (respectively $\coverageTime\br{\bigcup_{S\in\cC}S}\leq\gamma\cdot\optPCMSSC{\cI}$).
+The algorithms for decision tree problems are conditioned on existence of approximations for the set above covering variants (cf. Section~\ref{sec:SC}).
+For each covering problem we can distinguish two optimality measures with one being the number of covered items and the other being $\spr{\cC}$ or $\coverageTime\br{\cC}$.
+We say that an algorithm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,f)$ it returns a solution $\cC$ such that $\cov\br{\cC}\geq fn/\alpha$ and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$.
+From a $(\gamma,\alpha)$-approximation $\cC$ for $\ProblemPCMSSC$ we require $\cov\br{\cC}\geq fn/\alpha$ and $\coverageTime\br{\cC}\leq\gamma\cdot\OPT\br{\cI}$.
+Likewise, a $(\gamma,\alpha)$-approximation for $\ProblemBPCSC$ for any input instance $\cI=(\cU,\cS,\preceq,\budget)$ returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\alpha}\cdot\OPT\br{\cI}$ and $\spr{\cC}\leq \gamma\cdot \budget$.
+Throughout this paper, $n$ denotes the number of elements in a universum ($n=\spr{\cU}$) or the number of hypotheses ($n=\spr{\cH}$), and $m$ denotes the number of sets or tests ($m=\spr{\cS}$ or $m=\spr{\cT}$).
 
-For $\ProblemBPCSC$, which is a maximization problem with a budget constraint, we say that an algorithm is a $(\gamma,\alpha)$-approximation, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,B)$ it returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\alpha}\cdot\OPT\br{\cI}$ (where $\OPT\br{\cI}$ is the maximum coverage achievable with budget $B$) and $\spr{\cC}\leq \gamma\cdot B$.
 
 \medskip
 \paraTitle{Maximum density problems.}
-The algorithms for set covering are in turn obtained via a reduction from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
+The algorithms for set covering are in turn obtained via reductions from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
 The \emph{density} of a nonempty subfamily $\cA$ on a universum $X$ (where $A\subseteq X$ for each $A\in\cA$) is
 \[
 \Delta\br{\cA, X} = \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}.
@@ -104,38 +94,34 @@ Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$ and
 \end{problem}
 
 \begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)]
-Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $B>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and $\spr{\cA}\leq B$.
+Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $\budget>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and $\spr{\cA}\leq \budget$.
 \end{problem}
 
 \medskip
 \paraTitle{Related problems.}
-\DD{A te problemy to na razie resztowka, ktora gdzies powinna trafic}
-
 For the problems below, let $(V,d)$ denote a metric space with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
 An \emph{$r$-tour} $\tau$ is a walk that starts and ends at vertex $r \in V$.
-Let $\spr{\tau}$ denote the total length of tour $\tau$.
-Let $\cX = \brc{X_1, \ldots, X_g}$ be a family of groups where each $X \in \cX$ is a subset of $V$.
-Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight function assigning a weight to each group.
-Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups covered by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX : X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
-For a tour $\tau$ and group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+Let $\spr{\tau}$ denote the total length of tour $\tau$ \DD{defined as the sum of distances between subsequents elements of $\tau$}.
+Let $\cX$ be a family of groups where each $X \in \cX$ is a subset of $V$.
+Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
+Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX : X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
+For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[Group Steiner Tree (GST)]
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$ and a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, find an $r$-tour $\tau$ such that $\cov\br{\tau} = \cX$ and that minimizes
-$$c(\tau) = \sum_{X \in \cX} w(X) \cdot t_\tau(X).$$
+$c(\tau) = \sum_{X \in \cX} w(X) \cdot t_\tau(X)$.
 \end{problem}
 
 \begin{problem}[Group Steiner Orienteering (GSO)]
-Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $B > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq B$ that maximizes
-$$\sum_{X \in \cov\br{\tau}} w(X).$$
+Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
+$\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{problem}
-
+\DD{DD: w poniższym napisałem krócej kryterium, bo $t_\tau$ jest określone dobrze dla niepokrytych elementów.}
 \begin{problem}[Partial Latency Group Steiner Tree (LPGST)]
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
-$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
+$c(\tau) = \sum_{X \cX} w(X) \cdot t_\tau(X)$.
+%$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
 \end{problem}
 
-\begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture]
-For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: (1) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$, (2) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
-\end{conjecture}
 
 
