@@ -69,10 +69,9 @@ Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\
 
 \paraTitle{Additional notation for decision trees.}
 Suppose that a decision tree strategy performed some tests $T\subseteq\cT$.
-If a hypothesis $h\in\cH$ has the property that for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$, then we say that $h$ is a \emph{potential target}.
-Denote by $\cH_T$ the set of all potential targets after the tests in $T$.
+The set $\cH_T\subseteq\cH$ consists of all hypotheses $h$ such that for each test $t\in T$ the reply is a set $U_t\in t$ such that $h\in U_t$.
 Note that $\cH_T$ does not depend on the order of performing these tests.
-Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v$ consists of all hypotheses that are potential targets after the tests $\tests{D}{v}$.
+Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v=\cH_T$, where $T=\tests{D}{v}$.
 
 \medskip
 \paraTitle{Set covering problems.}
