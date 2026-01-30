@@ -1,0 +1,35 @@
+\begin{tikzpicture}[scale=1.2]
+    % Define node styles
+    \tikzstyle{vertex}=[circle, fill=blue!40, draw=black, thick, minimum size=6mm]
+    \tikzstyle{edge_label}=[font=\small, midway, above]
+    \tikzstyle{vertex_label}=[font=\small]
+    
+    % Title
+    \node[font=\large\bfseries, blue!80] at (5, 1) {Clause gadget for $c_i = \{v_i^1, v_i^2, v_i^3\}$};
+    
+    % Clause gadget for c_i = {v_i^1, v_i^2, v_i^3}
+    \node[vertex, label=below:{$v[C,i,1]$}] (c1) at (0, 0) {};
+    \node[vertex, label=below:{$v[C,i,v_i^1]$}] (cv1) at (2, 0) {};
+    \node[vertex, label=below:{$v[C,i,v_i^{12}]$}] (cv12) at (4, 0) {};
+    \node[vertex, label=below:{$v[C,i,v_i^{23}]$}] (cv23) at (6, 0) {};
+    \node[vertex, label=below:{$v[C,i,v_i^3]$}] (cv3) at (8, 0) {};
+    \node[vertex, label=below:{$v[C,i,2]$}] (c2) at (10, 0) {};
+    
+    % Draw edges
+    \draw[very thick] (c1) -- node[edge_label] {$e^{cla}[i,0]$} (cv1);
+    \draw[very thick] (cv1) -- node[edge_label] {$e^{cla}[i,v_i^1]$} (cv12);
+    \draw[very thick] (cv12) -- node[edge_label] {$e^{cla}[i,v_i^2]$} (cv23);
+    \draw[very thick] (cv23) -- node[edge_label] {$e^{cla}[i,v_i^3]$} (cv3);
+    \draw[very thick] (cv3) -- node[edge_label] {$e^{cla}[i,0']$} (c2);
+    
+    % Precedence annotations
+    \node[above=0.5cm of cv1, align=center, font=\footnotesize] (prec1) {depends on\\$e^{var}[v_i^{1,+}]$ or $e^{var}[v_i^{1,-}]$};
+    \draw[->, dashed, red, thick] (prec1) -- (cv1);
+    
+    \node[above=0.5cm of cv23, align=center, font=\footnotesize] (prec3) {depends on\\$e^{var}[v_i^{3,+}]$ or $e^{var}[v_i^{3,-}]$};
+    \draw[->, dashed, red, thick] (prec3) -- (cv23);
+    
+    \node[above=0.3cm of c1, align=center, font=\footnotesize, text=gray] {depends on all\\variable edges};
+    \node[above=0.3cm of c2, align=center, font=\footnotesize, text=gray] {depends on all\\variable edges};
+    
+\end{tikzpicture}
