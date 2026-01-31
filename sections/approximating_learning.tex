@@ -1,10 +1,5 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
-% To build our algorithm we will make use of the following definition:
-% \begin{definition}[Sepcover]
-%     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPT\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
-% \end{definition}
-
 The following definition gives a basic tool for our algorithm.
 \begin{definition}[Sepcover]
   Let $D$ be any decision tree for an instance $\cI$.
@@ -19,11 +14,11 @@ Figure \ref{fig:sepcover} illustrates the definition of sepcover.
 \caption{Sepcover sequence in a decision tree}
 \label{fig:sepcover}
 \end{figure}
-Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
-Let initially $v$ be the root.
-If more than $\spr{\cH}/2$ hypotheses are potential targets right before the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
-Otherwise the process is over.
-This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
+% Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
+% Let initially $v$ be the root.
+% If more than $\spr{\cH}/2$ hypotheses are potential targets right before the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
+% Otherwise the process is over.
+% This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
 
 We will use two immediate monotonicity properties.
 \begin{lemma}\label{lemma:subspace_opt}

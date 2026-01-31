@@ -287,16 +287,13 @@ We have the following theorem:
     $$
     \mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] = \binom{p\sqrt{N}}{2} \cdot N^{-1/4-\gamma/2}\geq \frac{p^2N}{4} \cdot N^{-1/4-\gamma/2}=\frac{p^2 N^{3/4-\gamma/2}}{4}.
     $$ 
-    
     For this expected value to be sufficiently large (specifically, to be $\Theta(\log^2 N)$), we choose:
-    $$
-    p=32\cdot N^{-3/8+\gamma/4}\cdot \log N.
-    $$
-    
-    With this choice, we have $\mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] \geq 64\log^2 N$, which will allow us to apply concentration bounds effectively.
+    $
+    p=32\cdot N^{-3/8+\gamma/4}\cdot \log N
+    $. 
+	We have $\mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] \geq 64\log^2 N$, which will allow us to apply concentration bounds effectively.
 
     \paragraph{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to PCSC using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\sqrt{N}+N^{3/4-\gamma/2})$.
-    
     Consider the solution that selects all vertex representatives $V_{v,i}$ for all $v \in V(\mathcal{P})$ and all $i \in [\lambda]$, together with all edge representatives $E_{uv}$ for all edges $uv \in E(\mathcal{P})$. The special element $0$ is covered by any vertex representative, so we focus on covering elements in $\{1,\dots, n\}$.
     
     Fix an arbitrary element $j \in \{1,\dots, n\}$. We first bound the number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$. Since $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$, by Chernoff's bound (Theorem \ref{thm:chernoff}) with $\delta = 1/2$, we have:
@@ -365,20 +362,13 @@ We have the following theorem:
     $$
     This condition is satisfied by choosing $n = \Theta(N^{3/4})$.
     
-    Therefore, with high probability, after selecting $\lambda x$ vertex representatives and at most $x^2/\sqrt{N}$ edge representatives, the total number of elements from $\{1,\dots, n\}$ that are covered is at most:
-    $$
-    \frac{x^2}{\sqrt{N}} \cdot 2np^2 = 2np^2 \cdot \frac{x^2}{\sqrt{N}}.
-    $$
-    
-    Substituting $p^2 = 1024 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N$, we get:
-    $$
-    2048 \cdot n \cdot N^{-3/4+\gamma/2}\cdot \log^2 N \cdot \frac{x^2}{\sqrt{N}} = 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot x^2.
-    $$
-    
-    Now, suppose $x \leq N^{(5-2\gamma)/8}$. Then:
-    $$
-    2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot x^2 \leq 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot N^{(5-2\gamma)/4} = 2048 \cdot n \cdot \log^2 N.
-    $$
+    Now, suppose $x \leq N^{(5-2\gamma)/8}$. Then, with high probability, after selecting $\lambda x$ vertex representatives and at most $x^2/\sqrt{N}$ edge representatives, the total number of elements from $\{1,\dots, n\}$ that are covered is at most:
+    \begin{align*}
+    2np^2 \cdot \frac{x^2}{\sqrt{N}} 
+	&= 
+    2048 \cdot n \cdot N^{-3/4+\gamma/2}\cdot \log^2 N \cdot \frac{x^2}{\sqrt{N}} = 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot x^2
+	\\&\leq 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot N^{(5-2\gamma)/4} = 2048 \cdot n \cdot \log^2 N.
+    \end{align*}
     
     Since $n = \Theta(N^{3/4})$, we have $2048 \cdot n \cdot \log^2 N = o(n)$ for sufficiently large $N$. This means that when $x \leq N^{(5-2\gamma)/8}$, at most $o(n)$ elements from $\{1,\dots, n\}$ are covered, leaving $\Omega(n)$ elements uncovered.
     
@@ -388,34 +378,19 @@ We have the following theorem:
     $$
     
     \paragraph{Comparison and conclusion.}
-    We now compare the costs in the two cases to establish the inapproximability ratio. When a planted component exists, with high probability there is a solution of cost at most:
+    We now compare the costs in the two cases to establish the inapproximability ratio. By choosing $\lambda = N^{1/4}$ (or any $\lambda \geq N^{1/4}$) and letting $\gamma$ approach $0$ we have that the ratio between the costs in Case 2 and Case 1 is at least:
     $$
-    \lambda\sqrt{N} + N^{3/4-\gamma/2}.
+    \frac{\lambda N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}}{\lambda\sqrt{N} + N^{3/4-\gamma/2}} = \Omega\br{
+    \frac{N^{5/8}}{N^{1/2}}} = \Omega{N^{1/8}}.
     $$
-    
-    When no planted component exists, with high probability any solution has cost at least:
-    $$
-    \lambda N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}.
-    $$
-    
-    The ratio between these costs is:
-    $$
-    \frac{\lambda N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}}{\lambda\sqrt{N} + N^{3/4-\gamma/2}}.
-    $$
-    
-    By choosing $\lambda = N^{1/4}$ (or any $\lambda \geq N^{1/4}$) and letting $\gamma$ approach $0$, the dominant terms in the numerator and denominator become $N^{5/8}$ and $N^{1/2}$ respectively, giving a ratio approaching:
-    $$
-    \frac{N^{5/8}}{N^{1/2}} = N^{1/8}.
-    $$
-    
-    Since we chose $n = \Theta(N^{3/4})$, we have that the gap is $\Theta(N^{1/8}) = \Theta((N^{3/4})^{1/6}) = \Theta(n^{1/6})$. For any $\epsilon > 0$, by choosing $\gamma$ sufficiently small (but positive), we can make this gap arbitrarily close to $n^{1/6-\epsilon}$.
-    
-    Furthermore, the total number of sets $m$ in the constructed instance is $m = \lambda N + |\mathcal{E}|$. For a graph drawn from $G(N, N^{-1/2})$ (possibly with a planted component), the number of edges is highly concentrated around $\binom{N}{2} \cdot N^{-1/2} = \Theta(N^{3/2})$. With $\lambda = N^{1/4}$, we have $m = \Theta(N^{3/2})$. Therefore, $n = \Theta(N^{3/4}) = \Theta(m^{1/2})$, and the gap can also be expressed as:
-    $$
+
+    Since we chose $n = \Theta(N^{3/4})$, we have that the gap is $\Theta(N^{1/8}) = \Theta((N^{3/4})^{1/6}) = \Theta(n^{1/6})$. By choosing $\gamma$ sufficiently small, we can make this gap arbitrarily close to $n^{1/6}$.
+    Furthermore, the total number of sets $m$ in the constructed instance is $m = \lambda N + |\mathcal{E}|$. For a graph drawn from $G(N, N^{-1/2})$, the number of edges is highly concentrated around $\binom{N}{2} \cdot N^{-1/2} = \Theta(N^{3/2})$. With $\lambda = N^{1/4}$, we have $m = \Theta(N^{3/2})$. Therefore, $n = \Theta(N^{3/4}) = \Theta(m^{1/2})$, and the gap can also be expressed as:
+    $
     \Theta(N^{1/8}) = \Theta((N^{3/2})^{1/12}) = \Theta(m^{1/12}).
-    $$
+    $
     
-    Thus, any polynomial-time algorithm for \ProblemPCSC\ with approximation factor better than $\cO(n^{1/6-\epsilon})$ or $\cO(m^{1/12-\epsilon})$ for any $\epsilon > 0$ could distinguish between the two cases of the Planted Dense Subgraph problem with significant advantage, contradicting the Planted Dense Subgraph Conjecture. This completes the proof.
+    Thus, any polynomial-time algorithm for \ProblemPCSC\ with approximation factor better than $\cO(n^{1/6-\epsilon})$ or $\cO(m^{1/12-\epsilon})$ for any $\epsilon > 0$ could distinguish between the two cases of the Planted Dense Subgraph problem with significant advantage. This completes the proof.
 \end{proof}
 Therefore we immediately have that:
 \begin{corollary}\label{thm:PCWCDT-PDS-hardness}

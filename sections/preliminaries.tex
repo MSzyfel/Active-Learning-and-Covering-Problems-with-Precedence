@@ -35,7 +35,7 @@ We consider two cost measures for decision trees: the worst-case cost $\COSTW\br
 
 \medskip
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
-Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution on instance $\cI$.
+Throughout the paper we use $\cI$ to denote an instance of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution on instance $\cI$.
 \begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case. That is, find a decision tree $D$ such that $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
