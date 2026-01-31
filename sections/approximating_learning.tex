@@ -40,10 +40,10 @@ Figure \ref{fig:sepcover} illustrates the definition of sepcover.
 %We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
 
 Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
-For each test $t\in\cT$
-$$
+For each test $t\in\cT$, let
+$
 \xi(t)=\brc{h\in\cH \mid h\in U \textup{ for some }U\in t\textup{ s.t. }  \spr{U}\leq\frac{3}{4}\spr{\cU}}.
-$$
+$
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.

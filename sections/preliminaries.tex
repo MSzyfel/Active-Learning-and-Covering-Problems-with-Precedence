@@ -1,28 +1,30 @@
 \section{Preliminaries and problem definitions} \label{sec:preliminaries}
 
-\DD{DD:proponuję nie definiować $[k]$, gdyż jest używane w Tw.39, a wcześniej ze 3 razy. A i w Tw. 30 czasem tez jest $\{1,\ldots,x\}$, więc uspójniłbym do tego pełnego.}
 %For any set $X$, we denote by $\spr{X}$ its cardinality.
 %For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1, 2, \ldots, k}$.
 
 % \paraTitle{Decision tree problems.}
 % In the decision tree problems, we are given a set of hypotheses $\cH$ and a set of tests $\cT$. Each test $t$ is an arbitrary partition of $\cH$ into disjoint subsets $U_{t,1}, U_{t,2}, \ldots, U_{t,r_t}$, where $r_t$ is the number of possible responses to test $t$. When a test $t$ is performed, the response indicates which subset $U_{t,j}$ contains the hidden hypothesis $\target \in \cH$. The tests are subject to precedence constraints encoded by a DAG $\cF = \brc{\cT, \preceq}$, meaning that a test $t$ can be performed only if all its predecessors in $\cF$ have already been performed.
 
+\paraTitle{Partial orders and precedence constraints.}
+Throughout this paper, we work with POSETs $(X, \preceq)$, where $\preceq$ is a reflexive, transitive, and antisymmetric binary relation.
+For elements $x, y \in X$, we say that $y$ is a \emph{predecessor} of $x$ if $y \preceq x$, and that $x$ is a \emph{successor} of $y$.
+A subset $S \subseteq X$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
+A sequence $(x_1, x_2, \ldots, x_k)$ of elements from $X$ is \emph{precedence-closed} if for any $x_i$ and $x_j$ such that $x_i \preceq x_j$, we have $i < j$. We consider several special types of partial orders: An \emph{inforest} is a partial order in which every element has at most one successor. An \emph{outforest} is a partial order in which every element has at most one predecessor.
+
 \paraTitle{Decision trees.}
-In all adaptive learning problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous replies, gives \questioner the next test to be performed.
+In decision tree problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous replies, gives \questioner the next test to be performed.
 This strategy is typically represented as a \textit{decision tree}, a rooted tree $D$ in which internal nodes represent tests to be performed, edges represent replies and each leaf represents a hypothesis.
 Formally, a decision tree is defined recursively as follows.
 If $r=\brc{R_1,\ldots,R_l}\in\cT$ is the first test performed by $\cS$, then $r$ is the root of $D$.
-For each reply $R_i$, $i\in\brc{1,\ldots,l}$, take inductively defined decision tree $D_i$ derived from the queries done by $\cS$ when the reply to $r$ is $R_i$.
+For each reply $R_i$, $i\in\brc{1,\ldots,l}$, take inductively defined decision tree $D_i$ derived from the tests done by $\cS$ when the reply to $r$ is $R_i$.
 Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r$, and the edge connecting $r$ to the root of $D_i$ is labeled with the reply $R_i$.
 To complete the inductive definition, if $\cS$ is a trivial strategy that outputs the target, then the corresponding tree $D$ is a leaf labeled with the target.
 It should be remarked that it is possible for a test to appear multiple times in the decision tree.
-However, with a slight abuse of notation we use tests as nodes of $D$ whenever there is no ambiguity.
+However, with a slight abuse of notation we use tests as nodes of $D$ whenever there is no ambiguity. When the tests are subject to a precedence relation $(\cT, \preceq)$, a decision tree $D$ is \emph{precedence-closed} if for every node $v$ in $D$, the set of tests on the path from the root to $v$ forms a precedence-closed sequence so that a test $t$ can be executed only if all its predecessors in $(\cT, \preceq)$ have already been performed
 
 \paraTitle{Cost measures for decision trees.}
-Let $\tests{D}{v}$ denote the sequence of tests performed in order to arrive at the node $v$ in $D$, including $v$.
-In other words, $\tests{D}{v}$ consists of the nodes of the path from the root to $v$ in $D$.
-The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}-1$, where $v$ is the leaf of $D$ that represents the event of declaring that $h$ is the target.
-
+Let $\tests{D}{v}$ denote the sequence of tests on the path from the root to $v$ in $D$ including $v$. The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}$, where $v$ is the leaf of $D$ that represents identifying $h$ as the target.
 Let $p: \cH \to [0,1]$ be a probability distribution over the hypotheses, where $\sum_{h \in \cH} p(h) = 1$.
 We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \mathbb{E}_{h \sim p}\left[\COST\br{D, h}\right] = \sum_{h \in \cH} p(h) \cdot \COST\br{D, h}$.
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
@@ -57,17 +59,16 @@ Let $\closure{S}$, where $S\in\cS$ for a family of sets $(\cS,\preceq)$, be the 
 For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
 For a sequence $\cC$ of sets we analogously define $\cov\br{\cC}$ to be the union of all elements in $\cC$.
 A permutation $\br{C_1,\ldots,C_l}$ of the elements in a family $\cC\subseteq\cS$ is \emph{precedence-closed} if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
-The \emph{coverage time} of an element $x\in\cov\br{\cC}$ in such precedence-closed sequence $\cC=\br{C_1,\ldots,C_l}$ is the minimum index $i$ such that $x\in C_i$.
+The \emph{coverage time} of an element $x\in\cov\br{\cC}$ in such precedence-closed sequence $\cC=\br{C_1,\ldots,C_l}$ is the minimum index $i$ such that $x\in C_i$ if such index exists, and $\spr{\cC}$ otherwise.
 The symbol $\coverageTime\br{\cC}$ denotes the sum of coverage times of all elements in $\cov\br{\cC}$.
-\DD{Uwaga, do wyjaśnienia: $\coverageTime$ nie zlicza sumy dla elementów poza $\cC$.}
 
-\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)]
+\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)] \label{problem:PCSC}
 Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $fn$ items and minimizes $\spr{\cC}$.
 \end{problem}
-\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)]
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $\cC$ that covers at least $fn$ items and \DD{minimizes $\coverageTime\br{\cC}$.}
+\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $\cC$ that covers at least $fn$ items and minimizes $\coverageTime\br{\cC}$.
 \end{problem}
-\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)]
+\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 
@@ -81,19 +82,18 @@ Throughout this paper, $n$ denotes the number of elements in a universum ($n=\sp
 
 \medskip
 \paraTitle{Maximum density problems.}
-The algorithms for set covering are in turn obtained via reductions from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
-The \emph{density} of a nonempty subfamily $\cA$ on a universum $X$ (where $A\subseteq X$ for each $A\in\cA$) is
-\[
+The algorithms for set covering are obtained via reductions from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
+The \emph{density} of a nonempty subfamily $\cA$ on a universum $X$ is
+$
 \Delta\br{\cA, X} = \frac{\spr{\cov\br{\cA, X}}}{\spr{\cA}}.
-\]
-For convenience, we define $\Delta\br{\emptyset, X} < 0$.
-We write $\Delta\br{\cA}$ when $X$ is clear from the context.
+$
+We write $\Delta\br{\cA}$ when $X$ there is no ambiguity.
 
-\begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)]
+\begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)] \label{problem:MDPCS}
 Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$ and a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
 \end{problem}
 
-\begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)]
+\begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)] \label{problem:BMDPCS}
 Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $\budget>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and $\spr{\cA}\leq \budget$.
 \end{problem}
 
@@ -101,23 +101,21 @@ Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a 
 \paraTitle{Related problems.}
 For the problems below, let $(V,d)$ denote a metric space with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
 An \emph{$r$-tour} $\tau$ is a walk that starts and ends at vertex $r \in V$.
-Let $\spr{\tau}$ denote the total length of tour $\tau$ \DD{defined as the sum of distances between subsequents elements of $\tau$}.
 Let $\cX$ be a family of groups where each $X \in \cX$ is a subset of $V$.
 Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX : X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
 For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
-\begin{problem}[Group Steiner Tree (GST)]
+\begin{problem}[Group Steiner Tree (GST)] \label{problem:GST}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$ and a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, find an $r$-tour $\tau$ such that $\cov\br{\tau} = \cX$ and that minimizes
 $c(\tau) = \sum_{X \in \cX} w(X) \cdot t_\tau(X)$.
 \end{problem}
 
-\begin{problem}[Group Steiner Orienteering (GSO)]
+\begin{problem}[Group Steiner Orienteering (GSO)] \label{problem:GSO}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{problem}
-\DD{DD: w poniższym napisałem krócej kryterium, bo $t_\tau$ jest określone dobrze dla niepokrytych elementów.}
-\begin{problem}[Partial Latency Group Steiner Tree (LPGST)]
+\begin{problem}[Partial Latency Group Steiner Tree (LPGST)] \label{problem:LPGST}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
 $c(\tau) = \sum_{X \cX} w(X) \cdot t_\tau(X)$.
 %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$

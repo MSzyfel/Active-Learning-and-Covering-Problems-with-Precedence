@@ -180,16 +180,16 @@
 
 \begin{abstract}
 This work considers a number of optimization problems and reductive relations between them.
-The two main problems we are interested in are the \emph{Optimal Decision Tree} problems and \emph{Set Cover}.
+The two main problems we are interested in are the \emph{Optimal Decision Tree} and \emph{Set Cover}.
 These two fundamental tasks are studied under precedence constraints, that is, if a query (or set) $X$ is a predecessor of $Y$, then $Y$ needs to have $X$ as an ancestor in a feasible decision tree (or respectively, if $Y$ is added to set cover, then so must be $X$).
-For the Optimal Decision Tree we study two optimization criteria: worst case search time (height of the tree) or the average search time.
-For Set Cover the criteria are the number of items covered, the number of subsets chosen for the cover, or the average coverage time, giving $2$-criteria optimization problems.
+For the Optimal Decision Tree we consider two optimization criteria: worst case identification time (height of the tree) or the average identification time.
+Similarly, for the Set Cover we study two cost measures: size of the cover or the average cover time.
 
 Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides via a black-box usage an approximation for another.
-En route we introduce other optimization problem either to complete the `reduction landscape' or because they hold the essence of the algorithmic method.
-The latter is brought by a problem of finding a maximum density subfamily, where the density is defined as the ratio of the number of items the family covers to its size.
-The picture is complemented by a number of hardness reductions that provide inapproximability gaps for the decision tree and covering problems.
-Besides giving a complete set of results for general precedence constraints, we also provide stronger results for two most typically studied and applicable precedence relations, inforest and outforest.
+En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of the algorithmic method.
+The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*\br{\sqrt{m}}$-approximation algorithms for all of the aforementioned problems.
+The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability gaps for the decision tree and covering problems.
+Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence relations, inforest and outforest which are tight.
 \end{abstract}
 
 
@@ -225,16 +225,16 @@ Besides giving a complete set of results for general precedence constraints, we 
 
 \bibliography{bib-pcal}
 
-\appendix
+% \appendix
 
-% \crefalias{section}{appendix} % uncomment if you are using cleveref
+% % \crefalias{section}{appendix} % uncomment if you are using cleveref
 
-\section{My Proof of Theorem 1}
+% \section{My Proof of Theorem 1}
 
-This is a boring technical proof.
+% This is a boring technical proof.
 
-\section{My Proof of Theorem 2}
+% \section{My Proof of Theorem 2}
 
-This is a complete version of a proof sketched in the main text.
+% This is a complete version of a proof sketched in the main text.
 
 \end{document}

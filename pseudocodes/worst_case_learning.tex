@@ -15,7 +15,7 @@
 %$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
 $S \gets$ Call $\blackBox$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
 
-$D \gets D_S \gets $ any decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
+$D \gets D_S \gets $ decision tree which consists of sequence of tests $S$.
 
 \ForEach{\textup{leaf }$v$\textup{ of }$D$}{%$\cH' \in \cH - S$}{
 $D_u \gets$ \ProcDecisionTree$(\cH_v, \cT \setminus  S, (\cT\setminus S,\preceq))$.

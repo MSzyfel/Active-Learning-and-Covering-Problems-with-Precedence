@@ -228,7 +228,7 @@ As an immediate corollaries of Theorem \ref{thm:PCSC-to-PCWCDT-hardness} and \re
 
 \subsection{General precedence constraints}
 In this section we show strong inapproximability results for \ProblemPCWCDT\ and \ProblemPCACDT\ with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
-\begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture]
+\begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture] \label{problem:PDS}
 For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: (1) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$, (2) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
 \end{conjecture}
 \DD{DD: tutaj wkleiłem conjecture i zakomentowałem jej parafrezę (możemy podmienić, ale nie ma sensu mieć obu).}
@@ -248,7 +248,7 @@ Using the reduction from \ProblemPCMSSC\ to \ProblemPCACDT\ and \ProblemPCWCDT\ 
 
 Below we show that a similar reduction can also be used to obtain the same inapproximability result for \ProblemPCSC. In the reduction we will often make use of the Chernoff Bound which is as follows:
 \begin{theorem}[Chernoff Bound]\label{thm:chernoff}
-    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in[n]$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
+    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in\{1,\ldots,n\}$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
     \begin{align*}
         \mathbb{P}[X\leq (1-\delta)\mu] &\leq e^{-\frac{\delta^2\mu}{2}},\\
         \mathbb{P}[X\geq (1+\delta)\mu] &\leq e^{-\frac{\delta^2\mu}{3}}.
@@ -262,11 +262,11 @@ We have the following theorem:
 \begin{proof}
     \paragraph{Construction of the reduction.} We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$ for some $\gamma > 0$ to be determined later. In our reduction we will embed the structure of the input graph into the precedence constraints, while the universe elements will enforce the covering requirement. 
     
-    Given a graph $G=([N], \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of PCSC as follows. For each vertex $v \in [N]$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in [\lambda]$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in [\lambda]$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
+    Given a graph $G=(\{1,\ldots,N\}, \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of PCSC as follows. For each vertex $v \in \{1,\ldots,N\}$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in \{1,\ldots,\lambda\}$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in \{1,\ldots,\lambda\}$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
 
-    Next, we define the universe of elements to be covered. Let $U=\{0,1,\dots, n\}$ for some appropriately chosen natural number $n$ to be determined later. Every vertex representative set contains only the special element $0$, that is, $V_{v, i}=\{0\}$ for all $v \in [N]$ and $i \in [\lambda]$. 
+    Next, we define the universe of elements to be covered. Let $U=\{0,1,\dots, n\}$ for some appropriately chosen natural number $n$ to be determined later. Every vertex representative set contains only the special element $0$, that is, $V_{v, i}=\{0\}$ for all $v \in \{1,\ldots,N\}$ and $i \in \{1,\ldots,\lambda\}$. 
     
-    To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in [N]$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in [N]$, we have $\mathbb{P}[j \in U_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets of its endpoints together with the special element, that is, $E_{uv} = \{0\} \cup (U_u \cap U_v)$. 
+    To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in \{1,\ldots,N\}$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in \{1,\ldots,N\}$, we have $\mathbb{P}[j \in U_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets of its endpoints together with the special element, that is, $E_{uv} = \{0\} \cup (U_u \cap U_v)$. 
     
     From this construction, we can compute the following expected values:
     \begin{itemize}
@@ -338,7 +338,7 @@ We have the following theorem:
     
     \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to PCSC must use significantly more sets to cover all elements in $U$ with high probability.
     
-    Consider any solution to PCSC that selects representatives corresponding to some set $X \subseteq [N]$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in [\lambda]$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
+    Consider any solution to PCSC that selects representatives corresponding to some set $X \subseteq \{1,\ldots,N\}$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in \{1,\ldots,\lambda\}$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
     
     We first bound the number of edges among the vertices in $X$. Since the graph is drawn from $G(N, N^{-1/2})$, each potential edge exists independently with probability $N^{-1/2}$. For any fixed set $X$ of size $x$, the expected number of edges with both endpoints in $X$ is:
     $$
