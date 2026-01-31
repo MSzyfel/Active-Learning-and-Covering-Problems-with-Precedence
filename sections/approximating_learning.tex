@@ -2,19 +2,26 @@
 
 % To build our algorithm we will make use of the following definition:
 % \begin{definition}[Sepcover]
-%     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPT\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
+%     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPT\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
 % \end{definition}
 
 The following definition gives a basic tool for our algorithm.
 \begin{definition}[Sepcover]
-  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
+  Let $D$ be any decision tree for an instance $\cI$.
   Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
   Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+  If $D$ minimizes $\COSTW\br{D}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
 \end{definition}
+Figure \ref{fig:sepcover} illustrates the definition of sepcover.
+\begin{figure}[h]
+\centering
+\input{figures/sepcover.tex}
+\caption{Sepcover sequence in a decision tree}
+\label{fig:sepcover}
+\end{figure}
 Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
 Let initially $v$ be the root.
-If more than $\spr{\cH}/2$ hypotheses are potential targets after the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
+If more than $\spr{\cH}/2$ hypotheses are potential targets right before the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
 Otherwise the process is over.
 This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
 
@@ -29,38 +36,28 @@ We will use two immediate monotonicity properties.
     Then, $\OPT\br{\cI} \geq \sum_{i=1}^t \OPT\br{\br{\cH_i, \cT, \preceq}}$.
 \end{lemma}
 
-Figure \ref{fig:sepcover} illustrates the definition of sepcover.
-\begin{figure}[h]
-\centering
-\input{figures/sepcover.tex}
-\caption{Sepcover sequence in a decision tree}
-\label{fig:sepcover}
-\end{figure}
-
-%We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
-
 Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
 For each test $t\in\cT$, let
-$
-\xi(t)=\brc{h\in\cH \mid h\in U \textup{ for some }U\in t\textup{ s.t. }  \spr{U}\leq\frac{3}{4}\spr{\cU}}.
-$
+$$
+\xi(t)=\brc{h\in\cH \mid h\in U \textup{ for some }U\in t\textup{ s.t. }  \spr{U}\leq\frac{3}{4}\spr{\cH}}.
+$$
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
-By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
-%In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+By extension, for any subset $T\subseteq\cT$, $\xi(T)=\brc{\xi(t) \mid t\in T}$.
+The intuition behind the definition of $\xi$ is that it transforms an instance of a decition tree problem into a set cover instance with size-bounded restriction on the family of sets.
 
 \medskip
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) that will be used in both cases.
-The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance also includes probabilities which we also pass to the black-box.
-Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$ is used to split the instance and make recursive calls.
+The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance also includes probabilities which we also pass to the black-box but omit in the list of parameters, slightly abusing the notation but keeping a uniform presentation for both subproblems.
+Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$, obtained via the $\xi$-operator, is used to split the instance and make recursive calls.
 Note that the $S$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
-Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests in $S$.
+Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests corresponding to the cover in $S$.
 \input{pseudocodes/worst_case_learning.tex}
 
 
 \subsection{Precedence Constrained Worst Case Decision Tree} \label{subsection:PCWCDT}
 
-We will use sepcovers to lowerbound optimal solution:
+We will use sepcovers to lowerbound the cost of optimal solution:
 \begin{observation} \label{obs:sepcoverWC}
     Let $\cI$ be any instance of $\ProblemPCWCDT$.
     Then, $\spr{\sepcover{\cI}} \leq \OPT\br{\cI}$.
@@ -87,18 +84,18 @@ We will use sepcovers to lowerbound optimal solution:
 
 
 %\DD{I tak bedziemy oszczedzac miejsce, wiec moze nie warto parafrazowac algorytmu, a dac jakas intuicje jako klej?}
-%We now state an algorithm (Algorithm~\ref{alg:worstDecisionTree}) that outputs a decision tree for an input instance $\cI=\br{\cH, \cT, \cF}$ of $\ProblemPCWCAL$.
+%We now state an algorithm (Algorithm~\ref{alg:worstDecisionTree}) that outputs a decision tree for an input instance $\cI=\br{\cH, \cT, \preceq}$ of $\ProblemPCWCAL$.
 
 %     Algorithm \ref{alg:worstDecisionTree} is recursive and works as follows.
-%     Given an instance $\cI=\br{\cH, \cT, \cF}$, if $\spr{\cH}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+%     Given an instance $\cI=\br{\cH, \cT, \preceq}$, if $\spr{\cH}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
 %     Let $S\subseteq\cT$ be the output. We build a decision tree $D_S$ on tests from $S$ closed under $\preceq_{\xi}$.
-%     For each $\cH' \in \cH\setminus S$, we recursively call \ProcWorstDecisionTree on instance $\br{\cH', \cT\setminus S, \cF-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
+%     For each $\cH' \in \cH\setminus S$, we recursively call \ProcWorstDecisionTree on instance $\br{\cH', \cT\setminus S, \preceq-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
 
 
 The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}.:
     \begin{observation} \label{obs:DS}
         Consider $D_S$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses a $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
-        %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\cF$.
+        %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
         Then, $\COSTW\br{D_S} \leq \alpha \cdot \spr{\sepcover{\cI}}$.
     \end{observation}
 
@@ -108,7 +105,7 @@ If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\Pr
 $\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
-     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \cF, \blackBox}$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
+     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ and $\blackBox$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
      Let $D$ be the decision tree returned by this call.
      In order to prove the theorem it is enough to argue that
      \begin{equation} \label{eq:D}
@@ -116,19 +113,19 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approx
      \end{equation}
 
      The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume by induction that for every $\cI' = \br{\cH', \cT, \cF}$ such that $\cH' \subseteq \cH\setminus S$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI'$.
+     Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
      To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
      We have
 %         \begin{align*}
-%             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{\cH' \in \cH \setminus S} \COSTW\br{D', \cI'} \\
-%             \leq & \alpha \cdot \spr{S^*} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+%             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{D'(\cH')} \COSTW\br{D', \cI'} \\
+%             \leq & \alpha \cdot \spr{S^*} + \max_{D'(\cH')} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
 %             \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPT\br{\cI} \\
 %             = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
 %             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} \\
 %        \end{align*}
         \begin{align*}
-            \COSTW\br{D} \leq & \COSTW\br{D_S} + \max_{\cH' \in \cH \setminus S} \COSTW\br{D'(\cH')} \\
-            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH' \in \cH \setminus S} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+            \COSTW\br{D} \leq & \COSTW\br{D_S} + \max_{\cH'(D')} \COSTW\br{D'(\cH')} \\
+            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH'(D')} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
             \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPT\br{\cI} \\
             = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI},
@@ -137,9 +134,10 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approx
         This concludes the proof of the theorem.
 \end{proof}
 
+\DD{tutaj ref.}
 We therefore obtain the following corollary:
 \begin{corollary}\label{cor:PCWCDT-special-cases}
-    There exist polynomial time approximation algorithms for $\ProblemPCWCDT$ with the following guarantees:
+    There exist polynomial-time approximation algorithms for $\ProblemPCWCDT$ with the following guarantees:
     \begin{itemize}
         \item $\cO\br{\log n}$-approximation algorithm for inforests,
         \item $\cO\br{\log^2n}$-approximation algorithm for outforests,
@@ -183,16 +181,14 @@ Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than 
 
 We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
 This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
-\DD{do rozwazenia fix notacyjny: $\sepcover{\cI}$ to jest zbior, a tutaj mamy do czynienia z suma zalezna od kolejnosci}
-
-However, since in this case we have arbitrary probability distrubution on hypotheses, we firstly emply a rounding technique which firstly scales the probabilities to polynomial size integers. Below we present which does so, by incurring only a 2-factor loss in the approximation.
-For an instance $\cI=\br{\cH, \cT, \cF, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
+However, since in this case we have an arbitrary probability distrubution on hypotheses, we firstly employ a rounding technique which scales the probabilities to represent them as polynomial-size integers.
+Below we argue that this incurrs only a 2-factor loss in the approximation.
+Formally, for an instance $\cI=\br{\cH, \cT, \preceq, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
 We say that $p'$ is a \emph{$q$-rounding} of $p$.
-Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over $\cH$.
-\DD{dodalem lower bound dla lemma}
+Note that $\sum_{h\in\cH}p'\br{h}=1$ and thus $p'$ is indeed a probability distribution over $\cH$.
 \begin{lemma} \label{lemma:rounding}
-    Let $\cI=\br{\cH, \cT, \cF, p}$ be any instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$.
-    Then, for the instance $\cI'=\br{\cH, \cT, \cF, p'}$ it holds $z(h)\in \mathbb{N}$ and $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$.
+    Let $\cI=\br{\cH, \cT, \preceq, p}$ be any instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$.
+    Then, for the instance $\cI'=\br{\cH, \cT, \preceq, p'}$ it holds $z(h)\in\bigo(nm)$ and $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$.
 \end{lemma}
 \begin{proof}
     Note that the lower bound $\OPT\br{\cI}\leq\OPT\br{\cI'}$ follows from $p\leq p'$, and it remains to upper bound $\OPT\br{\cI'}$.
@@ -229,10 +225,10 @@ Note that $p'\br{\cH}=1$ and thus $p'$ is indeed a probability distribution over
 %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 \end{proof}
 
-Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \cF, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm. 
+Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \cF}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=1/4$.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=\spr{\cH}/4$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
     Then, $\coverageTime\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
@@ -247,7 +243,6 @@ We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}
     \begin{itemize}
         \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cH}/4$ elements. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\cH}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
         \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $\spr{\sigma}$.
-        \DD{fix w def. kryterium: niepokryte elementy kontrybuuja dlugosc sekwencji}
     \end{itemize}
     Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
@@ -259,34 +254,35 @@ The following observation is analogous to Observation~\ref{obs:DS}:
 \end{observation}
 
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
 \end{theorem}
 \begin{proof}
-    Let $\cI=\br{\cH, \cT, \cF, p}$ be an instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$ with $q=\frac{1}{nm}$.
-    By Lemma~\ref{lemma:rounding}, for the rounded instance $\cI'=\br{\cH, \cT, \cF, p'}$ we have $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$ and $z(h)\in \mathbb{N}$ for each $h\in\cH$, where $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$.
+    Let $\cI=\br{\cH, \cT, \preceq, p}$ be an instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$ with $q=\frac{1}{nm}$.
+    By Lemma~\ref{lemma:rounding}, for the rounded instance $\cI'=\br{\cH, \cT, \preceq, p'}$ we have $\OPT\br{\cI}\leq\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$ and $z(h)\in \mathbb{N}$ for each $h\in\cH$, where $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$.
+    Hence from now on all cost measures refer to $\cI'$.
     
-    Consider a call to \ProcDecisionTree on input $\cI'=\br{\cH, \cT, \cF, p', \blackBox}$, where $\blackBox$ is a $\br{\beta,\mu}$-approximation algorithm for $\ProblemPCMSSC$.
+    Consider a call to \ProcDecisionTree on input $\cI'=\br{\cH, \cT, \preceq, p', \blackBox}$, where $\blackBox$ is a $\br{\beta,\mu}$-approximation algorithm for $\ProblemPCMSSC$.
     Let $D$ be the decision tree returned by this call.
     We will prove by induction on $s_z$ that
     \begin{equation} \label{eq:ACinduction-sz}
-     \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'}.
+     \COSTA\br{D} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'}.
     \end{equation}
 
     The base case when $s_z=1$ (equivalently, $\spr{\cH}=1$) is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI'' = \br{\cH', \cT, \cF, p'}$ such that $\cH' \subseteq \cH\setminus S$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''}$, where $D'$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
+    Assume by induction that for every $\cI'' = \br{\cH', \cT, \preceq, p'}$ such that $\spr{\cH'}<\spr{\cH}$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'(\cH')} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''}$, where $D'(\cH')$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
     We have
 \begin{align*}
-    \COSTA\br{D, \cI'} \leq & \COSTA\br{D_S, \cI'} + \sum_{\cH' \in \cH \setminus S} \COSTA\br{D'(\cH'), \cI''} \\
-    \leq & \beta \cdot \COSTA\br{\sepcover{\cI'}, \cI'} + \sum_{\cH' \in \cH \setminus S} \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''} \\
+    \COSTA\br{D} \leq & \COSTA\br{D_S} + \sum_{D'(\cH')} \COSTA\br{D'(\cH')} \\
+    \leq & \beta \cdot \COSTA\br{\sepcover{\cI'}} + \sum_{D'(\cH')} \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''} \\
     \leq & \beta \cdot \OPT\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{\frac{\br{4\mu-1}\cdot s_z}{4\mu}} \cdot \OPT\br{\cI'} \\
     = & \beta \cdot \OPT\br{\cI'} + \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'} - \beta\cdot \OPT\br{\cI'} \\
     = & \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'},
 \end{align*}
-where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $s_z'\leq \frac{(4\mu -1)}{4\mu}\cdot s_z$ for every $\cH' \in \cH\setminus S$ (since the $\blackBox$ covers a $1/(4\mu)$ fraction of the total probability mass).
+where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $s_z'\leq \frac{(4\mu -1)}{4\mu}\cdot s_z$ for every subset of hypotheses $\cH'$ (since the $\blackBox$ covers a $1/(4\mu)$ fraction of the total probability mass).
 
 Since $s_z \leq nm + n$ and by Lemma~\ref{lemma:rounding}, we have
 \begin{align*}
-\COSTA\br{D, \cI} &\leq \COSTA\br{D, \cI'} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPT\br{\cI'}
+\COSTA\br{D, \cI} &\leq \COSTA\br{D} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPT\br{\cI'}
 \\&\leq 
 \frac{2\cdot\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{nm+n} \cdot \OPT\br{\cI}\leq \frac{4\cdot \beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n} \cdot \OPT\br{\cI}
 \end{align*}
