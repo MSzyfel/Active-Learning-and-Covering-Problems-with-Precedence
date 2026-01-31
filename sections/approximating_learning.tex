@@ -4,21 +4,8 @@
 % \begin{definition}[Sepcover]
 %     Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$. We define a sequence of tests $P_D$ called \emph{sepcover} as follows. Initially, $P_D$ is empty and $\cH' = \cH$. While $\spr{\cH'}> \spr{\cH}/2$, we append to $P_D$ the test $r\br{D_{\cH'}}$ and update $\cH'$ to be the set of hypotheses corresponding to the child of $D_{\cH'}$ that contains the most hypotheses. If $\COSTW\br{D}=\OPT\br{\cI}$, then we denote $\sepcover{\cI} = P_D$ (ties broken arbitrarily).
 % \end{definition}
-
-The following definition gives a basic tool for our algorithm.
-\begin{definition}[Sepcover]
-  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
-  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
-  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
-\end{definition}
-Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
-Let initially $v$ be the root.
-If more than $\spr{\cH}/2$ hypotheses are potential targets after the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
-Otherwise the process is over.
-This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
-
-We will use two immediate monotonicity properties.
+In this section we present approximation algorithms for the problems $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to the problems $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. 
+We will use the following immediate monotonicity properties.
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
     Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
@@ -29,16 +16,15 @@ We will use two immediate monotonicity properties.
     Then, $\OPT\br{\cI} \geq \sum_{i=1}^t \OPT\br{\br{\cH_i, \cT, \preceq}}$.
 \end{lemma}
 
-Figure \ref{fig:sepcover} illustrates the definition of sepcover.
-\begin{figure}[h]
-\centering
-\input{figures/sepcover.tex}
-\caption{Sepcover sequence in a decision tree}
-\label{fig:sepcover}
-\end{figure}
-
+The following definition gives a basic tool for analysis of our algorithms.
+\begin{definition}[Sepcover]
+  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
+  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
+  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
+  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+\end{definition}
+Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
 %We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
-
 Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
 For each test $t\in\cT$, let
 $
@@ -47,6 +33,13 @@ $
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+
+\begin{figure}[h]
+\centering
+\input{figures/sepcover.tex}
+\caption{Sepcover sequence in a decision tree}
+\label{fig:sepcover}
+\end{figure}
 
 \medskip
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
