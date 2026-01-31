@@ -7,8 +7,7 @@ $\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}$ and $\cS$.
 We will refer to such $\cA$ as a \emph{greedy} solution.
 %\input{pseudocodes/mdpcs_greedy.tex}
 
-Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
-When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
+When $\max_{S \in \mathcal{G}} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
 Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
 An $\cA$ that satisfies
     $$
@@ -128,15 +127,15 @@ In order to prove the main theorem of this section consider a greedy procedure s
 We note a subtle fact of finishing the loop once $k/2$ elements are covered and not iterating till reaching $k$.
 This is because the last set $\cA$ may be of unbounded size but the above allows us to argue that the size of optimal solution to the instance from the last iteration is lower-bounded by $\Omega(k)$, which is enough to obtain the required approximation ratio.
 \input{pseudocodes/set_cover.tex}
+\begin{theorem} \label{thm:MDPCStoPCSC}
+    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{4\gamma/f, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
+\end{theorem}
+\begin{proof}
 Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in\brc{1,\ldots,l}$.
 For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
 Let $R_i=\cU\setminus\cov\br{\cC_i}$ for $i\in\brc{1,\ldots,l}$ and $R_0=\cU$, $\cC_0=\emptyset$.
 Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and let $\cCopt$ be an optimal solution to $\ProblemPCSC$ on $\cI$, i.e., $\cov\br{\cCopt}\geq k$ and $\spr{\cCopt}=\optPCSC{\cI}$.
 
-% Consider first the case when $l=1$, i.e., there is only one iteration.
-% Then, $\spr{\cov\br{\cA_l}}\geq k$ and $\Delta\br{\cA_l}\geq\gamma\cdot\Delta\br{\cCopt}$, where the latter follows from the assumption that the algorithm for $\ProblemMDPCS$ is $\gamma$-approximate.
-% From this we obtain
-% $\spr{\cA_l}  \leq \frac{1}{\gamma}\cdot \spr{\cov\br{\cA_l}}\cdot\spr{\cCopt}/k \leq \frac{n}{\gamma k}\spr{\cCopt}$, where the latter is by a trivial upper bound $\spr{\cov\br{\cA_l}}\leq n$.
 Note that for each $i\in\brc{1,\ldots,l}$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
 Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in\brc{1,\ldots,l}$.
 Thus, $\Delta(\cA_i,R_{i-1}) \geq \frac{1}{\gamma}\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$,
@@ -157,10 +156,8 @@ For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$
 Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2\gamma n}{k}\spr{\cCopt}$.
 This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}$.
 Moreover, $\spr{\cov\br{\cC_l}}\geq k/2$, which means the algorithm covers at least half of the required elements.
-This proves the following theorem.
-\begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{4\gamma/f, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
-\end{theorem}
+This proves the theorem.
+\end{proof}
 
 Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
 \begin{corollary}\label{cor:BPCSC-to-PCSC}
@@ -307,12 +304,12 @@ $
 \spr{\closure{S}} \leq C \cdot
 \spr{\cov\br{\closure{S}}}^\epsilon
 $ ($\epsilon$-shallow ancestry).
-Then Procedure $\ProcedureMDPCSGreedy$ provides an $\bigo(n^\epsilon)$-approximation for the $\ProblemMDPCS$ problem.
+Then a greedy solution provides an $\bigo(n^\epsilon)$-approximation for the $\ProblemMDPCS$ problem.
 \end{theorem}
 
 \begin{proof}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$.
- Let $\cA$ be the solution returned by $\ProcedureMDPCSGreedy$.
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$ and let $\cA$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
+ Define $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
  There are two cases:
 \begin{enumerate}
     \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*} \leq n$. Therefore:
