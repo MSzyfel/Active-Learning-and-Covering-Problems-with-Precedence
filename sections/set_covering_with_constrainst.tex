@@ -1,50 +1,47 @@
-\section{Max-Density Precedence-Closed Subfamily (MDPCS)} \label{sec:MDPCS}
+\section{Max-Density Precedence-Closed Subfamily} \label{sec:MDPCS}
 
 In order to solve $\ProblemPCSC$ and $\ProblemPCMSSC$ we firstly solve two essential problems: $\ProblemMDPCS$ and $\ProblemBMDPCS$ which serve as a way to find precedence-closed subfamilies of sets which cover many elements with respect to their size. We will then use such subroutines as an oracle in order to construct greedy, set-cover like approximation algorithms for our problems.
 %An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
-By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cG}$ provides a $\bigo\br{\sqrt{m}}$-approximation: we pick $\cA$ to be the best solution among
+By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cU,\cG,\preceq}$ provides a $\bigo\br{\sqrt{m}}$-approximation: pick $\cA$ to be the best solution among
 $\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}$ and $\cS$.
 We will refer to such $\cA$ as a \emph{greedy} solution.
 %\input{pseudocodes/mdpcs_greedy.tex}
 
 Let $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
 When $\delta\geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
-Additionally, we show that a slightly modified greedy rule achieves an $B$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
+Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
 An $\cA$ that satisfies
     $$
-    \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq B} \brc{\Delta\br{\closure{S}}}.
+    \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
     $$
-will be called a \emph{$B$-greedy} solution to $\ProblemBMDPCS$.
+will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
 \begin{theorem}\label{thm:BMDPCS-greedy}
-    Let $\cA^*$ be any optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $B$-greedy.
-    Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{B}$.
+    Let $\cA^*$ be an optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $\budget$-greedy.
+    Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{\budget}$.
 \end{theorem}
 \begin{proof}
-    \DD{tutaj staralem sie uproscic, pozbywajac sie symbolu $\delta_B$, gdyz to jest po prostu $\Delta(\cA)$. Takze zmienialem $\cov\br{\cA,\cU}$ na $\cov\br{\cA}$, tu i dalej takze.}
-    We utilize a partial argument of \cite{PCMSSC} for the $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq B$.
-    Denote $\cA^*=\brc{S_1,\ldots,S_k}$.
-    For each $S_i\in \cA^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S_i}}\leq \Delta\br{\cA}$.
+    We utilize a partial argument of \cite{PCMSSC} for $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq \budget$.
+    For each $S\in \cA^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S}}\leq \Delta\br{\cA}$.
     Therefore:
     $$
-    \spr{\cov\br{\cA^*}} \leq \sum_{i=1}^{k}\spr{\cov\br{\closure{S_i}}}\leq \Delta\br{\cA}\sum_{i=1}^k \spr{\closure{S_i}} \leq \Delta\br{\cA} \cdot k^2,
+    \spr{\cov\br{\cA^*}} \leq \sum_{S\in\cA^*}\spr{\cov\br{\closure{S}}}\leq \Delta\br{\cA}\sum_{S\in\cA^*} \spr{\closure{S}} \leq \Delta\br{\cA} \cdot k^2,
     $$
     where the first inequality is by the definition of union. We have that:
     $$
-    \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}}=\frac{\spr{\cov\br{\cA^*}}}{k\cdot\Delta\br{\cA}}\leq k\leq B,
+    \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}}=\frac{\spr{\cov\br{\cA^*}}}{k\cdot\Delta\br{\cA}}\leq k\leq \budget,
     $$
     which by rearranging gives the desired inequality.
 \end{proof}
-The above theorem gives an $B$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $B$ this might be much worse then the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $B$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$.
+The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$. \DD{(tutaj chciałeś zapytac o $o(m)$ czy $o(\budget)$?)}
 
-Also, note that the above analysis works also when we associate non-uniform weights to every element of $\cU$ and define density with respect to the total weight of covered elements.
+Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
 
-\section{Set covering with constraints} \label{sec:SC}
+\section{Set covering with precedence constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of te below procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for brevity.
+Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
 \subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
-\DD{wyjalem troche z dowodu tw, gdyz wowczas latwiej bedzie przycinac skrocona wersje.}
 
 The approximation algorithm is the greedy procedure shown in Algorithm~\ref{alg:BPCSC}.
 For the analysis, let $\cC_i$ and $\cA_i$, $i\in\brc{1,\ldots,l}$, be the sets $\cC$ and $\cA$ obtained in the $i$-th iteration; $\cC_0=\emptyset$.
@@ -53,13 +50,13 @@ Note that $\cov\br{\cA_i,\cU\setminus\cov\br{\cC_{i-1}}}$ is the set of element 
 
 First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem:BPCSC-cost}) and then we estimate how much it covers (cf. Lemma~\ref{lem:BPCSC-coverage}).
 \begin{lemma}\label{lem:BPCSC-cost}
-    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
 \end{lemma}
 \begin{proof}
     We consider two cases:
     \begin{enumerate}
-        \item If $B\geq \sqrt{m/H_n}$, then for any $\cC$ it holds:$\spr{\cC} \leq m \leq \sqrt{m\cdot H_n}\cdot B$.
-        \item Else, when $B < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot B$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq B$, we have that $\spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot B + B = \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+        \item If $\budget\geq \sqrt{m/H_n}$, then for any $\cC$ it holds:$\spr{\cC} \leq m \leq \sqrt{m\cdot H_n}\cdot \budget$.
+        \item Else, when $\budget < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot \budget$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq \budget$, we have that $\spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot \budget + \budget = \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
     \end{enumerate}
 \end{proof}
 
@@ -69,9 +66,9 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cov\br{\cC}} \geq \spr{\cov\br{\cCopt}}$.
 \end{lemma}
 \begin{proof}
-    If $B \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
+    If $\budget \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
 
-    Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot B$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot B$, the number of covered elements is at least $\spr{\cov\br{\cCopt}}$.
+    Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot \budget$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot \budget$, the number of covered elements is at least $\spr{\cov\br{\cCopt}}$.
     
     %Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$.
     Let $R_i = \cU \setminus \cov\br{\cC_i}$ be the set of uncovered elements after the $i$-th iteration; take $R_0=\emptyset$.
@@ -83,52 +80,53 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     Order the elements of $\cov\br{\cCopt}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily (i.e., if $i(u_j)<i(u_{j'})$, then $j<j'$).
 
     \begin{claim}\label{lem:cost-per-element}
-        For each $j \in \brc{1, \ldots, k}$, $c(u_j) \leq B^2/(k-j+1)$.
+        For each $j \in \brc{1, \ldots, k}$, $c(u_j) \leq \budget^2/(k-j+1)$.
     \end{claim}
     \begin{proof}
-     Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq B$. Since the algorithm selects a $B$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
+     Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq \budget$. Since the algorithm selects a $\budget$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
     $$
-    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{B} \geq \frac{k-j+1}{\spr{\cCopt} \cdot B} \geq \frac{k-j+1}{B^2},
+    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{\budget} \geq \frac{k-j+1}{\spr{\cCopt} \cdot \budget} \geq \frac{k-j+1}{\budget^2},
     $$ 
     where the first inequality is by the approximation guarantee of the algorithm and the greedy choice, the second inequality is by definition of density, and the last inequality is by the budget constraint on $\cCopt$. Rearranging the above inequality yields:
     $$
     c(u_j) = \frac{\spr{\cA_{i(u_j)}}}{\spr{\cov\br{\cA_{i(u_j)}, R_{i(u_j)-1}}}} = 
-    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{B^2}{k-j+1}
+    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{\budget^2}{k-j+1}
     $$
     and the claim follows.
     \end{proof}
 
-    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq B^2H_k$.
+    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq \budget^2H_k$.
     By the price definition, $\sum_{j=1}^k c(u_j)=\spr{\cC_{t-1}}$.
-    Since $\spr{\cA_t}\leq B$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq B^2H_n+B$.
-    Recall that we are considering the case when $B\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}B$.
+    Since $\spr{\cA_t}\leq \budget$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq \budget^2H_n+\budget$.
+    Recall that we are considering the case when $\budget\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}\budget$.
     This completes the proof of the lemma.
-
 %     \begin{align*}
 %         \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t}
 %     \\&\leq
-%     \sum_{u \in \cov\br{\cC_{t-1}}} c(u) + B
+%     \sum_{u \in \cov\br{\cC_{t-1}}} c(u) + \budget
 %     \\&\leq
-%     \sum_{j=1}^{k} \frac{B^2}{k-j+1} + B
+%     \sum_{j=1}^{k} \frac{\budget^2}{k-j+1} + \budget
 %     \\&=
-%     B^2 \cdot H_k + B
+%     \budget^2 \cdot H_k + \budget
 %     \\&\leq
-%     B^2 \cdot H_n + B
+%     \budget^2 \cdot H_n + \budget
 %     \\&\leq
-%     \br{\sqrt{m\cdot H_n}+1}\cdot B,
+%     \br{\sqrt{m\cdot H_n}+1}\cdot \budget,
 %     \end{align*}
-%     where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq B$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $B < \sqrt{m/H_n}$.
+%     where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq \budget$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $\budget < \sqrt{m/H_n}$.
 \end{proof}
 
 Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage} prove the following.
 \begin{theorem} \label{thm:BPCSC}
-    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-bicriteria approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$. That is, the algorithm returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \OPT\br{\cI}$ and $\spr{\cC}\leq \br{\sqrt{m\cdot H_n}+1}\cdot B$.
+    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-bicriteria approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$. That is, the algorithm returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \OPT\br{\cI}$ and $\spr{\cC}\leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
 \end{theorem}
 
 \subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}\label{subsection:PCSC}
 
 Let $k=f\cdot n$.
 In order to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
+We note a subtle fact of finishing the loop once $k/2$ elements are covered and not iterating till reaching $k$.
+This is because the last set $\cA$ may be of unbounded size but the above allows us to argue that the size of optimal solution to the instance from the last iteration is lower-bounded by $\Omega(k)$, which is enough to obtain the required approximation ratio.
 \input{pseudocodes/set_cover.tex}
 Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in\brc{1,\ldots,l}$.
 For brevity let $\cC_i$, $i\in\brc{1,\ldots,l}$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\cA_1\cup\cdots\cup\cA_i$.
@@ -164,7 +162,7 @@ This proves the following theorem.
     If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{4\gamma/f, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 
-Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $B^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $B^*$. We have the following corollary.
+Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
 \begin{corollary}\label{cor:BPCSC-to-PCSC}
     If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$.
 \end{corollary}
@@ -269,27 +267,36 @@ Lemma \ref{lem:combined-coverage-cost} directly implies the following theorem.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
-It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding an $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
+It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding a $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
-\subsection{Special cases of the precedence constraints} \label{subsection:SpecialCases}
+\subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
 \begin{theorem}\label{thm:BPCSC-inforest}
     There exists an $\br{1, \frac{e}{e-1}}$-approximation algorithm for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    The proof is by showing that this problem is reducible to a case with no precedence constraints, however taking a set $S$ may impose cost $c\br{S}$. This problem is equivalent to the standard budgeted maximum coverage problem, for which a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Notice that in this case, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the original instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
+    The proof is by showing that this problem is reducible to a case with no precedence constraints, however taking a set $S$ may impose cost $c\br{S}$.
+    \DD{($\leftarrow$ tego w sumie nie rozumiem, odnośnie tego $c()$)}
+    This problem is equivalent to the standard budgeted maximum coverage problem, for which a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Notice that in this case, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
 \end{proof}
 
 This implies the following result for $\ProblemPCMSSC$ via carefull examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}.
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
-    There exists an $\br{432\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{1711.35, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
+    There exist $\br{432\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{1711.35, \frac{e}{e-1}}$-approximation algorithms for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{theorem}\label{thm:BPCSC-outforest}
-    There exists an $\br{\bigo\br{\log n}, 4}$-approximation algorithm for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
+    There exists a $\br{\bigo\br{\log n}, 4}$-approximation algorithm for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    The proof is by showing that this problem is reducible to GSO on tree metrics. This problem admits an $\br{\bigo\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. It should be noted that they give a worse approximation ratio of $\br{\bigo\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $\bigo\br{\log n}$ distortion. Since our metrics is already a tree metric, we can skip this step and obtain the improved approximation ratio.
+    The proof is by showing that this problem is reducible to $\ProblemGSO$ on tree metrics.
+    The latter admits a $\br{\bigo\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}.
+    It should be noted that they give a worse approximation ratio of $\br{\bigo\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $\bigo\br{\log n}$ distortion.
+    Since our metrics is already a tree metric, we can skip this step and obtain the improved approximation ratio.
     
-    We create the metric as follows: we create a root node $r$ and for each set $S\in\cS$ we create a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$. Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group which consists of all repersentatives of vertices covering $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times. Since traversing an edge $(v_S, v_W)$ results in visiting a set $W$ which is a succesor of $S$ in the outforest, we have that if a tour visits a repersentative of a set $W$, it must have visited the repersentative of all of its predecessors in the outforest. Therefore, any feasible solution to GSO on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
+    We create the metric as follows: we introduce a root node $r$ and for each set $S\in\cS$ we add a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$.
+    Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group which consists of all repersentatives of vertices containing $u$, \DD{i.e., $\brc{v_S \mid u\in S}$}. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
+    \DD{Moreover, since the tour starts at the root, we have that if a repersentative of a set $W$ is visited, it the repersentative of all of its predecessors in the outforest have been visited.}
+    Therefore, any feasible solution to $\ProblemGSO$ on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
+    \DD{Uwaga: Thm. \ref{thm:BPCSC-to-PCMSSC} nie przenosi ratio, do sprawdzenia.}
 \end{proof}
 
 
@@ -300,15 +307,17 @@ $
 \spr{\closure{S}} \leq C \cdot
 \spr{\cov\br{\closure{S}}}^\epsilon
 $ ($\epsilon$-shallow ancestry).
-Then $\ProblemMDPCS$-Greedy provides an $\bigo(n^\epsilon)$-approximation.
+Then Procedure $\ProcedureMDPCSGreedy$ provides an $\bigo(n^\epsilon)$-approximation for the $\ProblemMDPCS$ problem.
 \end{theorem}
 
-\begin{proof} \DD{todo: check}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$. There are two cases:
+\begin{proof}
+ Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$.
+ Let $\cA$ be the solution returned by $\ProcedureMDPCSGreedy$.
+ There are two cases:
 \begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA, \cU} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*, \cU} \leq n$. Therefore:
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*} \leq n$. Therefore:
 $$
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 $$
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
      \mathcal{G}$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
@@ -322,12 +331,12 @@ $. We have that:
 
 Therefore:
 \[
-\Delta\br{\cA^*, \cU}= \frac{\spr{\cov\br{\cA^*}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\Delta\br{\cA^*}= \frac{\spr{\cov\br{\cA^*}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 \]
 
-By the greedy choice, $\Delta\br{\cA, \cU} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+By the greedy choice, $\Delta\br{\cA} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
 \[
-\frac{\Delta\br{\cA^*, \cU}}{\Delta\br{\cA, \cU}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
 \]
 \end{enumerate}
 Since $C$ is constant, the theorem follows.
