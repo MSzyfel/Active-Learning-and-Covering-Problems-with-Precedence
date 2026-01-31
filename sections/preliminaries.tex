@@ -16,9 +16,9 @@ A sequence $(x_1, x_2, \ldots, x_k)$ of elements from $X$ is \emph{precedence-cl
 In decision tree problems, the goal is to design a \textit{strategy} $\cS$ understood as an adaptive algorithm, that based on the previous replies, gives \questioner the next test to be performed.
 This strategy is typically represented as a \textit{decision tree}, a rooted tree $D$ in which internal nodes represent tests to be performed, edges represent replies and each leaf represents a hypothesis.
 Formally, a decision tree is defined recursively as follows.
-If $r=\brc{R_1,\ldots,R_l}\in\cT$ is the first test performed by $\cS$, then $r$ is the root of $D$.
-For each reply $R_i$, $i\in\brc{1,\ldots,l}$, take inductively defined decision tree $D_i$ derived from the tests done by $\cS$ when the reply to $r$ is $R_i$.
-Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r$, and the edge connecting $r$ to the root of $D_i$ is labeled with the reply $R_i$.
+If $r=\brc{H_1,\ldots,H_l}\in\cT$ is the first test performed by $\cS$, then $r$ is the root of $D$.
+For each reply $H_i$, $i\in\brc{1,\ldots,l}$, take inductively defined decision tree $D_i$ derived from the tests done by $\cS$ when the reply to $r$ is $H_i$.
+Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r$, and the edge connecting $r$ to the root of $D_i$ is labeled with the reply $H_i$.
 To complete the inductive definition, if $\cS$ is a trivial strategy that outputs the target, then the corresponding tree $D$ is a leaf labeled with the target.
 It should be remarked that it is possible for a test to appear multiple times in the decision tree.
 However, with a slight abuse of notation we use tests as nodes of $D$ whenever there is no ambiguity. When the tests are subject to a precedence relation $(\cT, \preceq)$, a decision tree $D$ is \emph{precedence-closed} if for every node $v$ in $D$, the set of tests on the path from the root to $v$ forms a precedence-closed sequence so that a test $t$ can be executed only if all its predecessors in $(\cT, \preceq)$ have already been performed
@@ -53,7 +53,6 @@ For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and al
 
 \medskip
 \paraTitle{Set covering problems.}
-We start by defining the remaining notation.
 %For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
 Let $\closure{S}$, where $S\in\cS$ for a family of sets $(\cS,\preceq)$, be the minimal precedence-closed subset of $\cS$ containing $S$.
 For a family of sets $\cA$ its \emph{coverage} is $\cov\br{\cA}=\bigcup_{A\in\cA}A$, and by extension, $\cov\br{\cA, X} = \cov\br{\cA} \cap X$ for any set $X$.
@@ -100,11 +99,11 @@ Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a 
 \medskip
 \paraTitle{Related problems.}
 For the problems below, let $(V,d)$ denote a metric space with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
-An \emph{$r$-tour} $\tau$ is a walk that starts and ends at vertex $r \in V$.
+An \emph{$r$-tour} $\tau$ is a walk that starts and ends at vertex $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
 Let $\cX$ be a family of groups where each $X \in \cX$ is a subset of $V$.
 Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX : X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
-For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[Group Steiner Tree (GST)] \label{problem:GST}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$ and a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, find an $r$-tour $\tau$ such that $\cov\br{\tau} = \cX$ and that minimizes

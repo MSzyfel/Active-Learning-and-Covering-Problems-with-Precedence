@@ -61,7 +61,7 @@ We will use sepcovers to lowerbound the cost of optimal solution:
 %We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCDT$.
 \begin{lemma}\label{lemma:cover_sep_worst_case}
     Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCDT$ instance.
-    Let $S^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+    Let $S^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f=1/4}$.
     %and a test $t$ covers $h\in \cH$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$.
     Then, $\spr{S^*} \leq \spr{\sepcover{\cI}}$.
 \end{lemma}
@@ -97,7 +97,8 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
 
 \begin{theorem} \label{thm:alphaPCWCDT}
 If there is an $\br{\alpha, \gamma}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
+$\cO\br{\frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. 
+% In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
      Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ and $\blackBox$, where $\blackBox$ is a $\br{\alpha,\gamma}$-approximation algorithm for $\ProblemPCSC$.
@@ -163,17 +164,18 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
 %     $$
 %     \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D\setminus S} \COSTA\br{D', \cI}.
 %     $$
+
 \end{observation}
+\paraTitle{Remark on notation.}
+Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. We also want that after removal of all tests in $\sepcover{\cI}$ from the decision tree, each subtree has at most half of the total probability mass of hypotheses.
+While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
+
 Here, $D-S$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
 As an immediate corollary, by taking an optimal $D$ and the corresponding $S=\sepcover{\cI}$ we have:
 \begin{observation} \label{obs:sepcoverAC}
     Let $\cI$ be any instance of $\ProblemPCACDT$.
     Then, $\COSTA\br{\sepcover{\cI}} \leq \OPT\br{\cI}$.
 \end{observation}
-
-\paraTitle{Remark on notation.}
-Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
-
 We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
 This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
 However, since in this case we have an arbitrary probability distrubution on hypotheses, we firstly employ a rounding technique which scales the probabilities to represent them as polynomial-size integers.
@@ -223,21 +225,21 @@ Note that $\sum_{h\in\cH}p'\br{h}=1$ and thus $p'$ is indeed a probability distr
 Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
 We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \preceq}$ be any uniform distribution $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f}$ with $f=\spr{\cH}/4$.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance. Let $S^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, f=1/4}$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
     Then, $\coverageTime\br{S^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
 \begin{proof}
     Assume towards a contradiction that $\coverageTime\br{S^*} > \COSTA\br{\sepcover{\cI}}$.
     We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $S^*$.
-    Let $\sigma$ be the shortest prefix of $\sepcover{\cI}$ that covers at least $\spr{\cH}/4$ elements, $\spr{\cov\br{\sigma}}\geq \spr{\cH}/4$.
+    Let $\sigma$ be the shortest prefix of $\sepcover{\cI}$ that covers at least $p\br{\cH}/4$ probability mass, $\sum_{u\in \cov\br{\sigma}}p\br{u}\geq p\br{\cH}/4$.
     Note that because we consider a prefix, the precedence constraints are satisfied.
     Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}.
     Take an arbitrary $h \in \cH$.
     There are two cases to consider:
     \begin{itemize}
-        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cH}/4$ elements. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\cH}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
-        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $\spr{\sigma}$.
+        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $p\br{\cH}/4$ probability mass. Since at the moment of sepcovering, $h$ belonged to a response of size at most $p\br{\cH}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
+        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $p\br{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $p\br{\sigma}$.
     \end{itemize}
     Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
@@ -249,7 +251,8 @@ The following observation is analogous to Observation~\ref{obs:DS}:
 \end{observation}
 
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. 
+    % In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
 \end{theorem}
 \begin{proof}
     Let $\cI=\br{\cH, \cT, \preceq, p}$ be an instance of $\ProblemPCACDT$ and let $p'$ be the $q$-rounding of $p$ with $q=\frac{1}{nm}$.
@@ -263,7 +266,7 @@ The following observation is analogous to Observation~\ref{obs:DS}:
      \COSTA\br{D} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z \cdot \OPT\br{\cI'}.
     \end{equation}
 
-    The base case when $s_z=1$ (equivalently, $\spr{\cH}=1$) is trivial since the cost of the decision tree is 0.
+    The base case when $s_z\leq1$ (equivalently, $\spr{\cH}=1$) is trivial since the cost of the decision tree is 0.
     Assume by induction that for every $\cI'' = \br{\cH', \cT, \preceq, p'}$ such that $\spr{\cH'}<\spr{\cH}$ and $s_z' = \sum_{h\in\cH'}z(h)$ we have $\COSTA\br{D'(\cH')} \leq \frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log s_z' \cdot \OPT\br{\cI''}$, where $D'(\cH')$ is the decision tree returned by \ProcDecisionTree on input $\cI''$.
     We have
 \begin{align*}
@@ -286,7 +289,9 @@ This concludes the proof.
 
 By combining the Lemma \ref{lemma:rounding} and Theorem \ref{thm:PCMSSC-to-PCACDT}, we immediately obtain the following corollary.
 \begin{corollary}\label{cor:PCACDT-special-cases}
-    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$. This yields the following approximation ratios:
+    If there is an $\br{\beta, \mu}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\beta}{\log\br{\frac{4\mu}{4\mu -1}}}\cdot \log \br{m+n}}$-approximation algorithm for $\ProblemPCACDT$. 
+    % In particular when $\mu = \cO\br{1}$, the approximation is $\cO\br{\beta \cdot \log \br{m+n}}$. 
+    This yields the following approximation ratios:
     \begin{itemize}
         \item $\cO\br{\log\br{m+n}}$-approximation algorithm for inforests,
         \item $\cO\br{\log^2\br{m+n}}$-approximation algorithm for outforests,
