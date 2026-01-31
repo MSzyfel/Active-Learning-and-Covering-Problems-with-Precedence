@@ -31,7 +31,7 @@ will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
     $$
     which by rearranging gives the desired inequality.
 \end{proof}
-The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$. \DD{(tutaj chciałeś zapytac o $o(m)$ czy $o(\budget)$?)}
+The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$ \DD{in case when $k=\Theta(m)$}.
 
 Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
 
@@ -308,8 +308,8 @@ Then a greedy solution provides an $\bigo(n^\epsilon)$-approximation for the $\P
 \end{theorem}
 
 \begin{proof}
- Let $\cA^*$ be an optimal solution consisting of sets $S_1, \ldots, S_k$ and let $\cA$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
- Define $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
+ Let $\cA^*$ be an optimal solution and let $\cA$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
+ Denote for brevity $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
  There are two cases:
 \begin{enumerate}
     \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*} \leq n$. Therefore:
@@ -317,23 +317,22 @@ $$
 \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 $$
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-     \mathcal{G}$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+     \mathcal{G}$ it holds $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
 \spr{\cov\br{\closure{S}}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}}}^\epsilon
 $. Rearranging this inequality, we get that $
 \spr{\cov\br{\closure{S}}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 $. We have that:
 \[
-\spr{\cov\br{\cA^*}} = \spr{\bigcup_{j=1}^k\cov\br{\closure{S_j}}} \leq \sum_{j=1}^{k} \spr{\cov\br{\closure{S_j}}} \leq k \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\spr{\cov\br{\cA^*}} = \spr{\bigcup_{S\in\cA^*}\cov\br{\closure{S}}} \leq \sum_{S\in\cA^*} \spr{\cov\br{\closure{S}}} \leq \spr{\cA^*} \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
 \]
-
-Therefore:
+Therefore,
 \[
-\Delta\br{\cA^*}= \frac{\spr{\cov\br{\cA^*}}}{k} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
+\Delta\br{\cA^*}= \frac{\spr{\cov\br{\cA^*}}}{\spr{\cA^*}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
 \]
 
 By the greedy choice, $\Delta\br{\cA} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
 \[
-\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon
+\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon.
 \]
 \end{enumerate}
 Since $C$ is constant, the theorem follows.
