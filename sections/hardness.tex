@@ -113,51 +113,6 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 	The reverse direction, that a search tree of total number of tests $T_{var} + T_{clauses}$ corresponds to a valuation satisfying all the clauses, is left to the reader.
 	The correspondence between total number of tests and average number of tests is direct. 
 \end{proof}
-	
-\begin{theorem}
-		Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
-\end{theorem}
-\begin{proof}
-	The reduction is very similar to the previous ones, albeit we the path graph with a tree graph.  
-\end{proof}
-
-\begin{theorem}
-	Average-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
-\end{theorem}
-\begin{proof}
-	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
-	For the formal definition of the reduction we recommend \cite{Ausiello}.
-	Namely, the problem where we would like to maximize the number of fulfilled clauses.
-	To prove this we have to provide functions:
-	\begin{itemize}
-		\item $f$ -- mapping from the instances of \ProblemMaxThreeSat to Binary Search.
-		\item $g$ -- mapping from the solutions of Binary Search to the solutions of \ProblemMaxThreeSat. 
-	\end{itemize}
-	And we need to prove the 2 crucial properties (other properties mentioned in the referenced definition are straightforward).
-	For the first one, 
-	let $I_S$ be any instance of \ProblemMaxThreeSat,
-	let $f(I_S)$ -- the constructed instance of \ProblemAverageCaseBinarySearchPrecedanceConstraints,
-	and let, $M_{SEARCH}$ and $M_{SAT}$ be the optimality measures for the respective problems (for the respective problems), also let $M_{SEARCH}^*$ and $M_{SEARCH}^*$ be the values of the optimal solutions for the instance.
-	The property to prove is
-	\[
-	M_{SEARCH}^*(f(I_S)) \le \beta M_{SAT}^*(I_S)
-	\]
-	for some fixed $\beta > 0$.
-	To prove this, we observe: 
-	\begin{itemize}
-		\item On one hand for any $I_S$ composed of $m$ clauses, we can observe at once that $M_{SAT}^*(I_S) \ge m/2$.
-		\item On the other hand for such an instance, we can drop all variables which do not appear in any clause. 
-		Due to this the number of variables is bounded by $3m$.
-		Hence, for the instance, due to the dummy variables, $|C| + |V| \le 8m$.
-		As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
-		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = C_{sep}$.
-		\item Now, the $|V|$ variable-edges correspond to total quarry time $|V| (2k+3) = C_{var}$.
-		\item After this, consider the total quarry time of clause edges. 
-		For a satisfied clause, there can be one quarry in time $k+2$ and other quarries $4$ can be done in time $k+3, k+3, k+4, k+4$. 
-		Hence this gives total quarry time $|C|(5k + 16)$ = $C_{clauses}$. 
-	\end{itemize}
-\end{proof}
-
 
 \subsection{Outforest precendce constrains}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
