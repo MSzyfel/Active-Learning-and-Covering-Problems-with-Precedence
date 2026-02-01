@@ -1,29 +1,31 @@
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \LinesNumbered
+
 \caption{The $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$}
-\label{alg:PCSC}
+\label{alg:BPCSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedureBPCSC(\cU, \cS, \preceq, B)$}{
-    \If{$B\geq \sqrt{m/H_n}$}
-    {
-        \Return $\cS$.
-    }
-  \Else{
+%    \If{$B\geq \sqrt{m/H_n}$}
+%    {
+%        \Return $\cS$.
+%    }
+%  \Else{
   $\cC \gets \emptyset$.
 
   \While{$\spr{\cC} < \sqrt{m\cdot H_n}\cdot B$}{
 
     $\cA \gets$ Run the $B$-approx. algorithm for $\ProblemBMDPCS$ on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC, B)$.
 
-    \ForEach{$u \in \cov\br{\cA, \cU-\cC}$}{
-        $c\br{u}\gets \Delta\br{\cA, \cU-\cC}$. \tcp*{for analysis only}
-    }
+%    \ForEach{$u \in \cov\br{\cA, \cU-\cC}$}{
+%        $c\br{u}\gets \Delta\br{\cA, \cU-\cC}$. \tcp*{for analysis only}
+%    }
     $\cC \gets \cC \cup \cA$.
   }
 
   \Return $\cC$.
-  }
+%  }
 }
 \end{algorithm}
+
 

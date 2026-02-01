@@ -2,7 +2,7 @@
 \DontPrintSemicolon
 \LinesNumbered
 \caption{The algorithm for $\ProblemPCMSSC$}
-\label{alg:PCSC}
+\label{alg:fPCMSSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedureFPCMSSC(\cU, \cS, \preceq, f)$}{
     $\cO\gets \emptyset$.
@@ -13,22 +13,20 @@
         $\pi_l\gets \emptyset$.
 
         \For{$1\leq i\leq l$}{
-            $\tau\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^i)$.
+            $\tau_l^i\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^i)$.
 
-            $U \gets U \setminus \cov(\pi)$.
+            $U \gets U \setminus \cov(\tau_l^i)$.
 
-            $\pi_l \gets \pi_l \circ \tau$.
+            $\pi_l \gets \pi_l \circ \tau_l^i$.
         }
         
         Extend $\pi_l$ to ensure that $\spr{\pi_l} \geq \alpha\cdot a^l$.
 
-        $\sigma\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^l)$.
+        $\sigma_l \gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, B=a^l)$.
 
-        $\pi_l \gets \pi_l \circ \sigma$.
-
-        $\cO \gets \cO \cup \brc{\pi_l}$.
+        $\cO \gets \cO \cup \brc{\pi_l \circ \sigma_l}$.
     }
-    \Return $\argmin_{\pi\in \cO} \brc{\cost(\pi)}$.
+    \Return $\argmin_{\pi\in \cO} \brc{\COST(\pi)}$.
 }
 \end{algorithm}
 
