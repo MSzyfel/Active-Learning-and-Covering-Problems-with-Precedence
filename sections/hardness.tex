@@ -145,51 +145,6 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 	The reverse direction, that a search tree of total number of tests $T_{var} + T_{clauses}$ corresponds to a valuation satisfying all the clauses, is left to the reader.
 	The correspondence between total number of tests and average number of tests is direct. 
 \end{proof}
-	
-\begin{theorem}
-		Worst-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
-\end{theorem}
-\begin{proof}
-	The reduction is very similar to the previous ones, albeit we the path graph with a tree graph.  
-\end{proof}
-
-\begin{theorem}
-	Average-Case Tree Search With Precedence Constraints is cannot be approximated with ration better than $\frac{}{}$ unless $\Pclass = \NP$.
-\end{theorem}
-\begin{proof}
-	However, to prove hardness we make an $L$-reduction from \ProblemMaxThreeSat.
-	For the formal definition of the reduction we recommend \cite{Ausiello}.
-	Namely, the problem where we would like to maximize the number of fulfilled clauses.
-	To prove this we have to provide functions:
-	\begin{itemize}
-		\item $f$ -- mapping from the instances of \ProblemMaxThreeSat to Binary Search.
-		\item $g$ -- mapping from the solutions of Binary Search to the solutions of \ProblemMaxThreeSat. 
-	\end{itemize}
-	And we need to prove the 2 crucial properties (other properties mentioned in the referenced definition are straightforward).
-	For the first one, 
-	let $I_S$ be any instance of \ProblemMaxThreeSat,
-	let $f(I_S)$ -- the constructed instance of \ProblemAverageCaseBinarySearchPrecedanceConstraints,
-	and let, $M_{SEARCH}$ and $M_{SAT}$ be the optimality measures for the respective problems (for the respective problems), also let $M_{SEARCH}^*$ and $M_{SEARCH}^*$ be the values of the optimal solutions for the instance.
-	The property to prove is
-	\[
-	M_{SEARCH}^*(f(I_S)) \le \beta M_{SAT}^*(I_S)
-	\]
-	for some fixed $\beta > 0$.
-	To prove this, we observe: 
-	\begin{itemize}
-		\item On one hand for any $I_S$ composed of $m$ clauses, we can observe at once that $M_{SAT}^*(I_S) \ge m/2$.
-		\item On the other hand for such an instance, we can drop all variables which do not appear in any clause. 
-		Due to this the number of variables is bounded by $3m$.
-		Hence, for the instance, due to the dummy variables, $|C| + |V| \le 8m$.
-		As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
-		Hence, in an optimal solution the separator-edges will have total quarry time $1 + 2*2 + 4*3 + 8*4 + \ldots 2^k*k = C_{sep}$.
-		\item Now, the $|V|$ variable-edges correspond to total quarry time $|V| (2k+3) = C_{var}$.
-		\item After this, consider the total quarry time of clause edges. 
-		For a satisfied clause, there can be one quarry in time $k+2$ and other quarries $4$ can be done in time $k+3, k+3, k+4, k+4$. 
-		Hence this gives total quarry time $|C|(5k + 16)$ = $C_{clauses}$. 
-	\end{itemize}
-\end{proof}
-
 
 \subsection{Outforest precendce constrains}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
@@ -269,7 +224,7 @@ We have the following theorem:
 
     Next, we define the universe of elements to be covered. Let $U=\{0,1,\dots, n\}$ for some appropriately chosen natural number $n$ to be determined later. Every vertex representative set contains only the special element $0$, that is, $V_{v, i}=\{0\}$ for all $v \in \{1,\ldots,N\}$ and $i \in \{1,\ldots,\lambda\}$. 
     
-    To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in \{1,\ldots,N\}$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in \{1,\ldots,N\}$, we have $\mathbb{P}[j \in U_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets of its endpoints together with the special element, that is, $E_{uv} = \{0\} \cup (U_u \cap U_v)$. 
+    To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in \{1,\ldots,N\}$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in \{1,\ldots,N\}$, we have $\mathbb{P}[j \in U_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets, that is, $E_{uv} = (U_u \cap U_v)$. 
     
     From this construction, we can compute the following expected values:
     \begin{itemize}
@@ -352,7 +307,7 @@ We have the following theorem:
     
     For this probability to be at most $N^{-8}$, we would need $\mu_E \geq 12(x+8)\log N$, which translates to $x \geq 500\sqrt{N}\log N$. However, we are interested in the regime where $x \leq N^{(5-2\gamma)/8}$. For such values of $x$ and sufficiently large $N$ (note that $N^{(5-2\gamma)/8} < N^{5/8} < \sqrt{N}$ for large $N$), we can safely assume that with overwhelming probability, any set $X$ of size $x \leq N^{(5-2\gamma)/8}$ contains at most $x^2/\sqrt{N}$ edges.
     
-    Next, we bound how many elements can be covered by these edge representatives. By construction, each edge representative $E_{uv}$ covers the elements in $\{0\} \cup (U_u \cap U_v)$. The size of $U_u \cap U_v$ has expectation $\mathbb{E}[\spr{U_u \cap U_v}]=np^2$. By Chernoff's bound, the probability that a single edge representative covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most $e^{-np^2/12}$. 
+    Next, we bound how many elements can be covered by these edge representatives. By construction, each edge representative $E_{uv}$ covers the elements in $(U_u \cap U_v)$. The size of $U_u \cap U_v$ has expectation $\mathbb{E}[\spr{U_u \cap U_v}]=np^2$. By Chernoff's bound, the probability that a single edge representative covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most $e^{-np^2/12}$. 
     
     The total number of edge representatives available after selecting vertices in $X$ is at most $x^2/\sqrt{N}$. By the union bound, the probability that at least one of these edge representatives covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most:
     \[
