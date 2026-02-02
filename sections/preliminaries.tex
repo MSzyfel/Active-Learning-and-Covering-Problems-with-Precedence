@@ -25,8 +25,7 @@ However, with a slight abuse of notation we use tests as nodes of $D$ whenever t
 
 \paraTitle{Cost measures for decision trees.}
 Let $\tests{D}{v}$ denote the sequence of tests on the path from the root to $v$ in $D$ including $v$. The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}$, where $v$ is the leaf of $D$ that represents identifying $h$ as the target.
-Let $p: \cH \to [0,1]$ be a probability distribution over the hypotheses, where $\sum_{h \in \cH} p(h) = 1$.
-We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \mathbb{E}_{h \sim p}\left[\COST\br{D, h}\right] = \sum_{h \in \cH} p(h) \cdot \COST\br{D, h}$.
+We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \cH}\cdot \COST\br{D, h}$.
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
 %$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 %$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
@@ -37,10 +36,10 @@ We consider two cost measures for decision trees: the worst-case cost $\COSTW\br
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
 Throughout the paper we use $\cI$ to denote an instance of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution on instance $\cI$.
 \begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree strategy that outputs the target hypothesis by performing the minimum number of tests in the worst case. That is, find a decision tree $D$ such that $\COSTW\br{D}=\OPT\br{\cI}$.
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that and minimizes the worst-case cost $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
 \begin{problem}[Precedence Constrained Average Case Decision Tree ($\ProblemPCACDT$)] \label{problem:PCACDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\cT,\preceq)$ on tests, and a probability distribution $p: \cH \to [0,1]$ over the hypotheses (where $\sum_{h \in \cH} p(h) = 1$), find a precedence-closed decision tree strategy that outputs the target hypothesis $\target$ and minimizes the expected number of tests. That is, find a decision tree $D$ such that $\COSTA\br{D}=\OPT\br{\cI}$.
+Given a set of hypotheses $\cH$, a set of tests $\cT$, a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that and minimizes the average-case cost $\COSTA\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
 \paraTitle{Additional notation for decision trees.}

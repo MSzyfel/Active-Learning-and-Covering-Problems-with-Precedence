@@ -19,12 +19,12 @@ $D\gets\brc{\emptyset, \emptyset}$,
 $\cH_{0} \gets \cH$, $t_{0} \gets \emptyset$.
 
 \For{$i=1$ \KwTo $|\cC|$}{
-\ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $1\leq\spr{\cH'} \leq \frac{4\beta-1}{4\beta}\cdot \spr{\cH}$}}{
+\ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $1\leq\spr{\cH'} \leq \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$}}{
     $D_{\cH'} \gets$ \ProcDecisionTree$(\cH', \cT, \preceq, \blackBox)$.
 
     Hang $D_{\cH'}$ below $t_{i-1}$ in $D$.
 }
-\If{\textnormal{$i\neq 1$ and there is no $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $\spr{\cH'} > \frac{4\beta-1}{4\beta}\cdot \spr{\cH}$}}{
+\If{\textnormal{$i\neq 1$ and there is no $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $\spr{\cH'} > \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$}}{
     \Return $D$.
 }
 
