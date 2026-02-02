@@ -72,9 +72,9 @@ Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a preceden
 
 The algorithms for decision tree problems are conditioned on existence of approximations for the set above covering variants (cf. Section~\ref{sec:SC}).
 For each covering problem we can distinguish two optimality measures with one being the number of covered items and the other being $\spr{\cC}$ or $\coverageTime\br{\cC}$.
-We say that an algorithm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,f)$ it returns a solution $\cC$ such that $\cov\br{\cC}\geq f\cdot n/\alpha$ and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$.
-From a $(\gamma,\alpha)$-approximation $\cC$ for $\ProblemPCMSSC$ we require $\cov\br{\cC}\geq f\cdot n/\alpha$ and $\coverageTime\br{\cC}\leq\gamma\cdot\OPT\br{\cI}$.
-Likewise, a $(\gamma,\alpha)$-approximation for $\ProblemBPCSC$ for any input instance $\cI=(\cU,\cS,\preceq,\budget)$ returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\alpha}\cdot\OPT\br{\cI}$ and $\spr{\cC}\leq \gamma\cdot \budget$.
+We say that an algorithm is $(\alpha,\beta)$-approximation for $\ProblemPCSC$, where $\alpha\geq 1$ and $\beta\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,f)$ it returns a solution $\cC$ such that $\cov\br{\cC}\geq f\cdot n/\beta$ and $\spr{\cC}\leq\alpha\cdot\optPCSC{\cI}$.
+From a $(\alpha,\beta)$-approximation $\cC$ for $\ProblemPCMSSC$ we require $\cov\br{\cC}\geq f\cdot n/\beta$ and $\coverageTime\br{\cC}\leq\alpha\cdot\OPT\br{\cI}$.
+Likewise, a $(\alpha,\beta)$-approximation for $\ProblemBPCSC$ for any input instance $\cI=(\cU,\cS,\preceq,\budget)$ returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\beta}\cdot\OPT\br{\cI}$ and $\spr{\cC}\leq \alpha\cdot \budget$.
 Throughout this paper, $n$ denotes the number of elements in a universum ($n=\spr{\cU}$) or the number of hypotheses ($n=\spr{\cH}$), and $m$ denotes the number of sets or tests ($m=\spr{\cS}$ or $m=\spr{\cT}$).
 
 
