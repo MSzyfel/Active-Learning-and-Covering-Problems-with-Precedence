@@ -184,6 +184,7 @@ We have the following theorem:
     We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$. In our reduction we will embded the structure of the graph into the precedence constraints, while the universe elements will merely enforce the covering requirement. Given a graph $G=\brc{[N], \mathcal{E}}$ we firstly convert each vertex $v$ of $G$ into $\lambda$ representative sets $V_{u, i}$ for $i \in [\lambda]$ where $\lambda$ is appropriately chosen natural number. We then convert each edge $uv\in\mathcal{E}$ into one representative set $E_{uv}$ which is a successor of all representatives of $u$ and $v$, i.e., $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$ for all $i \in [\lambda]$. 
 
     We then create the universe elements $U=\brc{0,\dots, n}$ for some appropriately chosen natural number $n$. Every vertex representative $V_{u, i}$ covers consists of a singular item $V_{u, i}=\brc{0}$. In order to define the edge representatives we would firstly like to associate items with vertices. To do so we built auxiliary sets $U_v$ for each vertex $v$. The construction is randomized, and based on a probability $p\in(0,1)$. Each item in $[n]$ is associated with $U_v$ independently with probability $p$, so that $\mathbb{P}[j \in U_v] = p$ for each $j \in [n]$. Finally, each edge representative $E_{uv}$ covers the union of the auxiliary sets of its endpoints, i.e., $E_{uv} = U_u \cup U_v$. We have that $\mathbb{E}[\spr{U_v}] = p n$, $\mathbb{E}[\spr{v\colon j\in U_v}] = p N$ and $\mathbb{E}[\spr{E_{uv}}] = \mathbb{E}[\spr{U_u \cup U_v}] = np^2$.
+    \TP{A to $\mathbb{E}[\spr{E_{uv}}] = \mathbb{E}[\spr{U_u \cup U_v}] = np^2$ jest dobrze? Raczje powinna być ta część wspólna.}
 
     The idea is as follows: We pick $p$ to be smallest value for which if planted component exists then with high probability it covers $U$ in which case we can showcase a good solution to PCSC. On the other hand, if no planted component exists then we show that it pushes the cost of any solution to PCSC high enough to obtain the desired inapproximability ratio. 
     
@@ -228,7 +229,22 @@ We have the following theorem:
     Now assume that the planted component does not exist. We show that any solution to PCSC must have high cost with high probability. 
 
     
-    \MS{Tutaj dowod jest jeszcze enigmatyczny dla mnie dlatego zostawiam to na razie. TODO: pokazac, ze jak nie ma komponentu to koszt rozwiazania mocno rosnie}
+    \MS{Tutaj dowod jest jeszcze enigmatyczny dla mnie dlatego zostawiam to na razie. T	\TP{Podkreślić mocno, że skopiowane to }ODO: pokazac, ze jak nie ma komponentu to koszt rozwiazania mocno rosnie}.
+    \begin{enumerate}
+    	\item Consider any solution consisting of $x$ vertex sets taken with $\lambda$ multiplicity [hence there are $x\lambda$ sets].
+    	The expected number of edges on this vertices is $E_{\#e} \le \frac{x^2}{\sqrt{N}}$.
+    	There are $\binom{N}{x} \le N^x$ such sets.
+    	\item By Chernoff Bounds the probability that a given set of $x$ vertices has more than $3/2 E_{\#e}$ edges is at most $\exp(-E_{\#e}/12)$.
+    	Hence the probability that any set of vertices has more that $3/2 E_{\#e}$ edges is at most $N^{x}\exp(-E_{\#e}/12)$.
+    	\item Due to the fact that $\alpha = \frac{1}{2}$,
+    	$E_{\#e}=\frac{x^2}{2\sqrt{N}}$.
+    	Hence if one assumes $x \ge C\sqrt{N}\log N$, one gets $E_{\#e} \ge \frac{C}{2}\sqrt{N}\log^2N$.
+    	Due to this the probability that any set of vertices has more that $3/2 E_{\#e}$ edges is at most
+    	\TP{Praca trwa...}
+    \end{enumerate}
+    
+    
+    
 \end{proof}
 Therefore we immediately have that:
 \begin{theorem}\label{thm:PCWCDT-PDS-hardness}
