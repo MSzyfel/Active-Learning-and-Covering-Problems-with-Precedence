@@ -13,10 +13,11 @@ In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2
 Hence, there is $(n-1)$-meaningful tests to be performed.
 Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
 
+\MS{Ten akapit potencjalnie do zakomendowania}
 Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. 
 In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is NP-hard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is NP-hard as well.
 \begin{theorem}\label{thm:PCWCDT-NP-hard}
-    Worst-Case Decision Tree With Precedence Constraints is \NPhard.
+    Worst-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.
 \end{theorem}
 \begin{proof}
 	Consider an instance of \ProblemThreeSat given as: a set of variables $V$, and a set of clauses $C$.
@@ -73,7 +74,7 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 		\[
 			\coord{c}{i}{1}, \coord{c}{i}{v_i^1}, \coord{c}{i}{v_i^{12}}, \coord{c}{i}{v_i^{23}}, \coord{c}{i}{v_i^3}, \coord{c}{i}{2}.
 		\]
-		Denote the tests between the consecutive pairs of hypotheses as: $\litedge{i, 0}$, $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$, $\litedge{i, 0'}$Binary Search.
+		Denote the tests between the consecutive pairs of hypotheses as: $\litedge{i, 0}$, $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$, $\litedge{i, 0'}$.
 		\item For a variable $v_i$, construct a gadget compose of $3$ hypotheses as a path
 		\[
 			\coord{v}{i}{1}, \coord{v}{i}{2}, \coord{v}{i}{3}
@@ -88,10 +89,10 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 	\end{enumerate}
 	To define the order on the edges:
 	\begin{enumerate}
-		\item Observe that there are exactly $1+2+\ldots+2^{k}$ separator tests, for some $k > 0$ due to introduction of dummy variables.
+		\item Observe that there are exactly $\sum_{i=1}^{k}2^i$ separator tests, for some $k > 0$ due to introduction of dummy variables.
 		Hence easily one can make an order corresponding to binary tree, to force the queries.
 		\item Force all other tests to be preceded by the separator tests.
-		\item For every cBinary Searchlause $c_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$, make $\litedge{i, v}$ dependent on $\varedge{v^+}$ if $v$ is positive literal; make it dependent on $\varedge{v^-}$ otherwise.
+		\item For every clause $c_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$, make $\litedge{i, v}$ dependent on $\varedge{v^+}$ if $v$ is positive literal; make it dependent on $\varedge{v^-}$ otherwise.
 		\item For every clause $c_i$, make $\litedge{i, 0}$ and $\litedge{i, 0'}$ dependent on all variable edges.
 	\end{enumerate}
 	Now, to prove that the problem is \NPhard we prove the decision version of the problem is \NPcomplete, 
@@ -99,8 +100,8 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 	
 	To prove that the problem is in \NP we observe that given decision tree certifies maximum number of tests.
 	
-	Now, assume that the instance of $(C, V)$ \ProblemThreeSat is of 'YES' type.
-	Hence let $f: V \leftarrow \{T, F\}$ be a valuation which satisfies all the clauses.
+	\paragaraph{YES case:} Assume that the instance of $(C, V)$ \ProblemThreeSat is of 'YES' type.
+	Hence let $f: V \leftarrow \{T, F\}$ be an evaluation which satisfies all the clauses.
 	Then, we build the strategy:
 	\begin{itemize}
 		\item Perform the separator tests in time up to $k$.
@@ -127,7 +128,7 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 
 
 \begin{theorem}
-    Average-Case Decision Tree With Precedence Constraints is \NPhard.
+    Average-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.x`'
 \end{theorem}
 \begin{proof}
 	The reduction is the same as in the worst-case variant; except that we have to consider the average number of tests.

@@ -1,8 +1,8 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
-\MS{MS: symbole ktorych (chyba) brakuje: $t\br{\cH}$, $\cH_t$, $D\setminus V$}
 
 In this section we present approximation algorithms for the problems $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to the problems $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. 
+We begin with few additional symbols. For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$. Let $\cH'\subseteq \cH$. By $t\br{\cH}$ we denote the test $t$ restricted to hypotheses in $\cH'$, i.e., for each response $H\in t$, we have a response $H\cap \cH'$ in $t\br{\cH'}$. Finally, by $D\setminus V$ denote the collection of subtrees (a forest) obtained by the removal of all nodes in $V$ from $D$.
 We will use the following immediate monotonicity properties. 
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
