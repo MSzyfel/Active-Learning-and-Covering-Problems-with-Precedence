@@ -18,8 +18,8 @@ The following definition gives a basic tool for analysis of our algorithms.
 \begin{definition}[Sepcover]
   Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
   Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
-  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\cS\br{D}$.
+  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \cS\br{D}$ (ties broken arbitrarily).
 \end{definition}
 Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
 %We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
@@ -31,10 +31,10 @@ $
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. We also set $\cU=\bigcup_{t\in\cT}\xi(t)$. 
 \begin{lemma}
-    We have $\spr{\cU}\geq 3\cdot\spr{\cH}/4$.
+    We have $\spr{\cU}\geq \frac{4}{5}\cdot\spr{\cH}$.
 \end{lemma}
 \begin{proof}
-    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}>4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1$ is uncovered, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\spr{\cH}$. Assume that there is a second hypothesis $h_2$ that is also uncovered. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$ so $h_2$ needs to belong to a response of size at most $\spr{\cH}/4$, a contradiction.
+    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}\geq4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1\notin \cU$, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\cdot\spr{\cH}$. Assume that there is a second hypothesis $h_2\notin \cU$. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$, so $h_2$ needs to belong to a response of size at most $\frac{3}{4}\cdot\spr{\cH}$, a contradiction. Thus $\spr{\cU}\geq \min_{i\geq5}\brc{\frac{i-1}{i}}\cdot\spr{\cH}=\frac{4}{5}\cdot\spr{\cH}$.
 \end{proof}
  
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
@@ -50,9 +50,9 @@ By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) used in both cases.
 The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$ respectively.
-Let $\cC$ be the cover obtained by the black-box procedure on the corresponding instance. Assume that $\cC$ contains some ordering of its elements. If $\cC$ is the output of an approximation algorithm for $\ProblemPCSC$, then the ordering is a topological ordering of the tests in $\cC$ according to the precedence constraints.
+Let $\cC$ be the cover obtained for the instance $\br{\cU, \xi\br{\cT}, \preceq_{\xi}, f=1/4}$ by the black-box procedure on the corresponding instance. Assume that $\cC$ contains some ordering of its elements. If $\cC$ is the output of an approximation algorithm for $\ProblemPCSC$, then this ordering is a topological ordering of the tests in $\cC$ according to the precedence constraints.
 Note that the $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
-We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$. During each such iteration, we look at all possible responses to the appended test and for each sufficiently small response $\cH'$ ($\spr{\cH'} \leq \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$), we recursively call \ProcDecisionTree on the subinstance induced by $\cH'$. If there exists a large response $\cH'$ ($\spr{\cH'} > \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$), then we do not make a recursive call for it and simply continue appending tests from $\cC$ as a response associated with $\cH'$. Note that since $\frac{16\beta-3}{16\beta}>\frac{1}{2}$ for any $\beta \geq 1$, there is at most one such response. 
+We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$. During each such iteration, we look at all possible responses to the appended test and for each sufficiently small response $\cH'$ ($\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$), we recursively call \ProcDecisionTree on the subinstance induced by $\cH'$. If there exists a large response $\cH'$ ($\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$), then we do not make a recursive call for it and simply continue appending tests from $\cC$ as a response associated with $\cH'$. Note that since $\frac{5\beta-1}{5\beta}>\frac{1}{2}$ for any $\beta \geq 1$, there is at most one such response. 
 % Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests corresponding to the cover in $S$.
 \input{pseudocodes/worst_case_learning.tex}
 
@@ -104,7 +104,7 @@ Let $D_{\cC}$ be a decision tree restricted only to tests from $\cC$. The follow
 
 \begin{theorem} \label{thm:PCSC-to-PCWCDT}
 If there is an $\br{\alpha, \beta}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. 
+$\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. 
 % In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
@@ -112,11 +112,11 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}} \cdot \log n}$-approx
      Let $D$ be the decision tree returned by this call.
      In order to prove the theorem it is enough to argue that
      \begin{equation} \label{eq:D}
-     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI}.
+     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
      \end{equation}
 
      The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
+     Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
      To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
      We have
 %         \begin{align*}
@@ -128,12 +128,12 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}} \cdot \log n}$-approx
 %        \end{align*}
         \begin{align*}
             \COSTW\br{D} \leq & \COSTW\br{D_{\cC}} + \max_{\cH'(D')} \COSTW\br{D'(\cH')} \\
-            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH'(D')} \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-            \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log \br{\frac{\br{{16\beta-3}}\cdot n}{16\beta}} \cdot \OPT\br{\cI} \\
-            = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-            = & \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI},
+            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH'(D')} \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+            \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
+            = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
+            = & \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
         \end{align*}
-        where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{3}{4}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(16\beta -3)}{16\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
+        where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
         This concludes the proof of the theorem.
 \end{proof}
 
@@ -166,7 +166,7 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
     Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
     \[
-    \COSTA\br{D} = \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \COSTA\br{D'}.
+    \COSTA\br{D} = \COSTA\br{D_{S}} + \sum_{D'\in D\setminus V\br{D_{S}}} \COSTA\br{D'}.
     \]
 %     $$
 %     \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D\setminus S} \COSTA\br{D', \cI}.
@@ -257,7 +257,7 @@ The following observation is analogous to Observation~\ref{obs:DS}:
 \end{observation}
 
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\alpha, \beta}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$. 
+    If there is an $\br{\alpha, \beta}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$. 
     % In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
 \end{theorem}
 \begin{proof}
@@ -265,21 +265,21 @@ The following observation is analogous to Observation~\ref{obs:DS}:
     Let $D$ be the decision tree returned by this call.
     In order to prove the theorem it is enough to argue that
     \begin{equation} \label{eq:D-average}
-     \COSTA\br{D} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI}.
+     \COSTA\br{D} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
     \end{equation}
 
     The proof is by induction on $n$. The base case when $n=1$ is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
+    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
     To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
     We have
 \begin{align*}
     \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{\cH'(D')} \COSTA\br{D'(\cH')} \\
-    \leq & \alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH'(D')} \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-    \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log \br{\frac{\br{{16\beta-3}}\cdot n}{16\beta}} \cdot \OPT\br{\cI} \\
-    = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-    = & \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI},
+    \leq & \alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH'(D')} \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+    \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
+    = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
+    = & \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
 \end{align*}
-where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{3}{4}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(16\beta -3)}{16\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
+where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
 This concludes the proof of the theorem.
 \end{proof}
 
