@@ -179,20 +179,19 @@
 \begin{abstract}
 This work considers a number of optimization problems and reductive relations between them.
 The two main problems we are interested in are the \emph{Optimal Decision Tree} and \emph{Set Cover}.
-These two fundamental tasks are studied under precedence constraints, that is, if a query (or set) $X$ is a predecessor of $Y$, then $Y$ needs to have $X$ as an ancestor in a feasible decision tree (or respectively, if $Y$ is added to set cover, then so must be $X$).
+We study these two fundamental tasks under precedence constraints, that is, if a test (or set) $X$ is a predecessor of $Y$, then in any feasible decision tree $X$ needs to be an ancestor of $Y$  (or respectively, if $Y$ is added to set cover, then so must be $X$).
 For the Optimal Decision Tree we consider two optimization criteria: worst case identification time (height of the tree) or the average identification time.
 Similarly, for the Set Cover we study two cost measures: size of the cover or the average cover time.
 
-Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of an algorithm for the former.
-En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of the algorithmic method.
+Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of a procedure for the former.
+En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of combinatorial structure of our problems.
 The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*\br{\sqrt{m}}$-approximation algorithms for all of the aforementioned problems.
-The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability gaps for the decision tree and covering problems.
-Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence relations, inforest and outforest which are tight.
+The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability results for the decision tree and covering problems.
+Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence types, outforests and inforests. By providing corresponding hardness results, we show these results to be tight.
 \end{abstract}
 
 
 % \begin{abstract}%
-%
 %   We consider the Optimal Decision Tree problem in which a hidden hypothesis is required to be uncovered by performing a series of tests, each of which reveals partial information about the hidden hypothesis.
 %   Upon receiving this information, the learner adaptively selects the next test to be performed.
 %   The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case.
@@ -206,7 +205,7 @@ Besides giving a complete set of results for general precedence constraints, we 
 % \end{abstract}
 
 \begin{keywords}%
-  Optimal decision trees, Set cover, Precedence constraints, Approximation Algorithms%
+  Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms%
 \end{keywords}
 
 
