@@ -26,7 +26,7 @@ Figure \ref{fig:sepcover} illustrates the definition of sepcover.
 Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
 For each test $t\in\cT$, let
 $
-\xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\spr{\cH}}.
+\xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\cdot\spr{\cH}}.
 $
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. We also set $\cU=\bigcup_{t\in\cT}\xi(t)$. 
@@ -34,7 +34,7 @@ By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
     We have $\spr{\cU}\geq 3\cdot\spr{\cH}/4$.
 \end{lemma}
 \begin{proof}
-    If $\spr{\cH}=4$, then any test covers all $\cH$ and the claim holds trivially. Assume that $\spr{\cH}>4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1$ is uncovered, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\spr{\cH}$. Assume that there is a second hypothesis $h_2$ that is also uncovered. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$ so $h_2$ needs to belong to a response of size at most $\spr{\cH}/4$, a contradiction.
+    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}>4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1$ is uncovered, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\spr{\cH}$. Assume that there is a second hypothesis $h_2$ that is also uncovered. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$ so $h_2$ needs to belong to a response of size at most $\spr{\cH}/4$, a contradiction.
 \end{proof}
  
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
