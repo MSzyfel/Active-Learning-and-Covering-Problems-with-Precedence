@@ -1,26 +1,7 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
-The following definition gives a basic tool for our algorithm.
-\begin{definition}[Sepcover]
-  Let $D$ be any decision tree for an instance $\cI$.
-  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
-  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $D$ minimizes $\COSTW\br{D}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
-\end{definition}
-Figure \ref{fig:sepcover} illustrates the definition of sepcover.
-\begin{figure}[h]
-\centering
-\input{figures/sepcover.tex}
-\caption{Sepcover sequence in a decision tree}
-\label{fig:sepcover}
-\end{figure}
-% Note that a sepcover can be efficiently computed for a decision tree $D$ by the following greedy procedure that finds the above node $v$.
-% Let initially $v$ be the root.
-% If more than $\spr{\cH}/2$ hypotheses are potential targets right before the query to $v$, that is, the subtree $D_v$ has more than $\spr{\cH}/2$ leaves, then find the child $u$ of $v$ that maximizes $\cH_u$ and let $v:=u$.
-% Otherwise the process is over.
-% This is indeed correct because each test $x\in\tests{D}{v}$ can have at most one child associated with more than half of the hypotheses from $\cH_x$.
-
-We will use two immediate monotonicity properties.
+In this section we present approximation algorithms for the problems $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to the problems $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. 
+We will use the following immediate monotonicity properties. 
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
     Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
@@ -31,22 +12,39 @@ We will use two immediate monotonicity properties.
     Then, $\OPT\br{\cI} \geq \sum_{i=1}^t \OPT\br{\br{\cH_i, \cT, \preceq}}$.
 \end{lemma}
 
+The following definition gives a basic tool for analysis of our algorithms.
+\begin{definition}[Sepcover]
+  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
+  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
+  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
+  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+\end{definition}
+Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
+%We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
 Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
 For each test $t\in\cT$, let
-$$
-\xi(t)=\brc{h\in\cH \mid h\in U \textup{ for some }U\in t\textup{ s.t. }  \spr{U}\leq\frac{3}{4}\spr{\cH}}.
-$$
+$
+\xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\spr{\cH}}.
+$
 Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
-By extension, for any subset $T\subseteq\cT$, $\xi(T)=\brc{\xi(t) \mid t\in T}$.
-The intuition behind the definition of $\xi$ is that it transforms an instance of a decition tree problem into a set cover instance with size-bounded restriction on the family of sets.
+By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. We also set $\cU=\bigcup_{t\in\cT}\xi(t)$. 
+It should be noted that $\spr{\cU}\geq \spr{\cH}-1$. This is because there is at most one hypothesis that is not covered by any test in $\cT$. To see this observe that if a hypothesis $h_1$ is uncovered, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\spr{\cH}$. Assume that there is a second hypothesis $h_2$ that is also uncovered. However, by definition we know that there exists a test which distinguishes $h_1$ and $h_2$ so $h_2$ needs to belong to a response of size at most $\spr{\cH}/4$, a contradiction. 
+%In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
+
+\begin{figure}[h]
+\centering
+\input{figures/sepcover.tex}
+\caption{Sepcover sequence in a decision tree}
+\label{fig:sepcover}
+\end{figure}
 
 \medskip
 The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) that will be used in both cases.
-The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. Note that when we are dealing with $\ProblemPCACDT$, the input instance also includes probabilities which we also pass to the black-box but omit in the list of parameters, slightly abusing the notation but keeping a uniform presentation for both subproblems.
-Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $S$, obtained via the $\xi$-operator, is used to split the instance and make recursive calls.
-Note that the $S$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
-Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests corresponding to the cover in $S$.
+The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$. 
+Algorithm \ref{alg:worstDecisionTree} is recursive and a set cover $\cC$ is used to split the instance and make recursive calls.
+Note that the $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
+% Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests corresponding to the cover in $S$.
 \input{pseudocodes/worst_case_learning.tex}
 
 
@@ -69,12 +67,12 @@ We will use sepcovers to lowerbound the cost of optimal solution:
         It is enough to argue that $\xi(\sepcover{\cI})$ covers at least $\spr{\cH/4}$ elements from $\cH$.
         Assume towards a contradiction that this is not the case, i. e. less than $\spr{\cH}/4$ elements are covered by $\xi(\sepcover{\cI})$.
 %Therefore there exists $t\in \sepcover{\cI}$ and a response $\cH'$ of size $\spr{\cH'}\leq \spr{\cH}/2$ such that hypotheses in $\cH'$ are not covered by $\sepcover{\cI}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\cH'\subseteq U_{t,j}$ (since $\cH'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\cH'} < \spr{\cH}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\cH'}+\spr{U_{t,j}-\cH'}<3/4\cdot \spr{\cH}$ which by definition means that $h$ is covered by $\sepcover{\cI}$, a contradiction.
-        Therefore there exists $t\in \sepcover{\cI}$ and a response $U\in t$ that corresponds to a child $u$ of $t$ such that hypotheses in $U$ are not covered by $\xi(\sepcover{\cI})$ and $\spr{\cH_u}\leq\spr{\cH}/2$.
+        Therefore there exists first test $t\in \sepcover{\cI}$ and a response $U\in t$ that corresponds to a child $u$ of $t$ such that hypotheses in $U$ are not covered by $\xi(\sepcover{\cI})$ and $\spr{\cH_u}\leq\spr{\cH}/2$.
         (Here we refer to a decision tree $D$ such that $\sepcover{D}=\sepcover{\cI}$).
         Otherwise the claim holds trivially, since all hypotheses would be covered.
         Note that $\cH_u\subseteq U$.
-        We have that $U\setminus\cH_u$ is a subset of hypotheses covered by other tests in $\sepcover{\cI}$ and hence by assumption, $\spr{U\setminus\cH_u}\leq \spr{\cH}/4$.
-        Therefore, we have that $\spr{U} = \spr{\cH_u}+\spr{U\setminus\cH_u}<3/4\cdot \spr{\cH}$ which by definition means that all elements in $U$ are covered by $\sepcover{\cI}$, a contradiction.
+        We have that $U\setminus\cH_u$ is a subset of hypotheses covered by other tests in $\sepcover{\cI}$ and hence by assumption, $\spr{U\setminus\cH_u}< \spr{\cH}/4$.
+        Therefore, we have that $\spr{U} = \spr{\cH_u}+\spr{U\setminus\cH_u}<3/4\cdot \spr{\cH}$ which means that hypothesis in $U$ are covered by $\sepcover{\cI}$, a contradiction.
     \end{proof}
 
 
@@ -158,9 +156,9 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
 \begin{observation} \label{obs:WCdecomposition}
     Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
-    $$
+    \[
     \COSTA\br{D} = \COSTA\br{S} + \sum_{D'\in D-S} \COSTA\br{D'}.
-    $$
+    \]
 %     $$
 %     \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D\setminus S} \COSTA\br{D', \cI}.
 %     $$

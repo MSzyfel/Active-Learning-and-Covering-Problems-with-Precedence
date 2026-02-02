@@ -10,9 +10,9 @@ We will refer to such $\cA$ as a \emph{greedy} solution.
 When $\max_{S \in \mathcal{G}} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
 Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
 An $\cA$ that satisfies
-    $$
+    \[
     \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
-    $$
+    \]
 will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
 \begin{theorem}\label{thm:BMDPCS-greedy}
     Let $\cA^*$ be an optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $\budget$-greedy.
@@ -22,16 +22,16 @@ will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
     We utilize a partial argument of \cite{PCMSSC} for $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq \budget$.
     For each $S\in \cA^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S}}\leq \Delta\br{\cA}$.
     Therefore:
-    $$
+    \[
     \spr{\cov\br{\cA^*}} \leq \sum_{S\in\cA^*}\spr{\cov\br{\closure{S}}}\leq \Delta\br{\cA}\sum_{S\in\cA^*} \spr{\closure{S}} \leq \Delta\br{\cA} \cdot k^2,
-    $$
+    \]
     where the first inequality is by the definition of union. We have that:
-    $$
+    \[
     \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}}=\frac{\spr{\cov\br{\cA^*}}}{k\cdot\Delta\br{\cA}}\leq k\leq \budget,
-    $$
+    \]
     which by rearranging gives the desired inequality.
 \end{proof}
-The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$ \DD{in case when $k=\Theta(m)$}.
+The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$ in case when $k=\Theta(m)$.
 
 Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
 
@@ -83,14 +83,14 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     \end{claim}
     \begin{proof}
      Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq \budget$. Since the algorithm selects a $\budget$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
-    $$
+    \[
     \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{\budget} \geq \frac{k-j+1}{\spr{\cCopt} \cdot \budget} \geq \frac{k-j+1}{\budget^2},
-    $$ 
+    \] 
     where the first inequality is by the approximation guarantee of the algorithm and the greedy choice, the second inequality is by definition of density, and the last inequality is by the budget constraint on $\cCopt$. Rearranging the above inequality yields:
-    $$
+    \[
     c(u_j) = \frac{\spr{\cA_{i(u_j)}}}{\spr{\cov\br{\cA_{i(u_j)}, R_{i(u_j)-1}}}} = 
     \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{\budget^2}{k-j+1}
-    $$
+    \]
     and the claim follows.
     \end{proof}
 
@@ -139,9 +139,9 @@ Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and le
 Note that for each $i\in\brc{1,\ldots,l}$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
 Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in\brc{1,\ldots,l}$.
 Thus, $\Delta(\cA_i,R_{i-1}) \geq \frac{1}{\gamma}\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$,
-$$
+\[
 \frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \frac{1}{\gamma}\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in\brc{1,\ldots,l},
-$$
+\]
 which gives
 \begin{equation} \label{eq:Ai}
 \spr{\cA_i} \leq \gamma \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
@@ -149,9 +149,9 @@ which gives
 \end{equation}
 For each $i\in\brc{1,\ldots,l-1}$ it holds $\spr{\cov\br{\cCopt,R_{i-1}}}\geq k/2$.
 Thus,
-$$
+\[
 \sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2\gamma}{k} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2\gamma n}{k} \cdot \spr{\cCopt}.
-$$
+\]
 For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
 Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2\gamma n}{k}\spr{\cCopt}$.
 This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}$.
@@ -182,10 +182,9 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         \begin{equation} \label{eq:pi}
         \spr{\pi_{l^*}} \leq \alpha\cdot \sum_{i=1}^{l^*} a^{i+1}\leq \frac{\alpha\cdot a^{l^*+2}}{a-1}\leq \frac{\alpha\cdot a^{2}\spr{\zeta^*}}{a-1}\leq4\alpha\cdot \br{3\beta-1}\cdot\spr{\zeta^*}
         \end{equation}
-        \DD{DD: może lepiej w extension step zrobić równość, aby nie pozostawiać wątpliwości, że nie wolno przekroczyć $\alpha\cdot \beta\cdot a^{l}$}
         Since in the extension step we ensure that $\spr{\pi_{l^*}} \geq \alpha\cdot \beta\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha \cdot \beta}\cdot \spr{\zeta^*}$ and the first part of the lemma follows.
 
-        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\zeta^*}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\zeta^*}}$. Similarly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i}}$. Additionally, define $n_0=n_0^*=0$. We have:
+        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\zeta^*}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\zeta^*}}$. Similarly, for every $i\in \brc{1,\dots,l^*}$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i}}$. Additionally, define $n_0=n_0^*=0$. We have:
         \begin{align*}
             \COST\br{\pi}&\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&\leq
@@ -198,15 +197,16 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         The last inequality is due to \eqref{eq:pi} and the bound on $\spr{\zeta^*}$.
         Moreover, we have that:
         \begin{align*}
-        \COST\br{\zeta^*}&\geq \sum_{i=1}^{l^*-1}a^{i-1}\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\zeta^*}
+        2\cdot\COST\br{\zeta^*}&\geq a^{l^*-1}\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\zeta^*}
         \\&\geq
-        \sum_{i=1}^{l^*-1}a^{i-1}\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
+        a^{l^*-1}\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
+        \\&=
+        \br{n-n_0^*}+\sum_{i=1}^{l^*-1}\br{a^{i}-a^{i-1}}\cdot\br{n-n_{i}^*}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
         \\&\geq
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
-        \DD{powyższa suma wg moich rachunków dobiega do $l^*-1$}
 
-        Consider any iteration $i\in [l^*]$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\zeta^*}{a^{i-1}}}$ be the set of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\zeta^*}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}$.
+        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\zeta^*}{a^{i-1}}}$ be the set of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\zeta^*}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\zeta^*}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}$.
         Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}}$. As a consequence we see that $n-n_i\leq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$.
         Thus,
         \begin{align*}
@@ -216,27 +216,27 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
             \\&\leq
             a^3\cdot n + \frac{1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_i^*} + \frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&\leq
-            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
+            \frac{2\cdot a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&=
-            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}}
+            \frac{2\cdot a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}}
             \\&\leq
-            \frac{a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
+            \frac{2\cdot a^4}{a-1}\cdot\COST\br{\zeta^*}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
         \end{align*}
         By rearranging the above inequality we obtain:
         \begin{align*}
-            Q&\leq \alpha\cdot\COST\br{\zeta^*}\cdot\frac{a^4}{\br{a-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot a}{\beta}}}
+            Q&\leq \alpha\cdot\COST\br{\zeta^*}\cdot\frac{2\cdot a^4}{\br{a-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot a}{\beta}}}
             \\&=
-            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{2\cdot\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
             \\&=
-            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{2\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
         \end{align*}
         by our choice of $a$. One can easily check that for $\beta\geq 1$, $\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}\leq \frac{\br{\beta-1/3}}{\beta}$ so that:
         \begin{align*}
             Q&\leq
-            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{3\beta-1}^2\cdot\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1/3}}{\beta}}}
+            \alpha\cdot\COST\br{\zeta^*}\cdot\frac{\br{3\beta-1}^2\cdot\br{\frac{2\cdot 3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1/3}}{\beta}}}
             \\&=
-            \alpha\cdot\COST\br{\zeta^*}\cdot 3\beta\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4
-            \leq 432\cdot\alpha\cdot\beta^3\cdot\COST\br{\zeta^*}
+            \alpha\cdot\COST\br{\zeta^*}\cdot 6\beta\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4
+            \leq 864\cdot\alpha\cdot\beta^3\cdot\COST\br{\zeta^*}
         \end{align*}
         The lemma follows.
     \end{proof}
@@ -272,14 +272,12 @@ It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSS
     There exists an $\br{1, \frac{e}{e-1}}$-approximation algorithm for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    The proof is by showing that this problem is reducible to a case with no precedence constraints, however taking a set $S$ may impose cost $c\br{S}$.
-    \DD{($\leftarrow$ tego w sumie nie rozumiem, odnośnie tego $c()$)}
-    This problem is equivalent to the standard budgeted maximum coverage problem, for which a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Notice that in this case, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
+    The proof is by showing that this problem is reducible to a standard budgeted maximum coverage problem (with no precedence constraints) with non-uniform cost of sets. In this setup including a set $S$ into the cover may impose cost $c\br{S}$. For this a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Observer that  for precedence constraints of the inforest type, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
 \end{proof}
 
 This implies the following result for $\ProblemPCMSSC$ via carefull examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}.
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
-    There exist $\br{432\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{1711.35, \frac{e}{e-1}}$-approximation algorithms for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
+    There exist $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation algorithms for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{theorem}\label{thm:BPCSC-outforest}
     There exists a $\br{\bigo\br{\log n}, 4}$-approximation algorithm for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
@@ -291,8 +289,8 @@ This implies the following result for $\ProblemPCMSSC$ via carefull examination 
     Since our metrics is already a tree metric, we can skip this step and obtain the improved approximation ratio.
     
     We create the metric as follows: we introduce a root node $r$ and for each set $S\in\cS$ we add a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$.
-    Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group which consists of all repersentatives of vertices containing $u$, \DD{i.e., $\brc{v_S \mid u\in S}$}. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
-    \DD{Moreover, since the tour starts at the root, we have that if a repersentative of a set $W$ is visited, it the repersentative of all of its predecessors in the outforest have been visited.}
+    Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group $X_u=\brc{v_S \mid u\in S}$ which consists of all repersentatives of vertices containing $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
+    Moreover, since the tour starts at the root, we have that if a repersentative of a set $W$ is visited, it the repersentative of all of its predecessors in the outforest have been visited.
     Therefore, any feasible solution to $\ProblemGSO$ on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
     \DD{Uwaga: Thm. \ref{thm:BPCSC-to-PCMSSC} nie przenosi ratio, do sprawdzenia.}
 \end{proof}
@@ -314,9 +312,9 @@ Then a greedy solution provides an $\bigo(n^\epsilon)$-approximation for the $\P
  There are two cases:
 \begin{enumerate}
     \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*} \leq n$. Therefore:
-$$
+\[
 \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
-$$
+\]
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
      \mathcal{G}$ it holds $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
 \spr{\cov\br{\closure{S}}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}}}^\epsilon

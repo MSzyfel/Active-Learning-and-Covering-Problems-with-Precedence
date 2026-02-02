@@ -241,12 +241,13 @@ Using this conjecture one can show the following inapproximability results for \
 \begin{theorem}\label{thm:PCMSSC-PDS-hardness}
     For any $\epsilon>0$ \ProblemPCMSSC\ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
-Using the reduction from \ProblemPCMSSC\ to \ProblemPCACDT\ and \ProblemPCWCDT\ from the previous section we immediately obtain the following results:
+
+Using the reduction from \ProblemPCMSSC\ to \ProblemPCACDT from the previous section we immediately obtain the following results:
 \begin{corollary}\label{thm:PCACDT-PDS-hardness}
     For any $\epsilon>0$ $\ProblemPCACDT$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{corollary}
 
-Below we show that a similar reduction can also be used to obtain the same inapproximability result for \ProblemPCSC. In the reduction we will often make use of the Chernoff Bound which is as follows:
+Below we show that a similar reduction can also be used to obtain the same inapproximability result for \ProblemPCSC. The construction and analysis is mostly the same as in \cite{PCMSSC} but we include it here for completeness. In the reduction we will often make use of the Chernoff Bound which is as follows:
 \begin{theorem}[Chernoff Bound]\label{thm:chernoff}
     Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in\{1,\ldots,n\}$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
     \begin{align*}
@@ -279,14 +280,14 @@ We have the following theorem:
     
     \paragraph{Choice of parameters.}
     Let $\mathcal{P}$ denote the planted component if it exists. Since $\mathcal{P}$ consists of $k = \sqrt{N}$ vertices, for any element $j \in \{1,\dots, n\}$, the expected number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$ is $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$. Therefore, the expected number of unordered pairs of vertices in $\mathcal{P}$ where both auxiliary sets contain $j$ is:
-    $$
+    \[
     \mathbb{E}\left[\left|\left\{(v, u)\colon j\in U_v, j\in U_u, v,u \in V(\mathcal{P}), v < u\right\}\right|\right] = \binom{p\sqrt{N}}{2}.
-    $$
+    \]
     
     Since each edge in $\mathcal{P}$ exists independently with probability $k^{\beta - 1} = (\sqrt{N})^{-1/2 - \gamma}=N^{-1/4-\gamma/2}$, the expected number of edge representative sets from $\mathcal{P}$ that cover element $j$ is:
-    $$
+    \[
     \mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] = \binom{p\sqrt{N}}{2} \cdot N^{-1/4-\gamma/2}\geq \frac{p^2N}{4} \cdot N^{-1/4-\gamma/2}=\frac{p^2 N^{3/4-\gamma/2}}{4}.
-    $$ 
+    \] 
     For this expected value to be sufficiently large (specifically, to be $\Theta(\log^2 N)$), we choose:
     $
     p=32\cdot N^{-3/8+\gamma/4}\cdot \log N
@@ -297,69 +298,69 @@ We have the following theorem:
     Consider the solution that selects all vertex representatives $V_{v,i}$ for all $v \in V(\mathcal{P})$ and all $i \in [\lambda]$, together with all edge representatives $E_{uv}$ for all edges $uv \in E(\mathcal{P})$. The special element $0$ is covered by any vertex representative, so we focus on covering elements in $\{1,\dots, n\}$.
     
     Fix an arbitrary element $j \in \{1,\dots, n\}$. We first bound the number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$. Since $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$, by Chernoff's bound (Theorem \ref{thm:chernoff}) with $\delta = 1/2$, we have:
-    $$
+    \[
     \mathbb{P}\left[\left|\{v\colon j\in U_v, v \in V(\mathcal{P})\}\right| \leq \frac{p\sqrt{N}}{2}\right] \leq  e^{-p\sqrt{N}/8} = e^{-4\cdot N^{1/8+\gamma/4}\cdot \log N} = N^{-4\cdot N^{1/8+\gamma/4}},
-    $$
+    \]
     which is exponentially small. 
     
     Next, for large enough $x$, we have $\binom{x}{2} \geq x^2/4$. Therefore, the expected number of unordered pairs of vertices in $\mathcal{P}$ where both auxiliary sets contain $j$ is at least $p^2N/4$. Again by Chernoff's bound, we have:
-    $$
+    \[
     \mathbb{P}\left[\left|\{(u,v)\colon j\in U_u, j\in U_v, u,v \in V(\mathcal{P}), u < v\}\right| \leq \frac{p^2N}{16}\right] \leq N^{-4\cdot N^{1/8+\gamma/4}}.
-    $$
+    \]
 
     Now, each such pair $(u,v)$ corresponds to an edge in $\mathcal{P}$ with probability $N^{-1/4-\gamma/2}$. Since edge existence is independent of the auxiliary set memberships, the expected number of edge representatives in $\mathcal{P}$ that cover $j$ is:
-    $$
+    \[
     \mu := \mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv\in E(\mathcal{P})\}}] \geq \frac{p^2N}{16} \cdot N^{-1/4-\gamma/2}=64\log^2 N.
-    $$
+    \]
 
     Applying Chernoff's bound once more, we obtain:
-    $$
+    \[
     \mathbb{P}[\spr{\{E_{uv}\colon j\in E_{uv}, uv\in E(\mathcal{P})\}} \leq \mu/2] \leq e^{-\mu/8} = e^{-8\log^2 N} = N^{-8\log N}.
-    $$
+    \]
 
     By the union bound over all $n$ elements in $\{1,\dots, n\}$, the probability that some element is not covered by the edge representatives in $\mathcal{P}$ is at most $n \cdot N^{-8\log N}$. We will choose $n = \Theta(N^{3/4})$ later, which makes this probability negligible for large $N$.
     
     Finally, we bound the number of sets in this solution. The number of vertex representative sets is exactly $\lambda\sqrt{N}$. For the edge representatives, observe that:
-    $$
+    \[
     \mathbb{E}[\spr{E(\mathcal{P})}]=\binom{\sqrt{N}}{2}\cdot N^{-1/4-\gamma/2}\leq \frac{N}{2} \cdot N^{-1/4-\gamma/2} = \frac{N^{3/4-\gamma/2}}{2}.
-    $$
+    \]
     
     By Chernoff's bound with $\delta = 1$, we have:
-    $$
+    \[
     \mathbb{P}[\spr{E(\mathcal{P})} \geq N^{3/4-\gamma/2}] \leq e^{-N^{3/4-\gamma/2}/6},
-    $$
+    \]
     which is extremely small. Therefore, with high probability, the total number of sets in the solution is at most:
-    $$
+    \[
     \lambda\sqrt{N}+N^{3/4-\gamma/2}.
-    $$
+    \]
     
     \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to PCSC must use significantly more sets to cover all elements in $U$ with high probability.
     
     Consider any solution to PCSC that selects representatives corresponding to some set $X \subseteq \{1,\ldots,N\}$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in \{1,\ldots,\lambda\}$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
     
     We first bound the number of edges among the vertices in $X$. Since the graph is drawn from $G(N, N^{-1/2})$, each potential edge exists independently with probability $N^{-1/2}$. For any fixed set $X$ of size $x$, the expected number of edges with both endpoints in $X$ is:
-    $$
+    \[
     \mu_E := \binom{x}{2}\cdot N^{-1/2} \leq \frac{x^2}{2\sqrt{N}}.
-    $$
+    \]
     
     There are at most $\binom{N}{x} \leq N^x$ possible sets $X$ of size $x$. By Chernoff's bound with $\delta = 1/2$, the probability that a specific set $X$ contains more than $3\mu_E/2$ edges is at most $e^{-\mu_E/12}$. By the union bound over all possible sets of size $x$, the probability that some set of size $x$ has more than $3\mu_E/2$ edges is at most:
-    $$
+    \[
     N^x \cdot e^{-\mu_E/12} = N^x \cdot \exp\left(-\frac{x^2}{24\sqrt{N}}\right).
-    $$
+    \]
     
     For this probability to be at most $N^{-8}$, we would need $\mu_E \geq 12(x+8)\log N$, which translates to $x \geq 500\sqrt{N}\log N$. However, we are interested in the regime where $x \leq N^{(5-2\gamma)/8}$. For such values of $x$ and sufficiently large $N$ (note that $N^{(5-2\gamma)/8} < N^{5/8} < \sqrt{N}$ for large $N$), we can safely assume that with overwhelming probability, any set $X$ of size $x \leq N^{(5-2\gamma)/8}$ contains at most $x^2/\sqrt{N}$ edges.
     
     Next, we bound how many elements can be covered by these edge representatives. By construction, each edge representative $E_{uv}$ covers the elements in $\{0\} \cup (U_u \cap U_v)$. The size of $U_u \cap U_v$ has expectation $\mathbb{E}[\spr{U_u \cap U_v}]=np^2$. By Chernoff's bound, the probability that a single edge representative covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most $e^{-np^2/12}$. 
     
     The total number of edge representatives available after selecting vertices in $X$ is at most $x^2/\sqrt{N}$. By the union bound, the probability that at least one of these edge representatives covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most:
-    $$
+    \[
     \frac{x^2}{\sqrt{N}} \cdot e^{-np^2/12}.
-    $$
+    \]
     
     Recall that $p^2 = (32)^2 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N = 1024 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N$. For the above probability to be negligible, we need $n \geq 200\log N/p^2$, which gives:
-    $$
+    \[
     n \geq \frac{200\log N}{1024 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N} = \cO\left(\frac{N^{3/4-\gamma/2}}{\log N}\right).
-    $$
+    \]
     This condition is satisfied by choosing $n = \Theta(N^{3/4})$.
     
     Now, suppose $x \leq N^{(5-2\gamma)/8}$. Then, with high probability, after selecting $\lambda x$ vertex representatives and at most $x^2/\sqrt{N}$ edge representatives, the total number of elements from $\{1,\dots, n\}$ that are covered is at most:
@@ -373,16 +374,16 @@ We have the following theorem:
     Since $n = \Theta(N^{3/4})$, we have $2048 \cdot n \cdot \log^2 N = o(n)$ for sufficiently large $N$. This means that when $x \leq N^{(5-2\gamma)/8}$, at most $o(n)$ elements from $\{1,\dots, n\}$ are covered, leaving $\Omega(n)$ elements uncovered.
     
     To cover all elements in $U$, any solution must eventually select enough sets to cover these remaining $\Omega(n)$ elements. However, due to the precedence constraints, to reach edge representatives that can cover many new elements, the solution must first select many vertex representatives. Specifically, to significantly increase coverage beyond what $x \leq N^{(5-2\gamma)/8}$ vertices provide, the solution must select at least $\lambda N^{(5-2\gamma)/8}$ vertex representatives plus at least $N^{(5-2\gamma)/4}$ edge representatives. Therefore, with high probability, the cost of any solution that covers all elements in $U$ is at least:
-    $$
+    \[
     \lambda N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}.
-    $$
+    \]
     
     \paragraph{Comparison and conclusion.}
     We now compare the costs in the two cases to establish the inapproximability ratio. By choosing $\lambda = N^{1/4}$ (or any $\lambda \geq N^{1/4}$) and letting $\gamma$ approach $0$ we have that the ratio between the costs in Case 2 and Case 1 is at least:
-    $$
+    \[
     \frac{\lambda N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}}{\lambda\sqrt{N} + N^{3/4-\gamma/2}} = \Omega\br{
     \frac{N^{5/8}}{N^{1/2}}} = \Omega{N^{1/8}}.
-    $$
+    \]
 
     Since we chose $n = \Theta(N^{3/4})$, we have that the gap is $\Theta(N^{1/8}) = \Theta((N^{3/4})^{1/6}) = \Theta(n^{1/6})$. By choosing $\gamma$ sufficiently small, we can make this gap arbitrarily close to $n^{1/6}$.
     Furthermore, the total number of sets $m$ in the constructed instance is $m = \lambda N + |\mathcal{E}|$. For a graph drawn from $G(N, N^{-1/2})$, the number of edges is highly concentrated around $\binom{N}{2} \cdot N^{-1/2} = \Theta(N^{3/2})$. With $\lambda = N^{1/4}$, we have $m = \Theta(N^{3/2})$. Therefore, $n = \Theta(N^{3/4}) = \Theta(m^{1/2})$, and the gap can also be expressed as:
