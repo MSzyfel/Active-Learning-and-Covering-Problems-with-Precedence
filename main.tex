@@ -5,6 +5,7 @@
 % amsmath, amssymb, natbib, graphicx, url, algorithm2e
 
 \usepackage{indentfirst}
+\usepackage{graphics}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning, decorations.pathreplacing, shadows}
 \usepackage{caption}
@@ -55,12 +56,9 @@
 \newcommand{\Cent}{\texttt{Cent}}
 \newcommand{\APP}{\texttt{APP}}
 \newcommand{\OPT}{\texttt{OPT}}
-\newcommand{\OPTW}{\texttt{OPT}_W}
-\newcommand{\OPTA}{\texttt{OPT}_A}
 \newcommand{\COST}{\texttt{COST}}
 \newcommand{\COSTW}{\texttt{COST}_W}
 \newcommand{\COSTA}{\texttt{COST}_A}
-\newcommand{\cost}{\texttt{cost}}
 \newcommand{\LB}{\mathcal{LB}}
 \newcommand{\HB}{\mathcal{HB}}
 \newcommand{\THB}{\mathcal{THB}}
@@ -85,9 +83,11 @@
 \newcommand{\cU}{\mathcal{U}}
 \newcommand{\cI}{\mathcal{I}}
 \newcommand{\cG}{\mathcal{G}}
+\newcommand{\cQ}{\mathcal{Q}}
 \newcommand{\cA}{\mathcal{A}}
 \newcommand{\cZ}{\mathcal{Z}}
 \newcommand{\cO}{\mathcal{O}}
+\newcommand{\cX}{\mathcal{X}}
 \newcommand{\questioner}{questioner }
 \newcommand{\target}{h^*}
 \newcommand{\bigo}{\mathcal{O}}
@@ -96,8 +96,6 @@
 \newcommand{\ProblemDT}{\textsc{DT}}
 \newcommand{\ProblemPCWCDT}{\textsc{PCWCDT}}
 \newcommand{\ProblemPCACDT}{\textsc{PCACDT}}
-\newcommand{\ProblemPCWDT}{\textsc{PCWDT}}
-\newcommand{\ProblemPCDT}{\textsc{PCDT}}
 \newcommand{\ProblemPCSC}{\textsc{f-PCSC}}
 \newcommand{\ProblemBPCSC}{\textsc{B-PCSC}}
 \newcommand{\ProblemPCMSSC}{\textsc{f-PCMSSC}}
@@ -107,9 +105,9 @@
 \newcommand{\ProblemPDS}{\textsc{PDS}}
 \newcommand{\ProblemGSO}{\textsc{GSO}}
 \newcommand{\ProblemLPGST}{\textsc{LPGST}}
-\newcommand{\ProcWorstDecisionTree}{\textsc{WorstDecisionTree}{} }
+
+\newcommand{\ProcDecisionTree}{\textsc{DecisionTree}{} }
 \newcommand{\blackBox}{\textsc{FindCover}{} }
-\newcommand{\ProcedureMDPCSGreedy}{\textsc{MDPCS-Greedy}}
 \newcommand{\ProcedurePCSC}{\textsc{Greedy-PCSC}}
 \newcommand{\ProcedureBPCSC}{\textsc{Greedy-B-PCSC}}
 \newcommand{\ProcedureFPCMSSC}{\textsc{Procedure-f-PCMSSC}}
@@ -130,6 +128,7 @@
 \newcommand{\sepcover}[1]{P^*\br{#1}}
 \newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
 \newcommand{\closure}[1]{\operatorname{closure}[#1]}
+\newcommand{\budget}{b}
 
 
 \usepackage[T1]{fontenc}
@@ -141,7 +140,7 @@
 \newtheorem{claim}{Claim}
 
 
-\title[Optimal Decision Trees and Covering Problems with Precedence]{Optimal Decision Trees and Covering Problems with Precedence}
+\title[Precedence-Constrained Decision Trees and Coverings]{Precedence-Constrained Decision Trees and Coverings}
 \usepackage{times}
 % Use \Name{Author Name} to specify the name.
 % If the surname contains spaces, enclose the surname
@@ -177,33 +176,38 @@
 
 \maketitle
 
-\begin{abstract}%
+\begin{abstract}
+This work considers a number of optimization problems and reductive relations between them.
+The two main problems we are interested in are the \emph{Optimal Decision Tree} and \emph{Set Cover}.
+We study these two fundamental tasks under precedence constraints, that is, if a test (or set) $X$ is a predecessor of $Y$, then in any feasible decision tree $X$ needs to be an ancestor of $Y$  (or respectively, if $Y$ is added to set cover, then so must be $X$).
+For the Optimal Decision Tree we consider two optimization criteria: worst case identification time (height of the tree) or the average identification time.
+Similarly, for the Set Cover we study two cost measures: size of the cover or the average cover time.
 
-  In the Optimal Decision Tree problem, a hidden hypothesis is required to be uncovered. To do so, the learner is allowed to perform tests, each of which reveals partial information about the hidden hypothesis. Upon receiving this information, the learner adaptively selects the next test to be performed. The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case. 
-
-  In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
-
-  For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets. 
-  This paper explores the connection of optimal decision trees and covering problems under such constraints. 
-  
-  We show that given any bicriteria $\br{\cO\br{1}, \alpha}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $\cO\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any $\cO\br{\beta}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $\cO\br{\beta\cdot \log n}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $O^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. Then, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithm results with general $\cO\br{m^{1/6}}$ hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $\cO\br{\log^2n}$-inapproximability results for outforest precedence constraints and NP-hardness for the special case of binary searching with precedence constraints.
+Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of a procedure for the former.
+En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of combinatorial structure of our problems.
+The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*\br{\sqrt{m}}$-approximation algorithms for all of the aforementioned problems.
+The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability results for the decision tree and covering problems.
+Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence types, outforests and inforests. By providing corresponding hardness results, we show these results to be tight.
 \end{abstract}
 
+
+% \begin{abstract}%
+%   We consider the Optimal Decision Tree problem in which a hidden hypothesis is required to be uncovered by performing a series of tests, each of which reveals partial information about the hidden hypothesis.
+%   Upon receiving this information, the learner adaptively selects the next test to be performed.
+%   The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case.
+%
+%   In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
+%
+%   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets.
+%   This paper explores the connection of optimal decision trees and covering problems under such constraints.
+%
+%   We show that given any bicriteria $\br{\alpha, \cO\br{1}}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $\cO\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any bicriteria $\cO\br{\beta,O\br{1}}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $\cO\br{\beta\cdot \log \br{m+n}}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $\cO^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. To do so, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithmic results with a general $\cO\br{m^{1/12-\epsilon}}$ and $\cO\br{n^{1/6-\epsilon}}$-hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $\cO\br{\log^2n}$-inapproximability results for outforest precedence constraints. We also give \NPhard results for the special case of babelinary searching in linearly ordered sets with precedence as well as APX-hardness for binary searching in tree-like POSETs with precedence.
+% \end{abstract}
+
 \begin{keywords}%
-  Optimal decision trees, Set cover, Precedence constraints, Approximation Algorithms%
+  Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms%
 \end{keywords}
 
-\DD{Ogolne uwagi:
-\begin{itemize}
- \item wszelkie uwagi pisze jako komenda \DD{...} dzieki czemu na koniec latwo sie pozbyc; nie bede raczej uwag dorzucal w mailach, aby nie zniknelo; wszystko co ponizej oczywiscie do dyskusji, a gdy bedzie zgoda i bedzie zaimplementowane, to bede usuwal artefakty.
- \item przejrzawszy sporo papierow z poprzedniego COLT, mam obserwacje, ze dobrym/typowym ukladem papieru jest: intro; our contribution; related work; outline(opcjonalnie); preliminaries; wyniki; appendix.
- \item intro zwykle nie jest zbyt rozlekle oraz prawie zawsze pozbawione lania wody. Czesto od razu definicja problemu, aby wprowadzic pojecia, aby moc szybko formalnie podac wyniki (our contribution)
- \item ``front'' artykulu, czyli wszystko do preliminaries to typowo 4-5 stron,
- \item front we wszystkich miejcach zawiera zwykle odnosniki do literatury a sekcja ``related work'' jest czesto tytulowana ``other related work'' lub cos w tym rodzaju
- \item czytelnik powiniem poza dowodami rozumiec baze przeczytawszy front (czyli rozumiec wyniki, widziec co papier robi) a jesli chce sie dowiedziec jak/dlaczego (dowody) to idzie dalej. Czesto recenzent jest leniwy i nie zajrzy dalej niz front... niestety.
- \item W zwiazku z powyzszym sekcja ``our contribution'' (potencjalnie w tytule dodamy ``and techniques'' jak Michal sugeruje) powinna sie pochwalic takze jakimis ciekawszymi trickami lub technikami uzytymi pozniej w dowodach.
-\end{itemize}
-}
 
 \input{sections/introduction}
 \input{sections/preliminaries}
@@ -218,16 +222,16 @@
 
 \bibliography{bib-pcal}
 
-\appendix
+% \appendix
 
-% \crefalias{section}{appendix} % uncomment if you are using cleveref
+% % \crefalias{section}{appendix} % uncomment if you are using cleveref
 
-\section{My Proof of Theorem 1}
+% \section{My Proof of Theorem 1}
 
-This is a boring technical proof.
+% This is a boring technical proof.
 
-\section{My Proof of Theorem 2}
+% \section{My Proof of Theorem 2}
 
-This is a complete version of a proof sketched in the main text.
+% This is a complete version of a proof sketched in the main text.
 
 \end{document}

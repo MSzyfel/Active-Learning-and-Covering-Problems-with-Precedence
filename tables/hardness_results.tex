@@ -1,22 +1,29 @@
-\begin{table}[t!]
-\caption{Hardness and inapproximability results for covering and decision tree problems. All results are from Section~\ref{sec:hardness}. PDS denotes results conditional on the Planted Dense Subgraph Conjecture.}
+\begin{table}[ht!]
+\caption{Inapproximability results. PDS $\equiv$ claims conditional on the Planted Dense Subgraph Conj.}
 \label{tab:hardness}
 \centering
 {
-\small
-\begin{tabular}{lcccc}
+\footnotesize
+\begin{tabular}{p{0.08\linewidth}C{0.19\linewidth}C{0.19\linewidth}C{0.19\linewidth}C{0.19\linewidth}}
 \toprule
-\textbf{prec} & \textbf{F-PCSC} & \textbf{PCMSSC} & \textbf{PCWCDT} & \textbf{PCACDT} \\
+\textbf{precedenses} & \textbf{\hyperref[problem:PCSC]{\ProblemPCSC}} & \textbf{\hyperref[problem:PCMSSC]{\ProblemPCMSSC}} & \textbf{\hyperref[problem:PCWCDT]{\ProblemPCWCDT}} & \textbf{\hyperref[problem:PCACDT]{\ProblemPCACDT}} \\
 \midrule
-none & $(1-o(1))H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $o(\log n)$ \\
+\multirow{2}{\linewidth}{none} & $(1-o(1))H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $o(\log n)$ \\
 & \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
+
+\addlinespace[2pt]
 \cdashline{2-5}
-outforest & $o(\log^{2} n)$ & $(4-\epsilon)$ & $o(\log^{2} n)$ & $o(\log^{2} n)$ \\
-& (Thm.~\ref{thm:PCSC-outforest-hardness}) & \cite{ApproximatingMinSumSetCover} & (Cor.~\ref{thm:PCWCDT-outforest-hardness}) & (Cor.~\ref{thm:PCACDT-outforest-hardness}) \\
+\addlinespace[2pt]
+
+\multirow{2}{\linewidth}{outforest} & $o(\log^{2} n)$ & $o(\log^{2-\epsilon} n)$ & $o(\log^{2} n)$ & $o(\log^{2} n)$ \\
+& (Thm.~\ref{thm:PCSC-outforest-hardness}) & (Thm.~\ref{thm:PCMSSC-outforest-hardness}) & (Cor.~\ref{thm:PCWCDT-outforest-hardness}) & (Cor.~\ref{thm:PCACDT-outforest-hardness}) \\
+
+\addlinespace[2pt]
 \cdashline{2-5}
-general & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ & $o(m^{1/6})$ \\
-& (Thm.~\ref{thm:PCSC-PDS-hardness}) & (Thm.~\ref{thm:PCMSSC-PDS-hardness}) & (Thm.~\ref{thm:PCWCDT-PDS-hardness}) & (Thm.~\ref{thm:PCACDT-PDS-hardness}) \\
-& PDS & PDS & PDS & PDS \\
+\addlinespace[2pt]
+
+\multirow{2}{\linewidth}{general} & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ & $o(n^{1/6})$, $o(m^{1/12})$ \\
+& (Thm.~\ref{thm:PCSC-PDS-hardness}, PDS) & (\cite{PCMSSC}, PDS) & (Cor.~\ref{thm:PCWCDT-PDS-hardness}, PDS) & (Cor.~\ref{thm:PCACDT-PDS-hardness}, PDS) \\
 \bottomrule
 \end{tabular}
 }

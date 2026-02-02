@@ -1,7 +1,7 @@
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \LinesNumbered
-\caption{The $\gamma$-greedy algorithm for $\ProblemPCSC$}
+\caption{A $\br{4\gamma/f, 2}$-approximate greedy algorithm for $\ProblemPCSC$}
 \label{alg:PCSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedurePCSC(\cU, \cS, \preceq, k)$}{
@@ -9,12 +9,12 @@
 
   \While{$\spr{\cov\br{\cC}} < k/2$}{
 
-    $\cA \gets$ Run the $\gamma$-approx. algorithm for MDPCS on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC)$\;
+    $\cA \gets$ Run the $\gamma$-approx. algorithm for $\ProblemMDPCS$ on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC)$\;
 
     $\cC \gets \cC \cup \cA$\;
   }
 
-  \Return $\cC\setminus\cA'$
+  \Return $\cC$
 }
 \end{algorithm}
 
