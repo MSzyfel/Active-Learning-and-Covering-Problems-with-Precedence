@@ -1,0 +1,240 @@
+\documentclass[anon,12pt]{colt2026} % Anonymized submission
+%\documentclass[final,12pt]{colt2026} % Include author names
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+\usepackage{indentfirst}
+\usepackage{graphics}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, decorations.pathreplacing, shadows}
+\usepackage{caption}
+\usepackage{algorithm2e}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{arydshln}
+\usepackage{bbm}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{mdframed}
+
+% Configure algorithm2e style
+\SetAlFnt{\small}
+\SetAlCapFnt{\normalsize}
+\SetAlCapNameFnt{\normalsize}
+\SetNlSty{textbf}{}{}
+
+\newcommand{\br}[1]{\mathopen{}\left( #1 \right)}
+\newcommand{\brc}[1]{\mathopen{}\left\{ #1 \right\}}
+\newcommand{\spr}[1]{\mathopen{}\left| #1 \right|}
+\newcommand{\fl}[1]{\mathopen{}\left\lfloor #1 \right\rfloor}
+\newcommand{\cl}[1]{\mathopen{}\left\lceil #1 \right\rceil}
+\newcommand{\angl}[1]{\mathopen{}\langle #1 \rangle}
+\newcommand{\e}[1]{\exp\left\{ #1 \right\}}
+
+\newcommand{\ecc}{\operatorname{ecc}}
+\newcommand{\rad}{\operatorname{rad}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\Rim}{\operatorname{Rim}}
+\newcommand{\rim}{\operatorname{rim}}
+\newcommand{\Anc}{\operatorname{Anc}}
+\newcommand{\cov}{\operatorname{cov}}
+\newcommand{\prefix}[2]{#1|_{#2}}
+
+\newcommand{\NP}{\textnormal{$\mathcal{NP}$}\xspace}
+\newcommand{\Pclass}{\textnormal{$\mathcal{P}$}\xspace}
+
+
+\newcommand{\NPcomplete}{\textnormal{$\mathcal{NP}$-Complete}\xspace}
+\newcommand{\NPhard}{\textnormal{$\mathcal{NP}$-Hard}\xspace}
+\newcommand{\APXhard}{\textnormal{$\mathcal{APX}$-Hard}\xspace}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly–$\mathcal{APX}$–Complete}\xspace}
+
+\newcommand{\Cent}{\texttt{Cent}}
+\newcommand{\APP}{\texttt{APP}}
+\newcommand{\OPT}{\texttt{OPT}}
+\newcommand{\COST}{\texttt{COST}}
+\newcommand{\COSTW}{\texttt{COST}_W}
+\newcommand{\COSTA}{\texttt{COST}_A}
+\newcommand{\LB}{\mathcal{LB}}
+\newcommand{\HB}{\mathcal{HB}}
+\newcommand{\THB}{\mathcal{THB}}
+\newcommand{\THH}{\texttt{TH}}
+
+\newcommand{\argmin}{\mathopen{}\operatorname*{arg\,min}}
+\newcommand{\argmax}{\mathopen{}\operatorname*{arg\,max}}
+
+
+\usepackage{xcolor}
+\newcommand{\DD}[1]{\textbf{\textcolor{violet}{#1}}}
+\newcommand{\MS}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\TP}[1]{\textbf{\textcolor{green}{#1}}}
+
+% symbols
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cZ}{\mathcal{Z}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\questioner}{questioner }
+\newcommand{\target}{h^*}
+\newcommand{\bigo}{\mathcal{O}}
+
+% problem and algorithm names
+\newcommand{\ProblemDT}{\textsc{DT}}
+\newcommand{\ProblemPCWCDT}{\textsc{PCWCDT}}
+\newcommand{\ProblemPCACDT}{\textsc{PCACDT}}
+\newcommand{\ProblemPCSC}{\textsc{f-PCSC}}
+\newcommand{\ProblemBPCSC}{\textsc{B-PCSC}}
+\newcommand{\ProblemPCMSSC}{\textsc{f-PCMSSC}}
+\newcommand{\ProblemMDPCS}{\textsc{MDPCS}}
+\newcommand{\ProblemBMDPCS}{\textsc{B-MDPCS}}
+\newcommand{\ProblemGST}{\textsc{GST}}
+\newcommand{\ProblemPDS}{\textsc{PDS}}
+\newcommand{\ProblemGSO}{\textsc{GSO}}
+\newcommand{\ProblemLPGST}{\textsc{LPGST}}
+
+\newcommand{\ProcDecisionTree}{\textsc{DecisionTree}{} }
+\newcommand{\blackBox}{\textsc{FindCover}{} }
+\newcommand{\ProcedurePCSC}{\textsc{Greedy-PCSC}}
+\newcommand{\ProcedureBPCSC}{\textsc{Greedy-B-PCSC}}
+\newcommand{\ProcedureFPCMSSC}{\textsc{Procedure-f-PCMSSC}}
+
+% opt parameters
+\newcommand{\optPCSC}[1]{\OPT\br{#1}}
+\newcommand{\optPCMSSC}[1]{\OPT_{\sum}\br{#1}}
+
+% functions and parameters
+\newcommand{\ProblemThreeSat}{\textsc{3-SAT}\xspace}
+\newcommand{\ProblemMaxThreeSat}{\textsc{MAX3-SAT}\xspace}
+\newcommand{\ProblemAverageCaseBinarySearchPrecedanceConstraints}{\textsc{Average Case Binary Search with Precedence Constraints}\xspace}
+
+\newcommand{\cTinD}[1]{\cT[#1]}  % tests in decision tree #1
+\newcommand{\inner}[1]{\operatorname{inner}(#1)}  %inner nodes in a decision tree
+\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 to arrive at node #2
+\newcommand{\paraTitle}[1]{\noindent\textbf{#1}}   %paragraph titles (to eliminate more sub-sub-subsections
+\newcommand{\sepcover}[1]{P^*\br{#1}}
+\newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
+\newcommand{\closure}[1]{\operatorname{closure}[#1]}
+\newcommand{\budget}{b}
+
+
+\usepackage[T1]{fontenc}
+\usepackage[polish,english]{babel}
+
+% Theorem environments
+\newtheorem{observation}{Observation}
+\newtheorem{problem}{Problem}
+\newtheorem{claim}{Claim}
+
+
+\title[Precedence-Constrained Decision Trees and Coverings]{Precedence-Constrained Decision Trees and Coverings}
+\usepackage{times}
+% Use \Name{Author Name} to specify the name.
+% If the surname contains spaces, enclose the surname
+% in braces, e.g. \Name{John {Smith Jones}} similarly
+% if the name has a "von" part, e.g \Name{Jane {de Winter}}.
+% If the first letter in the forenames is a diacritic
+% enclose the diacritic in braces, e.g. \Name{{\'E}louise Smith}
+
+% Two authors with the same address
+% \coltauthor{\Name{Author Name1} \Email{abc@sample.com}\and
+%  \Name{Author Name2} \Email{xyz@sample.com}\\
+%  \addr Address}
+
+% Three or more authors with the same address:
+% \coltauthor{\Name{Author Name1} \Email{an1@sample.com}\\
+%  \Name{Author Name2} \Email{an2@sample.com}\\
+%  \Name{Author Name3} \Email{an3@sample.com}\\
+%  \addr Address}
+
+% Authors with different addresses:
+\coltauthor{%
+ \Name{Michał Szyfelbein} \Email{abc@sample.com}\\
+ \addr Address 1
+ \AND
+ \Name{Dariusz Dereniowski} \Email{xyz@sample.com}\\
+ \addr Address 2%
+ \AND
+ \Name{Tytus Pikies} \Email{xyz@sample.com}\\
+ \addr Address 3%
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This work considers a number of optimization problems and reductive relations between them.
+The two main problems we are interested in are the \emph{Optimal Decision Tree} and \emph{Set Cover}.
+We study these two fundamental tasks under precedence constraints, that is, if a test (or set) $X$ is a predecessor of $Y$, then in any feasible decision tree $X$ needs to be an ancestor of $Y$  (or respectively, if $Y$ is added to set cover, then so must be $X$).
+For the Optimal Decision Tree we consider two optimization criteria: worst case identification time (height of the tree) or the average identification time.
+Similarly, for the Set Cover we study two cost measures: size of the cover or the average cover time.
+
+Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of a procedure for the former.
+En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of combinatorial structure of our problems.
+The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*\br{\sqrt{m}}$-approximation algorithms for all of the aforementioned problems.
+The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability results for the decision tree and covering problems.
+Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence types, outforests and inforests. By providing corresponding hardness results, we show these results to be tight.
+\end{abstract}
+
+
+% \begin{abstract}%
+%   We consider the Optimal Decision Tree problem in which a hidden hypothesis is required to be uncovered by performing a series of tests, each of which reveals partial information about the hidden hypothesis.
+%   Upon receiving this information, the learner adaptively selects the next test to be performed.
+%   The goal is to uncover the hidden hypothesis while performing as few tests as possible in the worst or average case.
+%
+%   In the covering problems, we are given a set of items and a collection of subsets that cover these items. The objective is to select a sequence of subsets that covers all items, which minimizing the worst or average covering cost.
+%
+%   For both types of problems, a natural constraint may arise that some tests can only be performed only after certain other tests (or some subsets can only be selected after selecting certain other subsets). We model such constraints using directed acyclic graphs (DAGs) that impose precedence on the tests or subsets.
+%   This paper explores the connection of optimal decision trees and covering problems under such constraints.
+%
+%   We show that given any bicriteria $\br{\alpha, \cO\br{1}}$-approximation ratio for the Precedence Constrained Set Cover, we can obtain an $\cO\br{\alpha\cdot \log n}$-approximation ratio for the Worst Case Decision Tree problem with precedence constraints, where $n$ is the number of hypothesis. Similarly, we prove that given any bicriteria $\cO\br{\beta,O\br{1}}$-approximation ratio for the Precedence Constrained Min-Sum Set Cover, we can obtain an $\cO\br{\beta\cdot \log \br{m+n}}$-approximation ratio for the Average Case Decision Tree problem with Precedence Constraints. In particular we obtain $\cO^*\br{\sqrt{m}}$ approximation for general precedence constraints and $\text{poly}\br{\log n}$ approximation guarantees for inforests and outforests. To do so, we provide several approximation algorithms for the Set Cover and Min-Sum Set Cover problems with various types of precedence constraints. We complement our algorithmic results with a general $\cO\br{m^{1/12-\epsilon}}$ and $\cO\br{n^{1/6-\epsilon}}$-hardness of approximation results for both versions of the optimal decision tree problem subject to the Planted Dense Subgraph Conjecture, as well as $\cO\br{\log^2n}$-inapproximability results for outforest precedence constraints. We also give \NPhard results for the special case of babelinary searching in linearly ordered sets with precedence as well as APX-hardness for binary searching in tree-like POSETs with precedence.
+% \end{abstract}
+
+\begin{keywords}%
+  Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms%
+\end{keywords}
+
+\appendix
+
+\bibliography{bib-pcal}
+
+\input{sections/introduction}
+\input{sections/preliminaries}
+% \input{sections/binary_search}
+\input{sections/approximating_learning}
+\input{sections/set_covering_with_constrainst}
+\input{sections/hardness}
+\input{sections/conclusions}
+
+% Acknowledgments---Will not appear in anonymized version
+\acks{We thank a bunch of people and funding agency.}
+
+
+
+
+
+% % \crefalias{section}{appendix} % uncomment if you are using cleveref
+
+% \section{My Proof of Theorem 1}
+
+% This is a boring technical proof.
+
+% \section{My Proof of Theorem 2}
+
+% This is a complete version of a proof sketched in the main text.
+
+\end{document}
