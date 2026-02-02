@@ -33,12 +33,12 @@ will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
 \end{proof}
 The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\sqrt{m}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. Note that however, for our needs, the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$ approximation for $\ProblemBMDPCS$ in case when $k=\Theta(m)$.
 
-Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
+% Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
 
 \section{Set covering with precedence constraints} \label{sec:SC}
 \newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
-Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
+% Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
 \subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
 

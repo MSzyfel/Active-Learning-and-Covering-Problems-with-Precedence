@@ -4,34 +4,36 @@
 \newcommand{\varedge}[1]{t^{var}[#1]}
 \newcommand{\litedge}[1]{t^{cla}[#1]}
 
-In this section, we establish hardness and inapproximability results for the precedence-constrained covering and decision tree problems introduced in previous sections. Throughout all reductions involving fractional set cover (F-PCSC), we assume that $f = 1$, meaning that each set can be selected at most once.
+In this section, we establish hardness and inapproximability results for the precedence-constrained covering and decision tree problems introduced in previous sections. Throughout all reductions involving fractional set cover ($\ProblemPCSC$), we assume that $f = 1$, meaning that each set can be selected at most once.
 
 \subsection{Binary search with precedence constrains}
 
-We begin by showing that the decision tree problem is NP-hard even for the very special of binary searching with precedence.
+We begin by showing that the decision tree problem is \NPhard even for the very special of binary searching with precedence.
 In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2 \prec \ldots \prec h_n$ and tests that correspond to binary queries of the form ``Is the unknown hypothesis $h_i$ less than or equal to $h_k$?''.
 Hence, there is $(n-1)$-meaningful tests to be performed.
 Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
 
 \MS{Ten akapit potencjalnie do zakomendowania}
 Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. 
-In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is NP-hard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is NP-hard as well.
+In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is \NPhard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is \NPhard as well.
 \begin{theorem}\label{thm:PCWCDT-NP-hard}
     Worst-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.
 \end{theorem}
 \begin{proof}
-	Consider an instance of \ProblemThreeSat given as: a set of variables $V$, and a set of clauses $C$.
+    \MS{Podzieliłem to na jakieś zjadliwe lematy. Trochę dziwnie się to dla mnie czyta w takich podpunktach, moze warto by to troche zredukowac i rozpisac bardziej opisowo. Uwaga ogólna, nie używaj nawiasów kwadratowych jako wtrąceń, to wygląda nienaturalnie.}
+
+	Consider an instance of \ProblemThreeSat given as: a set of variables $\cX$, and a set of clauses $\cC$.
 	Each clause consist of exactly $3$ literals.
 	The idea is to:
 	\begin{itemize}
-		\item Construct tests corresponding, separately, to  variables and clauses. 
+		\item Construct tests corresponding, to  variables and clauses. 
 		Moreover, divide them into small segments, so each segment corresponds to a single variable, clause, respectively.
 		Use precedence constraints to force this separation.
-		\item All the variable-test (for hypotheses corresponding to variables) can be performed at the same time.
-		Hence, either the variable-test or test corresponding to the negation of the variable can be performed [chosen] in a given turn.
-		And, correspondingly, the tests corresponding to the negation (or the variable) can be perform in the next turn.
-		\item Construct literal-tests [tests per literal]. Make every literal-test dependent on the corresponding variable.
-		\item Now, if at least one variable-test was performed in the time $t$, then at least one literal-test can be performed in $t+1$.
+		\item All the variable-test (for hypotheses corresponding to variables) can be performed at the same time. \MS{Nie wiadomo co to znaczy at the same time, chodzi o ten sam poziom drzewa?}
+		Hence, either the variable-test or test corresponding to the negation of the variable can be performed in a given turn. \MS{Tu też ostrożnie, nmy budujemy drzewo decyzyjne, ta idea tur jest problematyczna, bo rózne testy sie wybiera w zaleznosci od odpowiedzi}
+		And, correspondingly, the tests corresponding to the negation (or the variable) can be performed in the next turn.
+		\item Construct literal-tests . Make every literal-test be preceded by the tests to corresponding variable tests. 
+		\item Now, if at least one variable-test was performed at the time $t$, then at least one literal-test can be performed in $t+1$. \MS{Należy napisać, że wykonaniu danego testu odpowiada jakiś moment w czasie, co więcej trzeba napisać, że z powodu budowy konstrukcji, kazdy test jest wykonywany w tym samym momencie czasu w każdej gałęzi drzewa decyzyjnego, w którym jest wykonany.}
 		\item If at least one literal-test was performed at given time then a clause segment can be performed in nearest time step, because some "middle" test of the segment was performed. 
 	\end{itemize}
 	
@@ -64,12 +66,12 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 % 		\label{fig:reduction_precedence}
 % 	\end{figure}
 
-	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $C$, and variables, denoted by $V$, is as follows:
+	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $\cC$, and variables, denoted by $\cX$, is as follows:
 
 	\begin{enumerate}
-		\item Let $d > 0$ be smallest value such a value that $\log_2(|C| + |V| - 2 + d) \in Z$.
+		\item Let $d > 0$ be smallest value such a value that $\log (|\cC| + |\cX| - 2 + d) \in \mathbb{Z}$.
 		Add $d$ dummy variables -- i.e. variables unrelated to any clause.
-		From now, we assume that $|V| + |C| - 1 = 2^k-1$, for some $k > 0$.
+		From now, we assume that $|\cX| + |\cC| - 1 = 2^k-1$, for some $k > 0$.
 		\item For every $c_i = \{v_i^1, v_i^2, v_i^3\}$, construct a collection of tests given on hypotheses
 		\[
 			\coord{c}{i}{1}, \coord{c}{i}{v_i^1}, \coord{c}{i}{v_i^{12}}, \coord{c}{i}{v_i^{23}}, \coord{c}{i}{v_i^3}, \coord{c}{i}{2}.
@@ -84,110 +86,131 @@ In this problem we are given an arithmetic expression consisting of $n$ variable
 		\item Compose the instance of learning in the following way.
 		Order the clauses components one by one, let the hypotheses $\coord{c}{i}{4}$ be before $\coord{c}{i+1}{1}$ by and the test between them be denoted as $\sepedge{i}$.
 		Let us denote such an test from this set as separator test.
-		Connect $\coord{c}{|C|}{4}$ to $\coord{v}{1}{1}$ by $\sepedge{|C|}$, $|C|$-th separator test.
-		Continue with variable gadgets in the same way; hence the total number of separator tests is $|C| + |V| - 1$.
+		Connect $\coord{c}{|\cC|}{4}$ to $\coord{v}{1}{1}$ by $\sepedge{|\cC|}$, $|\cC|$-th separator test.
+		Continue with variable gadgets in the same way; hence the total number of separator tests is $|\cC| + |\cX| - 1$.
 	\end{enumerate}
-	To define the order on the edges:
+	To define precedence constraints on tests we perform the following:
 	\begin{enumerate}
 		\item Observe that there are exactly $\sum_{i=1}^{k}2^i$ separator tests, for some $k > 0$ due to introduction of dummy variables.
-		Hence easily one can make an order corresponding to binary tree, to force the queries.
+		We set the precedence constraints on separator tests to form a complete binary tree of height $k$.
 		\item Force all other tests to be preceded by the separator tests.
-		\item For every clause $c_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$, make $\litedge{i, v}$ dependent on $\varedge{v^+}$ if $v$ is positive literal; make it dependent on $\varedge{v^-}$ otherwise.
-		\item For every clause $c_i$, make $\litedge{i, 0}$ and $\litedge{i, 0'}$ dependent on all variable edges.
+		\item For every clause $c_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$, if $v$ is positive literal; make $\varedge{v^+}$ precede $\litedge{i, v}$,  otherwise make $\varedge{v^-}$ precede $\litedge{i, v}$.
+		\item For every clause $c_i$, make all variable edges precede $\litedge{i, 0}$ and $\litedge{i, 0'}$. 
 	\end{enumerate}
 	Now, to prove that the problem is \NPhard we prove the decision version of the problem is \NPcomplete, 
-	i.e. the problem to determine if for a given input $(P, O, t)$ there exists a strategy of worst case number of tests less than or equal to $t$.
+	i.e. the problem to determine if for a given input there exists a strategy of worst case number of tests less than or equal to $t$. To prove that the problem is in \NP we observe that given decision tree certifies maximum number of tests.
 	
-	To prove that the problem is in \NP we observe that given decision tree certifies maximum number of tests.
+    \begin{lemma}
+        Assume that the instance of $(\cC, \cX)$ \ProblemThreeSat is of 'YES' type. Then, there exists an evaluation $f: \cX \leftarrow \{T, F\}$ which satisfies all the clauses.
+    \end{lemma}
+    \begin{proof}
+    Let $f: \cX \leftarrow \{T, F\}$ be an evaluation which satisfies all the clauses.
+	Then, we build the decision tree as follows $D$: Firstly, construct a complete binary tree of height $k$ using separator tests. Observe that this step is forced by precedence constraints.
+    \MS{Żeby następne zdania miały sens trzeba precyzyjnie okreslic w ktorych galeziach drzewa jakie testy sa wykonywane. WAZNE: jeden test moze sie wykonywac w wielu galeziach i pewnie tak bedzie NIE wystarczy okreslic samego punktu w czasie}
+    For every variable $v$, if variable was assigned $T$, perform $\varedge{v^+}$ it in time $k+1$; otherwise perform $\varedge{v^-}$.Hence, they are performed in times $k+1$ and $k+2$, respectively. 
+	Now all the clause gadgets have at least one precondition met in time $k+1$. \MS{nie wiadomo czym jest precondition}
+	Due to this we can perform at least one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ in time $k+2$.
+	Due to the fact that each test can be performed in time $k+3$ or later we can complete the tests in time up to $k+4$ for every clause.
+	Due to this for the constructed instance there exists a decision tree of depth at most $k+4$.
+    \end{proof}
 	
-	\paragaraph{YES case:} Assume that the instance of $(C, V)$ \ProblemThreeSat is of 'YES' type.
-	Hence let $f: V \leftarrow \{T, F\}$ be an evaluation which satisfies all the clauses.
-	Then, we build the strategy:
-	\begin{itemize}
-		\item Perform the separator tests in time up to $k$.
-		\item For every variable $v$, if variable was assigned $T$, perform $\varedge{v^+}$ it in time $k+1$; otherwise perform $\varedge{v^-}$.
-		      Hence, they are performed in times $k+1$ and $k+2$, respectively. 
-		\item Now all the clause gadgets have at least one precondition met in time $k+1$.
-		      Due to this we can perform at least one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ in time $k+2$.
-		      Due to the fact that each test can be performed in time $k+3$ or later we can complete the tests in time up to $k+4$ for every clause.
-	\end{itemize}
-	Due to this for the constructed graph there exists a strategy of time $k+4$.
-	
-	Assume now that the answer for the constructed instance, i.e. path graph, order, and time $k+4$ the answer is 'YES'.
+    \begin{lemma}
+        Assume that for the constructed instance of path graph, order, and time $k+4$ the answer is 'YES'.
+        Then, the instance of $(\cC, \cX)$ \ProblemThreeSat is of 'YES' type.
+    \end{lemma}
+	\begin{proof}
 	We perform the following observations:
 	\begin{itemize}
 		\item For a given clause-gadget, due to the fact that there are $5$ edges, we need at least $3$ time units to perform all the tests. 
-		\item The earliest possible time to finish separator tests is $k$.
+		\item The earliest possible time to finish separator tests is $k$. \MS{operowanie na czasach jest bardzo niedokładne, trzeba precyzyjnie powiedzieć, ile separator testy kontrybuują do czasu identyfikacji w każdej gałęzi drzewa decyzyjnego}
 		\item Due to this we have to perform at least one test in time $k+2$ for every clause-gadget $c_i$.
-		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be performed before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was queried.
-		Hence, for at least one of these tests preconditions were met [test was performed] in time $k+1$.
-		The variable-tests queried in $k+1$ to a valuation of the variables matching all the clauses.
+		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be performed before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was performed. 
+        \item Hence, for at least one of these tests all of its precedeeing tests have been executed by the time $k+1$. 
+		The variable-tests performed in $k+1$ to an evaluation of the variables matching all the clauses. \MS{nie wiadomo o co chodzi}
 	\end{itemize}
-	
+    \end{proof}
+    Hence, the theorem follows.
+
 \end{proof}
 
-
 \begin{theorem}
-    Average-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.x`'
+    Average-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.x
 \end{theorem}
 \begin{proof}
 	The reduction is the same as in the worst-case variant; except that we have to consider the average number of tests.
 	Again assume that the instance of \ProblemThreeSat is of 'YES' type.
-	As previously, let $\log_2(|C| + |V|) = k$, hence $k \le 3 + \log_2m$.
+	As previously, let $\log (|\cC| + |\cX|) = k$, hence $k \le 3 + \log m$.
 	Hence:
 	\begin{itemize}
-	\item In any reasonable solution the separator-tests will be performed in times $1, 2, \ldots, k$.
-	\item 	Now, the $|V|$ variable-tests correspond to total quarry time $|V| (3k+5)$, denoted by $T_{var}$, because 1 hypothesis is be decided in time $k+1$ and $2$ in $k+2$.
+	\item In any reasonable solution the separator-tests will form a complete binary tree of height $k$.
+	\item 	Now, the $|\cX|$ variable-tests correspond to total testing time $|\cX|\cdot(3k+5)$, denoted by $T_{var}$, because 1 hypothesis is be decided in time $k+1$ and $2$ in $k+2$.
 	\item After this, consider the total number of tests for the hypotheses corresponding to the clauses.
 	For a satisfied clause, there can be one test performed in time $k+2$ and the other tests can be done in time $k+3, k+3, k+4, k+4$. 
-	Hence this gives total number of tests spent on these hypotheses is $|C|(6k + 22)$, denoted by $T_{clauses}$.  
+	Hence this gives total number of tests spent on these hypotheses is $|\cC|\cdot(6k + 22)$, denoted by $T_{clauses}$.  
 	\end{itemize} 
 	Together it gives the total number of tests $T_{var} + T_{clauses}$ in a search tree corresponding to a valuation of variables satisfying all the clauses.
 	The reverse direction, that a search tree of total number of tests $T_{var} + T_{clauses}$ corresponds to a valuation satisfying all the clauses, is left to the reader.
 	The correspondence between total number of tests and average number of tests is direct. 
 \end{proof}
-
-\subsection{Outforest precendce constrains}
+\subsection{Reductions from precedence constrained set cover}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
-    If there is no $\alpha$-approximation for \ProblemPCSC, then there is no $\cO\br{\alpha}$-approximation for \ProblemPCWCDT.
+    Approximating $\ProblemPCWCDT$ is as hard as approximating $\ProblemPCSC$.
 \end{theorem}
 \begin{proof}
-    Let $(U, \mathcal{S}, P)$ be an instance of \ProblemPCSC\ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of \ProblemPCWCDT\ as follows. For each element $u \in U$, we create two representative hypotheses $h_u^0$ and $h_u^1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u^i) = h_u^i$ if $u \in S$ and $t_S(h_u^i) = 0$ otherwise. The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in \ProblemPCSC, then $t_{S_1}$ must be selected before $t_{S_2}$ in \ProblemPCWCDT. Notice, that any valid decision tree for the constructed instance of \ProblemPCWCDT\ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u^i$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Note that even when the candidate set contains only representatives of one element $u$, we still need to perform a test to distinguish between $h_u^0$ and $h_u^1$, which could not be a case if there was only one hypothesis per element.
-    Therefore, any valid decision tree for the constructed instance of \ProblemPCWCDT\ corresponds to a valid selection of sets in \ProblemPCSC\ and vice versa. Moreover, the cost of the decision tree is equal to the number of selected sets. Thus, since the size of the reduction is linear any $\alpha$-approximation for \ProblemPCWCDT\ would yield an $\cO\br{\alpha}$-approximation for \ProblemPCSC.
+    Let $(U, \mathcal{S}, P)$ be an instance of $\ProblemPCSC$ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of $\ProblemPCWCDT$ as follows. For each element $u \in U$, we create two representative hypotheses $h_u^0$ and $h_u^1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u^i) = h_u^i$ if $u \in S$ and $t_S(h_u^i) = 0$ otherwise. The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in $\ProblemPCSC$, then $t_{S_1}$ must be selected before $t_{S_2}$ in $\ProblemPCWCDT$. Notice, that any valid decision tree for the constructed instance of $\ProblemPCWCDT$ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u^i$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Note that even when the candidate set contains only representatives of one element $u$, we still need to perform a test to distinguish between $h_u^0$ and $h_u^1$, which could not be a case if there was only one hypothesis per element.
+    Therefore, any valid decision tree for the constructed instance of $\ProblemPCWCDT$ corresponds to a valid selection of sets in $\ProblemPCSC$ and vice versa. Moreover, the cost of the decision tree is equal to the number of selected sets. Thus, since the size of the reduction is linear any $\alpha$-approximation for $\ProblemPCWCDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCSC$.
 \end{proof}
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT-hardness}
-    If there is no $\alpha$-approximation for $\ProblemPCMSSC$, then there is no $\cO\br{\alpha}$-approximation for $\ProblemPCACDT$.
+    Approximating $\ProblemPCACDT$ is as hard as approximating $\ProblemPCMSSC$.
 \end{theorem}
 \begin{proof}
-    We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of \ProblemPCACDT\ is twice the number of selected sets in \ProblemPCMSSC. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for \ProblemPCACDT\ would yield an $\cO\br{\alpha}$-approximation for \ProblemPCMSSC.
+    We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of $\ProblemPCACDT$ is twice the number of selected sets in $\ProblemPCMSSC$. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for $\ProblemPCACDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCMSSC$.
 \end{proof}
-\begin{theorem}\label{thm:PCSC-to-PCACDT-hardness}
-    If there is no $\alpha$-approximation for $\ProblemPCSC$, then there is no $\cO\br{\alpha}$-approximation for $\ProblemPCACDT$.
-\end{theorem}
+% \begin{theorem}\label{thm:PCSC-to-PCACDT-hardness}
+%     If there is no $\alpha$-approximation for $\ProblemPCSC$, then there is no $\cO\br{\alpha}$-approximation for $\ProblemPCACDT$.
+% \end{theorem}
 \begin{proof}
-	Let $(U, \mathcal{S}, P)$ be an instance of \ProblemPCSC\ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of $\ProblemPCACDT$ as follows. For each element $u \in U$, we create a representative hypothesis $h_u$ with $p\br{h_u}=0$. We also create a dummy hypothesis $h$ such that $p\br{h}=1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u) = h_u$ if $u \in S$ and $t_S(h_u) = 0$ otherwise ($t_S(h)=0$). The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in \ProblemPCSC, then $t_{S_1}$ must be selected before $t_{S_2}$ in \ProblemPCWCDT. Notice, that any valid decision tree for the constructed instance of \ProblemPCWCDT\ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Since the dummy hypothesis $h$ has probability $1$, the cost of any decision tree is equal to the number of tests performed in the path. In order to distinguish all hypotheses $h_u$ from the dummy hypothesis $h$, we need to perform tests that cover all elements in $U$.
-    Therefore, any valid decision tree for the constructed instance of \ProblemPCWCDT\ corresponds to a valid selection of sets in \ProblemPCSC\ and vice versa. Thus, since the size of the reduction is linear any $\alpha$-approximation for \ProblemPCWCDT\ would yield an $\cO\br{\alpha}$-approximation for \ProblemPCSC.
+	Let $(U, \mathcal{S}, P)$ be an instance of $\ProblemPCSC$ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of $\ProblemPCACDT$ as follows. For each element $u \in U$, we create a representative hypothesis $h_u$ with $p\br{h_u}=0$. We also create a dummy hypothesis $h$ such that $p\br{h}=1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u) = h_u$ if $u \in S$ and $t_S(h_u) = 0$ otherwise ($t_S(h)=0$). The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in $\ProblemPCSC$, then $t_{S_1}$ must be selected before $t_{S_2}$ in $\ProblemPCWCDT$. Notice, that any valid decision tree for the constructed instance of $\ProblemPCWCDT$ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Since the dummy hypothesis $h$ has probability $1$, the cost of any decision tree is equal to the number of tests performed in the path. In order to distinguish all hypotheses $h_u$ from the dummy hypothesis $h$, we need to perform tests that cover all elements in $U$.
+    Therefore, any valid decision tree for the constructed instance of $\ProblemPCWCDT$ corresponds to a valid selection of sets in $\ProblemPCSC$ and vice versa. Thus, since the size of the reduction is linear any $\alpha$-approximation for $\ProblemPCWCDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCSC$.
 \end{proof}
 \subsection{Outforest precedence constraints}
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
-    $\ProblemPCSC$ with outforest precedence constraints is NP-hard to approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    $\ProblemPCSC$ with outforest precedence constraints cannot be approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    To show this we prove that Group Steiner Tree on tree metrics is reducible to Set Cover with outforest precedence constraints. Since GST on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{PolylogarithmicInapproximability}. Note that in the latter reduction all of the weights are of form $2^{-h}$ with exponent ranging from $0$ to $h=\cO\br{\log^{1-\epsilon} n}$. Therefore, we can scale all weights by $2^h=\text{poly}\br{n}$ to obtain integer weights without affecting the approximation ratio. Let $T, w, \mathcal{G}$ be an instance of GST where $T$ is a tree metric with root $r$, $w$ are the weights on the edges of $T$ and $\mathcal{G}=\br{G_1, \ldots, G_k}$ are the groups. We construct an instance of \ProblemPCSC\ with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $w_e$, for each vertex $v\neq r$ we create its $w_e$ representatives $S_v^1 \preceq \ldots \preceq S_v^{w_e}$ so that taking $S^{w_e}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{w_e}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $G_i$ we create a universe element $u_i$. If $v \in G_i$ and $e$ is the parent edge of $v$, we set $S_{w_e}$ to cover $u_i$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of \ProblemPCSC\ corresponds to a valid Steiner Tree in the instance of GST and vice versa. Moreover, the cost of the selected sets is equal to the cost of the Steiner Tree. Thus, \ProblemPCSC\ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    To show this we prove that $\ProblemGST$ on tree metrics is reducible to $\ProblemPCSC$ with outforest precedence constraints. 
+
+    Since $\ProblemGST$ on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{PolylogarithmicInapproximability}. Note that in the latter reduction all of the distances are of form $2^{-h}$ with exponent ranging from $0$ to $h=\cO\br{\log^{1-\epsilon} n}$. Therefore, we can scale all of them by $2^h=\text{poly}\br{n}$ to obtain integer weights without affecting the approximation ratio.
+
+    Let $\br{T=(V, d), \mathcal{X}}$ be an instance of $\ProblemGST$ where $T$ is a tree metric with root $r$ and $\mathcal{X} \subseteq 2^V$ are the groups. We construct an instance of $\ProblemPCSC$ with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $d(e)$, for each vertex $v\neq r$ we create its $d(e)$ representatives $S_v^1 \preceq \ldots \preceq S_v^{d(e)}$ so that taking $S^{d(e)}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{d(e)}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $X \in \mathcal{X}$ we create a universe element $u_X$. If $v \in X$ and $e$ is the parent edge of $v$, we set $S_{d(e)}$ to cover $u_X$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of $\ProblemPCSC$ corresponds to a valid Steiner Tree in the instance of $\ProblemGST$ and vice versa. Moreover, the cost of the selected sets is equal to the cost of the Steiner Tree. Thus, $\ProblemPCSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{proof}
-As an immediate corollaries of Theorem \ref{thm:PCSC-to-PCWCDT-hardness} and \ref{thm:PCSC-to-PCWCDT-hardness} we obtain the following results:
+\begin{theorem}\label{thm:PCMSSC-outforest-hardness}
+    $\ProblemPCMSSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+\end{theorem}
+\begin{proof}
+    To show this we prove that $\ProblemLPGST$ on tree metrics is reducible to $\ProblemPCMSSC$ with outforest precedence constraints. 
+    Since $\ProblemLPGST$ on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. 
+    Note that in the above problem some group weights might be $0$. To alleviate this difficuilty we scale up all of the weights up by a factor of $n^2$ and if a given weight is $0$ we set it to $1$. Observe that this scaling changes the optimal value by at most a factor of $2$ and thus does not affect the asymptotical hardness of approximation.
+    
+    Let $\br{T=(V, d), w, \mathcal{X}}$ be an instance of $\ProblemLPGST$ where $T$ is a tree metric with root $r$, $w: \mathcal{X} \to \mathbb{N}$ are the weights of groups and $\mathcal{X} \subseteq 2^V$ are the groups. We construct an instance of $\ProblemPCMSSC$ with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $d(e)$, for each vertex $v\neq r$ we create its $d(e)$ representatives $S_v^1 \preceq \ldots \preceq S_v^{d(e)}$ so that taking $S^{d(e)}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{d(e)}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $X \in \mathcal{X}$ with weight $w_X = w(X)$, we create $w_X$ universe elements $u_X^1, u_X^2, \ldots, u_X^{w_X}$. If $v \in X$ and $e$ is the parent edge of $v$, we set $S_{d(e)}$ to cover all elements $u_X^1, u_X^2, \ldots, u_X^{w_X}$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of $\ProblemPCMSSC$ corresponds to a valid solution in the instance of $\ProblemLPGST$ and vice versa. Moreover, the cost of the selected sets is equal to the cost in $\ProblemLPGST$. Thus, $\ProblemPCMSSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+\end{proof}
+As an immediate corollaries of Theorem \ref{thm:PCSC-to-PCWCDT-hardness} and \ref{thm:PCMSSC-to-PCACDT-hardness} we obtain the following results:
 \begin{corollary}\label{thm:PCWCDT-outforest-hardness}
-    $\ProblemPCWCDT$ with outforest precedence constraints is NP-hard to approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    $\ProblemPCWCDT$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{corollary}
 
 \begin{corollary}\label{thm:PCACDT-outforest-hardness}
-    $\ProblemPCACDT$ with outforest precedence constraints is NP-hard to approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    $\ProblemPCACDT$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{corollary}
 
 \subsection{General precedence constraints}
-In this section we show strong inapproximability results for \ProblemPCWCDT\ and \ProblemPCACDT\ with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
+In this section we show strong inapproximability results for $\ProblemPCWCDT$ and $\ProblemPCACDT$ with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
 \begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture] \label{problem:PDS}
-For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: (1) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$, (2) With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
+For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: 
+\begin{itemize}
+    \item With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$.
+    \item With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
+\end{itemize}
 \end{conjecture}
 \DD{DD: tutaj wkleiłem conjecture i zakomentowałem jej parafrezę (możemy podmienić, ale nie ma sensu mieć obu).}
 % The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \alpha $ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$:
@@ -195,17 +218,17 @@ For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynom
 %     \item With probability 1/2, $G_1$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$,
 %     \item With probability 1/2, $G_2$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
 % \end{itemize}
-Using this conjecture one can show the following inapproximability results for \ProblemPCMSSC\ \cite{PCMSSC}:
+Using this conjecture one can show the following inapproximability results for $\ProblemPCMSSC$ \cite{PCMSSC}:
 \begin{theorem}\label{thm:PCMSSC-PDS-hardness}
-    For any $\epsilon>0$ \ProblemPCMSSC\ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
+    For any $\epsilon>0$ $\ProblemPCMSSC$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 
-Using the reduction from \ProblemPCMSSC\ to \ProblemPCACDT from the previous section we immediately obtain the following results:
+Using the reduction from $\ProblemPCMSSC$ to $\ProblemPCACDT$ from the previous section we immediately obtain the following results:
 \begin{corollary}\label{thm:PCACDT-PDS-hardness}
     For any $\epsilon>0$ $\ProblemPCACDT$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{corollary}
 
-Below we show that a similar reduction can also be used to obtain the same inapproximability result for \ProblemPCSC. The construction and analysis is mostly the same as in \cite{PCMSSC} but we include it here for completeness. In the reduction we will often make use of the Chernoff Bound which is as follows:
+Below we show that a similar reduction can also be used to obtain the same inapproximability result for $\ProblemPCSC$. The construction and analysis is mostly the same as in \cite{PCMSSC} but we include it here for completeness. In the reduction we will often make use of the Chernoff Bound which is as follows:
 \begin{theorem}[Chernoff Bound]\label{thm:chernoff}
     Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in\{1,\ldots,n\}$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
     \begin{align*}
@@ -221,7 +244,7 @@ We have the following theorem:
 \begin{proof}
     \paragraph{Construction of the reduction.} We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$ for some $\gamma > 0$ to be determined later. In our reduction we will embed the structure of the input graph into the precedence constraints, while the universe elements will enforce the covering requirement. 
     
-    Given a graph $G=(\{1,\ldots,N\}, \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of PCSC as follows. For each vertex $v \in \{1,\ldots,N\}$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in \{1,\ldots,\lambda\}$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in \{1,\ldots,\lambda\}$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
+    Given a graph $G=(\{1,\ldots,N\}, \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of $\ProblemPCSC$ as follows. For each vertex $v \in \{1,\ldots,N\}$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in \{1,\ldots,\lambda\}$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in \{1,\ldots,\lambda\}$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
 
     Next, we define the universe of elements to be covered. Let $U=\{0,1,\dots, n\}$ for some appropriately chosen natural number $n$ to be determined later. Every vertex representative set contains only the special element $0$, that is, $V_{v, i}=\{0\}$ for all $v \in \{1,\ldots,N\}$ and $i \in \{1,\ldots,\lambda\}$. 
     
@@ -252,7 +275,7 @@ We have the following theorem:
     $. 
 	We have $\mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] \geq 64\log^2 N$, which will allow us to apply concentration bounds effectively.
 
-    \paragraph{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to PCSC using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\sqrt{N}+N^{3/4-\gamma/2})$.
+    \paragraph{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to $\ProblemPCSC$ using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\sqrt{N}+N^{3/4-\gamma/2})$.
     Consider the solution that selects all vertex representatives $V_{v,i}$ for all $v \in V(\mathcal{P})$ and all $i \in [\lambda]$, together with all edge representatives $E_{uv}$ for all edges $uv \in E(\mathcal{P})$. The special element $0$ is covered by any vertex representative, so we focus on covering elements in $\{1,\dots, n\}$.
     
     Fix an arbitrary element $j \in \{1,\dots, n\}$. We first bound the number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$. Since $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$, by Chernoff's bound (Theorem \ref{thm:chernoff}) with $\delta = 1/2$, we have:
@@ -292,7 +315,7 @@ We have the following theorem:
     \lambda\sqrt{N}+N^{3/4-\gamma/2}.
     \]
     
-    \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to PCSC must use significantly more sets to cover all elements in $U$ with high probability.
+    \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to $\ProblemPCSC$ must use significantly more sets to cover all elements in $U$ with high probability.
     
     Consider any solution to PCSC that selects representatives corresponding to some set $X \subseteq \{1,\ldots,N\}$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in \{1,\ldots,\lambda\}$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
     
@@ -349,9 +372,9 @@ We have the following theorem:
     \Theta(N^{1/8}) = \Theta((N^{3/2})^{1/12}) = \Theta(m^{1/12}).
     $
     
-    Thus, any polynomial-time algorithm for \ProblemPCSC\ with approximation factor better than $\cO(n^{1/6-\epsilon})$ or $\cO(m^{1/12-\epsilon})$ for any $\epsilon > 0$ could distinguish between the two cases of the Planted Dense Subgraph problem with significant advantage. This completes the proof.
+    Thus, any polynomial-time algorithm for $\ProblemPCSC$ with approximation factor better than $\cO(n^{1/6-\epsilon})$ or $\cO(m^{1/12-\epsilon})$ for any $\epsilon > 0$ could distinguish between the two cases of the Planted Dense Subgraph problem with significant advantage. This completes the proof.
 \end{proof}
 Therefore we immediately have that:
 \begin{corollary}\label{thm:PCWCDT-PDS-hardness}
-    For any $\epsilon>0$ \ProblemPCWCDT\ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
+    For any $\epsilon>0$ $\ProblemPCWCDT$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
 \end{corollary}

@@ -1,28 +1,30 @@
 \begin{tikzpicture}[
     node distance=0.7cm and 2cm,
     problem/.style={rectangle, draw, very thick, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
-    arrow/.style={->, very thick}
+    arrow/.style={->, very thick},
+    edgelabel/.style={font=\tiny, fill=white, inner sep=1pt}
 ]
 
 % Define positions based on the hand-drawn diagram
 % Top level
 \node[problem] (gst) at (-2, 0) {$\hyperref[problem:GST]{\ProblemGST}$};
-\node[problem] (pds) at (2, 0) {$\hyperref[problem:PDS]{\ProblemPDS}$};
+\node[problem] (pds) at (0.5, 0) {$\hyperref[problem:PDS]{\ProblemPDS}$};
+\node[problem] (lpgst) at (3.7, 0) {$\hyperref[problem:LPGST]{\ProblemLPGST}$};
 
 % Middle level
-\node[problem, below left=0.7cm and 0.5cm of pds] (fpcsc) {$\hyperref[problem:PCSC]{\ProblemPCSC}$};
-\node[problem, below right=0.7cm and 0.5cm of pds] (fpcmssc) {$\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$};
+\node[problem, below left=0.7cm and 0.3cm of pds] (fpcsc) {$\hyperref[problem:PCSC]{\ProblemPCSC}$};
+\node[problem, below right=0.7cm and 0.3cm of pds] (fpcmssc) {$\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$};
 
 % Bottom level
 \node[problem, below=0.7cm of fpcsc] (pcwcdt) {$\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$};
 \node[problem, below=0.7cm of fpcmssc] (pcacdt) {$\hyperref[problem:PCACDT]{\ProblemPCACDT}$};
 
-% Arrows with hyperlinks to sections
-\draw[arrow] (gst) -- (fpcsc);
-\draw[arrow] (pds) -- (fpcsc);
-\draw[arrow] (pds) -- (fpcmssc);
-\draw[arrow] (fpcsc) -- (pcwcdt);
-\draw[arrow] (fpcsc) -- (pcacdt);
-\draw[arrow] (fpcmssc) -- (pcacdt);
+% Arrows with theorem references
+\draw[arrow] (gst) -- node[edgelabel, pos=0.5] {Thm.~\ref{thm:PCSC-outforest-hardness}} (fpcsc);
+\draw[arrow] (lpgst) -- node[edgelabel, pos=0.5] {Thm.~\ref{thm:PCMSSC-outforest-hardness}} (fpcmssc);
+\draw[arrow] (pds) -- node[edgelabel, pos=0.5] {Thm.~\ref{thm:PCSC-PDS-hardness}} (fpcsc);
+\draw[arrow] (pds) -- node[edgelabel, pos=0.5] {\cite{PCMSSC}} (fpcmssc);
+\draw[arrow] (fpcsc) -- node[edgelabel, pos=0.5] {Thm.~\ref{thm:PCSC-to-PCWCDT-hardness}} (pcwcdt);
+\draw[arrow] (fpcmssc) -- node[edgelabel, pos=0.5] {Thm.~\ref{thm:PCMSSC-to-PCACDT-hardness}} (pcacdt);
 
 \end{tikzpicture}

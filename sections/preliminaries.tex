@@ -61,10 +61,10 @@ The \emph{coverage time} of an element $x\in\cov\br{\cC}$ in such precedence-clo
 The symbol $\coverageTime\br{\cC}$ denotes the sum of coverage times of all elements in $\cov\br{\cC}$.
 
 \begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)] \label{problem:PCSC}
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $fn$ items and minimizes $\spr{\cC}$.
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $f\cdot n$ items and minimizes $\spr{\cC}$.
 \end{problem}
 \begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
-Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $\cC$ that covers at least $fn$ items and minimizes $\coverageTime\br{\cC}$.
+Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f<1$, find a precedence-closed sequence $\cC$ that covers at least $f\cdot n$ items and minimizes $\coverageTime\br{\cC}$.
 \end{problem}
 \begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq \budget$.
@@ -72,8 +72,8 @@ Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a preceden
 
 The algorithms for decision tree problems are conditioned on existence of approximations for the set above covering variants (cf. Section~\ref{sec:SC}).
 For each covering problem we can distinguish two optimality measures with one being the number of covered items and the other being $\spr{\cC}$ or $\coverageTime\br{\cC}$.
-We say that an algorithm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,f)$ it returns a solution $\cC$ such that $\cov\br{\cC}\geq fn/\alpha$ and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$.
-From a $(\gamma,\alpha)$-approximation $\cC$ for $\ProblemPCMSSC$ we require $\cov\br{\cC}\geq fn/\alpha$ and $\coverageTime\br{\cC}\leq\gamma\cdot\OPT\br{\cI}$.
+We say that an algorithm is $(\gamma,\alpha)$-approximation for $\ProblemPCSC$, where $\gamma\geq 1$ and $\alpha\geq 1$, if for any input instance $\cI=(\cU,\cS,\preceq,f)$ it returns a solution $\cC$ such that $\cov\br{\cC}\geq f\cdot n/\alpha$ and $\spr{\cC}\leq\gamma\cdot\optPCSC{\cI}$.
+From a $(\gamma,\alpha)$-approximation $\cC$ for $\ProblemPCMSSC$ we require $\cov\br{\cC}\geq f\cdot n/\alpha$ and $\coverageTime\br{\cC}\leq\gamma\cdot\OPT\br{\cI}$.
 Likewise, a $(\gamma,\alpha)$-approximation for $\ProblemBPCSC$ for any input instance $\cI=(\cU,\cS,\preceq,\budget)$ returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \frac{1}{\alpha}\cdot\OPT\br{\cI}$ and $\spr{\cC}\leq \gamma\cdot \budget$.
 Throughout this paper, $n$ denotes the number of elements in a universum ($n=\spr{\cU}$) or the number of hypotheses ($n=\spr{\cH}$), and $m$ denotes the number of sets or tests ($m=\spr{\cS}$ or $m=\spr{\cT}$).
 
@@ -105,8 +105,7 @@ Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by
 For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[Group Steiner Tree (GST)] \label{problem:GST}
-Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$ and a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, find an $r$-tour $\tau$ such that $\cov\br{\tau} = \cX$ and that minimizes
-$c(\tau) = \sum_{X \in \cX} w(X) \cdot t_\tau(X)$.
+Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\cX \subseteq 2^V$, find an $r$-tour such that $\cov\br{\tau} = \cX$ minimizing $\spr{\tau}$.
 \end{problem}
 
 \begin{problem}[Group Steiner Orienteering (GSO)] \label{problem:GSO}

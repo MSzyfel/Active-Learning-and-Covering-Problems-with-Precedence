@@ -1,7 +1,8 @@
 \begin{tikzpicture}[
     node distance=0.7cm and 2cm,
     problem/.style={rectangle, draw, very thick, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
-    arrow/.style={->, very thick}
+    arrow/.style={->, very thick},
+    edgelabel/.style={font=\tiny, fill=white, inner sep=1pt}
 ]
 
 % Define positions based on the hand-drawn diagram
@@ -24,15 +25,15 @@
 \node[problem, below=0.7cm of fpcsc] (pcwcdt) {$\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$};
 \node[problem, below=0.7cm of fpcmssc] (pcacdt) {$\hyperref[problem:PCACDT]{\ProblemPCACDT}$};
 
-% Arrows with hyperlinks to sections
-\draw[arrow] (bmdpcs) -- (bpcsc) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}};
-\draw[arrow] (mdpcs) -- (fpcsc) node[midway, above, font=\scriptsize\upshape, sloped] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}};
-\draw[arrow] (bpcsc) -- (fpcsc) node[midway, above left, font=\scriptsize\upshape] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}};
-\draw[arrow] (bpcsc) -- (fpcmssc) node[midway, above right, font=\scriptsize\upshape] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}};
-\draw[arrow] (gso) -- (bpcsc) node[midway, above, font=\scriptsize\upshape, sloped] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
-\draw[arrow] (gso) -- (lpgst) node[midway, right, font=\scriptsize\upshape] {\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}};
-\draw[arrow] (lpgst) -- (fpcmssc) node[pos=0.5, above, sloped, font=\scriptsize\upshape] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}};
-\draw[arrow] (fpcsc) -- (pcwcdt) node[midway, left, font=\scriptsize\upshape] {\hyperref[subsection:PCWCDT]{Sec.~\ref*{subsection:PCWCDT}}};
-\draw[arrow] (fpcmssc) -- (pcacdt) node[midway, right, font=\scriptsize\upshape] {\hyperref[subsection:PCACDT]{Sec.~\ref*{subsection:PCACDT}}};
+% Arrows with theorem references
+\draw[arrow] (bmdpcs) -- node[edgelabel, pos=0.5] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}} (bpcsc);
+\draw[arrow] (mdpcs) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (fpcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (fpcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}} (fpcmssc);
+\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (bpcsc);
+\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}} (lpgst);
+\draw[arrow] (lpgst) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (fpcmssc);
+\draw[arrow] (fpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCWCDT]{Sec.~\ref*{subsection:PCWCDT}}} (pcwcdt);
+\draw[arrow] (fpcmssc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCACDT]{Sec.~\ref*{subsection:PCACDT}}} (pcacdt);
 
 \end{tikzpicture}
