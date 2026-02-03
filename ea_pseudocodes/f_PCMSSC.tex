@@ -1,0 +1,31 @@
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+\caption{The algorithm for $\ProblemPCMSSC$ based on $\br{\alpha, \beta}$-approximation for $\ProblemBPCSC$}
+\label{ea:alg:fPCMSSC}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{$\ProcedureFPCMSSC(\cU, \cS, \preceq, f)$}{
+    $\cQ\gets \emptyset$.
+
+    \For{$1\leq l\leq \cl{\log{n}}$}{
+        $U\gets \cU$.
+        
+        $\pi_l\gets \emptyset$.
+
+        \For{$1\leq i\leq l$}{
+            $\tau_l^i\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, \budget=a^{i+1})$.
+
+            $U \gets U \setminus \cov(\tau_l^i)$.
+
+            $\pi_l \gets \pi_l \circ \tau_l^i$.
+        }
+        Extend $\pi_l$ by appending to it arbitrary sets to ensure that $\spr{\pi_l} \geq \min\brc{\alpha\cdot \beta\cdot a^l, m}$.
+
+        $\sigma_l \gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, \budget=a^l)$.
+
+        $\cQ \gets \cQ \cup \brc{\pi_l \circ \sigma_l}$.
+    }
+    \Return $\argmin_{\pi\in \cQ} \brc{\COST(\pi)}$.
+}
+\end{algorithm}
+

@@ -4,24 +4,24 @@ Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests} a
 Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that $x\cap y=\emptyset$ for any $x,y\in t$ and $\bigcup_{x\in t} x=\cH$.
 As a result of executing a test $t\in\cT$, \questioner recives a \emph{reply} that reveals $H\in t$ such that $\target\in H$. Upon receiving this reply, the \questioner selects another test $t'\in\cT$ to perform next.
 Without formally stating an optimization criterion we refer to the above as the \emph{Optimal Decision Tree} ($\ProblemDT$) problem.
-(For formal statemets of our problems see Section~\ref{sec:preliminaries}).
+(For formal statemets of our problems see Section~\ref{ea:sec:preliminaries}).
 
 % We note that the above statement generalizes the classical binary search in (fully or partially) sorted data.
 In this work we generalize this proces by considering precedence relation between tests given as an arbitrary partial order $(\cT,\preceq)$.
 A test $t$ can be performed only if all its predecessors have been performed previously (to which we refer as \emph{precedence-closed} solution).
 On the applicability side, the problem includes numerous use cases, some of them in the area of biology \cite{BayesianLearnerOptimalNoisyBinarySearch}.
 For example hypotheses may represent possible conditions or diseases and tests may repesent medical procedures. In such case it may happen that some tests are less invasive or expensive than others, and should be performed firstly. Additionally, it can also happen that a given test is a prerequisite for another test, e.g., a blood test may be required before performing a biopsy. At last it might also be the case that a large test consists of multiple stages, each with its own outcomes, and the later stages can be performed only after the earlier ones. 
-% To see a visual example of such a scenario consider Figure~\ref{fig:pcal_example}.
+% To see a visual example of such a scenario consider Figure~\ref{ea:fig:pcal_example}.
 
 % \begin{figure}[t!]
 % \begin{minipage}[t]{0.47\textwidth}
-% \input{figures/pcal_example}
-% \caption{Decision tree with precedence.}\label{fig:pcal_example}
+% \input{ea_figures/pcal_example}
+% \caption{Decision tree with precedence.}\label{ea:fig:pcal_example}
 % \end{minipage}
 % \hfill
 % \begin{minipage}[t]{0.47\textwidth}
-% \input{figures/pccp_example}
-% \caption{Set cover with precedence.}\label{fig:pccp_example}
+% \input{ea_figures/pccp_example}
+% \caption{Set cover with precedence.}\label{ea:fig:pccp_example}
 % \end{minipage}
 % \end{figure}
 
@@ -31,17 +31,17 @@ Particularly, we study set covering with precedence:
 We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU$, such that $\bigcup_{S\in\cS}S=\cU$, a partial order $(\cS,\preceq)$ on these subsets and a parameter $0<f\leq 1$.
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} at least $f$-fraction of items from $\cU$ if $\spr{\bigcup_{C\in\cC}C}\geq f\cdot n$.
 We ask for a $\cC\subseteq\cS$ that covers at least $f\cdot n$ items from $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$. We measure the quality of such $\cC$ by either its size $\spr{\cC}$ or the average time it takes to cover an item from $\cU$ (assuming some order of sets in $\cC$ closed under the precedence constraint). 
-% For a visual example of such a scenario consider Figure~\ref{fig:pccp_example}.
+% For a visual example of such a scenario consider Figure~\ref{ea:fig:pccp_example}.
 We show how to reduce the optimal decision tree to the above set covering. Then we develop approximation algorithms for the set covering problems themselves. The approximation algorithms that we propose en route, e.g. for precedence constrained set cover, are of independent interest.
 
 % \medskip
 % \paraTitle{Outline.}
 % In the next section we formally state all problems we address in this work.
-% Section~\ref{sec:our-results} gives an overview of the main results of this work.
-% Section~\ref{sec:AL} provides approximation algorithm for the above decision tree problem, assuming there exist certain approximations for variants of set cover.
-% The latter are developed in Section~\ref{sec:SC}.
-% Finally, set cover is solved via dense subfamily approximation from Section~\ref{sec:MDPCS}.
-% The algorithms are supplemented with a number of inapproximability results in Section~\ref{sec:hardness}.
+% Section~\ref{ea:sec:our-results} gives an overview of the main results of this work.
+% Section~\ref{ea:sec:AL} provides approximation algorithm for the above decision tree problem, assuming there exist certain approximations for variants of set cover.
+% The latter are developed in Section~\ref{ea:sec:SC}.
+% Finally, set cover is solved via dense subfamily approximation from Section~\ref{ea:sec:MDPCS}.
+% The algorithms are supplemented with a number of inapproximability results in Section~\ref{ea:sec:hardness}.
 
 % Consider following problems:
 % \begin{itemize}
@@ -54,9 +54,9 @@ We show how to reduce the optimal decision tree to the above set covering. Then 
 \paragraph{Optimal Decision Tree}
 Optimal decision tree, also referred to as \emph{binary search trees} \cite{BoseCIKL20,DemaineHIP07}, is an extensively studied problem in computer science, starting with \cite{GareyPerfBoundsOnSplittingAlgForBinTesting} in the 1970s.
 Since then it has gathered a lot of attention due to its numerous applications including medical diagnosis, troubleshooting, active learning, and information retrieval. 
-Usually two optimization criteria are considered: the worst-case and the average-case cost.
+Usually two optimization criteria are considered: the worst-case and average-case cost. 
 Both versions of the problem are \NPhard and cannot be approximated within an $o\br{\log n}$ factor \cite{ConstructOptimalBinaryDecisionTreesIsNPComplete,HardnessOfMinHeightDTP,ApproximatingDecisionTreesMultiwayBranches,DiagnosisDetermination}.
-Moreover, this bound is tight and several $\cO(\log n)$-approximation algorithms are known for the average-case both with non-uniform probabilities and test costs \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as the worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Few special cases are known to admit $o\br{\log n}$-approximation. For the average case, this includes an $\cO\br{\log n/\log \log n}$-approximation when tests have a constant number of possible outcomes and all probabilities and costs are uniform \cite{TightAnalysisGreedyUniformDecisionTree}.
+Moreover, this bound is tight and several $\cO(\log n)$-approximation algorithms are known for average-case both with non-uniform probabilities and test costs \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Few special cases are known to admit $o\br{\log n}$-approximation. For average case, this includes an $\cO\br{\log n/\log \log n}$-approximation when tests have a constant number of possible outcomes and all probabilities and costs are uniform \cite{TightAnalysisGreedyUniformDecisionTree}. 
 % This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}. 
 Moreover achieving any approximation factor above $9$ is not \NPhard assuming ETH \cite{TightAnalysisGreedyUniformDecisionTree}.
 For the worst case, when the underlying search space is a partially ordered set with one maximum element and costs are uniform an $\cO\br{\log n/\log \log n}$-approximation is known \cite{EdgeRankingSearchingPartialOrders}.
@@ -65,67 +65,65 @@ For the worst case, when the underlying search space is a partially ordered set 
 \paragraph{Searching in Trees}
 The special case when the instance represents binary searching in a tree has also been extensively studied. 
 % In this problem hypothesis represent vertices and tests represent queries about direction towards the target. 
-For uniform costs and the worst-case criterion, a linear time algorithms are known for both edge and vertex query variants \cite{Schaffer1989OptNodeRankOfTsInLinTime,OnakParys2006GenOfBSSInTsAndFLikePosets,Mozes_Onak2008FindOptTSStartInLinTime}. For the average case, uniform costs and vertex queries an FPTAS exists \cite{SearchTreesOnGraphs}. For edge queries the problem is known to be \NPhard \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization} and a greedy strategy achieves $3/2$-approximation \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization,ImprovedApproximationAlgorithmsForTheAverageCaseTreeSearchingProblem,TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees}. For non-uniform costs, the vertex query model generalizes edge query model which is known to be \NPhard \cite{EdgeRankingOfWeightedTrees,TheBinaryIdentificationProblemForWeightedTrees,OnTheTreeSearchProblemWithNonUniformCosts}. The best known approximation ratio is $\bigo\br{\sqrt{\log n}}$ \cite{ApproximationStrategiesforGeneralizedBinarySearchinWeightedTrees}.
+For uniform costs and worst-case criterion, a linear time algorithms are known for both edge and vertex query variants \cite{Schaffer1989OptNodeRankOfTsInLinTime,OnakParys2006GenOfBSSInTsAndFLikePosets,Mozes_Onak2008FindOptTSStartInLinTime}. For average case, uniform costs and vertex queries an FPTAS exists \cite{SearchTreesOnGraphs}. For edge queries the problem is known to be \NPhard \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization} and a greedy strategy achieves $3/2$-approximation \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization,ImprovedApproximationAlgorithmsForTheAverageCaseTreeSearchingProblem,TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees}. For non-uniform costs, the vertex query model generalizes edge query model which is known to be \NPhard \cite{EdgeRankingOfWeightedTrees,TheBinaryIdentificationProblemForWeightedTrees,OnTheTreeSearchProblemWithNonUniformCosts}. The best known approximation ratio is $\br{\sqrt{\log n}}$ \cite{ApproximationStrategiesforGeneralizedBinarySearchinWeightedTrees}.
 The average case is also \NPhard and an $\br{4+\epsilon}$-approximation FPTAS is known \cite{szyfelbein2025approximatingaveragecasegraphsearch}.
 Searching in trees is a generalization of the classical binary search intensively studied in various models \cite{BorgstromK93,LaberMP02,BayesianLearnerOptimalNoisyBinarySearch,DereniowskiLU25}.
 A generalization of tree search to general graphs have also been recently studied, mostly in presence of noise, where some replies can be erroneous \cite{Emamjomeh-Zadeh16,DereniowskiLU25}.
 For some applications of these problems see e.g. \cite{Emamjomeh-Zadeh17,KarpK07}.
-To the best of our knowledge no variants of the decision tree problem have been studied in presence of precedence relation.
 
 \paragraph{Set Cover with precedence constraints}
 
 Set cover is the most important problem in combinatorial approximation algorithms.
-It is well known that the greedy algorithm achieves an $H_n$-approximation \cite{GreedyHeuristicSetCoverProblem}, where $H_n=\cO\br{\log n}$ is the $n$-th harmonic number. This is tight since it cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}. The Min-Sum Set Cover is a variant of the problem in which the goal is to minimize the average cover time of elements. For this version, the greedy algorithm is $4$-approximate \cite{ApproximatingMinSumSetCover}, which is tight. When allowing arbitrary precedence constraints the problem admits an $\cO\br{\sqrt{m}}$-approximation and cannot be approximated within an $\cO\br{m^{1/12-\epsilon}}$ nor $\cO\br{n^{1/6-\epsilon}}$ factor \cite{PCMSSC} subject to the PDS \cite{OnApproxTargetSetSelection}.
+It is well known that the greedy algorithm achieves an $H_n$-approximation for set cover \cite{GreedyHeuristicSetCoverProblem}, where $H_n=\cO\br{\log n}$ is the $n$-th harmonic number. This is tight since it cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}. The Min-Sum Set Cover is a variant of the problem in which the goal is to minimize the average cover time of element. For this version, the greedy algorithm is $4$-approximate \cite{ApproximatingMinSumSetCover}, which is tight. When allowing arbitrary precedence constraints the problem admits an $\cO\br{\sqrt{m}}$-approximation and cannot be approximated within an $\cO\br{m^{1/12-\epsilon}}$ nor $\cO\br{n^{1/6-\epsilon}}$ factor \cite{PCMSSC} subject to the PDS \cite{OnApproxTargetSetSelection}.
 
-\subsection{Our results and techniques} \label{sec:our-results}
+\subsection{Our results and techniques} \label{ea:sec:our-results}
 
 % Our main contribution consists of approximation algorithms and hardness results for decision tree and set covering problems with precedence constraints, studied under different structural restrictions on the precedence relation.
 
-\paragraph{Approximation Results.} The key insight underlying our approach is a systematic hierarchy of reductions: we reduce decision tree problems to set covering problems with precedence constraints, which in turn are solved via algorithms for finding dense precedence-closed subfamilies. This hierarchy of reductions, illustrated in Figure~\ref{fig:reductions}, allows us to iteratively simplify the problem until we reach a core problem that can be effectively approximated.
-All problems are formally stated in Section~\ref{sec:preliminaries} below.
-Our approximation results, including best known results from the literature, are summarized in Table~\ref{tab:results}.
+\paragraph{Approximation Results.} The key insight underlying our approach is a systematic hierarchy of reductions: we reduce decision tree problems to set covering problems with precedence constraints, which in turn are solved via algorithms for finding dense precedence-closed subfamilies. This hierarchy of reductions, illustrated in Figure~\ref{ea:fig:reductions}, allows us to iteratively simplify the problem until we reach a core problem that can be effectively approximated. 
+Our approximation results, including best known results from the literature, are summarized in Table~\ref{ea:tab:results}.
 
 \begin{figure}[ht!]
 \centering
-\input{figures/reduction_diagram}
-\caption{Relationships between covering and decision tree problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
+\input{ea_figures/reduction_diagram}
+\caption{Relationships between covering and decision tree problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{ea:fig:reductions}
 \end{figure}
 
-\input{tables/approximation_results.tex}
+\input{ea_tables/approximation_results.tex}
 
-For arbitrary precedence constraints, we achieve $\cO(\sqrt{m}\log n)$-approximation for $\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$ and $\cO(\sqrt{m}\log^{3/2}n)$-approximation for $\hyperref[problem:PCACDT]{\ProblemPCACDT}$, where $m$ is the number of tests and $n$ is the number of hypotheses. These results are obtained through a reductions to fractional set cover problems ($\hyperref[problem:PCSC]{\ProblemPCSC}$, $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$), for which we develop a $(\sqrt{m \cdot H_n}+1, 1)$-bicriteria approximation algorithm. For the fractional $\hyperref[problem:PCSC]{\ProblemPCSC}$, we also provide a $(\cO(\sqrt{m}/f), 2)$-bicriteria approximation via the $\hyperref[problem:MDPCS]{\ProblemMDPCS}$. For $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$, we develop an algorithm that converts any bicriteria approximation for $\hyperref[problem:BPCSC]{\ProblemBPCSC}$ into an approximation for $\ProblemPCMSSC$. Finally, we obtain a $(\cO(\sqrt{m\cdot H_n}), 1)$-bicriteria approximation for $\ProblemBPCSC$ via $\hyperref[problem:BMDPCS]{\ProblemBMDPCS}$. When the case of outofrest precedence constraints (each element has at most one predecessor), we achieve $\cO(\log n)$-approximation for $\ProblemBPCSC$ by equivalnce to $\hyperref[problem:GSO]{\ProblemGSO}$. This yields $\cO(\log^2 n)$ and $\cO(\log^2 n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$ respectively. For inforests (each element has at most one successor), $\ProblemBPCSC$ admits constant-factor $(1, \frac{e}{e-1})$-approximation for the covering problems via a reduction to the classical set cover problem. This yields $\cO(\log n)$ and $\cO(\log n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$ respectively
+For arbitrary precedence constraints, we achieve $\cO(\sqrt{m}\log n)$-approximation for $\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$ and $\cO(\sqrt{m}\log^{3/2}n)$-approximation for $\hyperref[problem:PCACDT]{\ProblemPCACDT}$, where $m$ is the number of tests and $n$ is the number of hypotheses. These results are obtained through a reductions to fractional set cover problems ($\hyperref[problem:PCSC]{\ProblemPCSC}$, $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$), for which we develop a $(\sqrt{m \cdot H_n}+1, 1)$-bicriteria approximation algorithm. For the fractional $\hyperref[problem:PCSC]{\ProblemPCSC}$, we provide an $(\cO(\sqrt{m}/f), 2)$-bicriteria approximation via the $\hyperref[problem:MDPCS]{\ProblemMDPCS}$. For $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$, we develop an algorithm that converts any bicriteria approximation for $\hyperref[problem:BPCSC]{\ProblemBPCSC}$ into an approximation for $\ProblemPCMSSC$. Finally, we obtain an $(\cO(\sqrt{m\cdot H_n}), 1)$-bicriteria approximation for $\ProblemBPCSC$ via $\hyperref[problem:BMDPCS]{\ProblemBMDPCS}$. When the case of outofrest precedence constraints (each element has at most one predecessor), we achieve $\cO(\log n)$-approximation for $\ProblemBPCSC$ by equivalnce to $\hyperref[problem:GSO]{\ProblemGSO}$. This yields $\cO(\log^2 n)$ and $\cO(\log^2 n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$ respectively. For inforests (each element has at most one successor), $\ProblemBPCSC$ admits constant-factor $(1, \frac{e}{e-1})$-approximation for the covering problems via a reduction to the classical set cover problem. This yields $\cO(\log n)$ and $\cO(\log n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$ respectively
 
-\paragraph{Hardness Results.} Our hardness results establish nearly matching lower bounds for most variants through a hierarchy of reductions illustrated in Figure~\ref{fig:hardness_diagram}. We systematically reduce from known hard problems such as Group Steiner Trees and Detecting Planted Dense Subgraphs to covering problems and then to decision tree problems, showing that achieving better approximation ratios is computationally hard even for special cases. Our hardness results, including best known results from the literature, are summarized in Table~\ref{tab:hardness}.
+\paragraph{Hardness Results.} Our hardness results establish nearly matching lower bounds for most variants through a hierarchy of reductions illustrated in Figure~\ref{ea:fig:hardness_diagram}. We systematically reduce from known hard problems such as Group Steiner Trees and Detecting Planted Dense Subgraphs to covering problems and then to decision tree problems, showing that achieving better approximation ratios is computationally hard even for special cases. Our hardness results, including best known results from the literature, are summarized in Table~\ref{ea:tab:hardness}.
 
 \begin{figure}[ht!]
     \centering
-    \input{figures/hardness_diagram.tex}
+    \input{ea_figures/hardness_diagram.tex}
     \caption{Inapproximability relations between problems, $\Pi_1 \to \Pi_2$ denotes that an inapproximability result for problem $\Pi_1$ implies an inapproximability result for problem $\Pi_2$.}
-    \label{fig:hardness_diagram}
+    \label{ea:fig:hardness_diagram}
 \end{figure}
 
-\input{tables/hardness_results.tex}
+\input{ea_tables/hardness_results.tex}
 
 For arbitrary precedence constraints, we prove that under the $\hyperref[problem:PDS]{\ProblemPDS}$, no algorithm can achieve $o(m^{1/12})$ nor $o(n^{1/6})$-approximation for $\ProblemPCSC$, $\ProblemPCMSSC$, $\ProblemPCWCDT$, or $\ProblemPCACDT$. For outforest, we establish $o(\log^2 n)$ hardness for $\ProblemPCSC$ by reducing from Group Steiner Tree on trees, which is known to be hard to approximate within $\cO(\log^2 n)$ unless $\text{NP}\subseteq \text{ZTIME}(n^{\text{polylog}(n)})$. This hardness naturally extends to decision tree problems via our reduction hierarchy.
 %  Additionally, we show that the problem is \NPhard even for the special case of binary search in a linearly ordered set. Note that without the precedence constraints for both criterions the classic binary search would provide an optimal strategy in polynomial time.
 
-% Our first theorem is due to Theorem~\ref{thm:alphaPCWCDT}.
-% \begin{theorem} \label{thm:generalPCWCDT}
+% Our first theorem is due to Theorem~\ref{ea:thm:alphaPCWCDT}.
+% \begin{theorem} \label{ea:thm:generalPCWCDT}
 % There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for the $\ProblemPCWCDT$, where $n$ is the number of hypotheses and $m$ is the number of tests.
 % \end{theorem}
-% Theorem~\ref{thm:alphaPCWCDT} relies on a bicriteria optimization algorithm for $\ProblemPCSC$ stated in Theorem~\ref{thm:MDPCStoPCSC} which in turn is obtained via an approximation algorithm for a problem called \emph{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$) given in \cite{PCMSSC}.
+% Theorem~\ref{ea:thm:alphaPCWCDT} relies on a bicriteria optimization algorithm for $\ProblemPCSC$ stated in Theorem~\ref{ea:thm:MDPCStoPCSC} which in turn is obtained via an approximation algorithm for a problem called \emph{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$) given in \cite{PCMSSC}.
 % \DD{(byc moze definicja MDPCS)}
-% As a corollary of Theorem~\ref{thm:MDPCStoPCSC}, we obtain the following result regarding $\ProblemPCSC$.
-% \begin{theorem} \label{thm:generalPCSC}
+% As a corollary of Theorem~\ref{ea:thm:MDPCStoPCSC}, we obtain the following result regarding $\ProblemPCSC$.
+% \begin{theorem} \label{ea:thm:generalPCSC}
 % There exists a polynomial-time $\bigo(\sqrt{m}f)$-approximation algorithm for $\ProblemPCSC$, where $m$ is the number of subsets over the universum of size $n$ and $f=k/n$, where $k$ is the required number of elements to be covered.
 % \end{theorem}
 
 
-% \begin{theorem} \label{thm:generalPCACDT}
+% \begin{theorem} \label{ea:thm:generalPCACDT}
 % There exists a polynomial-time $\bigo(\sqrt{m}\log n)$-approximation algorithm for $\ProblemPCACDT$, where $m$ is the number of sets over the universum of size $n$.
 % \end{theorem}
 
-% \begin{theorem} \label{thm:generalPCMSSC}
+% \begin{theorem} \label{ea:thm:generalPCMSSC}
 % There exists a polynomial-time $\bigo(\sqrt{m})$-approximation algorithm for $\ProblemPCMSSC$, where $m$ is the number of sets over the universum.
 % \end{theorem}
 
@@ -134,23 +132,23 @@ For arbitrary precedence constraints, we prove that under the $\hyperref[problem
 % \DD{Ten przykład jest super, ale chyba musimy znaleźć sposób na jego kompresję, tzn. nie stać nas na zapłacenie całej strony; około 1/3 strony byłaby ok (może tabelka obok drzewa decyzyjnego (moze zamiana kolumn vs wierszy aby ją powęzić, a może mocno zminimalizować przestrzeń między kolumnami, a partial order jako łuki pomiędzy etykietami wierszy tabelki?); też do przemyślenia gdzie ten przykład umieścić (raczej nie w ``contribution'', ale albo w intro, albo w preliminaries chyba}
 % \begin{figure}[htb!]
 % \centering
-% \input{figures/pcal_example}
-% \caption{Example of a $\ProblemPCAL$ instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{fig:pcal_example}
+% \input{ea_figures/pcal_example}
+% \caption{Example of a $\ProblemPCAL$ instance with 10 hypotheses and 12 tests. (a) Hypotheses-tests table. (b) Precedence DAG with four components. (c) A valid decision tree solution respecting precedence constraints.}\label{ea:fig:pcal_example}
 % \end{figure}
 %
 % \DD{na razie zakomentowałem rysunek dot zbiorów}
 % \begin{figure}[h]
 % \centering
-% \input{figures/pccp_example}
-% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \input{ea_figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{ea:fig:pccp_example}
 % \end{figure}
 
 % \begin{figure}[h]
 % \centering
-% \input{figures/pccp_example}
-% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
+% \input{ea_figures/pccp_example}
+% \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{ea:fig:pccp_example}
 % \end{figure}
 
 \subsection{Organization}
-Section~\ref{sec:preliminaries} introduces the necessary notions and preliminaries including all of the problem definitions. Section \ref{sec:AL} presents our approximation algorithms for decision trees with precedence constraints, relying on approximation algorithms for set covering with precedence constraints developed in Section~\ref{sec:SC}. Section~\ref{sec:hardness} provides approximation hardness results for both kinds of the aforementioned problems as well as hardness of binary search with precedence constraints.
+Section~\ref{ea:sec:preliminaries} introduces the necessary notions and preliminaries including all of the problem definitions. Section \ref{ea:sec:AL} presents our approximation algorithms for decision trees with precedence constraints, relying on approximation algorithms for set covering with precedence constraints developed in Section~\ref{ea:sec:SC}. A full version of the paper including hardness results as well as additional details is provided in the Appendix.
 

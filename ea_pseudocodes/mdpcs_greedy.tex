@@ -1,0 +1,17 @@
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+\caption{The greedy algorithm for MDPCS}
+\label{ea:alg:MDPCS}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{$\ProcedureMDPCSGreedy(\mathcal{G}, \preceq, \cU)$}{
+$\mathcal{A} \gets \mathcal{G}$\;
+
+\ForEach{$S \in \mathcal{G}$}{
+\If{$\Delta\br{\closure{S}, \cU} > \Delta\br{\mathcal{A}, \cU}$}{
+$\mathcal{A} \gets \closure{S}$\;
+}
+}
+\Return $\mathcal{A}$\;
+}
+\end{algorithm}

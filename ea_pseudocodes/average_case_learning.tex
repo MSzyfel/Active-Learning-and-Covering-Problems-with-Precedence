@@ -1,0 +1,28 @@
+
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+\caption{The $\cO(\beta\cdot\log n)$-approximation algorithm for the PCACDT}
+\label{ea:alg:averageDecisionTree}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{\textsc{AverageDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
+
+\If{$\spr{\mathcal{H}} = 1$}{
+    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$.
+}
+
+\ForEach{$t \in \mathcal{T}$}{
+Set $t$ to cover $u\in \mathcal{H}$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\mathcal{H}}$.
+}
+$S \gets$ Run the $\beta$-approximation algorithm for PCMSSC on instance $(\mathcal{H}, \mathcal{T}, \mathcal{F},f)$ with $f=1/4$.
+
+$D \gets D_S \gets $ decision tree which consists of sequence of tests $S$.
+
+\ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
+$D' \gets$ \textsc{AverageDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
+
+Attach $D'$ to the leaf of $D$ corresponding to $\mathcal{H}'$.
+}
+\Return $D$.
+}
+\end{algorithm}

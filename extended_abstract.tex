@@ -185,8 +185,8 @@ Similarly, for the Set Cover we study two cost measures: size of the cover or th
 
 Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of a procedure for the former.
 En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of combinatorial structure of our problems.
-The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*\br{\sqrt{m}}$-approximation algorithms for all of the aforementioned problems.
-The picture is complemented by a number of hardness reductions that provide $o\br{m^{1/12-\epsilon}}$-inapproximability results for the decision tree and covering problems.
+The latter is brought by a problem of finding a maximum density precedence closed subfamily, where the density is defined as the ratio of the number of items the family covers to its size. By doing so we provide $\cO^*(\sqrt{m})$-approximation algorithms for all of the aforementioned problems.
+The picture is complemented by a number of hardness reductions that provide $o(m^{1/12-\epsilon})$-inapproximability results for the decision tree and covering problems.
 Besides giving a complete set of results for general precedence constraints, we also provide polylogarithmic approximation guarantees for two most typically studied and applicable precedence types, outforests and inforests. By providing corresponding hardness results, we show these results to be tight.
 \end{abstract}
 
@@ -208,9 +208,15 @@ Besides giving a complete set of results for general precedence constraints, we 
   Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms%
 \end{keywords}
 
-\appendix
+\input{ea_sections/introduction}
+\input{ea_sections/preliminaries}
+% \input{sections/binary_search}
+\input{ea_sections/approximating_learning}
+\input{ea_sections/set_covering_with_constrainst}
 
 \bibliography{bib-pcal}
+
+\appendix
 
 \input{sections/introduction}
 \input{sections/preliminaries}
@@ -218,7 +224,6 @@ Besides giving a complete set of results for general precedence constraints, we 
 \input{sections/approximating_learning}
 \input{sections/set_covering_with_constrainst}
 \input{sections/hardness}
-\input{sections/conclusions}
 
 % Acknowledgments---Will not appear in anonymized version
 \acks{We thank a bunch of people and funding agency.}

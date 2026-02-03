@@ -1,0 +1,39 @@
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+
+\caption{A generic approximation algorithm for $\ProblemPCACDT$ and $\ProblemPCWCDT$.}
+\label{ea:alg:worstDecisionTree}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{\ProcDecisionTree$(\cH, \cT, \preceq, \blackBox)$}{
+\If{$\spr{\cH} = 1$}{
+    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
+}
+%\ForEach{$t \in \cT$}{
+%Set $t$ to cover $u\in \cH$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\cH}$.
+%}
+%$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
+$\cC \gets$ Call $\br{\alpha, \beta}$-approximation algorithm $\blackBox$ on instance $(\cU, \xi(\cT), \preceq_{\xi}, f=1/4)$.
+
+$D\gets\brc{\emptyset, \emptyset}$,
+$\cH_{0} \gets \cH$, $t_{0} \gets \emptyset$.
+
+\For{$i=1$ \KwTo $|\cC|$}{
+\ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $1\leq\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
+    $D_{\cH'} \gets$ \ProcDecisionTree$(\cH', \cT, \preceq, \blackBox)$.
+
+    Hang $D_{\cH'}$ below $t_{i-1}$ in $D$.
+}
+\If{\textnormal{$i\neq 1$ and there is no $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
+    \Return $D$.
+}
+
+$\cH_i \gets\argmax_{\cH', \cH'\in t_{i-1}\br{\cH_{i-1}}} \brc{\spr{\cH'}}$.
+
+$t_i \gets$ the $i$-th test in $\cC$.
+
+Hang $t_i$ below $t_{i-1}$ (if it exists) in $D$ or as the root otherwise.
+}
+\Return $D$.
+}
+\end{algorithm}
