@@ -3,7 +3,7 @@
 \LinesNumbered
 
 \caption{The $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$}
-\label{alg:BPCSC}
+\label{ea:alg:BPCSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedureBPCSC(\cU, \cS, \preceq, \budget)$}{
 %    \If{$\budget\geq \sqrt{m/H_n}$}
@@ -17,10 +17,9 @@
 
     $\cA \gets$ Run the $\budget$-approx. algorithm for $\ProblemBMDPCS$ on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC, \budget)$.
 
-   \ForEach{$u \in \cov\br{\cA, \cU\setminus\cC}$}{
-       $c\br{u}\gets \Delta\br{\cA, \cU\setminus\cC}$. \tcp*{for analysis only}
-   }
-
+%    \ForEach{$u \in \cov\br{\cA, \cU-\cC}$}{
+%        $c\br{u}\gets \Delta\br{\cA, \cU-\cC}$. \tcp*{for analysis only}
+%    }
     $\cC \gets \cC \cup \cA$.
   }
 
