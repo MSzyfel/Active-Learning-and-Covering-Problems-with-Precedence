@@ -7,14 +7,14 @@ $\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}$ and $\cS$.
 We will refer to such $\cA$ as a \emph{greedy} solution.
 %\input{ea_pseudocodes/mdpcs_greedy.tex}
 When $\max_{S \in \mathcal{G}} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
-Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
+Additionally, we show that a slightly modified greedy rule achieves a $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
 An $\cA$ that satisfies
     $
     \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
     $
 will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
 \begin{theorem}\label{ea:thm:BMDPCS-greedy}
-    Let $\cA^*$ be an optimal solution for $\ProblemBMDPCS$ and let $\cA$ be $\budget$-greedy.
+    Let $\cA^*$ be an optimal solution to $\ProblemBMDPCS$ and let $\cA$ be $\budget$-greedy.
     Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{\budget}$.
 \end{theorem}
 % \begin{proof}
@@ -45,8 +45,7 @@ The approximation algorithm is the greedy procedure shown in Algorithm~\ref{ea:a
 % Note that $\cov\br{\cA_i,\cU\setminus\cov\br{\cC_{i-1}}}$ is the set of element in $\cU$ that are being covered in the $i$-th iteration. 
 %, and for each $u\in\cov\br{\cA_i,\cU\setminus\cC_{i-1}}$ denote $c(u):=\Delta\br{\cA_i,\cU\setminus\cC_{i-1}}$.
 \input{ea_pseudocodes/B_PCSC}
-
-First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{ea:lem:BPCSC-cost}) and then we estimate how much it covers (cf. Lemma~\ref{ea:lem:BPCSC-coverage}).
+The two following lemmas give Theorem~\ref{ea:thm:BPCSC}.
 \begin{lemma}\label{ea:lem:BPCSC-cost}
     Let $\cC$ be the cover returned by Algorithm~\ref{ea:alg:BPCSC}. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
 \end{lemma}
@@ -57,9 +56,6 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{ea:
 %         \item Else, when $\budget < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot \budget$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq \budget$, we have that $\spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot \budget + \budget = \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
 %     \end{enumerate}
 % \end{proof}
-
-
-
 \begin{lemma}\label{ea:lem:BPCSC-coverage}
     Let $\cC$ be the cover returned by Algorithm~\ref{ea:alg:BPCSC}. Then, $\spr{\cov\br{\cC}} \geq \spr{\cov\br{\cCopt}}$.
 \end{lemma}
@@ -67,7 +63,7 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{ea:
 %     If $\budget \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
 
 %     Otherwise, we assume that the the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot \budget$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot \budget$, the number of covered elements is at least $\spr{\cov\br{\cCopt}}$.
-    
+%
 %     %Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$.
 %     Let $R_i = \cU \setminus \cov\br{\cC_i}$ be the set of uncovered elements after the $i$-th iteration; take $R_0=\emptyset$.
 %     %Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$.
@@ -92,7 +88,7 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{ea:
 %     \]
 %     and the claim follows.
 %     \end{proof}
-
+%
 %     Using Claim~\ref{ea:lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq \budget^2H_k$.
 %     By the price definition, $\sum_{j=1}^k c(u_j)=\spr{\cC_{t-1}}$.
 %     Since $\spr{\cA_t}\leq \budget$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq \budget^2H_n+\budget$.
@@ -113,20 +109,19 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{ea:
 % %     \end{align*}
 % %     where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq \budget$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $\budget < \sqrt{m/H_n}$.
 % \end{proof}
-
-Lemmas \ref{ea:lem:BPCSC-cost} and \ref{ea:lem:BPCSC-coverage} prove the following.
+%Lemmas \ref{ea:lem:BPCSC-cost} and \ref{ea:lem:BPCSC-coverage} prove the following.
 \begin{theorem} \label{ea:thm:BPCSC}
-    There exists a $\br{\sqrt{m\cdot H_n}+1, 1}$-bicriteria approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$. That is, the algorithm returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \OPT\br{\cI}$ and $\spr{\cC}\leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
+    There exists a polynomial-time $\br{\sqrt{m\cdot H_n}+1, 1}$-bicriteria approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$. That is, the algorithm returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \OPT\br{\cI}$ and $\spr{\cC}\leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
 \end{theorem}
 
 \subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}\label{ea:subsection:PCSC}
 Let $k=f\cdot n$.
 In order to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{ea:alg:PCSC}.
 We note a subtle fact of finishing the loop once $k/2$ elements are covered and not iterating till reaching $k$.
-This is because the last set $\cA$ may be of unbounded size but the above allows us to argue that the size of optimal solution to the instance from the last iteration is lower-bounded by $\Omega(k)$, which is enough to obtain the required approximation ratio.
+This is because the last set $\cA$ may be of unbounded size but it can be argued that the size of an optimal solution to the instance from the last iteration is lower-bounded by $\Omega(k)$, which is enough to obtain the required approximation ratio.
 \input{ea_pseudocodes/set_cover.tex}
 \begin{theorem} \label{ea:thm:MDPCStoPCSC}
-    If there exists a $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a $\br{4\gamma/f, 2}$-bicriteria approximation algorithm for $\ProblemPCSC$.
+    If there exists a polynomial-time $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a polynomial-time bicriteria $\br{4\gamma/f, 2}$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 % \begin{proof}
 % Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{ea:alg:PCSC}, $i\in\brc{1,\ldots,l}$.
@@ -159,7 +154,7 @@ This is because the last set $\cA$ may be of unbounded size but the above allows
 
 Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
 \begin{corollary}\label{ea:cor:BPCSC-to-PCSC}
-    If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$.
+    If there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$.
 \end{corollary}
 
 
@@ -261,13 +256,13 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
     % \end{proof}
 Lemma \ref{ea:lem:combined-coverage-cost} directly implies the following theorem.
 \begin{theorem}\label{ea:thm:BPCSC-to-PCMSSC}
-    If there exists an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
+    If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
 % It should be noted that in all cases when we use Theorem~\ref{ea:thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding a $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
 \subsection{Special cases of precedence constraints} \label{ea:subsection:SpecialCases}
 \begin{theorem}\label{ea:thm:BPCSC-inforest}
-    There exists an $\br{1, \frac{e}{e-1}}$-approximation algorithm for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
+    There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 % \begin{proof}
 %     The proof is by showing that this problem is reducible to a standard budgeted maximum coverage problem (with no precedence constraints) with non-uniform cost of sets. In this setup including a set $S$ into the cover may impose cost $c\br{S}$. For this a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Observer that  for precedence constraints of the inforest type, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{ea:cor:BPCSC-to-PCSC} the theorem follows.
@@ -275,10 +270,10 @@ Lemma \ref{ea:lem:combined-coverage-cost} directly implies the following theorem
 
 This implies the following result for $\ProblemPCMSSC$ via carefull examination of Theorem~\ref{ea:thm:BPCSC-to-PCMSSC}.
 \begin{corollary}\label{ea:cor:BPCSC-inforest-to-PCMSSC}
-    There exist $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation algorithms for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
+    There exist polynomial-time bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation algorithms for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{theorem}\label{ea:thm:BPCSC-outforest}
-    There exists a $\br{\bigo\br{\log n}, 4}$-approximation algorithm for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
+    There exist polynomial-time bicriteria $\br{\bigo\br{\log n}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 % \begin{proof}
 %     The proof is by showing that this problem is reducible to $\ProblemGSO$ on tree metrics.
