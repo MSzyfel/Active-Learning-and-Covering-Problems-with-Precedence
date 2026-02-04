@@ -25,7 +25,7 @@ $\cH_{1} \gets \cH$.
 \ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $1\leq\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
     $D_{\cH'} \gets$ \ProcDecisionTree$(\cH', \cT, \preceq, \blackBox)$.
 
-    Hang $D_{\cH'}$ below $t_{i-1}$ in $D$.
+    Hang $D_{\cH'}$ below $t_{i}$ in $D$.
 }
 \If{\textnormal{there is no $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
     \Return $D$.

@@ -17,15 +17,13 @@ $\cC \gets$ Call $\br{\alpha, \beta}$-approximation algorithm $\blackBox$ on ins
 
 $t_{1} \gets$ the test associated with the first set in $\cC$.
 
-$D\gets\br{\brc{t_1}, \emptyset}$.
-
-$\cH_{1} \gets \cH$. 
+$D\gets\br{\brc{t_1}, \emptyset}$, $\cH_{1} \gets \cH$. 
 
 \For{$i=1$ \KwTo $|\cC|-1$}{
 \ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $1\leq\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
     $D_{\cH'} \gets$ \ProcDecisionTree$(\cH', \cT, \preceq, \blackBox)$.
 
-    Hang $D_{\cH'}$ below $t_{i-1}$ in $D$.
+    Hang $D_{\cH'}$ below $t_{i}$ in $D$.
 }
 \If{\textnormal{there is no $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
     \Return $D$.
