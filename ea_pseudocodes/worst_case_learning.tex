@@ -1,5 +1,3 @@
-\SetKwRepeat{Do}{do}{while}%
-
 \begin{algorithm}[h]
 \DontPrintSemicolon
 \LinesNumbered
@@ -11,31 +9,33 @@
 \If{$\spr{\cH} = 1$}{
     \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
 }
-
+%\ForEach{$t \in \cT$}{
+%Set $t$ to cover $u\in \cH$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\cH}$.
+%}
+%$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
 $\cC \gets$ Call $\br{\alpha, \beta}$-approximation algorithm $\blackBox$ on instance $(\cU, \xi(\cT), \preceq_{\xi}, f=1/4)$.
 
-$D\gets\br{\emptyset, \emptyset}$ and let $i\gets 1$.
+$t_{1} \gets$ the test associated with the first set in $\cC$.
 
-\Do{$i\leq|\cC|$ \textnormal{and there is no $\cH'$, $\cH'\in t_{i}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
+$D\gets\br{\brc{t_1}, \emptyset}$.
 
-$t_i \gets$ the test associated with the $i$-th set in $\cC$.
+$\cH_{1} \gets \cH$. 
 
-Make $t_i$ to be a child of $t_{i-1}$ in $D$ (when $i>1$), or the root of $D$ otherwise (when $i=1$).
-
-$\cH_i \gets\argmax_{\cH'\in t_{i}} \brc{\spr{\cH'}}$.
-
-\ForEach{\textnormal{reply $\cH'$, $\cH'\in t_{i}$, such that $1\leq\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
+\For{$i=1$ \KwTo $|\cC|-1$}{
+\ForEach{\textnormal{response $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $1\leq\spr{\cH'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
     $D_{\cH'} \gets$ \ProcDecisionTree$(\cH', \cT, \preceq, \blackBox)$.
 
-    Hang $D_{\cH'}$ below $t_{i}$ in $D$, i.e., make the root of $D_{\cH'}$ to be a child of $t_i$.
+    Hang $D_{\cH'}$ below $t_{i-1}$ in $D$.
+}
+\If{\textnormal{there is no $\cH'$, $\cH'\in t_{i}\br{\cH_{i}}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
+    \Return $D$.
 }
 
-Increment $i$.
+$\cH_{i+1} \gets\argmax_{\cH', \cH'\in t_{i}\br{\cH_{i}}} \brc{\spr{\cH'}}$.
 
-% \If{\textnormal{$i\neq 1$ and there is no $\cH'$, $\cH'\in t_{i-1}\br{\cH_{i-1}}$, such that $\spr{\cH'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
-%     \Return $D$.
-% }
+$t_{i+1} \gets$ the test associated with $i+1$-th set in $\cC$.
 
+Hang $t_{i+1}$ below $t_{i}$.
 }
 \Return $D$.
 }
