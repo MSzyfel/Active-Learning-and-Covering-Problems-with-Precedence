@@ -115,6 +115,7 @@
 % opt parameters
 \newcommand{\optPCSC}[1]{\OPT\br{#1}}
 \newcommand{\optPCMSSC}[1]{\OPT_{\sum}\br{#1}}
+\newcommand{\cCopt}{\cC_{\textup{opt}}} %optimal solution to PCSC
 
 % functions and parameters
 \newcommand{\ProblemThreeSat}{\textsc{3-SAT}\xspace}
@@ -181,7 +182,7 @@ This work considers a number of optimization problems and reductive relations be
 The two main problems we are interested in are the \emph{Optimal Decision Tree} and \emph{Set Cover}.
 We study these two fundamental tasks under precedence constraints, that is, if a test (or set) $X$ is a predecessor of $Y$, then in any feasible decision tree $X$ needs to be an ancestor of $Y$  (or respectively, if $Y$ is added to set cover, then so must be $X$).
 For the Optimal Decision Tree we consider two optimization criteria: worst case identification time (height of the tree) or the average identification time.
-Similarly, for the Set Cover we study two cost measures: size of the cover or the average cover time.
+Similarly, for the Set Cover we study two cost measures: the size of the cover or the average cover time.
 
 Our approach is to develop a number of algorithmic reductions, where an approximation algorithm for one problem provides an approximation for another via a black-box usage of a procedure for the former.
 En route we introduce other optimization problems either to complete the `reduction landscape' or because they hold the essence of combinatorial structure of our problems.

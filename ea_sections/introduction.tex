@@ -53,23 +53,24 @@ We show how to reduce the optimal decision tree to the above set covering. Then 
 
 \paragraph{Optimal Decision Tree}
 Optimal decision tree, also referred to as \emph{binary search trees} \cite{BoseCIKL20,DemaineHIP07}, is an extensively studied problem in computer science, starting with \cite{GareyPerfBoundsOnSplittingAlgForBinTesting} in the 1970s.
-Since then it has gathered a lot of attention due to its numerous applications including medical diagnosis, troubleshooting, active learning, and information retrieval. 
-Usually two optimization criteria are considered: the worst-case and average-case cost. 
+Since then it has gathered a lot of attention due to its numerous applications including medical diagnosis, troubleshooting, active learning, and information retrieval.
+Usually two optimization criteria are considered: the worst-case and the average-case cost.
 Both versions of the problem are \NPhard and cannot be approximated within an $o\br{\log n}$ factor \cite{ConstructOptimalBinaryDecisionTreesIsNPComplete,HardnessOfMinHeightDTP,ApproximatingDecisionTreesMultiwayBranches,DiagnosisDetermination}.
-Moreover, this bound is tight and several $\cO(\log n)$-approximation algorithms are known for average-case both with non-uniform probabilities and test costs \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Few special cases are known to admit $o\br{\log n}$-approximation. For average case, this includes an $\cO\br{\log n/\log \log n}$-approximation when tests have a constant number of possible outcomes and all probabilities and costs are uniform \cite{TightAnalysisGreedyUniformDecisionTree}. 
-% This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}. 
+Moreover, this bound is tight and several $\cO(\log n)$-approximation algorithms are known for the average-case both with non-uniform probabilities and test costs \cite{OptimalSplitTreeProblem,AnalysisGreedyActiveLearning,ApproximatingDecisionTreesMultiwayBranches,AverageCaseActiveLearningWithCosts,ApproximatingOptimalBinaryDecisionTrees,DTsforEntIdent,ApproxAlgsForOptDTsAndAdapTSPProblems,DiagnosisDetermination,AdaptiveSubmodularRankingAndRouting,AdaptivityInAdaptiveSubmodularity,MinimumCostAdaptiveSubmodularCover} as well as the worst case \cite{DecisionTreesForGeometricModels,TheCostComplexityOfInteractiveLearning,DiagnosisDetermination}. Few special cases are known to admit $o\br{\log n}$-approximation. For the average case, this includes an $\cO\br{\log n/\log \log n}$-approximation when tests have a constant number of possible outcomes and all probabilities and costs are uniform \cite{TightAnalysisGreedyUniformDecisionTree}.
+% This variant cannot be approximated within $\br{4-\epsilon}$ factor for any $\epsilon > 0$ unless P = NP \cite{DTsforEntIdent}.
 Moreover achieving any approximation factor above $9$ is not \NPhard assuming ETH \cite{TightAnalysisGreedyUniformDecisionTree}.
 For the worst case, when the underlying search space is a partially ordered set with one maximum element and costs are uniform an $\cO\br{\log n/\log \log n}$-approximation is known \cite{EdgeRankingSearchingPartialOrders}.
 
 
 \paragraph{Searching in Trees}
-The special case when the instance represents binary searching in a tree has also been extensively studied. 
-% In this problem hypothesis represent vertices and tests represent queries about direction towards the target. 
-For uniform costs and worst-case criterion, a linear time algorithms are known for both edge and vertex query variants \cite{Schaffer1989OptNodeRankOfTsInLinTime,OnakParys2006GenOfBSSInTsAndFLikePosets,Mozes_Onak2008FindOptTSStartInLinTime}. For average case, uniform costs and vertex queries an FPTAS exists \cite{SearchTreesOnGraphs}. For edge queries the problem is known to be \NPhard \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization} and a greedy strategy achieves $3/2$-approximation \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization,ImprovedApproximationAlgorithmsForTheAverageCaseTreeSearchingProblem,TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees}. For non-uniform costs, the vertex query model generalizes edge query model which is known to be \NPhard \cite{EdgeRankingOfWeightedTrees,TheBinaryIdentificationProblemForWeightedTrees,OnTheTreeSearchProblemWithNonUniformCosts}. The best known approximation ratio is $\br{\sqrt{\log n}}$ \cite{ApproximationStrategiesforGeneralizedBinarySearchinWeightedTrees}.
+The special case when the instance represents binary searching in a tree has also been extensively studied.
+% In this problem hypothesis represent vertices and tests represent queries about direction towards the target.
+For uniform costs and the worst-case criterion, a linear time algorithms are known for both edge and vertex query variants \cite{Schaffer1989OptNodeRankOfTsInLinTime,OnakParys2006GenOfBSSInTsAndFLikePosets,Mozes_Onak2008FindOptTSStartInLinTime}. For the average case, uniform costs and vertex queries an FPTAS exists \cite{SearchTreesOnGraphs}. For edge queries the problem is known to be \NPhard \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization} and a greedy strategy achieves $3/2$-approximation \cite{OnTheComplexityOfSearchingInTreesAverageCaseMinimization,ImprovedApproximationAlgorithmsForTheAverageCaseTreeSearchingProblem,TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees}. For non-uniform costs, the vertex query model generalizes edge query model which is known to be \NPhard \cite{EdgeRankingOfWeightedTrees,TheBinaryIdentificationProblemForWeightedTrees,OnTheTreeSearchProblemWithNonUniformCosts}. The best known approximation ratio is $\bigo\br{\sqrt{\log n}}$ \cite{ApproximationStrategiesforGeneralizedBinarySearchinWeightedTrees}.
 The average case is also \NPhard and an $\br{4+\epsilon}$-approximation FPTAS is known \cite{szyfelbein2025approximatingaveragecasegraphsearch}.
 Searching in trees is a generalization of the classical binary search intensively studied in various models \cite{BorgstromK93,LaberMP02,BayesianLearnerOptimalNoisyBinarySearch,DereniowskiLU25}.
 A generalization of tree search to general graphs have also been recently studied, mostly in presence of noise, where some replies can be erroneous \cite{Emamjomeh-Zadeh16,DereniowskiLU25}.
 For some applications of these problems see e.g. \cite{Emamjomeh-Zadeh17,KarpK07}.
+To the best of our knowledge no variants of the decision tree problem have been studied in presence of precedence relation.
 
 \paragraph{Set Cover with precedence constraints}
 
@@ -82,6 +83,7 @@ It is well known that the greedy algorithm achieves an $H_n$-approximation \cite
 
 \paragraph{Approximation Results.} The key insight underlying our approach is a systematic hierarchy of reductions: we reduce decision tree problems to set covering problems with precedence constraints, which in turn are solved via algorithms for finding dense precedence-closed subfamilies. This hierarchy of reductions, illustrated in Figure~\ref{ea:fig:reductions}, allows us to iteratively simplify the problem until we reach a core problem that can be effectively approximated. 
 Our approximation results, including best known results from the literature, are summarized in Table~\ref{ea:tab:results}.
+All problems are formally stated in Section~\ref{sec:preliminaries} below.
 
 \begin{figure}[ht!]
 \centering
