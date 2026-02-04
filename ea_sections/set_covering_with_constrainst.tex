@@ -281,9 +281,9 @@ This implies the following result for $\ProblemPCMSSC$ via carefull examination 
 %     It should be noted that they give a worse approximation ratio of $\br{\bigo\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $\bigo\br{\log n}$ distortion.
 %     Since our metrics is already a tree metric, we can skip this step and obtain the improved approximation ratio.
     
-%     We create the metric as follows: we introduce a root node $r$ and for each set $S\in\cS$ we add a repersentative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$.
-%     Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group $X_u=\brc{v_S \mid u\in S}$ which consists of all repersentatives of vertices containing $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
-%     Moreover, since the tour starts at the root, we have that if a repersentative of a set $W$ is visited, it the repersentative of all of its predecessors in the outforest have been visited.
+%     We create the metric as follows: we introduce a root node $r$ and for each set $S\in\cS$ we add a representative node $v_S$ connected to its every succesor in the outforest with an edge of length $1$.
+%     Additionally, we connect each maximal element of the outforest to $r$ with an edge of length $1$. Finally, for each element $u\in\cU$ we create a group $X_u=\brc{v_S \mid u\in S}$ which consists of all representatives of vertices containing $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
+%     Moreover, since the tour starts at the root, we have that if a representative of a set $W$ is visited, it the representative of all of its predecessors in the outforest have been visited.
 %     Therefore, any feasible solution to $\ProblemGSO$ on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{ea:cor:BPCSC-to-PCSC} and Theorem \ref{ea:thm:BPCSC-to-PCMSSC} the theorem follows.
 %     \DD{Uwaga: Thm. \ref{ea:thm:BPCSC-to-PCMSSC} nie przenosi ratio, do sprawdzenia.}
 % \end{proof}
