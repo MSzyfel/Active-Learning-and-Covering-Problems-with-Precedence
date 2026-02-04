@@ -100,7 +100,7 @@ We will use sepcovers to lowerbound the cost of optimal solution:
 %     For each $\cH' \in \cH\setminus S$, we recursively call \ProcWorstDecisionTree on instance $\br{\cH', \cT\setminus S, \preceq-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
 
 
-Let $D_{\cC}$ be a decision tree restricted only to tests from $\cC$. The following observation is due to Lemmas \ref{ea:lemma:subspace_opt} and \ref{ea:lemma:cover_sep_worst_case}:
+Let $D_{\cC}$ be a decision tree restricted only to tests from $\cC$. By Lemmas \ref{ea:lemma:subspace_opt} and \ref{ea:lemma:cover_sep_worst_case} we have:
     \begin{observation} \label{ea:obs:DS}
         Consider $D_{\cC}$ computed in Algorithm~\ref{ea:alg:worstDecisionTree}, that uses a $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
         %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
