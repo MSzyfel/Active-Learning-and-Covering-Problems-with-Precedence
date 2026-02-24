@@ -244,7 +244,7 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         We have that $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$ and $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\zeta^*}$.
     \end{lemma}
     \begin{proof}
-        Since the optimal cover $\zeta^*$ satisfies $\spr{\zeta^*}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI'=(U,\cS,\preceq,a^{l^*})$ for which the $(\alpha,\beta)$-approximation $\sigma_{l^*}$ has been computed after the inner loop.
+        Since the optimal cover $\zeta^*$ satisfies $\spr{\zeta^*}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI'=(\cU,\cS,\preceq,a^{l^*})$ for which the $(\alpha,\beta)$-approximation $\sigma_{l^*}$ has been computed after the inner loop.
         Therefore we know that $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\zeta^*}$ and $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$.
     \end{proof}
     \begin{lemma}\label{lem:combined-coverage-cost}
@@ -331,7 +331,7 @@ By the greedy choice, $\Delta\br{\cA} \geq \delta$ and by assumption $\delta \le
 \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon.
 \]
 \end{enumerate}
-Since $C$ is constant, the theorem follows.
+% Since $C$ is constant, the theorem follows.
 \end{proof}
 
 
