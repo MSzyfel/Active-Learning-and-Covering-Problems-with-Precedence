@@ -13,7 +13,7 @@
 %  \Else{
   $\cC \gets \emptyset$.
 
-  \While{$\spr{\cC} < \sqrt{m\cdot H_n}\cdot \budget$}{
+  \While{$\spr{\cC} < \min\brc{\sqrt{m\cdot H_n}\cdot \budget, m}$}{
 
     $\cA \gets$ Run the $\budget$-approx. algorithm for $\ProblemBMDPCS$ on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC, \budget)$.
 

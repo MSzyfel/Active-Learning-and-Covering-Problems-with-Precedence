@@ -34,10 +34,10 @@ Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 We also set $\cU=\bigcup_{t\in\cT}\xi(t)$.
 \begin{lemma}
-    We have $\spr{\cU}\geq \frac{4}{5}\cdot\spr{\cH}$.
+    We have $\spr{\cU}\geq \spr{\cH}-1$ and $\spr{\cU}\geq \frac{4}{5}\cdot\spr{\cH}$.
 \end{lemma}
 \begin{proof}
-    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}\geq4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1\notin \cU$, then for every test $t\in\cT$, it holds that for the reply $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\cdot\spr{\cH}$. Assume that there is a second hypothesis $h_2\notin \cU$. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$, so $h_2$ needs to belong to a reply of size at most $\frac{3}{4}\cdot\spr{\cH}$, a contradiction. Thus $\spr{\cU}\geq \min_{i\geq5}\brc{\frac{i-1}{i}}\cdot\spr{\cH}=\frac{4}{5}\cdot\spr{\cH}$.
+    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}\geq4$. We show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1\notin \cU$, then for every test $t\in\cT$, it holds that for the reply $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\cdot\spr{\cH}$. Assume that there is a second hypothesis $h_2\notin \cU$. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$, so $h_2$ needs to belong to a reply of size at most $\frac{3}{4}\cdot\spr{\cH}$, a contradiction. Thus $\spr{\cU}\geq \min_{i\geq5}\brc{\frac{i-1}{i}}\cdot\spr{\cH}=\frac{4}{5}\cdot\spr{\cH}$.
 \end{proof}
  
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
@@ -234,30 +234,33 @@ This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}
 % Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
 We have a lemma that is analogous to Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance. Let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cU, \xi(\cT), \preceq_{\xi}, f=1/4}$.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance and let $\cI_{\cU}=\br{\cU, \cT, \preceq}$. Let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\cI_{\cU}$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
-    Then, $\coverageTime\br{\cC^*} \leq \COSTA\br{\sepcover{\cI}}$.
+    Then, $\coverageTime\br{\cC^*} \leq \COSTA\br{\sepcover{\cI_{\cU}}}$.
 \end{lemma}
 \begin{proof}
-    Assume towards a contradiction that $\coverageTime\br{\cC^*} > \COSTA\br{\sepcover{\cI}}$.
-    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $\cC^*$.
-    Let $\sigma$ be the shortest prefix of $\sepcover{\cI}$ that covers at least $\spr{\cU}/4$ items.
+    Assume towards a contradiction that $\coverageTime\br{\cC^*} > \COSTA\br{\sepcover{\cI_{\cU}}}$.
+    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI_{\cU}})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI_{\cU}}}$, contradicting the optimality of $\cC^*$.
+    Let $\sigma$ be the shortest prefix of $\sepcover{\cI_{\cU}}$ that covers at least $\spr{\cU}/4$ items.
     Note that because we consider a prefix, the precedence constraints are satisfied.
     Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}.
-    Take an arbitrary $h \in \cH$.
+    Take an arbitrary $h \in \cU$.
     There are two cases to consider:
     \begin{itemize}
-        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cU}/4$ items. Since at the moment of sepcovering, $h$ belonged to a reply of size at most $\spr{\cU}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
-        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $p\br{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $p\br{\sigma}$.
+        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI_{\cU}}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cU}/4$ items. Since at the moment of sepcovering, $h$ belonged to a reply of size at most $\spr{\cU}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI_{\cU}}}$.
+        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI_{\cU}}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $p\br{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI_{\cU}}}$ is at least $p\br{\sigma}$.
     \end{itemize}
-    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
+    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI_{\cU}}}$, a contradiction.
 \end{proof}
 
 The following observation is analogous to Observation~\ref{obs:DS}:
 \begin{observation} \label{obs:DS-average}
     Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$ as the $\blackBox$ subroutine.
-    Then, $\COSTA\br{D_{\cC}} \leq \alpha \cdot \COSTA\br{\sepcover{\cI}}$.
+    Then, $\COSTA\br{D_{\cC}} \leq 2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU}}}$.
 \end{observation}
+\begin{proof}
+    Assume that $\cH\setminus\cU$ is not empty, otherwise we actually have $\COSTA\br{D_{\cC}} \leq \alpha \cdot \COSTA\br{\sepcover{\cI_{\cU}}}$. Let $h\in \cH\setminus\cU$. Trivially, we have that the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most $\spr{\cC}$. We also have that $\spr{\cC}\leq \coverageTime\br{\cC}$. Therefore we have that $\COSTA\br{D_{\cC}} \leq \alpha \cdot \COSTA\br{\sepcover{\cI_{\cU}}} + \spr{\cC} \leq 2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU}}}$.
+\end{proof}
 
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
     If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCMSSC$, then there is a polynomial-time $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$.
@@ -268,19 +271,19 @@ The following observation is analogous to Observation~\ref{obs:DS}:
     Let $D$ be the decision tree returned by this call.
     In order to prove the theorem it is enough to argue that
     \begin{equation} \label{eq:D-average}
-     \COSTA\br{D} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
+     \COSTA\br{D} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
     \end{equation}
 
     The proof is by induction on $n$. The base case when $n=1$ is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
+    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
     To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
     We have
 \begin{align*}
     \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{\cH'(D')} \COSTA\br{D'(\cH')} \\
-    \leq & \alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH'(D')} \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-    \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
-    = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-    = & \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
+    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU}}} + \sum_{\cH'(D')} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+    \leq & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
+    = & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
+    = & \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
 \end{align*}
 where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every reply $\cH'$ associated with a test outside of $D_{\cC}$.
 This concludes the proof of the theorem.

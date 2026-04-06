@@ -34,7 +34,7 @@ Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on
 By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$.
 We also set $\cU=\bigcup_{t\in\cT}\xi(t)$.
 \begin{lemma}
-    We have $\spr{\cU}\geq \frac{4}{5}\cdot\spr{\cH}$.
+    We have $\spr{\cU}\geq \spr{\cH}-1$ and $\spr{\cU}\geq \frac{4}{5}\cdot\spr{\cH}$.
 \end{lemma}
 % \begin{proof}
 %     If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}\geq4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1\notin \cU$, then for every test $t\in\cT$, it holds that for the reply $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\cdot\spr{\cH}$. Assume that there is a second hypothesis $h_2\notin \cU$. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$, so $h_2$ needs to belong to a reply of size at most $\frac{3}{4}\cdot\spr{\cH}$, a contradiction. Thus $\spr{\cU}\geq \min_{i\geq5}\brc{\frac{i-1}{i}}\cdot\spr{\cH}=\frac{4}{5}\cdot\spr{\cH}$.

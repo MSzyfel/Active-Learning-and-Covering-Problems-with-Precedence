@@ -243,7 +243,7 @@ We have the following theorem:
     For any $\epsilon>0$, $\ProblemPCSC$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
 \end{theorem}
 \begin{proof}
-    \paragraph{Construction of the reduction.} We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$ for some $\gamma > 0$ to be determined later. In our reduction we will embed the structure of the input graph into the precedence constraints, while the universum elements will enforce the covering requirement.
+    \par\noindent\textbf{Construction of the reduction.} We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$ for some $\gamma > 0$ to be determined later. In our reduction we will embed the structure of the input graph into the precedence constraints, while the universum elements will enforce the covering requirement.
     
     Given a graph $G=(\{1,\ldots,N\}, \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of $\ProblemPCSC$ as follows. For each vertex $v \in \{1,\ldots,N\}$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in \{1,\ldots,\lambda\}$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in \{1,\ldots,\lambda\}$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
 
@@ -252,15 +252,15 @@ We have the following theorem:
     To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in \{1,\ldots,N\}$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in \{1,\ldots,N\}$, we have $\mathbb{P}[j \in\cU_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets, that is, $E_{uv} = (U_u \cap U_v)$.
     
     From this construction, we can compute the following expected values:
-    \begin{itemize}
-        \item $\mathbb{E}[\spr{U_v}] = p n$ for each vertex $v$,
-        \item $\mathbb{E}[\spr{\{v\colon j\in\cU_v\}}] = p N$ for each element $j \in \{1,\dots, n\}$,
-        \item $\mathbb{E}[\spr{E_{uv}}] = \mathbb{E}[\spr{U_u \cap U_v}] = np^2$ for each edge $uv$.
-    \end{itemize}
+    \begin{align*}
+        \mathbb{E}[\spr{U_v}] &= p n &&\text{for each vertex } v,\\
+        \mathbb{E}[\spr{\{v\colon j\in\cU_v\}}] &= p N &&\text{for each element } j \in \{1,\dots, n\},\\
+        \mathbb{E}[\spr{E_{uv}}] &= \mathbb{E}[\spr{U_u \cap U_v}] = np^2 &&\text{for each edge } uv.
+    \end{align*}
 
     The intuition behind this construction is as follows: we choose $p$ to be the smallest value such that if a planted component exists, then with high probability it covers all of $U$ using only edge representatives from the planted component (and their required predecessors). On the other hand, if no planted component exists, then we show that any solution must use significantly more sets to cover $U$, thus establishing the desired inapproximability ratio. 
     
-    \paragraph{Choice of parameters.}
+    \par\noindent\textbf{Choice of parameters.}
     Let $\mathcal{P}$ denote the planted component if it exists. Since $\mathcal{P}$ consists of $k = \sqrt{N}$ vertices, for any element $j \in \{1,\dots, n\}$, the expected number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$ is $\mathbb{E}[\spr{\{v\colon j\in\cU_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$. Therefore, the expected number of unordered pairs of vertices in $\mathcal{P}$ where both auxiliary sets contain $j$ is:
     \[
     \mathbb{E}\left[\left|\left\{(v, u)\colon j\in\cU_v, j\in\cU_u, v,u \in V(\mathcal{P}), v < u\right\}\right|\right] = \binom{p\sqrt{N}}{2}.
@@ -276,7 +276,7 @@ We have the following theorem:
     $. 
 	We have $\mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] \geq 64\cdot\log^2 N$, which will allow us to apply concentration bounds effectively.
 
-    \paragraph{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to $\ProblemPCSC$ using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\cdot\sqrt{N}+N^{3/4-\gamma/2})$.
+    \par\noindent\textbf{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to $\ProblemPCSC$ using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\cdot\sqrt{N}+N^{3/4-\gamma/2})$.
     Consider the solution that selects all vertex representatives $V_{v,i}$ for all $v \in V(\mathcal{P})$ and all $i \in \{1,\ldots,\lambda\}$, together with all edge representatives $E_{uv}$ for all edges $uv \in E(\mathcal{P})$. The special element $0$ is covered by any vertex representative, so we focus on covering elements in $\{1,\dots, n\}$.
     
     Fix an arbitrary element $j \in \{1,\dots, n\}$. We first bound the number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$. Since $\mathbb{E}[\spr{\{v\colon j\in\cU_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$, by Chernoff's bound (Theorem \ref{thm:chernoff}) with $\delta = 1/2$, we have:
@@ -316,7 +316,7 @@ We have the following theorem:
     \lambda\cdot\sqrt{N}+N^{3/4-\gamma/2}.
     \]
     
-    \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to $\ProblemPCSC$ must use significantly more sets to cover all elements in $U$ with high probability.
+    \par\noindent\textbf{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to $\ProblemPCSC$ must use significantly more sets to cover all elements in $U$ with high probability.
     
     Consider any solution to $\ProblemPCSC$ that selects representatives corresponding to some set $X \subseteq \{1,\ldots,N\}$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in \{1,\ldots,\lambda\}$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
     
@@ -360,7 +360,7 @@ We have the following theorem:
     \lambda\cdot N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}.
     \]
     
-    \paragraph{Comparison and conclusion.}
+    \par\noindent\textbf{Comparison and conclusion.}
     We now compare the costs in the two cases to establish the inapproximability ratio. By choosing $\lambda = N^{1/4}$ (or any $\lambda \geq N^{1/4}$) and letting $\gamma$ approach $0$ we have that the ratio between the costs in Case 2 and Case 1 is at least:
     \[
     \frac{\lambda\cdot N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}}{\lambda\cdot\sqrt{N} + N^{3/4-\gamma/2}} = \Omega\br{
