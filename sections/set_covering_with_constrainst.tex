@@ -3,7 +3,10 @@
 In order to solve $\ProblemPCSC$ and $\ProblemPCMSSC$ we firstly solve two essential problems: $\ProblemMDPCS$ and $\ProblemBMDPCS$ which serve as a way to find precedence-closed subfamilies of sets which cover many elements with respect to their size. We will then use such subroutines as an oracle in order to construct greedy, set-cover like approximation algorithms for our problems.
 %An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
 By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cU,\cG,\preceq}$ provides a $\bigo\br{\sqrt{m}}$-approximation: pick $\cA$ to be the best solution among
-$\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}$ and $\cS$.
+\[
+\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}
+\]
+and $\cS$.
 We will refer to such $\cA$ as a \emph{greedy} solution.
 %\input{pseudocodes/mdpcs_greedy.tex}
 
@@ -54,7 +57,10 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     We consider two cases:
     \begin{enumerate}
         \item If $\budget\geq \sqrt{m/H_n}$, then for $\cC=\cS$ it holds: $\spr{\cC} = m \leq \sqrt{m\cdot H_n}\cdot \budget$.
-        \item Else, when $\budget < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot \budget$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq \budget$, we have that $\spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot \budget + \budget = \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
+        \item Else, when $\budget < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot \budget$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq \budget$, we have that 
+        \[
+        \spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot \budget + \budget = \br{\sqrt{m\cdot H_n}+1}\cdot \budget.
+        \]
     \end{enumerate}
 \end{proof}
 
@@ -69,14 +75,20 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     %Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$.
     Let $R_i = \cU \setminus \cov\br{\cC_i}$ be the set of uncovered elements after the $i$-th iteration; take $R_0=\emptyset$.
     %Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$.
-    Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the \emph{price} of $u$ to be $c(u) = \spr{\cA_{i(u)}}/\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}$.
+    Note that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the \emph{price} of $u$ to be 
+    \[c(u) = \frac{\spr{\cA_{i(u)}}}{\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}}.
+    \]
+
     Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt}}$.
     (Note that such $t$ exists since we are analyzing Algorithm~\ref{alg:BPCSC} under the assumption that the loop works indefinitely, i.e., until all items are covered).
     Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt}}$.
     Order the elements of $\cov\br{\cCopt}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily (i.e., if $i(u_j)<i(u_{j'})$, then $j<j'$).
 
     \begin{claim}\label{lem:cost-per-element}
-        For each $j \in \brc{1, \ldots, k}$, $c(u_j) \leq \budget^2/(k-j+1)$.
+        For each $j \in \brc{1, \ldots, k}$ 
+        \[
+        c(u_j) \leq \frac{\budget^2}{k-j+1}.
+        \]
     \end{claim}
     \begin{proof}
      Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ of size at most $\spr{\cCopt}\leq \budget$. Since the algorithm selects a $\budget$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
@@ -91,10 +103,12 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
     and the claim follows.
     \end{proof}
 
-    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq \budget^2H_k$.
+    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq \budget^2\cdot H_k$.
     By the price definition, $\sum_{j=1}^k c(u_j)=\spr{\cC_{t-1}}$.
-    Since $\spr{\cA_t}\leq \budget$, $\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq \budget^2H_n+\budget$.
-    Recall that we are considering the case when $\budget\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}\budget$.
+    Since $\spr{\cA_t}\leq \budget$, we get 
+    \[\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq \budget^2\cdot H_n+\budget.
+    \]
+    Recall that we are considering the case when $\budget\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{mH_n}+1}\cdot\budget$.
     This completes the proof of the lemma.
 %     \begin{align*}
 %         \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t}
@@ -134,11 +148,15 @@ Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and le
 
 Note that for each $i\in[l]$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
 Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in[l]$.
-Thus, $\Delta(\cA_i,R_{i-1}) \geq \frac{1}{\gamma}\cdot\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})$, which gives by definition of $\Delta$:
+Thus, 
+\[
+\Delta(\cA_i,R_{i-1}) \geq \frac{\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})}{\gamma},
+\]
+which gives by definition of $\Delta$:
 \[
 \frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \frac{1}{\gamma}\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in[l],
 \]
-which implies:
+which further implies:
 \begin{equation} \label{eq:Ai}
 \spr{\cA_i} \leq \gamma \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
             \leq \gamma \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} } \cdot \spr{\cCopt}.
@@ -150,7 +168,10 @@ Thus,
 \]
 For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
 Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2\gamma n}{k}\spr{\cCopt}$.
-This gives $\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}$.
+This gives 
+\[
+\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}.
+\]
 Moreover, $\spr{\cov\br{\cC_l}}\geq k/2$, which means the algorithm covers at least half of the required elements.
 This proves the theorem.
 \end{proof}
@@ -249,13 +270,20 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$ and $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}$.
     \end{lemma}
     \begin{proof}
-        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, we have by Lemma~\ref{lem:sigma-coverage} that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$.
+        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, we have by Lemma~\ref{lem:sigma-coverage} that $
+        \spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}.$
         For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$.
-        Lemma \ref{lem:pi-spread-cost} implies that $\COST\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}$.
+        Lemma \ref{lem:pi-spread-cost} implies that 
+        \[
+        \COST\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}.
+        \]
         Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is also $t_u$.
-        For each $u\notin\cov\br{\pi_{l^*}}$, by Lemma~\ref{lem:pi-spread-cost} its cover time in $\pi_{l^*}$ is $t_u=\Omega\br{ \alpha\cdot\beta\cdot a^{l^*}}=\Omega\br{\alpha\cdot a^{l^*}}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most $\spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt} + \bigo\br{\alpha}\cdot a^{l^*} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt}$.
+        For each $u\notin\cov\br{\pi_{l^*}}$, by Lemma~\ref{lem:pi-spread-cost} its cover time in $\pi_{l^*}$ is $t_u=\Omega\br{ \alpha\cdot\beta\cdot a^{l^*}}=\Omega\br{\alpha\cdot a^{l^*}}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most 
+        \[
+        \spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt} + \bigo\br{\alpha}\cdot a^{l^*} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt}.
+        \]
         Therefore, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most a constant factor larger than its cover time in $\pi_{l^*}$.
-        As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we have that $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}$.
+        As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we get that $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}$.
     \end{proof}
 Lemma \ref{lem:combined-coverage-cost} directly implies the following theorem.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}

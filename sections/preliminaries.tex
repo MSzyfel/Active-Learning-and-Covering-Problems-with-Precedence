@@ -25,7 +25,7 @@ However, with a slight abuse of notation we use tests as nodes of $D$ whenever t
 
 \paraTitle{Cost measures for decision trees.}
 Let $\tests{D}{v}$ denote the sequence of tests on the path from the root to $v$ in $D$ including $v$. The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{v}}$, where $v$ is the leaf of $D$ that represents identifying $h$ as the target.
-We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \cH}\cdot \COST\br{D, h}$.
+We consider two cost measures for decision trees: the worst-case cost $\COSTW\br{D} = \max_{h \in \cH} \COST\br{D, h}$ and the average-case cost $\COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}$.
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
 %$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 %$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
@@ -35,10 +35,10 @@ We consider two cost measures for decision trees: the worst-case cost $\COSTW\br
 \medskip
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
 Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution on instance $\cI$.
-\begin{problem}[Precedence Constrained Worst Case Decision Tree ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
+\begin{problem}[\textsc{Precedence Constrained Worst Case Decision Tree} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the worst-case cost $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
-\begin{problem}[Precedence Constrained Average Case Decision Tree ($\ProblemPCACDT$)] \label{problem:PCACDT}
+\begin{problem}[\textsc{Precedence Constrained Average Case Decision Tree} ($\ProblemPCACDT$)] \label{problem:PCACDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the average-case cost $\COSTA\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
@@ -60,13 +60,13 @@ A permutation $\br{C_1,\ldots,C_l}$ of the elements in a family $\cC\subseteq\cS
 The \emph{coverage time} of an element $x$ in such precedence-closed sequence $\cC=\br{C_1,\ldots,C_l}$ is the minimum index $i$ such that $x\in C_i$ if such index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ otherwise.
 The symbol $\coverageTime\br{\cC}$ denotes the sum of coverage times of all elements in $\cov\br{\cC}$.
 
-\begin{problem}[Precedence Constrained Set Cover ($\ProblemPCSC$)] \label{problem:PCSC}
+\begin{problem}[\textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$)] \label{problem:PCSC}
 Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that covers at least $f\cdot n$ items and minimizes $\spr{\cC}$.
 \end{problem}
-\begin{problem}[Precedence Constrained Min-Sum Set Cover ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
+\begin{problem}[\textsc{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
 Given a universum $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that covers at least $f\cdot n$ items and minimizes $\coverageTime\br{\cC}$.
 \end{problem}
-\begin{problem}[Budgeted Precedence Constrained Set Cover ($\ProblemBPCSC$)] \label{problem:BPCSC}
+\begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universum $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises the number of covered items and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 
@@ -87,11 +87,11 @@ $
 $
 We write $\Delta\br{\cA}$ when $X$ is the universum.
 
-\begin{problem}[Max-Density Precedence-Closed Subfamily ($\ProblemMDPCS$)] \label{problem:MDPCS}
+\begin{problem}[\textsc{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$)] \label{problem:MDPCS}
 Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$ and a precedence relation $(\cG,\preceq)$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$.
 \end{problem}
 
-\begin{problem}[Bounded Max-Density Precedence-Closed Subfamily ($\ProblemBMDPCS$)] \label{problem:BMDPCS}
+\begin{problem}[\textsc{Bounded Max-Density Precedence-Closed Subfamily} ($\ProblemBMDPCS$)] \label{problem:BMDPCS}
 Given a universum $\cU$ of $n$ items, a family $\cG$ of $m$ subsets of $\cU$, a precedence relation $(\cG,\preceq)$ and an integer $\budget>0$, find a precedence-closed subfamily $\cA \subseteq \mathcal{G}$ that maximizes $\Delta\br{\cA}$ and $\spr{\cA}\leq \budget$.
 \end{problem}
 
@@ -104,15 +104,15 @@ Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX : X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
 For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
-\begin{problem}[Group Steiner Tree (GST)] \label{problem:GST}
+\begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
 Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\cX \subseteq 2^V$, find an $r$-tour such that $\cov\br{\tau} = \cX$ minimizing $\spr{\tau}$.
 \end{problem}
 
-\begin{problem}[Group Steiner Orienteering (GSO)] \label{problem:GSO}
+\begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{problem}
-\begin{problem}[Partial Latency Group Steiner Tree (LPGST)] \label{problem:LPGST}
+\begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
 $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
 %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
