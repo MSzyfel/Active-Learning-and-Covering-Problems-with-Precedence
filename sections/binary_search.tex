@@ -13,7 +13,7 @@ A precedence constrained $1/2$-cut in a path is a subset of edges whose removal 
     Observe that if $S^*$ contains $\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}$ then it is a $1/2$ cut. In such case we are done, since minimal precedence closed subset of edges containing $\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}$ is $F[\brc{\br{v_{\fl{n/2}}v_{\fl{n/2}+1}}}]$. Otherwise, let $e_1$ be the edge in $S^*$ closest to $v_1$ and $e_2$ be the edge in $S^*$ closest to $v_n$. Since $e_1$ and $e_2$ suffice to be a $1/2$-cut, the minimal precedence closed subset of edges with this property is $F[\brc{e_1, e_2}]$.
 \end{proof}
 
-Therefore one can easily compute such a cut in polynomial time by checking all possible candidates. We also have the following lemma relating the size of the optimal cut with the cost of the optimal decision tree:
+Consequently, one can easily compute such a cut in polynomial time by checking all possible candidates. We also have the following lemma relating the size of the optimal cut with the cost of the optimal decision tree:
 \begin{lemma}\label{lemma:cutcost}
     Let $P$ be the path induced by the instance $I = (\mathcal{H}, \mathcal{T}, \mathcal{F})$ of the binary search problem with precedence constraints. Additionally, let $S^*\subseteq \mathcal{T}$ be the optimal precedence constrained $1/2$-cut in $P$. Then we have that $n\cdot\spr{S^*}/2\leq \OPTA\br{I}$.
 \end{lemma}

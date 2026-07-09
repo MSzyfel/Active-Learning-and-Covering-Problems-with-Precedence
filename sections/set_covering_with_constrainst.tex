@@ -2,35 +2,35 @@
 
 In order to solve $\ProblemPCSC$ and $\ProblemPCMSSC$ we firstly solve two essential problems: $\ProblemMDPCS$ and $\ProblemBMDPCS$ which serve as a way to find precedence-closed subfamilies of sets which cover many elements with respect to their size. We will then use such subroutines as an oracle in order to construct greedy, set-cover like approximation algorithms for our problems.
 %An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
-By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cU,\cG,\preceq}$ provides a $\bigo\br{\sqrt{m}}$-approximation: pick $\cA$ to be the best solution among
+By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cU,\cS,\preceq}$ provides a $\bigo\br{\sqrt{m}}$-approximation: pick $\cC$ to be the best solution among
 \[
-\argmax_{\closure{S}, S\in\cG} \brc{\Delta\br{\closure{S}}}
+\argmax_{\closure{S}, S\in\cS} \brc{\Delta\br{\closure{S}}}
 \]
 and $\cS$.
-We will refer to such $\cA$ as a \emph{greedy} solution.
+We will refer to such $\cC$ as a \emph{greedy} solution.
 %\input{pseudocodes/mdpcs_greedy.tex}
 
-When $\max_{S \in \mathcal{G}} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
+When $\max_{S \in \cS} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
 Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
-An $\cA$ that satisfies
+An $\cC$ that satisfies
     \[
-    \cA=\argmax_{\closure{S}, S \in \mathcal{G}, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
+    \cC=\argmax_{\closure{S}, S \in \cS, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
     \]
 will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
 \begin{theorem}\label{thm:BMDPCS-greedy}
-    Let $\cA^*$ be an optimal solution to $\ProblemBMDPCS$ and let $\cA$ be $\budget$-greedy.
-    Then, $\Delta\br{\cA} \geq \frac{\Delta\br{\cA^*}}{\budget}$.
+    Let $\cC^*$ be an optimal solution to $\ProblemBMDPCS$ and let $\cC$ be $\budget$-greedy.
+    Then, $\Delta\br{\cC} \geq \frac{\Delta\br{\cC^*}}{\budget}$.
 \end{theorem}
 \begin{proof}
-    We utilize a partial argument of \cite{PCMSSC} for $\ProblemMDPCS$. Let $k=\spr{\cA^*}\leq \budget$.
-    For each $S\in \cA^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S}}\leq \Delta\br{\cA}$.
+    We utilize a partial argument of \cite{PCMSSC} for $\ProblemMDPCS$. Let $k=\spr{\cC^*}\leq \budget$.
+    For each $S\in \cC^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S}}\leq \Delta\br{\cC}$.
     Therefore:
     \[
-    \spr{\cov\br{\cA^*}} \leq \sum_{S\in\cA^*}\spr{\cov\br{\closure{S}}}\leq \Delta\br{\cA}\sum_{S\in\cA^*} \spr{\closure{S}} \leq \Delta\br{\cA} \cdot k^2,
+    \spr{\cov\br{\cC^*}} \leq \sum_{S\in\cC^*}\spr{\cov\br{\closure{S}}}\leq \Delta\br{\cC}\sum_{S\in\cC^*} \spr{\closure{S}} \leq \Delta\br{\cC} \cdot k^2,
     \]
     where the first inequality is by the definition of union. We have that:
     \[
-    \frac{\Delta\br{\cA^*}}{\Delta\br{\cA}}=\frac{\spr{\cov\br{\cA^*}}}{k\cdot\Delta\br{\cA}}\leq k\leq \budget,
+    \frac{\Delta\br{\cC^*}}{\Delta\br{\cC}}=\frac{\spr{\cov\br{\cC^*}}}{k\cdot\Delta\br{\cC}}\leq k\leq \budget,
     \]
     which by rearranging gives the desired inequality.
 \end{proof}
@@ -201,7 +201,7 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         \end{equation}
         Since in the extension step we ensure that $\spr{\pi_{l^*}} \geq \alpha\cdot \beta\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$ and the first part of the lemma follows.
 
-        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\prefix{\cCopt}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Similarly, for every $i\in \brc{1,\dots,l^*}$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i}}$. Additionally, define $n_0=n_0^*=0$. We have:
+        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\pref{\cCopt}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Similarly, for every $i\in \brc{1,\dots,l^*}$ let $n_i=\spr{\cov\br{\tau_{l^*}^1\circ\dots\circ \tau_{l^*}^i}}$. Additionally, define $n_0=n_0^*=0$. We have:
         \begin{align*}
             \COST\br{\pi}&\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&\leq
@@ -223,7 +223,7 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
 
-        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\prefix{\cCopt}{a^{i-1}}}$ be the set of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\prefix{\cCopt}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\prefix{\cCopt}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}$.
+        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\pref{\cCopt}{a^{i-1}}}$ be the set of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\pref{\cCopt}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\pref{\cCopt}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}$.
         Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}}$. As a consequence we see that $n-n_i\leq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$.
         Thus,
         \begin{align*}
@@ -264,7 +264,7 @@ We start with a lemma that relates the costs and the lengths of $\pi_{l^*}$ and 
     \end{lemma}
     \begin{proof}
         Since the optimal cover $\cCopt$ satisfies $\spr{\cCopt}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI'=(\cU,\cS,\preceq,a^{l^*})$ for which the $(\alpha,\beta)$-approximation $\sigma_{l^*}$ has been computed after the inner loop.
-        Therefore we know that $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\cCopt}$ and $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$.
+        Hence, we know that $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\cCopt}$ and $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$.
     \end{proof}
     \begin{lemma}\label{lem:combined-coverage-cost}
         We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$ and $\COST\br{\pi_{l^*} \circ \sigma_{l^*}} = O\br{\alpha\cdot\beta^3}\cdot \COST\br{\cCopt}$.
@@ -296,7 +296,7 @@ It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSS
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    The proof is by showing that this problem is reducible to a standard budgeted maximum coverage problem (with no precedence constraints) with non-uniform cost of sets. In this setup including a set $S$ into the cover may impose cost $c\br{S}$. For this a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Observer that  for precedence constraints of the inforest type, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Therefore we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
+    The proof is by showing that this problem is reducible to a standard budgeted maximum coverage problem (with no precedence constraints) with non-uniform cost of sets. In this setup including a set $S$ into the cover may impose cost $c\br{S}$. For this a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Observer that  for precedence constraints of the inforest type, for any two sets $S, W$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Thus, we can create an equivalent not precedented instance in the following way: for each set $S$ in the precedence-constrained instance, we create a new set $S'$ in the new instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S}=\spr{S'}$. It is easy to see that any feasible solution in the new instance corresponds to a feasible solution in the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} the theorem follows.
 \end{proof}
 
 This implies the following result for $\ProblemPCMSSC$ via carefull examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}.
@@ -321,7 +321,7 @@ This implies the following result for $\ProblemPCMSSC$ via carefull examination 
 
 As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $\bigo\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
 \begin{theorem}\label{thm:MDPCS-shallow-ancestry}
-Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \mathcal{G}$,
+Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \cS$,
 $
 \spr{\closure{S}} \leq C \cdot
 \spr{\cov\br{\closure{S}}}^\epsilon
@@ -330,31 +330,31 @@ Then a greedy solution provides an $\bigo(n^\epsilon)$-approximation for the $\P
 \end{theorem}
 
 \begin{proof}
- Let $\cA^*$ be an optimal solution and let $\cA$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
- Denote for brevity $\delta = \max_{S \in \mathcal{G}} \Delta\br{\closure{S}}$.
+ Let $\cC^*$ be an optimal solution and let $\cC$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
+ Denote for brevity $\delta = \max_{S \in \cS} \Delta\br{\closure{S}}$.
  There are two cases:
 \begin{enumerate}
-    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cA} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cA^*} \leq n$. Therefore:
+    \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cC} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cC^*} \leq n$. Therefore:
 \[
-\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
+\frac{\Delta\br{\cC^*}}{\Delta\br{\cC}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
 \]
     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-     \mathcal{G}$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \mathcal{G}$, $
+     \cS$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \cS$, $
 \spr{\cov\br{\closure{S}}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}}}^\epsilon
 $. Rearranging this inequality, we get $
 \spr{\cov\br{\closure{S}}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
 $. We have that:
 \[
-\spr{\cov\br{\cA^*}} = \spr{\bigcup_{S\in\cA^*}\cov\br{\closure{S}}} \leq \sum_{S\in\cA^*} \spr{\cov\br{\closure{S}}} \leq \spr{\cA^*} \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
+\spr{\cov\br{\cC^*}} = \spr{\bigcup_{S\in\cC^*}\cov\br{\closure{S}}} \leq \sum_{S\in\cC^*} \spr{\cov\br{\closure{S}}} \leq \spr{\cC^*} \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
 \]
 Therefore,
 \[
-\Delta\br{\cA^*}= \frac{\spr{\cov\br{\cA^*}}}{\spr{\cA^*}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
+\Delta\br{\cC^*}= \frac{\spr{\cov\br{\cC^*}}}{\spr{\cC^*}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
 \]
 
-By the greedy choice, $\Delta\br{\cA} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
+By the greedy choice, $\Delta\br{\cC} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
 \[
-\frac{\Delta\br{\cA^*}}{\Delta\br{\cA}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon.
+\frac{\Delta\br{\cC^*}}{\Delta\br{\cC}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon.
 \]
 \end{enumerate}
 % Since $C$ is constant, the theorem follows.
