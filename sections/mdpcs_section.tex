@@ -1,0 +1,40 @@
+﻿\section{Max-Density Precedence-Closed Subfamily} \label{sec:MDPCS}
+
+In order to solve $\ProblemPCSC$ and $\ProblemPCMSSC$, which is a requirement for our main results, we firstly solve two essential subproblems: $\ProblemMDPCS$ and $\ProblemBMDPCS$. We will then use such subroutines as an oracle in order to construct greedy, set-cover like approximation algorithms for our problems.
+%An approximation algorithm for $\ProblemMDPCS$ can be used as an essential subroutine in our algorithms for PCSC and PCMSSC.
+By \cite{PCMSSC}, the following solution to $\ProblemMDPCS$ on instance $\br{\cU,\cS,\preceq}$ provides an $\bigo\br{\sqrt{m}}$-approximation: pick $\cC$ to be the best solution among
+\[
+\argmax_{\closure{S}, S\in\cS} \brc{\Delta\br{\closure{S}}}
+\]
+and $\cS$.
+We will refer to such $\cC$ as a \emph{greedy} solution.
+%\input{pseudocodes/mdpcs_greedy.tex}
+
+When $\max_{S \in \cS} \Delta\br{\closure{S}} \geq 1$, then the approximation factor of the greedy can also be bounded by $\bigo\br{\sqrt{n}}$.
+Additionally, we show that a slightly modified greedy rule achieves an $\budget$-approximation for the parametrized version of the problem, $\ProblemBMDPCS$.
+Any family $\cC$ that satisfies
+    \[
+    \cC=\argmax_{\closure{S}, S \in \cS, \spr{\closure{S}}\leq \budget} \brc{\Delta\br{\closure{S}}}
+    \]
+will be called a \emph{$\budget$-greedy} solution to $\ProblemBMDPCS$.
+\begin{theorem}\label{thm:BMDPCS-greedy}
+    Let $\cC^*$ be an optimal solution to $\ProblemBMDPCS$ and let $\cC$ be $\budget$-greedy.
+    Then, $\Delta\br{\cC} \geq \frac{\Delta\br{\cC^*}}{\budget}$.
+\end{theorem}
+\begin{proof}
+    We utilize a partial argument of \cite{PCMSSC} for $\ProblemMDPCS$. Let $k=\spr{\cC^*}\leq \budget$.
+    For each $S\in \cC^*$, by the greedy rule we trivially have that $\Delta\br{\closure{S}}\leq \Delta\br{\cC}$.
+    Therefore:
+    \[
+    \spr{\cov\br{\cC^*}} \leq \sum_{S\in\cC^*}\spr{\cov\br{\closure{S}}}\leq \Delta\br{\cC}\sum_{S\in\cC^*} \spr{\closure{S}} \leq \Delta\br{\cC} \cdot k^2,
+    \]
+    where the first inequality is by the definition of union. We have that:
+    \[
+    \frac{\Delta\br{\cC^*}}{\Delta\br{\cC}}=\frac{\spr{\cov\br{\cC^*}}}{k\cdot\Delta\br{\cC}}\leq k\leq \budget,
+    \]
+    which by rearranging gives the desired inequality.
+\end{proof}
+The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMDPCS$. Note that for large values of $\budget$ this might be much worse than the $\cO\br{\sqrt{m}}$-approximation provided for the non-parametrized version of the problem. In the original version of the above argument it could be shown that if one additionally considers a candidate solution which is the whole $\cS$, then the approximation of greedy is $\min\brc{k, m/k}$. However, since we enforce additional condition on the size of the dense subfamily this might not be a feasible solution. However, it turns out that the $\budget$-approximation will be sufficient. We leave as an open question whether one can obtain a $o\br{m}$-approximation for $\ProblemBMDPCS$.
+
+% Also, note that the above analysis works also when we associate non-uniform weights to elements of $\cU$ and define density with respect to the total weight of covered elements.
+
