@@ -69,7 +69,7 @@ During each such iteration, we look at all possible replies to the appended test
 % We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
 \input{pseudocodes/worst_case_learning.tex}
 
-It should be noted, that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$, such that $D$ restricted to $\cC$ is connected and containing $r\br{D}$ and we can measure the contribution of $\cC$ to the cost of $D$. This is done by restricting each $\tests{h}{D}$ to $\cC$ and summing the costs of all tests in the restricted paths. The two cost criterions are then defined accordingly.
+It should be noted, that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$, such that $D$ restricted to $\cC$ is connected and containing $r\br{D}$ and we can measure the contribution of $\cC$ to the cost of $D$. This is done by restricting each $\tests{h}{D}$ to $\cC$ and summing the costs of all tests in the restricted paths. The two cost criteria are then defined accordingly.
 Let $D_{\cC}$ be the decision tree $D$ restricted only to tests corresponding to members of $\cC$, i.~e., we only consider the path formed by these tests. 
 
 
