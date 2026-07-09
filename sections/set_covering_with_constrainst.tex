@@ -45,7 +45,7 @@ The above theorem gives a $\budget$-approximation algorithm for the $\ProblemBMD
 \subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
 
 The approximation algorithm is the greedy procedure shown in Algorithm~\ref{alg:BPCSC}.
-For the analysis, let $\cC_i$ and $\cA_i$, $i\in\brc{1,\ldots,l}$, be the sets $\cC$ and $\cA$ obtained in the $i$-th iteration; $\cC_0=\emptyset$.
+For the analysis, let $\cC_i$ and $\cA_i$, $i\in[l]$, be the sets $\cC$ and $\cA$ obtained in the $i$-th iteration; $\cC_0=\emptyset$.
 Note that $\cov\br{\cA_i,\cU\setminus\cov\br{\cC_{i-1}}}$ is the set of element in $\cU$ that are being covered in the $i$-th iteration. %, and for each $u\in\cov\br{\cA_i,\cU\setminus\cC_{i-1}}$ denote $c(u):=\Delta\br{\cA_i,\cU\setminus\cC_{i-1}}$.
 \input{pseudocodes/B_PCSC}
 
