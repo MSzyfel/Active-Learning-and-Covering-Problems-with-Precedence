@@ -1,41 +1,3 @@
-\documentclass[11pt]{article}
-
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[english]{babel}
-
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{natbib}
-\usepackage[a4paper,left=2.2cm,right=2.2cm,top=2.5cm,bottom=2.5cm]{geometry}
-\usepackage{graphicx}
-\usepackage{url}
-\usepackage[hidelinks]{hyperref}
-\usepackage{xspace}
-\usepackage{indentfirst}
-\usepackage{graphics}
-\usepackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows, positioning, decorations.pathreplacing, shadows}
-\usepackage{caption}
-\usepackage{algorithm2e}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{arydshln}
-\usepackage{bbm}
-\usepackage{array}
-\usepackage{mdframed}
-\usepackage{xcolor}
-\usepackage{times}
-
-\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-
-% Configure algorithm2e style
-\SetAlFnt{\small}
-\SetAlCapFnt{\normalsize}
-\SetAlCapNameFnt{\normalsize}
-\SetNlSty{textbf}{}{}
-
 \newcommand{\br}[1]{\mathopen{}\left( #1 \right)}
 \newcommand{\brc}[1]{\mathopen{}\left\{ #1 \right\}}
 \newcommand{\spr}[1]{\mathopen{}\left| #1 \right|}
@@ -59,7 +21,7 @@
 \newcommand{\NPcomplete}{\textnormal{NP-Complete}\xspace}
 \newcommand{\NPhard}{\textnormal{NP-Hard}\xspace}
 \newcommand{\APXhard}{\textnormal{APX-Hard}\xspace}
-\newcommand{\polyAPXcomplete}{\textnormal{Poly–APX–Complete}\xspace}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly-APX-Complete}\xspace}
 
 \newcommand{\Cent}{\texttt{Cent}}
 \newcommand{\APP}{\texttt{APP}}
@@ -138,53 +100,3 @@
 \newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
 \newcommand{\closure}[1]{\operatorname{closure}[#1]}
 \newcommand{\budget}{b}
-
-% Theorem environments
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{problem}{Problem}
-\newtheorem{observation}{Observation}
-\newtheorem{claim}{Claim}
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-
-\title{Precedence-Constrained Decision Trees and Coverings}
-\author{%
-Michał Szyfelbein\\
-Gdańsk University of Technology, 80-233 Gdańsk, Poland\\
-\texttt{michal.szyfelbein@pg.edu.pl}
-\and
-Dariusz Dereniowski\\
-Gdańsk University of Technology, 80-233 Gdańsk, Poland\\
-\texttt{deren@eti.pg.edu.pl}
-}
-\date{}
-
-\begin{document}
-
-\maketitle
-
-\input{sections/abstract}
-
-\noindent\textbf{Keywords:} Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms
-
-\input{sections/introduction}
-\input{sections/preliminaries}
-% \input{sections/binary_search}
-\input{sections/approximating_learning}
-\input{sections/set_covering_with_constrainst}
-\input{sections/hardness}
-\input{sections/conclusions}
-
-\section*{Acknowledgments}
-The authors would like to express their gratitude to Tytus Pikies for preliminary discussions and insightful comments.
-
-\bibliographystyle{alpha}
-\bibliography{bib-pcal}
-
-\end{document}
