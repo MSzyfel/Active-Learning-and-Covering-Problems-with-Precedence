@@ -105,7 +105,7 @@ An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by
 Let $\cX$ be a family of \emph{groups}, where for each $X \in \cX$, $X\subseteq V$.
 Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
-For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
 Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\cX \subseteq 2^V$, find an $r$-tour such that $\cov\br{\tau} = \cX$ minimizing $\spr{\tau}$.
@@ -115,11 +115,11 @@ Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{problem}
-\begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
-Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
-$c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
-%$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
-\end{problem}
+% \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
+% Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
+% $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
+% %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
+% \end{problem}
 
 \medskip
 \paraTitle{Approximation conventions.}
