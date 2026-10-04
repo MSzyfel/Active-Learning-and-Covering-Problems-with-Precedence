@@ -4,26 +4,38 @@
 \caption{The algorithm for $\ProblemPCMSSC$ based on $\br{\alpha, \beta}$-approximation for $\ProblemBPCSC$}
 \label{ea:alg:fPCMSSC}
 \SetKwProg{Proc}{procedure}{}{}
+Fix a topological ordering of $(\cS,\preceq)$; $\operatorname{ord}(A)$ denotes its restriction to $A\subseteq\cS$.
 \Proc{$\ProcedureFPCMSSC(\cU, \cS, \preceq, f)$}{
     $\cQ\gets \emptyset$.
 
-    \For{$1\leq l\leq \cl{\log_a{\spr{\cS}}}$}{
+    \For{$1\leq l\leq \max\brc{1,\cl{\log_a{\spr{\cS}}}}$}{
         $U\gets \cU$.
         
         $\pi_l\gets \emptyset$.
+        $P_l\gets \emptyset$.
 
         \For{$1\leq i\leq l$}{
             $\tau_l^i\gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(U, \preceq, \cS, \budget=a^{i+1})$.
 
             $U \gets U \setminus \cov(\tau_l^i)$.
 
-            $\pi_l \gets \pi_l \circ \tau_l^i$.
+            $\pi_l \gets \pi_l \circ \operatorname{ord}(\tau_l^i\setminus P_l)$.
+            $P_l \gets P_l\cup\tau_l^i$.
         }
-        Extend $\pi_l$ by appending to it arbitrary sets to ensure that $\spr{\pi_l} \geq \min\brc{\alpha\cdot \beta\cdot a^l, m}$.
+        $T_l\gets\min\brc{m,\cl{\alpha\cdot\beta\cdot a^l}}$.
+        \While{$\spr{\pi_l}<T_l$}{
+            $S_l\gets$ the next set in the fixed topological ordering of $\cS$ that is not in $P_l$.
+            $\pi_l\gets\pi_l\circ\angl{S_l}$.
+            $P_l\gets P_l\cup\brc{S_l}$.
+        }
 
-        $\sigma_l \gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(\cU, \preceq, \cS, \budget=a^l)$.
+        $R_l\gets\cU\setminus\cov(P_l)$.
+        $\sigma_l \gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(R_l, \preceq, \cS, \budget=a^l)$.
+        $\pi_l\gets\pi_l\circ\operatorname{ord}(\sigma_l\setminus P_l)$.
 
-        $\cQ \gets \cQ \cup \brc{\pi_l \circ \sigma_l}$.
+        \If{$\spr{\cov\br{\pi_l,\cU}}\geq f\cdot\spr{\cU}/\beta$}{
+            $\cQ \gets \cQ \cup \brc{\pi_l}$.
+        }
     }
     \Return $\argmin_{\pi\in \cQ} \brc{\COST(\pi)}$.
 }

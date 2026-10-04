@@ -67,7 +67,7 @@ We usually write $\cH_T$ when $D$ is clear from the context.
 For a family of sets $(\cS,\preceq)$ and a set $S\in\cS$, let $\closure{S}$ be the minimal precedence-closed subset of $\cS$ containing $S$.
 For a family of sets $\cC\subseteq \cS$ its \emph{coverage} is defined as $\cov\br{\cC}=\bigcup_{C\in\cC}C$, and by extension, $\cov\br{\cC, X} = \cov\br{\cC} \cap X$ for any set $X$.
 If $\cC$ is a sequence of sets, rather than a family, we analogously define $\cov\br{\cC}=\bigcup_{C\in\cC}C$.
-Let $\cC=\angl{C_1,\ldots,C_l}$. We say that $\cC$ is \emph{precedence-closed} if for any $C_i$ and $C_j$ such that $C_i\preceq C_j$ it holds $i<j$.
+Let $\cC=\angl{C_1,\ldots,C_l}$. We say that $\cC$ is \emph{precedence-closed} if every strict predecessor of each $C_i$ occurs earlier in the sequence, that is, for every $Y\in\cS$ with $Y\preceq C_i$ and $Y\neq C_i$, there is a $j<i$ such that $C_j=Y$.
 The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such precedence-closed sequence $\cC$ is the minimum index $i$ such that $x\in C_i$ if such index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
 Given a universe $\cU$, we denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
 
@@ -123,7 +123,7 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
 
 \medskip
 \paraTitle{Approximation conventions.}
-Throughout this paper, when we use bicriteria ratio $(\alpha,\beta)$, which means that an algorithm is allowed to lose a factor $\beta$ on the coverage requirement (equivalently, it covers at least a $1/\beta$-fraction of the target amount), while simultaneously losing at most a factor $\alpha$ on the cost side, i.e., it either pays at most $\alpha$ times the optimum cost or violates the given budget by at most a factor $\alpha$, depending on the problem formulation.
+Throughout this paper, a bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose a factor $\beta\geq1$ on coverage (equivalently, it covers at least a $1/\beta$-fraction of the target amount) while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target; for budgeted problems, the budget may be exceeded by at most a factor $\alpha$.
 
 
 

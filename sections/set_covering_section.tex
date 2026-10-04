@@ -32,60 +32,38 @@ First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem
 \begin{proof}
     If $\budget \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
 
-    Otherwise, we assume that the while loop is being executed until the number of covered elements is at least $\spr{\cov\br{\cCopt}}$ and we bound the cost of the cover constructed up to that point by $\br{\sqrt{m\cdot H_n}+1}\cdot \budget$. By doing so, we show that when the cost of the cover $\cC$ exceeds $\sqrt{m\cdot H_n}\cdot \budget$, the number of covered elements is at least $\spr{\cov\br{\cCopt}}$.
-    
-    %Let $\cC_0 = \emptyset$ and let $\cC_i$ be the cover after the $i$-th iteration of the while loop, for $i \geq 1$.
-    Let $R_i = \cU \setminus \cov\br{\cC_i}$ be the set of uncovered elements after the $i$-th iteration; take $R_0=\emptyset$.
-    %Let $\cA_i$ be the set added to $\cC_{i-1}$ in the $i$-th iteration, so that $\cC_i = \cC_{i-1} \cup \cA_i$.
-    We have that $\spr{\cC_i} = \sum_{j=1}^{i} \spr{\cA_j}$. For any covered element $u \in \cU$, let $i(u)$ be the first iteration in which $u$ is covered, i.e., $u \in \cov\br{\cA_{i(u)}, R_{i(u)-1}}$. We set the \emph{price} of $u$ to be 
-    \[c(u) = \frac{\spr{\cA_{i(u)}}}{\spr{\cov\br{\cA_{i(u)}, R_{i(u)-1}}}}.
+    Otherwise, let $q=\spr{\cov\br{\cCopt}}$. If $q=0$, the claimed coverage guarantee is immediate, so assume $q>0$. We analyze the loop up to the first iteration $t$ for which $\spr{\cov\br{\cC_t}}\geq q$ and show that this iteration occurs before the algorithm reaches its cost threshold.
+
+    Let $\cC_i$ and $\cA_i$ be the cover and the family added in iteration $i$, with $\cC_0=\emptyset$, and define $R_i=\cU\setminus\cov\br{\cC_i}$ for all $i\geq 0$. In particular, $R_0=\cU$. For each covered element $u$, let $i(u)$ be its first covering iteration and define its price by
+    \[
+    c(u)=\frac{\spr{\cA_{i(u)}}}{\spr{\cov\br{\cA_{i(u)},R_{i(u)-1}}}}.
     \]
 
-    Let $t$ be the index of the first iteration of the while loop when $\spr{\cov\br{\cC_{t}}}\geq\spr{\cov\br{\cCopt}}$.
-    (Note that such $t$ exists since we are analyzing Algorithm~\ref{alg:BPCSC} under the assumption that the loop works indefinitely, until the number of covered elements is large enough).
-    Let $k=\spr{\cov\br{\cC_{t-1}}}\leq\spr{\cov\br{\cCopt}}$.
-    Order the elements of $\cov\br{\cCopt}$ as $u_1, u_2, \ldots, u_k$ in the order in which they are covered by the algorithm with ties broken arbitrarily (i.e., if $i(u_j)<i(u_{j'})$, then $j<j'$).
-
+    Set $k=\spr{\cov\br{\cC_{t-1}}}<q$, and order the $k$ elements of $\cov\br{\cC_{t-1}}$ as $v_1,\ldots,v_k$ by their first covering iteration, breaking ties arbitrarily.
     \begin{claim}\label{lem:cost-per-element}
-        For each $j \in \brc{1, \ldots, k}$ 
-        \[
-        c(u_j) \leq \frac{\budget^2}{k-j+1}.
-        \]
+        For every $j\in[k]$, $c(v_j)\leq\frac{\budget^2}{q-j+1}$.
     \end{claim}
     \begin{proof}
-     Consider the iteration $i(u_j)$ in which $u_j$ is covered. Since $\cCopt$ is a precedence-closed family, we know that during iteration $i(u_j)$, there exists a precedence-closed family $\cCopt\cap R_{i(u_j)-1}$ that covers at least $k-j+1$ elements of $R_{i(u_j)-1}$ and has size at most $\spr{\cCopt}\leq \budget$. Since the algorithm selects a $\budget$-approximation to $\ProblemBMDPCS$ during iteration $i(u_j)$, we have that:
-    \[
-    \Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}} \geq \frac{\Delta\br{\cCopt, R_{i(u_j)-1}}}{\budget} \geq \frac{k-j+1}{\spr{\cCopt} \cdot \budget} \geq \frac{k-j+1}{\budget^2},
-    \] 
-    where the first inequality is by the approximation guarantee of the algorithm and the greedy choice, the second inequality is by definition of density, and the last inequality is by the budget constraint on $\cCopt$. Rearranging the above inequality yields:
-    \[
-    c(u_j) = \frac{\spr{\cA_{i(u_j)}}}{\spr{\cov\br{\cA_{i(u_j)}, R_{i(u_j)-1}}}} = 
-    \frac{1}{\Delta\br{\cA_{i(u_j)}, R_{i(u_j)-1}}} \leq \frac{\budget^2}{k-j+1}
-    \]
-    and the claim follows.
+        Let $i=i(v_j)$. At most $j-1$ elements have been covered before iteration $i$, so at least $q-j+1$ elements of $\cov\br{\cCopt}$ remain in $R_{i-1}$. The family $\mathcal{D}_i=\cCopt\setminus\cC_{i-1}$ is precedence-closed in the residual family $\cS\setminus\cC_{i-1}$, has size at most $\spr{\cCopt}\leq\budget$, and covers all elements of $\cov\br{\cCopt}\cap R_{i-1}$. Thus, $\spr{\cov\br{\mathcal{D}_i,R_{i-1}}}\geq q-j+1$. By the $\budget$-approximation guarantee for $\ProblemBMDPCS$,
+        \[
+        \Delta\br{\cA_i,R_{i-1}}\geq\frac{1}{\budget}\Delta\br{\mathcal{D}_i,R_{i-1}}\geq\frac{q-j+1}{\spr{\mathcal{D}_i}\cdot\budget}\geq\frac{q-j+1}{\budget^2}.
+        \]
+        Since $c(v_j)=1/\Delta\br{\cA_i,R_{i-1}}$, the claim follows.
     \end{proof}
 
-    Using Claim~\ref{lem:cost-per-element}, the sum of prices of all elements in $\cC_{t-1}$ is bounded by $\sum_{j=1}^k c(u_j)\leq \budget^2\cdot H_k$.
-    By the price definition, $\sum_{j=1}^k c(u_j)=\spr{\cC_{t-1}}$.
-    Since $\spr{\cA_t}\leq \budget$, we get 
-    \[\spr{\cC_t}\leq\spr{\cC_{t-1}} + \spr{\cA_t} \leq \budget^2\cdot H_n+\budget.
+    By the price definition, summing over exactly the elements covered before iteration $t$ gives
+    \[
+    \spr{\cC_{t-1}}=\sum_{j=1}^{k}c(v_j)
+    \leq\budget^2\sum_{j=1}^{k}\frac{1}{q-j+1}
+    =\budget^2\br{H_q-H_{q-k}}
+    \leq\budget^2 H_n.
     \]
-    Recall that we are considering the case when $\budget\leq\sqrt{m/H_n}$, which gives $\spr{\cC_t}\leq \br{\sqrt{m\cdot H_n}+1}\cdot\budget$.
-    This completes the proof of the lemma.
-%     \begin{align*}
-%         \spr{\cC} &\leq \spr{\cC_{t-1}} + \spr{\cA_t}
-%     \\&\leq
-%     \sum_{u \in \cov\br{\cC_{t-1}}} c(u) + \budget
-%     \\&\leq
-%     \sum_{j=1}^{k} \frac{\budget^2}{k-j+1} + \budget
-%     \\&=
-%     \budget^2 \cdot H_k + \budget
-%     \\&\leq
-%     \budget^2 \cdot H_n + \budget
-%     \\&\leq
-%     \br{\sqrt{m\cdot H_n}+1}\cdot \budget,
-%     \end{align*}
-%     where the first inequality is by construction of $\cC$, the second inequality is by definition of the cost of covered elements and the fact that for every $1\leq i\leq t$, $\spr{\cA}\leq \budget$, the third inequality is by the previous lemma, the fourth equality is by definition of harmonic numbers, the fifth inequality is because trivially $k \leq n$, and the last inequality is by the assumption that $\budget < \sqrt{m/H_n}$.
+    Since $\spr{\cA_t}\leq\budget$, it follows that
+    \[
+    \spr{\cC_t}\leq\budget^2 H_n+\budget
+    \leq\br{\sqrt{m\cdot H_n}+1}\cdot\budget.
+    \]
+    Moreover, $\budget<\sqrt{m/H_n}$ in this case, so $\spr{\cC_{t-1}}\leq\budget^2 H_n<\sqrt{m\cdot H_n}\,\budget$. Hence iteration $t$ is reached before the algorithm's stopping threshold, and the algorithm covers at least $q$ elements. This proves the lemma.
 \end{proof}
 
 Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage} prove the following.
@@ -147,21 +125,22 @@ Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algo
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
 We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$. This result seems counterintuitive at first glance, since we are using an algorithm for a problem where the budget denotes the maximal allowed size of the cover to solve a problem where the budget denotes the sum of covering times. Our algorithm and its analysis are a generalization of the approach of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. Furthermore, their result is based on techniques used for the \textsc{Minimum Latency Travelling Salesman Problem} \cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem}.
 
-Let $1\geq a=\frac{3\beta-1}{3\beta-2}\leq 2$.
+Let $\alpha,\beta\geq 1$ and $a=\frac{3\beta-1}{3\beta-2}$, so $1<a\leq 2$.
 Consider the Algorithm~\ref{alg:fPCMSSC}.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
-Let $l^*$ be such that $a^{l^*-1} < \spr{\cCopt} \leq a^{l^*}$.
+Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, so $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
 \input{pseudocodes/f_PCMSSC.tex}
+Each family returned by $\ProblemBPCSC$ is precedence-closed, so the union of the sets already appended is also precedence-closed. When a family is appended, only its new sets are used and they are ordered by $\operatorname{ord}$; every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
     \begin{lemma}\label{lem:pi-spread-cost}
-        We have that $\spr{\pi_{l^*}} = \Theta\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$ and $\coverageTime\br{\pi_{l^*},\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        We have that $\spr{\pi_{l^*}} = \bigo\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$, and if $\spr{\pi_{l^*}}<m$, then $\spr{\pi_{l^*}}=\Omega\br{\alpha\cdot\beta}\cdot\spr{\cCopt}$. Moreover, $\coverageTime\br{\pi_{l^*},\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{lemma}
     \begin{proof}
-        We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. Moreover, we get that before the extension step of $\pi_{l^*}$, we had that:
+        We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. Thus, the length after padding satisfies:
         \begin{equation} \label{eq:pi}
-        \spr{\pi_{l^*}} \leq \alpha\cdot \sum_{i=1}^{l^*} a^{i+1}\leq \frac{\alpha\cdot a^{l^*+2}}{a-1}\leq \frac{\alpha\cdot a^{2}\spr{\cCopt}}{a-1}\leq4\alpha\cdot \br{3\beta-2}\cdot\spr{\cCopt}
+        \spr{\pi_{l^*}} \leq \max\brc{\alpha\cdot \sum_{i=1}^{l^*} a^{i+1},\min\brc{m,\cl{\alpha\cdot\beta\cdot a^{l^*}}}}\leq \frac{\alpha\cdot a^{l^*+3}}{a-1}\leq \frac{\alpha\cdot a^{4}}{a-1}\cdot\spr{\cCopt}=\bigo\br{\alpha\cdot\beta}\cdot\spr{\cCopt}.
         \end{equation}
-        Since in the extension step we ensure that $\spr{\pi_{l^*}} \geq \alpha\cdot \beta\cdot a^{l^*}$, we have that $\spr{\pi_{l^*}} = \Theta\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$ and the first part of the lemma follows.
+        Here we used $\cl{x}\leq x+1$, $\alpha a^{l^*}\geq1$, $\beta\leq1/(a-1)$, and $a^{l^*}\leq a\spr{\cCopt}$. If $\spr{\pi_{l^*}}<m$, the padding target is not capped by $m$, and hence $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}\geq\alpha\cdot\beta\cdot\spr{\cCopt}$. If $\spr{\pi_{l^*}}=m$, then the prefix contains every set in $\cS$; this case will be handled after the latency bound.
 
         For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\pref{\cCopt}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Accordingly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\angl{\tau_{l^*}^1,\dots, \tau_{l^*}^i}}}$. Additionally, define $n_0=n_0^*=0$. We have:
         \begin{align*}
@@ -185,8 +164,8 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
 
-        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $U_i=\cU\setminus \cov\br{\pref{\cCopt}{a^{i-1}}}$ be the set of uncovered elements at the beginning of iteration $i$ which is provided as a part of the $\cI_i$ instance to the $\ProblemBPCSC$ algorithm. We have that $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$ since $\pref{\cCopt}{a^{i}}$ is a feasible solution to instance $\cI_i$ of $\ProblemBPCSC$ such that $\spr{\cov\br{\pref{\cCopt}{a^{i}}, U_i}}\geq n_i^*-n_{i-1}$.
-        Since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in iteration $i$, we have that $n_i-n_{i-1}\geq \frac{1}{\beta}\cdot\br{n_i^*-n_{i-1}}$. As a consequence we see that $n-n_i\leq \frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_{i}^*}$.
+        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $R_{i-1}=\cU\setminus\cov\br{\angl{\tau_{l^*}^1,\dots,\tau_{l^*}^{i-1}}}$ be the algorithmic residual at the beginning of iteration $i$. The family $\pref{\cCopt}{a^i}$ is precedence-closed, has size at most $a^i\leq a^{i+1}$, and is therefore feasible for the $i$-th $\ProblemBPCSC$ instance. Since it covers $n_i^*$ elements in total and the previously computed solutions cover $n_{i-1}$ elements, it covers at least $n_i^*-n_{i-1}$ elements in $R_{i-1}$. Thus, $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$.
+        By the $\br{\alpha,\beta}$-approximation guarantee, $n_i-n_{i-1}\geq\frac{n_i^*-n_{i-1}}{\beta}$. Rearranging gives $n-n_i\leq\frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_i^*}$.
         Thus,
         \begin{align*}
             \frac{\br{a-1}\cdot Q}{\alpha}
@@ -220,34 +199,33 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         The lemma follows.
     \end{proof}
 
-    There are two cases to consider. If after extension step of $\pi_{l^*}$ we have that $\spr{\pi_{l^*}} \geq m$ then the solution covers entire universe and the proof is complete. Otherwise we have the following lemmas:
+    If $\spr{\pi_{l^*}}=m$, then $\pi_{l^*}$ contains every set in $\cS$, and thus covers every element covered by $\cCopt$. The candidate is feasible and its latency is bounded by Lemma~\ref{lem:pi-spread-cost}. Otherwise, let $P_{l^*}$ be the family of sets in $\pi_{l^*}$, let $R_{l^*}=\cU\setminus\cov\br{P_{l^*}}$, and let $r=\spr{\cov\br{P_{l^*},\cU}}$. We then have the following lemmas:
     \begin{lemma}\label{lem:sigma-coverage}
-        We have that $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$ and $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\cCopt}$.
+        We have that $\spr{\cov\br{\sigma_{l^*},R_{l^*}}} \geq \frac{\max\brc{0,f\cdot n-r}}{\beta}$ and $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\cCopt}$.
     \end{lemma}
     \begin{proof}
-        Since the optimal cover $\cCopt$ satisfies $\spr{\cCopt}\leq a^{l^*}$ and covers at least $f\cdot n$ elements, it is a feasible solution to the $\ProblemBPCSC$ instance $\cI'=(\cU,\cS,\preceq,a^{l^*})$ for which the $(\alpha,\beta)$-approximation $\sigma_{l^*}$ has been computed after the inner loop.
-        Hence, we know that $\spr{\sigma_{l^*}} = O\br{\alpha}\cdot \spr{\cCopt}$ and $\spr{\cov\br{\sigma_{l^*}}} \geq \frac{f\cdot n}{\beta}$.
+        Since $\cCopt$ satisfies $\spr{\cCopt}\leq a^{l^*}$, it is feasible for the final $\ProblemBPCSC$ instance on residual universe $R_{l^*}$. It covers at least $\max\brc{0,f\cdot n-r}$ elements of that residual. The approximation guarantee gives the coverage bound, while $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\alpha a\spr{\cCopt}=O\br{\alpha}\spr{\cCopt}$ gives the size bound.
     \end{proof}
+    Let $\pi_{l^*}^+=\pi_{l^*}\circ\operatorname{ord}\br{\sigma_{l^*}\setminus P_{l^*}}$ denote the sequence obtained by appending only the final solution's new sets.
     \begin{lemma}\label{lem:combined-coverage-cost}
-        We have that $\spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*} \circ \sigma_{l^*},\cU} = O\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        We have that $\spr{\cov\br{\pi_{l^*}^+,\cU}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*}^+,\cU} = O\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{lemma}
     \begin{proof}
-        Since $\pi_{l^*} \circ \sigma_{l^*}$ covers all of the elements covered by $\sigma_{l^*}$, by Lemma~\ref{lem:sigma-coverage} we have that $
-        \spr{\cov\br{\pi_{l^*} \circ \sigma_{l^*}}}\geq \frac{f\cdot n}{\beta}.$
+        By Lemma~\ref{lem:sigma-coverage}, the prefix and final solution together cover at least
+        \[
+        r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}
+        \]
+        elements. Here the residual coverage from $\sigma_{l^*}$ is disjoint from the prefix coverage by definition of $R_{l^*}$.
         For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$.
         Lemma \ref{lem:pi-spread-cost} implies that 
         \[
         \coverageTime\br{\pi_{l^*},\cU}=\sum_{u\in\cU} t_u = O\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}.
         \]
-        Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is also $t_u$.
-        For each $u\notin\cov\br{\pi_{l^*}}$, by Lemma~\ref{lem:pi-spread-cost}, $t_u=\Omega\br{ \alpha\cdot\beta\cdot a^{l^*}}=\Omega\br{\alpha\cdot a^{l^*}}$ and its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most 
-        \[
-        \spr{\pi_{l^*} \circ \sigma_{l^*}}=\spr{\pi_{l^*}} + \spr{\sigma_{l^*}} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt} + \bigo\br{\alpha}\cdot a^{l^*} = \bigo\br{\alpha\cdot\beta}\cdot \spr{\cCopt}.
-        \]
-        Therefore, its cover time in $\pi_{l^*} \circ \sigma_{l^*}$ is at most a constant factor larger than $t_u$.
-        As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we get that $\coverageTime\br{\pi_{l^*} \circ \sigma_{l^*},\cU} = O\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*}^+$ is also $t_u$.
+        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\beta a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the cover time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)t_u\leq2t_u$.
+        As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we get that $\coverageTime\br{\pi_{l^*}^+,\cU} = O\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{proof}
-Lemma \ref{lem:combined-coverage-cost} directly implies the following theorem.
+By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
@@ -269,16 +247,16 @@ Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the fo
     There exist polynomial-time bicriteria $\br{\bigo\br{\log n}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    We show how to reduce such an instance to the to $\ProblemGSO$ on tree metrics.
+    We show how to reduce such an instance to $\ProblemGSO$ on tree metrics.
     The latter problem admits a $\br{\bigo\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}.
     It should be noted that they give a worse approximation ratio of $\br{\bigo\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $\bigo\br{\log n}$ distortion.
     Since our metric will be a tree metric, we can skip this step and obtain the improved approximation ratio.
     
-    We create this metric as follows: we introduce a dummy root node $r$ and for each set $S\in\cS$ we add a representative node $v_S$ connected to its every successor in the outforest with an edge of length~$1$.
-    Additionally, we connect each maximal element of the outforest to $r$ with an edge of length~$1/2$. Finally, for each element $u\in\cU$ we create a group $X_u=\brc{v_S \mid u\in S}$ which consists of all representatives of vertices containing $u$. Since the resulting metric is a tree metric, any tour returned by the algorithm traverses each edge either $0$ or $2$ times.
-    Moreover, since the tour starts at the root, we have that if a representative of a set $W$ is visited, the representatives of all of its predecessors in the outforest have been visited.
-    Now, observe that if we take a tour in this metric and pick the sets corresponding to the representatives visited by the tour, we obtain a precedence-closed family of sets of size equal to the length of the tour. Conversely, if we take a precedence-closed family of sets, we can construct a tour in this metric that visits the representatives of these sets and has length equal to the size of the family. The number of elements covered by the family is equal to the number of groups $X_u$ visited by the tour.
-    Therefore, any feasible solution to $\ProblemGSO$ on this metric corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} theorem follows.
+    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
+
+    Let $\tau$ be any $r$-tour in this tree, and let $\cC_\tau=\brc{S\in\cS\mid v_S\text{ is visited by }\tau}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has exactly $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
+
+    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges. A tour that traverses each such edge once in each direction visits precisely the representatives in $\cC$, has length $\spr{\cC}$, and covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Hence, for every budget, tours of at most that length and precedence-closed families of at most that size achieve the same coverage. Thus the reduction preserves the optimum coverage, and by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
 \end{proof}
 
 
