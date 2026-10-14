@@ -27,15 +27,15 @@ The following definition gives a basic tool for analysis of our algorithms.
   Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcoverD{D}$.
   If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
 \end{definition}
-Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
+% Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
 
 
-\begin{figure}[h]
-\centering
-\input{figures/sepcover.tex}
-\caption{Sepcover sequence in a decision tree}
-\label{fig:sepcover}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \input{figures/sepcover.tex}
+% \caption{Sepcover sequence in a decision tree}
+% \label{fig:sepcover}
+% \end{figure}
 
 Intuitively, our idea is to construct a set covering instance such that the optimal solution to this instance is connected to the cost of tests in the sepcover of an optimal decision tree for the input instance $\cI$. This is done as follows.
 %We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a reply $\cH'$ of size at most $\spr{\cH}/2$.
@@ -159,7 +159,7 @@ Therefore, by Theorem \ref{thm:PCSC-to-PCWCDT} we obtain the following corollary
     \begin{itemize}
         \item $\cO\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
         \item $\cO\br{\log^2n}$-approximation for outforests, by and Theorem~\ref{thm:BPCSC-outforest}.
-        \item General $\cO\br{\sqrt{m}\cdot\log n}$-approximation, by Theorem~\ref{thm:MDPCStoPCSC}, and Theorem~\ref{thm:MDPCStoPCSC}.
+        \item General $\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation, by Theorem~\ref{thm:PCSC-RBSC} and Theorem~\ref{thm:PCSC-to-PCWCDT}.
     \end{itemize}
 \end{corollary}
 
@@ -317,6 +317,6 @@ Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
     \begin{itemize}
         \item $\cO\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
         \item $\cO\br{\log^2 n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item $\cO\br{\sqrt{m}\cdot\log^{3/2} n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
+        \item $\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
     \end{itemize}
 \end{corollary}

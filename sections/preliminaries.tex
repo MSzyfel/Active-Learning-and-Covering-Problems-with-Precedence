@@ -77,53 +77,7 @@ Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a p
 \begin{problem}[\textsc{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
 Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$ items and minimizes $\coverageTime\br{\cC, \cU}$.
 \end{problem}
-\begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
-Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
-\end{problem}
-
-\medskip
-\paraTitle{Maximum density problems.}
-The algorithms for set covering are obtained via reductions from a problem of finding a maximum density subset (cf. Section~\ref{sec:MDPCS}).
-The \emph{density} of a nonempty family $\cC$ on a set $X$ is
-$
-\Delta\br{\cC, X} = \frac{\spr{\cov\br{\cC, X}}}{\spr{\cC}}.
-$
-We write $\Delta\br{\cC}$ when $X$ is the universe.
-
-\begin{problem}[\textsc{Max-Density Precedence-Closed Subfamily} ($\ProblemMDPCS$)] \label{problem:MDPCS}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$ and a precedence relation $(\cS,\preceq)$, find a precedence-closed subfamily $\cC \subseteq \cS$ that maximizes $\Delta\br{\cC}$.
-\end{problem}
-
-\begin{problem}[\textsc{Bounded Max-Density Precedence-Closed Subfamily} ($\ProblemBMDPCS$)] \label{problem:BMDPCS}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and an integer $\budget>0$, find a precedence-closed subfamily $\cC \subseteq \cS$ that maximizes $\Delta\br{\cC}$ and $\spr{\cC}\leq \budget$.
-\end{problem}
-
-\medskip
-\paraTitle{Steiner problems.}
-Let $(V,d)$ denote a symmetric metric with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
-An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
-Let $\cX$ be a family of \emph{groups}, where for each $X \in \cX$, $X\subseteq V$.
-Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
-Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
-% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
-
-\begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
-Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\cX \subseteq 2^V$, find an $r$-tour such that $\cov\br{\tau} = \cX$ minimizing $\spr{\tau}$.
-\end{problem}
-
-\begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
-Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
-$\sum_{X \in \cov\br{\tau}} w(X)$.
-\end{problem}
-% \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
-% Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
-% $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
-% %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
-% \end{problem}
-
 \medskip
 \paraTitle{Approximation conventions.}
 Throughout this paper, a bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose a factor $\beta\geq1$ on coverage (equivalently, it covers at least a $1/\beta$-fraction of the target amount) while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target; for budgeted problems, the budget may be exceeded by at most a factor $\alpha$.
-
-
 

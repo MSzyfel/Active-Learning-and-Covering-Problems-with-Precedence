@@ -53,13 +53,15 @@ follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i
         \qquad
         Z_e=\sum_{K\in\mathcal{K}_e}\mathbf{1}\!\left\{\binom{K}{2}\subseteq E(G)\right\}.
     \]
-    Thus $Z_e$ is defined on the full probability space of $G\sim G(N,q)$ and is zero if $e\notin E(G)$. We now condition on $e\in E(G)$ to bound its moment. For an integer $s\geq1$, distributivity gives
+    Thus $Z_e$ is defined on the full probability space of $G\sim G(N,q)$ and is zero if $e\notin E(G)$. For an integer $s\geq1$, distributivity gives
     \[
         Z_e^s=
         \sum_{(K_1,\ldots,K_s)\in\mathcal{K}_e^s}
         \prod_{i=1}^s\mathbf{1}\!\left\{\binom{K_i}{2}\subseteq E(G)\right\},
     \]
-    a sum over ordered $s$-tuples, with repetitions allowed. Regard the $r-2$ vertices of each clique outside the endpoints of $e$ as labeled positions. An equality pattern is a set partition of these at most $s(r-2)$ positions: positions are in the same block exactly when they represent the same graph vertex. Only partitions that keep the positions within each clique distinct are admissible, so there are at most $B_{s(r-2)}=O_{r,s}(1)$ patterns, where $B_j$ is the $j$th Bell number. Fix one pattern and expose the cliques in order. If $K_i$ introduces $j$ new vertices, then $0\leq j\leq r-2$, there are $O_{r,s}(N^j)$ choices for them, and only the $r-j$ old vertices can span edges exposed earlier. Thus at least $R-\binom{r-j}{2}$ edges of $K_i$ are new. Conditional on $e$ being present, the probability that all the new edges across the tuple are present is the product of their powers of $q$. The contribution from choosing the new vertices at this step and requiring its new edges is at most a constant times
+    a sum over ordered $s$-tuples, with repetitions allowed. For each $i\in[s]$, label the $r-2$ vertices of $K_i$ outside the endpoints of $e$ by positions $(i,1),\ldots,(i,r-2)$. An equality pattern is a set partition of these $s(r-2)$ positions, with two positions in the same block exactly when they represent the same graph vertex. Call a pattern admissible if each block contains at most one position with any fixed first coordinate $i$, as the vertices within each clique are distinct. Each block therefore represents one graph vertex, and its positions specify the tuple entries in which that vertex occurs; in particular, its size is the number of its occurrences in the tuple. There are at most $B_{s(r-2)}=O_{r,s}(1)$ admissible patterns, where $B_j$ is the $j$th Bell number.
+
+    Fix an admissible pattern and expose $K_1,\ldots,K_s$ in order. At step $i$, the pattern determines which positions correspond to vertices seen in earlier cliques and which belong to blocks first appearing in $K_i$. Let $j$ be the number of these new blocks, so $0\leq j\leq r-2$. Their vertices can be chosen in at most $N^j$ ways. Thus $K_i$ has $r-j$ old vertices, including the endpoints of $e$. Any edge of $K_i$ exposed before step $i$ (including $e$) must have both endpoints among these old vertices, so at most $\binom{r-j}{2}$ edges can be old. Therefore at least $R-\binom{r-j}{2}$ edges of $K_i$ are new. By independence of the edge indicators, conditional on $e\in E(G)$ and on the earlier exposures, the probability that all $m$ new edges are present is $q^m$, where $m\geq R-\binom{r-j}{2}$. Thus the contribution from choosing the new vertices and requiring all these edges is at most
     \[
         N^j \cdot q^{R-\binom{r-j}{2}}
         =N^{j-\frac{2}{r+1}\cdot(R-\binom{r-j}{2})}
@@ -109,7 +111,7 @@ follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i
         \leq\sum_{x=1}^N\br{\frac{e}{xN^2}}^x
         =O(N^{-2})=o(1).
     \]
-    So we may assume that the complementary event happens, so $B_G(X)<t_x$, and hence $B_G(X)\leq A(a_x+x\log N)$, for every nonempty $X$ simultaneously.
+    Thus, we may assume that the complementary event happens, so $B_G(X)<t_x$, and hence $B_G(X)\leq A(a_x+x\log N)$, for every nonempty $X$ simultaneously.
 
     On the first high-probability event, each edge belongs to at most $N^\zeta$ cliques. Consequently, any fixed $r$-clique shares an edge with at most $RN^\zeta$ cliques, by summing this bound over its $R$ edges. Repeatedly select one remaining clique in $X$ and delete every clique sharing one of its edges. Each selected clique deletes at most $RN^\zeta$ cliques; the selected cliques are pairwise edge-disjoint, so their number is at most $B_G(X)$. Thus
     \[
@@ -677,6 +679,10 @@ In order to provide a polynomial inapproximability result, we rely on the \texts
 \end{proof}
 
 \subsection{Outforest precedence constraints}
+\begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
+Given a metric space $(V, d)$, a root vertex $r \in V$ and a family of groups $\cX \subseteq 2^V$, find an $r$-tour such that $\cov\br{\tau} = \cX$ minimizing $\spr{\tau}$.
+\end{problem}
+
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
     $\ProblemPCSC$ with $f=1$ and outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
@@ -774,4 +780,57 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
 \end{corollary}
 \begin{proof}
     Item 1 follows from Corollary~\ref{cor:PDS-limiting-hardness} and the full-coverage covering-to-decision-tree reductions. Items 2 and 3 follow from Theorems~\ref{thm:DS-covering-hardness} and~\ref{thm:quasipolynomial-covering-hardness}, respectively, by applying them to full-coverage instances and then using the covering-to-decision-tree reductions. These reductions create two hypotheses per covering element and one test per covering set, so $n_{\rm DT}=2\cdot n_{\rm cov}$ and $m_{\rm DT}=m_{\rm cov}$; the $n$- and $m$-based bounds therefore transfer. Item 4 follows from Theorem~\ref{thm:PGC-covering-hardness} in the same way. In items 2-4, the covering sets are empty or singletons, yielding tests with at most three outcomes, and the precedence DAG has height two. The $\ProblemPCWCDT$ claim in item 5 follows from Theorem~\ref{thm:PCSC-outforest-hardness} and the reduction from full-cover precedence-constrained set cover. The $\ProblemPCACDT$ claim follows from Corollary~\ref{cor:PCACDT-outforest-hardness}.
+\end{proof}
+
+\subsection{Consequences for Partial Red-Blue Set Cover}
+The exact reduction in Theorem~\ref{thm:PCSC-RBSC} maps an instance of $\ProblemPCSC$ with $m$ sets and $n$ items to an instance of $\ProblemPRBSC$ with $m$ red-blue sets, $m$ red elements, and $k=n$ blue elements. It preserves the optimum cost and coverage. Therefore the PCSC hardness results above transfer to Partial Red-Blue Set Cover on the image of this reduction, with the number of blue elements $k$ taking the role of $n$.
+For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
+
+Chlamt\'a\v{c} et al. prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\cO\br{m^{1/4-\epsilon}/\log^2 k}$-approximation for Red-Blue Set Cover \cite[Theorem~1.6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 k$ loss on the restricted instances produced by our closure reduction.
+
+\begin{corollary}[PDS hardness for Partial Red-Blue Set Cover]\label{cor:PRBSC-PDS-hardness}
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time $\cO\br{k^{1/2-\epsilon}}$- or $\cO\br{m^{1/4-\epsilon}}$-approximation for full-cover Red-Blue Set Cover on instances obtained by applying the reduction in Theorem~\ref{thm:PCSC-RBSC} to the PDS construction. More generally, for every fixed target fraction $f\in(0,1]$ and coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\cO\br{k^{1/2-\epsilon}},\kappa}$- or $\br{\cO\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot k}$ on these instances.
+\end{corollary}
+\begin{proof}
+    An approximation for these red-blue instances translates, with the same cost, coverage, and set-count parameters, to an approximation for the corresponding $\ProblemPCSC$ instance. Applying Corollary~\ref{cor:PDS-limiting-hardness} gives the claimed bounds.
+\end{proof}
+
+\begin{corollary}[Label-Cover hardness for RBSC]\label{cor:PRBSC-label-cover-hardness}
+    On instances in the image of the reduction in Theorem~\ref{thm:PCSC-RBSC}, the following bounds hold for $\ProblemPRBSC$ with target $\cl{f\cdot k}$:
+    \begin{enumerate}
+        \item For every fixed $f\in(0,1]$ and constants $K,J\geq0$, there is no polynomial-time bicriteria $\br{\cO\br{(\log k)^K},\cO\br{(\log k)^J}}$- or $\br{\cO\br{(\log m)^K},\cO\br{(\log m)^J}}$-approximation unless $\text{P}=\text{NP}$.
+        \item For every $\epsilon\in(0,1)$, there is no polynomial-time bicriteria approximation with either guarantee
+        \[
+            \br{\cO\br{2^{(\log k)^{1-\epsilon}}},\cO\br{2^{(\log k)^{1-\epsilon}}}}
+            \qquad\text{or}\qquad
+            \br{\cO\br{2^{(\log m)^{1-\epsilon}}},\cO\br{2^{(\log m)^{1-\epsilon}}}}
+        \]
+        unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{O(1)}}}$. In particular, ETH rules out these approximation factors.
+    \end{enumerate}
+\end{corollary}
+\begin{proof}
+    Apply the exact reduction in Theorem~\ref{thm:PCSC-RBSC} to the hard PCSC instances in Theorems~\ref{thm:DS-covering-hardness} and~\ref{thm:quasipolynomial-covering-hardness}. It preserves the number $m$ of sets and maps the universe size $n$ to the number $k$ of blue elements.
+\end{proof}
+
+\begin{corollary}[PGC hardness for RBSC]\label{cor:PRBSC-PGC-hardness}
+    Assuming the \textsc{Projection Games Conjecture}, let
+    \[
+        \gamma_k=\frac{c}{1+2c},\qquad
+        \gamma_m=\frac{c}{1+a\cdot c+2c},
+    \]
+    where $a,c$ are the constants in Theorem~\ref{thm:PGC-covering-hardness}. On instances in the image of Theorem~\ref{thm:PCSC-RBSC}, for every fixed $f\in(0,1]$ and $\rho,\sigma\geq0$:
+    \begin{itemize}
+        \item if $\rho+2\cdot\sigma<\gamma_k$, there is no polynomial-time bicriteria $\br{\cO\br{k^\rho},\cO\br{k^\sigma}}$-approximation unless $\text{P}=\text{NP}$
+        \item if $\rho+2\cdot\sigma<\gamma_m$, there is no polynomial-time bicriteria $\br{\cO\br{m^\rho},\cO\br{m^\sigma}}$-approximation unless $\text{P}=\text{NP}$
+    \end{itemize}
+\end{corollary}
+\begin{proof}
+    The exact reduction maps the PGC-hard PCSC instances to Partial Red-Blue Set Cover with $k=n$ blue elements and the same number $m$ of sets. Theorem~\ref{thm:PGC-covering-hardness} therefore gives both bounds.
+\end{proof}
+
+\begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
+    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} cannot be approximated within $\cO\br{\log^{2-\epsilon} k}$ unless $\text{NP}\subseteq\text{ZTIME}\br{k^{\text{polylog}(k)}}$.
+\end{corollary}
+\begin{proof}
+    Apply Theorem~\ref{thm:PCSC-RBSC} to the outforest instances in Theorem~\ref{thm:PCSC-outforest-hardness}. The reduction preserves the optimum and sets the number of blue elements to the PCSC universe size.
 \end{proof}

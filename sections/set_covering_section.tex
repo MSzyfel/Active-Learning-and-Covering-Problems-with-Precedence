@@ -2,118 +2,40 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-Having obtained appropriate approximation algorithms for $\ProblemMDPCS$ and $\ProblemBMDPCS$, we now turn our attention towards approximating various set covering problems. In particular, we show how to obtain a bicriteria $\br{\bigo\br{\sqrt{m\cdot \log n}}, 1}$-approximation for $\ProblemBPCSC$. This can be then turned into a $\br{\bigo\br{\sqrt{m\cdot \log n}}, 1}$-approximation for $\ProblemPCSC$ and a $\br{\bigo\br{\sqrt{m\cdot \log n}}, O\br{1}}$-approximation for $\ProblemPCMSSC$. At the end of the section we also show several better guarantees for inforest and outforest precedence constraints.
-\subsection{$\ProblemBPCSC$ via $\ProblemBMDPCS$} \label{subsection:BPCSC}
+We reduce $\ProblemPCSC$ to Partial Red-Blue Set Cover. This gives a direct approximation for $\ProblemPCSC$ and a budgeted approximation for $\ProblemBPCSC$. We then use the budgeted algorithm in the existing reduction to $\ProblemPCMSSC$. The forest-specific algorithms remain unchanged.
 
-We start with the budgeted variant, which will become a useful primitive for the fractional variants.
-The approximation algorithm is the greedy procedure shown in Algorithm~\ref{alg:BPCSC}.
-For the analysis, let $\cC_i$ and $\cA_i$, $i\in[l]$, be the sets $\cC$ and $\cA$ obtained in the $i$-th iteration; $\cC_0=\emptyset$.
-Note that $\cov\br{\cA_i,\cU\setminus\cov\br{\cC_{i-1}}}$ is the set of element in $\cU$ that are being covered in the $i$-th iteration. %, and for each $u\in\cov\br{\cA_i,\cU\setminus\cC_{i-1}}$ denote $c(u):=\Delta\br{\cA_i,\cU\setminus\cC_{i-1}}$.
-\input{pseudocodes/B_PCSC}
+\begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
+Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
+\end{problem}
+\begin{problem}[\textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$)] \label{problem:PRBSC}
+Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $k$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $k$ blue elements and minimizes $\spr{\cov\br{\cA',\cR}}$.
+\end{problem}
 
-First we bound the size of the set returned by the algorithm (cf. Lemma~\ref{lem:BPCSC-cost}) and then we estimate how much it covers (cf. Lemma~\ref{lem:BPCSC-coverage}).
-\begin{lemma}\label{lem:BPCSC-cost}
-    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cC} \leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
-\end{lemma}
-\begin{proof}
-    We consider two cases:
-    \begin{enumerate}
-        \item If $\budget\geq \sqrt{m/H_n}$, then for $\cC=\cS$ it holds: $\spr{\cC} = m \leq \sqrt{m\cdot H_n}\cdot \budget$.
-        \item Else, when $\budget < \sqrt{m/H_n}$, we have that before the last iteration, that is in iteration $l-1$, of the while loop, $\spr{\cC_{l-1}} < \sqrt{m\cdot H_n}\cdot \budget$. Since in the last iteration we add to $\cC_{l-1}$ sets in a collection $\cA_l$ such that $\spr{\cA_l} \leq \budget$, we have that 
-        \[
-        \spr{\cC_l} \leq \sqrt{m\cdot H_n}\cdot \budget + \budget = \br{\sqrt{m\cdot H_n}+1}\cdot \budget.
-        \]
-    \end{enumerate}
-\end{proof}
+\subsection{$\ProblemPCSC$ and $\ProblemBPCSC$ via Partial Red-Blue Set Cover}
+\label{subsection:PCSC}\label{subsection:BPCSC}
+Let $m=\spr{\cS}$ and $n=\spr{\cU}$. The approximation algorithm of Chlamt\'a\v{c} et al. for Red-Blue Set Cover has ratio
+\[
+\alpha_{m,n}=\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log n}.
+\]
+Their Appendix~A extends the guarantee to the partial version, where the solution must cover a given number of blue elements \cite[Theorem~1.3 and Appendix~A]{RedBlueSetCover}.
 
-\begin{lemma}\label{lem:BPCSC-coverage}
-    Let $\cC$ be the cover returned by Algorithm~\ref{alg:BPCSC}. Then, $\spr{\cov\br{\cC}} \geq \spr{\cov\br{\cCopt}}$.
-\end{lemma}
-\begin{proof}
-    If $\budget \geq \sqrt{m/H_n}$, then the algorithm returns $\cC_l=\cS$ and trivially covers at least as many elements as $\cCopt$.
+We use the same exact reduction for both covering variants. Create a red element $r_T$ for each $T\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $D_S=\closure{S}$ and create a red-blue set
+\[
+A_S=\brc{r_T:T\in D_S}\cup\brc{b_u:u\in\cov\br{D_S}}.
+\]
+The instance has one available set $A_S$ for each original set $S$. For any selected subfamily indexed by $\mathcal{J}\subseteq\cS$, define
+\[
+\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}D_S.
+\]
+The family $\cC_{\mathcal{J}}$ is precedence-closed. The red elements covered by the selected red-blue sets are exactly $\brc{r_T:T\in\cC_{\mathcal{J}}}$, and the blue elements covered are exactly $\brc{b_u:u\in\cov\br{\cC_{\mathcal{J}}}}$. Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$. Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers exactly the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$: each $D_S\subseteq\cC$, and every $S\in\cC$ belongs to $D_S$. Hence, the reduction preserves cost and coverage in both directions.
 
-    Otherwise, let $q=\spr{\cov\br{\cCopt}}$. If $q=0$, the claimed coverage guarantee is immediate, so assume $q>0$. We analyze the loop up to the first iteration $t$ for which $\spr{\cov\br{\cC_t}}\geq q$ and show that this iteration occurs before the algorithm reaches its cost threshold.
-
-    Let $\cC_i$ and $\cA_i$ be the cover and the family added in iteration $i$, with $\cC_0=\emptyset$, and define $R_i=\cU\setminus\cov\br{\cC_i}$ for all $i\geq 0$. In particular, $R_0=\cU$. For each covered element $u$, let $i(u)$ be its first covering iteration and define its price by
-    \[
-    c(u)=\frac{\spr{\cA_{i(u)}}}{\spr{\cov\br{\cA_{i(u)},R_{i(u)-1}}}}.
-    \]
-
-    Set $k=\spr{\cov\br{\cC_{t-1}}}<q$, and order the $k$ elements of $\cov\br{\cC_{t-1}}$ as $v_1,\ldots,v_k$ by their first covering iteration, breaking ties arbitrarily.
-    \begin{claim}\label{lem:cost-per-element}
-        For every $j\in[k]$, $c(v_j)\leq\frac{\budget^2}{q-j+1}$.
-    \end{claim}
-    \begin{proof}
-        Let $i=i(v_j)$. At most $j-1$ elements have been covered before iteration $i$, so at least $q-j+1$ elements of $\cov\br{\cCopt}$ remain in $R_{i-1}$. The family $\mathcal{D}_i=\cCopt\setminus\cC_{i-1}$ is precedence-closed in the residual family $\cS\setminus\cC_{i-1}$, has size at most $\spr{\cCopt}\leq\budget$, and covers all elements of $\cov\br{\cCopt}\cap R_{i-1}$. Thus, $\spr{\cov\br{\mathcal{D}_i,R_{i-1}}}\geq q-j+1$. By the $\budget$-approximation guarantee for $\ProblemBMDPCS$,
-        \[
-        \Delta\br{\cA_i,R_{i-1}}\geq\frac{1}{\budget}\Delta\br{\mathcal{D}_i,R_{i-1}}\geq\frac{q-j+1}{\spr{\mathcal{D}_i}\cdot\budget}\geq\frac{q-j+1}{\budget^2}.
-        \]
-        Since $c(v_j)=1/\Delta\br{\cA_i,R_{i-1}}$, the claim follows.
-    \end{proof}
-
-    By the price definition, summing over exactly the elements covered before iteration $t$ gives
-    \[
-    \spr{\cC_{t-1}}=\sum_{j=1}^{k}c(v_j)
-    \leq\budget^2\sum_{j=1}^{k}\frac{1}{q-j+1}
-    =\budget^2\br{H_q-H_{q-k}}
-    \leq\budget^2 H_n.
-    \]
-    Since $\spr{\cA_t}\leq\budget$, it follows that
-    \[
-    \spr{\cC_t}\leq\budget^2 H_n+\budget
-    \leq\br{\sqrt{m\cdot H_n}+1}\cdot\budget.
-    \]
-    Moreover, $\budget<\sqrt{m/H_n}$ in this case, so $\spr{\cC_{t-1}}\leq\budget^2 H_n<\sqrt{m\cdot H_n}\,\budget$. Hence iteration $t$ is reached before the algorithm's stopping threshold, and the algorithm covers at least $q$ elements. This proves the lemma.
-\end{proof}
-
-Lemmas \ref{lem:BPCSC-cost} and \ref{lem:BPCSC-coverage} prove the following.
-\begin{theorem} \label{thm:BPCSC}
-    There exists a polynomial-time $\br{\sqrt{m\cdot H_n}+1, 1}$-bicriteria approximation algorithm for $\ProblemBPCSC$, where $n=\spr{\cU}$ and $m=\spr{\cS}$. That is, the algorithm returns a solution $\cC$ such that $\spr{\cov\br{\cC}}\geq \OPT\br{\cI}$ and $\spr{\cC}\leq \br{\sqrt{m\cdot H_n}+1}\cdot \budget$.
-\end{theorem}
-
-\subsection{$\ProblemPCSC$ via $\ProblemMDPCS$}\label{subsection:PCSC}
-Let $k=f\cdot n$.
-In order to prove the main theorem of this section consider a greedy procedure shown as Algorithm~\ref{alg:PCSC}.
-We note a subtle fact of finishing the loop once $k/2$ elements are covered and not iterating till reaching $k$.
-This is because the last set $\cA$ may be of unbounded size but we argue that the size of an optimal solution to the instance from the last iteration is lower-bounded by $\Omega(k)$, which is enough to obtain the required approximation ratio.
-\input{pseudocodes/set_cover.tex}
-\begin{theorem} \label{thm:MDPCStoPCSC}
-    If there exists a polynomial-time $\gamma$-approximation algorithm for $\ProblemMDPCS$, then there exists a polynomial-time bicriteria $\br{4\gamma/f, 2}$-approximation algorithm for $\ProblemPCSC$.
+\begin{theorem}\label{thm:PCSC-BPCSC-RBSC}\label{thm:PCSC-RBSC}\label{thm:BPCSC}
+There is a polynomial-time $\alpha_{m,n}$-approximation algorithm for $\ProblemPCSC$. In addition, $\ProblemBPCSC$ admits a polynomial-time $\br{\alpha_{m,n},1}$-bicriteria approximation algorithm: given budget $\budget$, it returns a precedence-closed family of size at most $\alpha_{m,n}\cdot\budget$ that covers at least as many elements as an optimal family of size at most $\budget$.
 \end{theorem}
 \begin{proof}
-Denote by $\cA_i$ the set $\cA$ from the $i$th iteration of Algorithm~\ref{alg:PCSC}, $i\in[l]$.
-For brevity let $\cC_i$, $i\in[l]$, be the set $\cC$ obtained in the $i$th iteration, $\cC_i=\bigcup_{j=1}^i \cA_j$.
-Let $R_i=\cU\setminus\cov\br{\cC_i}$ for $i\in[l]$ and $R_0=\cU$, $\cC_0=\emptyset$.
-Denote by $\cI=(\cU,\cS,\preceq,k)$ any input instance to $\ProblemPCSC$, and let $\cCopt$ be an optimal solution to $\ProblemPCSC$ on $\cI$, i.e., $\cov\br{\cCopt}\geq k$ and $\spr{\cCopt}=\optPCSC{\cI}$.
+For $\ProblemPCSC$, run the partial Red-Blue Set Cover algorithm on the constructed instance with target $\cl{f\cdot n}$ blue elements, then convert its solution to a precedence-closed family as above. Since the reduction preserves cost and coverage, this gives an $\alpha_{m,n}$-approximation.
 
-Note that for each $i\in[l]$, $\cCopt\setminus\cC_{i-1}\neq\emptyset$ because otherwise $\cC_{i-1}\subseteq\cCopt$ which means that $\spr{\cC_{i-1}}\geq\spr{\cCopt}\leq k$ contradicting the fact that the algorithm conducted the $l$-th iteration.
-Hence, $\cCopt\setminus\cC_{i-1}$ is a precedence-closed family of density not greater than the density of an optimal solution to $\ProblemMDPCS$ for the input provided in the $i$-th iteration, $i\in[l]$.
-Thus, 
-\[
-\Delta(\cA_i,R_{i-1}) \geq \frac{\Delta(\cCopt\setminus\cC_{i-1},R_{i-1})}{\gamma},
-\]
-which gives by definition of $\Delta$:
-\[
-\frac{\spr{\cov\br{\cA_i,R_{i-1}}}}{\spr{\cA_i}} \geq \frac{1}{\gamma}\cdot\frac{\spr{\cov\br{\cCopt,R_{i-1}}}}{\spr{\cCopt\setminus\cC_{i-1}}}, \quad i\in[l],
-\]
-which further implies:
-\begin{equation} \label{eq:Ai}
-\spr{\cA_i} \leq \gamma \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} \cdot \spr{\cCopt\setminus\cC_{i-1}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} }
-            \leq \gamma \cdot \frac{ \spr{\cov\br{\cA_i,R_{i-1}}} }{ \spr{\cov\br{\cCopt,R_{i-1}}} } \cdot \spr{\cCopt}.
-\end{equation}
-For each $i\in[l-1]$ it holds $\spr{\cov\br{\cCopt,R_{i-1}}}\geq k/2$.
-Thus,
-\[
-\sum_{i=1}^{l-1}\spr{\cA_i} \leq \frac{2\gamma}{k} \cdot \spr{\cCopt} \cdot \sum_{i=1}^{l-1}\spr{\cov\br{\cA_i,R_{i-1}}} \leq \frac{2\gamma n}{k} \cdot \spr{\cCopt}.
-\]
-For the last iteration $\spr{\cov\br{\cA_l,R_{l-1}}}\leq n$ (potentially $\cA_l$ may be of size unbounded by a function of $k$) and $\spr{\cov\br{\cCopt,R_{l-1}}}\geq k/2$.
-Hence by \eqref{eq:Ai} we get $\spr{\cA_l}\leq \frac{2\gamma n}{k}\spr{\cCopt}$.
-This gives 
-\[
-\spr{\cC_l}=\sum_{i=1}^l\spr{\cA_i}\leq\frac{4\gamma n}{k}\cdot\spr{\cCopt} = \frac{4\gamma}{f}\cdot\spr{\cCopt}.
-\]
-Moreover, $\spr{\cov\br{\cC_l}}\geq k/2$, which means the algorithm covers at least half of the required elements.
-This proves theorem.
+For $\ProblemBPCSC$, run the partial Red-Blue Set Cover algorithm for each integer target from $1$ to $\spr{\cov\br{\cS,\cU}}$, converting each output to a precedence-closed family. Also include the empty family as a candidate, and return the candidate of largest coverage whose size is at most $\alpha_{m,n}\cdot\budget$. Let $\cC^*$ be an optimal family under budget $\budget$, and let $t^*=\spr{\cov\br{\cC^*,\cU}}$. If $t^*=0$, the empty family is optimal. Otherwise, the red-blue instance with target $t^*$ has optimum red cost at most $\spr{\cC^*}\leq\budget$. Its $\alpha_{m,n}$-approximate solution converts to a family of size at most $\alpha_{m,n}\cdot\budget$ covering at least $t^*$ elements. This candidate is considered by the algorithm, so the returned family covers at least as many elements as $\cC^*$. There are at most $n$ target values, so the algorithm runs in polynomial time.
 \end{proof}
 
 Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
@@ -123,7 +45,7 @@ Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algo
 
 
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
-We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$. This result seems counterintuitive at first glance, since we are using an algorithm for a problem where the budget denotes the maximal allowed size of the cover to solve a problem where the budget denotes the sum of covering times. Our algorithm and its analysis are a generalization of the approach of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. Furthermore, their result is based on techniques used for the \textsc{Minimum Latency Travelling Salesman Problem} \cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem}.
+We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on the DAG induced by the precedence constraints, and the cost of covering an element as a latency of ''visiting'' that element. Note that however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
 
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\beta-1}{3\beta-2}$, so $1<a\leq 2$.
 Consider the Algorithm~\ref{alg:fPCMSSC}.
@@ -243,6 +165,26 @@ Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the fo
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     There exists a bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest running in polynomial time.
 \end{corollary}
+
+\medskip
+\paraTitle{Steiner problems.}
+Let $(V,d)$ denote a symmetric metric with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
+An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
+Let $\cX$ be a family of \emph{groups}, where for each $X \in \cX$, $X\subseteq V$.
+Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
+Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
+% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+
+\begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
+Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
+$\sum_{X \in \cov\br{\tau}} w(X)$.
+\end{problem}
+% \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
+% Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
+% $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
+% %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
+% \end{problem}
+
 \begin{theorem}\label{thm:BPCSC-outforest}
     There exist polynomial-time bicriteria $\br{\bigo\br{\log n}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
@@ -259,47 +201,6 @@ Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the fo
     Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges. A tour that traverses each such edge once in each direction visits precisely the representatives in $\cC$, has length $\spr{\cC}$, and covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Hence, for every budget, tours of at most that length and precedence-closed families of at most that size achieve the same coverage. Thus the reduction preserves the optimum coverage, and by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
 \end{proof}
 
-
-% As of independent interest, we additionally show that if we enforce a certain condition on the input called \emph{$\epsilon$-shallow ancestry}, then for $\epsilon <1$  the greedy solution gives an $\bigo\br{n^\epsilon}$-approximation for $\ProblemMDPCS$.
-% \begin{theorem}\label{thm:MDPCS-shallow-ancestry}
-% Suppose there exists a constant $C > 0$ and $\epsilon \in (0, 1)$ such that for all $S \in \cS$,
-% $
-% \spr{\closure{S}} \leq C \cdot
-% \spr{\cov\br{\closure{S}}}^\epsilon
-% $ ($\epsilon$-shallow ancestry).
-% Then a greedy solution provides an $\bigo(n^\epsilon)$-approximation for the $\ProblemMDPCS$ problem.
-% \end{theorem}
-
-% \begin{proof}
-%  Let $\cC^*$ be an optimal solution and let $\cC$ be a greedy solution (cf. Section~\ref{sec:MDPCS}).
-%  Denote for brevity $\delta = \max_{S \in \cS} \Delta\br{\closure{S}}$.
-%  There are two cases:
-% \begin{enumerate}
-%     \item If $\delta \geq n^{1-\epsilon}$, then, we observe that $\Delta\br{\cC} = \delta \geq n^{1-\epsilon}$. Since we can cover at most $n$ elements with at least one set, we have $\Delta\br{\cC^*} \leq n$. Therefore:
-% \[
-% \frac{\Delta\br{\cC^*}}{\Delta\br{\cC}} \leq \frac{n}{n^{1-\epsilon}} = n^\epsilon
-% \]
-%     \item Else, if $\delta \leq n^{1-\epsilon}$, we proceed as follows: By definition of density, for any $S \in
-%      \cS$, $\spr{\cov\br{\closure{S}}} \leq \delta \cdot \spr{\closure{S}}$. Combining this with the $\epsilon$-shallow ancestry condition, we have that for all $S \in \cS$, $
-% \spr{\cov\br{\closure{S}}} \leq \delta \cdot C \cdot \spr{\cov\br{\closure{S}}}^\epsilon
-% $. Rearranging this inequality, we get $
-% \spr{\cov\br{\closure{S}}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}
-% $. We have that:
-% \[
-% \spr{\cov\br{\cC^*}} = \spr{\bigcup_{S\in\cC^*}\cov\br{\closure{S}}} \leq \sum_{S\in\cC^*} \spr{\cov\br{\closure{S}}} \leq \spr{\cC^*} \cdot (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
-% \]
-% Therefore,
-% \[
-% \Delta\br{\cC^*}= \frac{\spr{\cov\br{\cC^*}}}{\spr{\cC^*}} \leq (\delta \cdot C)^{\frac{1}{1-\epsilon}}.
-% \]
-
-% By the greedy choice, $\Delta\br{\cC} \geq \delta$ and by assumption $\delta \leq n^{1-\epsilon}$. Thus:
-% \[
-% \frac{\Delta\br{\cC^*}}{\Delta\br{\cC}} \leq \frac{(\delta \cdot C)^{\frac{1}{1-\epsilon}}}{\delta} = C^{\frac{1}{1-\epsilon}} \cdot \delta^{\frac{\epsilon}{1-\epsilon}} \leq C^{\frac{1}{1-\epsilon}} \cdot (n^{1-\epsilon})^{\frac{\epsilon}{1-\epsilon}} = C^{\frac{1}{1-\epsilon}} \cdot n^\epsilon.
-% \]
-% \end{enumerate}
-% % Since $C$ is constant, theorem follows.
-% \end{proof}
 
 % % \subsection{Other Applications}
 
@@ -320,9 +221,3 @@ Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the fo
 % %         \item $\br{\bigo\br{\sqrt{n}\log n}}$-approximation for general precedence constraints.
 % %     \end{itemize}
 % % \end{corollary}
-
-
-
-
-
-

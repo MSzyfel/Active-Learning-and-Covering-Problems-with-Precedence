@@ -1,30 +1,28 @@
 \begin{algorithm}[htb!]
 \DontPrintSemicolon
 \LinesNumbered
-
-\caption{The $\br{\sqrt{m\cdot H_n}+1, 1}$-approximation algorithm for $\ProblemBPCSC$}
+\caption{An $\br{\alpha_{m,n},1}$-approximation algorithm for $\ProblemBPCSC$}
 \label{alg:BPCSC}
 \SetKwProg{Proc}{procedure}{}{}
 \Proc{$\ProcedureBPCSC(\cU, \cS, \preceq, \budget)$}{
-%    \If{$\budget\geq \sqrt{m/H_n}$}
-%    {
-%        \Return $\cS$.
-%    }
-%  \Else{
-  $\cC \gets \emptyset$.
+  $\cR\gets\brc{r_S:S\in\cS}$\;
+  $\cB\gets\brc{b_u:u\in\cU}$\;
+  $\cA\gets\emptyset$\;
 
-  \While{$\spr{\cC} < \min\brc{\sqrt{m\cdot H_n}\cdot \budget, m}$}{
-
-    $\cA \gets$ Run the $\budget$-approx. algorithm for $\ProblemBMDPCS$ on $(\cU \setminus \cov(\cC), \preceq, \cS\setminus\cC, \budget)$.
-
-%    \ForEach{$u \in \cov\br{\cA, \cU-\cC}$}{
-%        $c\br{u}\gets \Delta\br{\cA, \cU-\cC}$. \tcp*{for analysis only}
-%    }
-    $\cC \gets \cC \cup \cA$.
+  \ForEach{$S\in\cS$}{
+    $D_S\gets\closure{S}$\;
+    $A_S\gets\brc{r_T:T\in D_S}\cup\brc{b_u:u\in\cov\br{D_S}}$\;
+    $\cA\gets\cA\cup\brc{A_S}$\;
   }
 
-  \Return $\cC$.
-%  }
+  $\cC_{\mathrm{best}}\gets\emptyset$\;
+  \For{$t\gets 1$ \KwTo $\spr{\cov\br{\cS}}$}{
+    $\cA_t\gets$ Run the $\alpha_{m,n}$-approximation algorithm for $\ProblemPRBSC$ on $(\cR,\cB,\cA,t)$\;
+    $\cC_t\gets\bigcup_{A_S\in\cA_t}D_S$\;
+    \If{$\spr{\cC_t}\leq\alpha_{m,n}\cdot\budget \land \spr{\cov\br{\cC_t}}>\spr{\cov\br{\cC_{\mathrm{best}}}}$}{
+      $\cC_{\mathrm{best}}\gets\cC_t$\;
+    }
+  }
+  \Return $\cC_{\mathrm{best}}$\;
 }
 \end{algorithm}
-

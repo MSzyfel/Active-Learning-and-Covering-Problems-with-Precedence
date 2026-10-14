@@ -1,5 +1,5 @@
 \begin{table}[ht!]
-\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints. ($H_n = \sum_{i=1}^{n} \frac{1}{i} = \Theta(\log n)$ is the $n$-th \emph{harmonic number}.).}
+\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints.}
 \label{tab:results}
 \centering
 {
@@ -29,7 +29,7 @@ outforest & $\br{\cO(\log n), 4}$ Thm.~\ref{thm:BPCSC-outforest} & $\br{\cO(\log
 \cdashline{2-6}
 \addlinespace[2pt]
 
-general & $\br{\sqrt{m \cdot H_n}+1, 1}$ Thm.~\ref{thm:BPCSC} & $\br{\cO(\sqrt{m}/f), 2}$ Thm.~\ref{thm:MDPCStoPCSC}, $\br{\sqrt{m \cdot H_n}+1, 1}$ Cor.~\ref{cor:BPCSC-to-PCSC} & $(\sqrt{m \cdot H_n}+1, 1)$ Thm.~\ref{thm:BPCSC-to-PCMSSC} & $\cO(\sqrt{m}\cdot\log n)$ Cor.~\ref{cor:PCWCDT-special-cases} & $\cO(\sqrt{m}\cdot\log^{3/2}n)$ Cor.~\ref{cor:PCACDT-special-cases} \\
+general & \shortstack[c]{$\br{\alpha_{m,n},1}$\\Thm.~\ref{thm:BPCSC}} & \shortstack[c]{$\br{\alpha_{m,n},1}$\\Thm.~\ref{thm:PCSC-RBSC}} & \shortstack[c]{$\br{\cO(\alpha_{m,n}),1}$\\Thm.~\ref{thm:BPCSC-to-PCMSSC}} & \shortstack[c]{$\begin{gathered}\cO(m^{1/3}\\\cdot\log^{4/3}m\\\cdot\log^2n)\end{gathered}$\\Cor.~\ref{cor:PCWCDT-special-cases}} & \shortstack[c]{$\begin{gathered}\cO(m^{1/3}\\\cdot\log^{4/3}m\\\cdot\log^2n)\end{gathered}$\\Cor.~\ref{cor:PCACDT-special-cases}} \\
 \bottomrule
 \end{tabular}
 }
