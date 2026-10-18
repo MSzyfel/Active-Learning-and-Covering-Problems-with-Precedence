@@ -1,7 +1,7 @@
 \section{Introduction}
 
 Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests}, and an unknown \emph{target hypothesis} $\target\in\cH$ that needs to be discovered through testing.
-Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that for any $X,Y\in t$,  $X\cap Y=\emptyset$ and $\bigcup_{X\in t} X=\cH$.
+Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that for any different $X,Y\in t$,  $X\cap Y=\emptyset$ and $\bigcup_{X\in t} X=\cH$.
 As a result of executing a test $t\in\cT$, the \questioner receives a \emph{reply} that reveals $H\in t$ such that $\target\in H$. Upon receiving this response, the \questioner adaptively selects the next test from $\cT$ to perform until the target hypothesis is identified (i.e., the intersection of all reply sets is a singleton). The goal is to conceive a strategy of testing, often modeled as a decision tree, which either minimizes the worst-case or the average-case number of tests performed until $\target$ is identified. We refer to the former problem as the \textsc{Worst Case Decision Tree} and to the latter as the \textsc{Average Case Decision Tree}. If the cost criterion is not mentioned explicitly, we refer to the problem as the \textsc{Optimal Decision Tree} ($\ProblemDT$).
 
 In this work we generalize the above setup by considering instances which are subject to arbitrary precedence constraints between tests given as a partial order $(\cT,\preceq)$ on the test set $\cT$.

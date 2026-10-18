@@ -13,9 +13,9 @@ For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and al
 
 \paraTitle{Partial orders and precedence constraints.}
 Throughout this paper, we work with POSETs $(\cX, \preceq)$, where $\preceq$ is a reflexive, transitive, and antisymmetric binary relation.
-For elements $X, Y \in \cX$, we say that $Y$ is a \emph{predecessor} of $X$ if $Y \preceq X$, and that $X$ is a \emph{successor} of $Y$.
+For two different elements $X, Y \in \cX$, we say that $Y$ is a \emph{predecessor} of $X$ if $Y \preceq X$, and that $X$ is a \emph{successor} of $Y$.
 A subset $\cS \subseteq \cX$ is \emph{precedence-closed} if for all $X \in \cS$ and all $Y \in \cX$ such that $Y \preceq X$, it holds that $Y \in \cS$.
-A sequence $(X_1, X_2, \ldots, X_k)$ of elements from $\cX$ is \emph{precedence-closed} if for any two different $X_i$ and $X_j$ such that $X_i \preceq X_j$, we have $i < j$. We consider two special types of partial orders: An \emph{inforest} is a partial order in which every element has at most one successor. An \emph{outforest} is a partial order in which every element has at most one predecessor.
+A sequence $(X_1, X_2, \ldots, X_k)$ of elements from $\cX$ is \emph{precedence-closed} if for any two different $X_i$ and $X_j$ such that $X_i \preceq X_j$, we have $i < j$. We consider two special types of partial orders: An \emph{inforest} is a partial order in which every element has at most one immediate successor. An \emph{outforest} is a partial order in which every element has at most one immediate predecessor.
 
 \paraTitle{Decision trees.}
 Consider a set of $n$ \emph{hypotheses} $\cH$ and a set of $m$ \emph{tests} $\cT$, and an unknown \emph{target hypothesis} $\target\in\cH$.
