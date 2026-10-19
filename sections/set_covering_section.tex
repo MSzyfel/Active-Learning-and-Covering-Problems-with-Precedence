@@ -51,9 +51,10 @@ Additionally, observe that a polynomial-time $\br{\alpha, \beta}$-approximation 
 We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. Note that, however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
 
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\beta-1}{3\beta-2}$, so $1<a\leq 2$.
-Consider the Algorithm~\ref{alg:fPCMSSC}.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
-Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, so $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
+Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, \DDfix{where $\cCopt$ is an optimal solution to $\ProblemPCMSSC$.}
+So, $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
+We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
 \input{pseudocodes/f_PCMSSC.tex}
 Each family returned by $\ProblemBPCSC$ is precedence-closed, so the union of the sets already appended is also precedence-closed. When a family is appended, only its new sets are used and they are ordered by $\operatorname{ord}$; every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
