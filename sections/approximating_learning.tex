@@ -69,9 +69,9 @@ During each such iteration, we look at all possible replies to the appended test
 % We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
 \input{pseudocodes/worst_case_learning.tex}
 
-\DDfix{It should be noted that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$.
-Formally, let $D_{\cC}$ be the decision tree $D$ restricted only to tests $t$ such that $t\in\tests{D}{v}$ for some $v\in\cC$. 
+\DDfix{It should be noted that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$. 
 }
+\DD{czy definiowac $D_{\cC}$ konkretnie?}
 
 
 
@@ -125,11 +125,12 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approxim
      \end{equation}
 
      The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have \[
-     \COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'},
+     Assume that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ we have \[
+     \COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'},
      \] 
      where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
      \DD{do wyjasnienia: w sumie nie zalapalem notacji $D_{\cC}$, gdyz dlaczego nie rozmiar sepcover path, czyl $\spr{\sepcoverD{D}}$?}
+     \DDfix{Denote for brevity $l(D')$ to be the number of leaves in $D'$.}
      We have
 %         \begin{align*}
 %             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{D'(\cH')} \COSTW\br{D', \cI'} \\
@@ -139,8 +140,8 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approxim
 %             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} \\
 %        \end{align*}
         \begin{align*}
-            \COSTW\br{D} \leq &\, \COSTW\br{D_{\cC}} + \max_{\cH\in D\setminus D_{\cC}} \brc{\COSTW\br{D'}} \\
-            \leq &\, \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH\in D\setminus D_{\cC}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}} \\
+            \COSTW\br{D} \leq &\, \COSTW\br{D_{\cC}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\COSTW\br{D'}} \\
+            \leq &\, \alpha \cdot \spr{\sepcover{\cI}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log l(D') \cdot \OPT\br{\cI'}} \\
             \leq &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
             = &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
             = &\, \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
@@ -165,7 +166,7 @@ Therefore, by Theorem \ref{thm:PCSC-to-PCWCDT} \DDfix{(using results proven late
 
 Here, the analysis becomes more involved, since in order to compare the cost of our solution with the cost of sepcover, rather then just comparing the size of sepcover with the cost of our solution, we need to take into account the contribution of each test to the objective function.
 We start with few observations.
-%For a decision tree $D$ and its node $v$, let $c\br{D, v} = p(v)\cdot\spr{\cH_v}$.
+\DD{pytanie czy suma ponizej powinna iterowac tez po lisciach?}
 \begin{observation} \label{obs:dec-tree-averaging}
     If $D$ is a decision tree for $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in V(D)}\spr{\cH_v}$.
 %    $$
@@ -175,7 +176,8 @@ We start with few observations.
 \end{observation}
 % Here, $D-S\br$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
 Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criterion as follows.
-\DD{Chyba tutaj trzebaby zdefiniowac koszt "czesciowego drzewa".}
+\DD{Chyba tutaj trzebaby zdefiniowac koszt "czesciowego drzewa", np:.}
+\DDfix{(We naturally extend the definition of the average-case cost to subtrees of the decision tree. For any tree $D$, the average-case cost $\COSTA\br{D'}$ of its subtree $D'$ rooted at $r(D)$ is the sum taken over all hypotheses $h$ of $\tests{D'}{v(h)}$, where $v(h)$ is the lowest node of $D'$ such that $D'_{v(h)}$ contains $h$.)}
 \begin{observation} \label{obs:WCdecomposition}
     Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
@@ -189,7 +191,8 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
 \end{observation}
 \paraTitle{Remark on notation.}
 Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. 
-While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
+While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree.
+\DDfix{With a slight abuse of notation we write $\COSTA\br{\sepcover{\cI}}$ to denote the average-case cost of the sequence of tests along the path.}
 As an immediate corollary, by taking an optimal $D^*$ and the corresponding $\sepcover{\cI}$ we have:
 \begin{observation} \label{obs:sepcoverAC}
     Let $\cI$ be any instance of $\ProblemPCACDT$.
@@ -269,7 +272,7 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
 \end{observation}
 \begin{proof}
     Firstly, examine how Algorithm \ref{alg:worstDecisionTree} constructs $D_{\cC}$. It builds a decision tree by obeying the ordering of tests in $\cC$ and whenever a response is small enough the rest of the decision tree is built recursively. We want to prove that $\COSTA\br{D_{\cC}}\leq \coverageTime\br{\cC}+\spr{\cC}$.
-    To do so, we show that for $i\in [\cC]$ and hypothesis $h\in\cU_{\xi}$ whenever $h\in\cov\br{\prefix{\cC}{i}}$, $h\notin \cH_{i+1}$. This would mean that the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most its contribution to $\coverageTime\br{\cC}$. To see that this is the case, observe that $h\in\cov\br{\prefix{\cC}{i}}$ means that there exists \DDfix{a test $t$ such that $\xi\br{t}\in \cov\br{\prefix{\cC}{i}}$,} such that $h\in H$, for some reply $H\in t$, and $\spr{H}\leq \frac{3}{4}\cdot\spr{\cH}$. However, this also means that the response to this test containing $t$ is of size at most $\frac{3}{4}\cdot\spr{\cH}\leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$, and hence $h\notin \cH_{i+1}$ as required. 
+    To do so, we show that for $i\in [\spr{\cC}]$ and hypothesis $h\in\cU_{\xi}$ whenever $h\in\cov\br{\prefix{\cC}{i}}$, $h\notin \cH_{i+1}$. This would mean that the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most its contribution to $\coverageTime\br{\cC}$. To see that this is the case, observe that $h\in\cov\br{\prefix{\cC}{i}}$ means that there exists \DDfix{a test $t_j$ (cf. Algorithm~\ref{alg:worstDecisionTree}), $j\leq i$,} such that $h\in H$, for some reply $H\in t_j$, and $\spr{H}\leq \frac{3}{4}\cdot\spr{\cH}$. However, this also means that the response to this test containing $t$ is of size at most $\frac{3}{4}\cdot\spr{\cH}\leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$, and hence $h\notin \cH_{i+1}$ as required. 
     
     \DDfix{Moreover, for each hypothesis in $\cH\setminus\cU_{\xi}$,  its contribution to $\COSTA\br{D_{\cC}}$ is at most $\spr{\cC}$.
     By construction, $\spr{\cC}\leq \coverageTime\br{\cC}$.}
@@ -298,12 +301,12 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
     \COSTA\br{D'} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log\spr{\cH'} \cdot \OPT\br{\cI'},
     \]
     where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
-    \DDfix{Denote for brevity $l(D')$ to be the number of leaves in $D'$.}
+    \DDfix{Let again $l(D')$ be the number of leaves in $D'$.}
     % To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
     We have
 \begin{align*}
-    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{S}}} \COSTA\br{D'} \\
-    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{D'\in D\setminus V\br{D_{S}}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log l(D') \cdot \OPT\br{\cI'} \\
+    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \COSTA\br{D'} \\
+    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log l(D') \cdot \OPT\br{\cI'} \\
     \leq & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
     = & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
     = & \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},

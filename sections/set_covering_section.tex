@@ -2,7 +2,7 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-We reduce $\ProblemPCSC$ to Partial Red-Blue Set Cover. This gives a direct approximation for $\ProblemPCSC$ and a budgeted approximation for $\ProblemBPCSC$. We then use the budgeted algorithm in the existing reduction to $\ProblemPCMSSC$. The forest-specific algorithms remain unchanged.
+We reduce $\ProblemPCSC$ to \textsc{Partial Red-Blue Set Cover}. This gives a direct approximation for $\ProblemPCSC$ and a budgeted approximation for $\ProblemBPCSC$. We then use the budgeted algorithm in the existing reduction to $\ProblemPCMSSC$. The forest-specific algorithms remain unchanged.
 
 \begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.

@@ -73,6 +73,7 @@ If $\cC$ is a sequence of sets, rather than a family, we analogously define $\co
 Let $\cC=\angl{C_1,\ldots,C_l}$. We say that $\cC$ is \emph{precedence-closed} if every strict predecessor of each $C_i$ occurs earlier in the sequence, that is, for every $Y\in\cS$ with $Y\preceq C_i$ and $Y\neq C_i$, there is a $j<i$ such that $C_j=Y$.
 The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such precedence-closed sequence $\cC$ is the minimum index $i$ such that $x\in C_i$ if such index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
 We denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
+\DD{uwaga: czasem uzywamy $\coverageTime(\cC)$.}
 
 \begin{problem}[\textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$)] \label{problem:PCSC}
 Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
