@@ -167,7 +167,7 @@ Here, the analysis becomes more involved, since in order to compare the cost of 
 We start with few observations.
 %For a decision tree $D$ and its node $v$, let $c\br{D, v} = p(v)\cdot\spr{\cH_v}$.
 \begin{observation} \label{obs:dec-tree-averaging}
-    If $D$ is a decision tree for a $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in V(D)}\spr{\cH_v}$.
+    If $D$ is a decision tree for $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in V(D)}\spr{\cH_v}$.
 %    $$
 %    \COSTA\br{D} = \sum_{t \in X} p(\cH_t)\cdot\spr{\cH_t},
 %    $$
@@ -175,6 +175,7 @@ We start with few observations.
 \end{observation}
 % Here, $D-S\br$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
 Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criterion as follows.
+\DD{Chyba tutaj trzebaby zdefiniowac koszt "czesciowego drzewa".}
 \begin{observation} \label{obs:WCdecomposition}
     Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
@@ -194,8 +195,7 @@ As an immediate corollary, by taking an optimal $D^*$ and the corresponding $\se
     Let $\cI$ be any instance of $\ProblemPCACDT$.
     Then, $\COSTA\br{\sepcover{\cI}} \leq \OPT\br{\cI}$.
 \end{observation}
-We follow a similar idea as the one for the worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
-This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
+We now explore a connection to $\ProblemPCMSSC$, which allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$.
 % However, since in this case we have an arbitrary probability distrubution on hypotheses, we firstly employ a rounding technique which scales the probabilities to represent them as polynomial-size integers.
 % Below we argue that this incurrs only a 2-factor loss in the approximation.
 % Formally, for an instance $\cI=\br{\cH, \cT, \preceq, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
@@ -240,39 +240,43 @@ This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}
 % %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 % \end{proof}
 % Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
-We have a lemma that is analogous to Lemma \ref{lemma:cover_sep_worst_case}.
+Hence, we have an analogue of Lemma \ref{lemma:cover_sep_worst_case}.
+\DD{DOdalem $f=1/4$ w tym lemacie; tez w wielu miejscach podowawalem brakujace $\xi$ i pozmienialem notacje bo argumentami sepcovera byly czasem instacje set cover.}
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance and let $\cI_{\cU_{\xi}}=\br{\cU_{\xi}, \cT, \preceq}$. Let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\cI_{\cU_{\xi}}$.
+    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance and let $\cI_{\cU_{\xi}}=\br{\cU_{\xi}, \xi\br{\cT}, \preceq_{\xi}, f=1/4}$. Let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\cI_{\cU_{\xi}}$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
-    Then, $\coverageTime\br{\cC^*} \leq \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$.
+    Then, $\coverageTime\br{\cC^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
 \begin{proof}
-    Assume towards a contradiction that $\coverageTime\br{\cC^*} > \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$.
-    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI_{\cU_{\xi}}})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$, contradicting the optimality of $\cC^*$.
-    Let $\sigma$ be the shortest prefix of $\sepcover{\cI_{\cU_{\xi}}}$ that covers at least $\spr{\cU_{\xi}}/4$ items.
+    Assume towards a contradiction that $\coverageTime\br{\cC^*} > \COSTA\br{\sepcover{\cI}}$.
+    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $\cC^*$.
+    Let $\sigma$ be the shortest prefix of $\xi(\sepcover{\cI})$ that covers at least $\spr{\cU_{\xi}}/4$ items.
     Note that because we consider a prefix, the precedence constraints are satisfied.
     Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}.
     Take an arbitrary $h \in \cU_{\xi}$.
     There are two cases to consider:
     \begin{itemize}
-        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI_{\cU_{\xi}}}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cU_{\xi}}/4$ items. Since at the moment of sepcovering, $h$ belonged to a reply of size at most $\spr{\cU_{\xi}}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$.
-        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI_{\cU_{\xi}}}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$ is at least $\spr{\sigma}$.
+        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cU_{\xi}}/4$ items. Since at the moment of sepcovering, $h$ belonged to a reply of size at most $\spr{\cU_{\xi}}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
+        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $\spr{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $\spr{\sigma}$.
     \end{itemize}
-    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$, a contradiction.
+    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
 \end{proof}
 
-The following observation is analogous to Observation~\ref{obs:DS} however requires a more careful consideration.
+The following is analogous to Observation~\ref{obs:DS} however requires a more careful consideration.
 \begin{observation} \label{obs:DS-average}
     Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$ as the $\blackBox$ subroutine.
-    Then, $\COSTA\br{D_{\cC}} \leq 2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}$.
+    Then, $\COSTA\br{D_{\cC}} \leq 2\alpha \cdot \COSTA\br{\sepcover{\cI}}$, \DDfix{where $\cI=\br{\cH,\cT,\preceq}$ is the input instance to $\ProblemPCACDT$.}
 \end{observation}
 \begin{proof}
-    Firstly, examine how the Algorithm \ref{alg:worstDecisionTree} constructs $D_{\cC}$. It builds a decision tree by obeying the ordering of tests in $\cC$ and whenever a response is small enough the rest of the decision tree is built recursively. We want to have $\COSTA\br{D_{\cC}}\leq \coverageTime\br{\cC}+\spr{\cC}$.     To do so, we show that for $i\in [\cC]$ and hypothesis $h\in\cU_{\xi}$ whenever $h\in\cov\br{\prefix{\cC}{i}}$, $h\notin \cH_{i+1}$. This would mean that the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most its contribution to $\coverageTime\br{\cC}$. To see that this is the case, observe that $h\in\cov\br{\prefix{\cC}{i}}$ means that there exists a test $t\in \cov\br{\prefix{\cC}{i}}$, such that $h\in H$, for some reply $H\in t$, such that $\spr{H}\leq \frac{3}{4}\cdot\spr{\cH}$. However, this also mean that the response to this test containing $t$ is of size at most $\frac{3}{4}\cdot\spr{\cH}\leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$, and hence $h\notin \cH_{i+1}$ as required. 
+    Firstly, examine how Algorithm \ref{alg:worstDecisionTree} constructs $D_{\cC}$. It builds a decision tree by obeying the ordering of tests in $\cC$ and whenever a response is small enough the rest of the decision tree is built recursively. We want to prove that $\COSTA\br{D_{\cC}}\leq \coverageTime\br{\cC}+\spr{\cC}$.
+    To do so, we show that for $i\in [\cC]$ and hypothesis $h\in\cU_{\xi}$ whenever $h\in\cov\br{\prefix{\cC}{i}}$, $h\notin \cH_{i+1}$. This would mean that the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most its contribution to $\coverageTime\br{\cC}$. To see that this is the case, observe that $h\in\cov\br{\prefix{\cC}{i}}$ means that there exists \DDfix{a test $t$ such that $\xi\br{t}\in \cov\br{\prefix{\cC}{i}}$,} such that $h\in H$, for some reply $H\in t$, and $\spr{H}\leq \frac{3}{4}\cdot\spr{\cH}$. However, this also means that the response to this test containing $t$ is of size at most $\frac{3}{4}\cdot\spr{\cH}\leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$, and hence $h\notin \cH_{i+1}$ as required. 
     
-    Moreover if the single hypothesis $h\in \cH\setminus\cU_{\xi}$ exists the contribution of $h$ to $\COSTA\br{D_{\cC}}$ is at most $\spr{\cC}$. We also trivially have that $\spr{\cC}\leq \coverageTime\br{\cC}$. Hence, we get that 
+    \DDfix{Moreover, for each hypothesis in $\cH\setminus\cU_{\xi}$,  its contribution to $\COSTA\br{D_{\cC}}$ is at most $\spr{\cC}$.
+    By construction, $\spr{\cC}\leq \coverageTime\br{\cC}$.}
+    Hence, we get that 
     \[
     \COSTA\br{D_{\cC}} \leq \coverageTime\br{\cC} + \spr{\cC} \leq 2\cdot \coverageTime\br{\cC}\leq 
-    2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}}
+    2\alpha \cdot \COSTA\br{\sepcover{\cI}}. \qedhere
     \]
 \end{proof}
 
@@ -284,25 +288,27 @@ The following observation is analogous to Observation~\ref{obs:DS} however requi
     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ where $\blackBox$ is an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$.
     We argue by induction on $n$ that
     \begin{equation} \label{eq:D-average}
-     \COSTA\br{D} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
+     \COSTA\br{D} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
     \end{equation}
+    where $D$ is the decision tree returned by Algorithm \ref{alg:worstDecisionTree}.
 
     The base case when $n=1$ is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have 
+    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ we have 
     \[
-    \COSTA\br{D'} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'}
+    \COSTA\br{D'} \leq \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log\spr{\cH'} \cdot \OPT\br{\cI'},
     \]
     where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
+    \DDfix{Denote for brevity $l(D')$ to be the number of leaves in $D'$.}
     % To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
     We have
 \begin{align*}
-    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{\cH\in D\setminus D_{\cC}} \COSTA\br{D'} \\
-    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI_{\cU_{\xi}}}} + \sum_{\cH\in D\setminus D_{\cC}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
+    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{S}}} \COSTA\br{D'} \\
+    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{D'\in D\setminus V\br{D_{S}}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log l(D') \cdot \OPT\br{\cI'} \\
     \leq & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
     = & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
     = & \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
 \end{align*}
-where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every $\cH'\in D\setminus D_{\cC}$.
+where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $l(D')=\leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every $D'\in D\setminus V\br{D_{S}}$.
 This concludes the proof of the theorem.
 \end{proof}
 
