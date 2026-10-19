@@ -13,13 +13,14 @@ Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $
 
 \subsection{$\ProblemPCSC$ and $\ProblemBPCSC$ via Partial Red-Blue Set Cover}
 \label{subsection:PCSC}\label{subsection:BPCSC}
-Let $m=\spr{\cS}$ and $n=\spr{\cU}$. The approximation algorithm of Chlamt\'a\v{c} et al. for Red-Blue Set Cover has ratio
+Let $m=\spr{\cS}$ and $n=\spr{\cU}$. The approximation algorithm of Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian \cite{RedBlueSetCover} for $\ProblemPRBSC$ has approximation ratio
 \[
 \alpha_{m,n}=\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log n}.
 \]
 Their Appendix~A extends the guarantee to the partial version, where the solution must cover a given number of blue elements \cite[Theorem~1.3 and Appendix~A]{RedBlueSetCover}.
+\DD{tu jest niejasne: problem w nazwie ma "partial" i jesli ratio zostaje takie samo dla wszystkich, to bym usunal ostatnie zdanie i tytowal [11] bez wnikania w szczegoly; zamienilbym to na proposition mowiace o algorytmie i ratio i wtedy mozemy sie powolywac na to ponizej.}
 
-We use the same exact reduction for both covering variants. Create a red element $r_T$ for each $T\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $D_S=\closure{S}$ and create a red-blue set
+We use the same exact reduction for both covering variants. Create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $D_S=\closure{S}$ and create a red-blue set
 \[
 A_S=\brc{r_T:T\in D_S}\cup\brc{b_u:u\in\cov\br{D_S}}.
 \]
@@ -27,25 +28,27 @@ The instance has one available set $A_S$ for each original set $S$. For any sele
 \[
 \cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}D_S.
 \]
-The family $\cC_{\mathcal{J}}$ is precedence-closed. The red elements covered by the selected red-blue sets are exactly $\brc{r_T:T\in\cC_{\mathcal{J}}}$, and the blue elements covered are exactly $\brc{b_u:u\in\cov\br{\cC_{\mathcal{J}}}}$. Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$. Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers exactly the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$: each $D_S\subseteq\cC$, and every $S\in\cC$ belongs to $D_S$. Hence, the reduction preserves cost and coverage in both directions.
+The family $\cC_{\mathcal{J}}$ is precedence-closed. The red elements covered by the selected red-blue sets are exactly $\brc{r_T:T\in\cC_{\mathcal{J}}}$, and the blue elements covered are exactly $\brc{b_u:u\in\cov\br{\cC_{\mathcal{J}}}}$.
+Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$, respectively.
+Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers exactly the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$: each $D_S\subseteq\cC$, and every $S\in\cC$ belongs to $D_S$. Hence, the reduction preserves cost and coverage in both directions.
 
 \begin{theorem}\label{thm:PCSC-BPCSC-RBSC}\label{thm:PCSC-RBSC}\label{thm:BPCSC}
 There is a polynomial-time $\alpha_{m,n}$-approximation algorithm for $\ProblemPCSC$. In addition, $\ProblemBPCSC$ admits a polynomial-time $\br{\alpha_{m,n},1}$-bicriteria approximation algorithm: given budget $\budget$, it returns a precedence-closed family of size at most $\alpha_{m,n}\cdot\budget$ that covers at least as many elements as an optimal family of size at most $\budget$.
 \end{theorem}
 \begin{proof}
-For $\ProblemPCSC$, run the partial Red-Blue Set Cover algorithm on the constructed instance with target $\cl{f\cdot n}$ blue elements, then convert its solution to a precedence-closed family as above. Since the reduction preserves cost and coverage, this gives an $\alpha_{m,n}$-approximation.
+For $\ProblemPCSC$, run the partial Red-Blue Set Cover algorithm on the constructed instance with target $\cl{f\cdot n}$ blue elements. Then, convert its solution to a precedence-closed family as above. Since the reduction preserves cost and coverage, this gives an $\alpha_{m,n}$-approximation.
 
 For $\ProblemBPCSC$, run the partial Red-Blue Set Cover algorithm for each integer target from $1$ to $\spr{\cov\br{\cS,\cU}}$, converting each output to a precedence-closed family. Also include the empty family as a candidate, and return the candidate of largest coverage whose size is at most $\alpha_{m,n}\cdot\budget$. Let $\cC^*$ be an optimal family under budget $\budget$, and let $t^*=\spr{\cov\br{\cC^*,\cU}}$. If $t^*=0$, the empty family is optimal. Otherwise, the red-blue instance with target $t^*$ has optimum red cost at most $\spr{\cC^*}\leq\budget$. Its $\alpha_{m,n}$-approximate solution converts to a family of size at most $\alpha_{m,n}\cdot\budget$ covering at least $t^*$ elements. This candidate is considered by the algorithm, so the returned family covers at least as many elements as $\cC^*$. There are at most $n$ target values, so the algorithm runs in polynomial time.
 \end{proof}
 
-Additionally, observe that if one has an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$, then one can obtain an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
+Additionally, observe that a polynomial-time $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ gives a polynomial-time $\br{\alpha, \beta}$-approximation for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
 \begin{corollary}\label{cor:BPCSC-to-PCSC}
     If there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$.
 \end{corollary}
 
 
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
-We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on the DAG induced by the precedence constraints, and the cost of covering an element as a latency of ''visiting'' that element. Note that however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
+We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. Note that, however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
 
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\beta-1}{3\beta-2}$, so $1<a\leq 2$.
 Consider the Algorithm~\ref{alg:fPCMSSC}.
