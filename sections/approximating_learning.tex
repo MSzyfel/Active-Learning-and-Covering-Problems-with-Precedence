@@ -61,7 +61,6 @@ The idea behind the algorithms for the $\ProblemPCWCDT$ (Section~\ref{subsection
 Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}).
 The only difference is a black-box procedure (we call it $\blackBox$) that is used to solve a particular subproblem - either $\ProblemPCSC$ or $\ProblemPCMSSC$, respectively.
 Let $\cC$ be the set cover obtained for the instance $\br{\cU_{\xi}, \xi\br{\cT}, \preceq_{\xi}, f=1/4}$ by the black-box procedure.
-\DD{tak formalnie, to $\xi(\cT)$ nie jest testem tylko podzbiorem hipotez (nie jest partycja hipotez).}
 Assume that $\cC$ has some ordering of its elements. If $\cC$ is the output of an approximation algorithm for $\ProblemPCSC$, then this ordering is a topological ordering of the tests in $\cC$ according to the precedence constraints.
 % Note that $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
 We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$.
@@ -69,9 +68,8 @@ During each such iteration, we look at all possible replies to the appended test
 % We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
 \input{pseudocodes/worst_case_learning.tex}
 
-\DDfix{It should be noted that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$. 
+\DDfix{It should be noted that we can restrict any decision tree $D$ to a subset of tests $\cC\subseteq \cT$; we denote it by $D_{\cC}$. 
 }
-\DD{czy definiowac $D_{\cC}$ konkretnie?}
 
 
 
@@ -104,7 +102,7 @@ We have the following immediate corollary of the definition of sepcover.
 %         Hence, we get $\spr{H} = \spr{\cU_{\xi,u}}+\spr{H\setminus\cU_{\xi,u}}<3/4\cdot \spr{\cU_{\xi}}$ which means that hypotheses in $H$ are covered by $\sepcover{\cI}$, a contradiction.
     \end{proof}
 
-The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}: \DD{uwaga1: w swietle komentarza w nastepnym tw, byc moze ten lemma wylatuje, lub do przepisania; uwaga2: w lemma zmienilem $\br{\gamma,\alpha}$ na $\br{\alpha, \beta}$; uwaga3: ja nie za bardzo widze taki claim i wydaje mi sie, ze ta obserwacja mowi jedynie o sepcover path bez rekurencyjnie dolaczanych galezi (czyli nie o calym drzewie?); tak w ogole to chyba powinno byc $\alpha$ w lemacie}
+The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}:
     \begin{observation} \label{obs:DS}
         Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses a $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
         %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
@@ -129,7 +127,6 @@ $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approxim
      \COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'},
      \] 
      where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
-     \DD{do wyjasnienia: w sumie nie zalapalem notacji $D_{\cC}$, gdyz dlaczego nie rozmiar sepcover path, czyl $\spr{\sepcoverD{D}}$?}
      \DDfix{Denote for brevity $l(D')$ to be the number of leaves in $D'$.}
      We have
 %         \begin{align*}
@@ -311,7 +308,7 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
     = & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
     = & \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
 \end{align*}
-where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $l(D')=\leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every $D'\in D\setminus V\br{D_{S}}$.
+where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $l(D') \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every $D'\in D\setminus V\br{D_{S}}$.
 This concludes the proof of the theorem.
 \end{proof}
 

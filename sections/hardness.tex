@@ -5,14 +5,14 @@ In this section, we provide several hardness of approximation results for preced
 We now establish a matching inapproximability result for general precedence constraints. Our reduction is a parametrized version of the construction of \cite{PCMSSC}, which provided inapproximability of $O\br{n^{1/6-\epsilon}}$ and $O\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$. The reduction is carried out from a quite unexpected problem, which is \textsc{Planted Dense Subgraph Conjecture}, a statement about hardness of distinguishing between a random Erd\H{o}s-R\'enyi
 graph on $n$ vertices, and the same random graph on $n$ vertices, but containing a planted dense subgraph. In the original construction, while encoding the structure of the graph into a covering instance
 the authors create subsets representing both vertices and edges of the input graph. We provide a more general, parametrized version of this construction, where for a fixed value $r$, we enumerate all $r$-cliques of the input graph, instead of the edges (which for $r=2$ gives the original construction).
-Our improvement over the original approach is fourfold. Firstly, for large enough value of the parameter $r$, our inapproximability results exclude approximation ratios of $O\br{n^{1/2-\epsilon}}$ and $O\br{m^{1/4-\epsilon}}$ respectively, which is much better than the previous results. Secondly, we use a more careful probabilistic analysis of the reduction, since we need to reason about the distribution of $r$-cliques in a random 
+Our improvement over the original approach is fourfold. Firstly, for large enough value of the parameter $r$, our inapproximability results exclude much weaker approximation ratios of $O\br{n^{1/2-\epsilon}}$ and $O\br{m^{1/4-\epsilon}}$. Secondly, we use a more careful probabilistic analysis of the reduction, since we need to reason about the distribution of $r$-cliques in a random 
 graph. Our analysis produces a tighter inapproximability results even for $r=2$, which are $O\br{n^{1/4-\epsilon}}$ and $O\br{m^{1/8-\epsilon}}$, respectively. Thirdly, we analyze both $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourthly, we show that obtaining even a bicriteria approximation with any of these parameters is hard.
 Recall, that in the bicriteria statements, a coverage-loss factor $\kappa\geq1$ means that a solution for target fraction $f$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target $f$.
 
 \subsubsection{Planted dense subgraphs and clique witnesses}
-Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph on $N$ vertices with edge probability $p$. 
+Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph on $N$ vertices with edge probability $p$.
 We first state the hardness assumption used both in our reduction, as well as in the previous results on precedence-constrained covering hardness \cite{PCMSSC}. The following statement regards the question of distinguishing between a random graph and a random planted dense subgraph \cite{OnApproxTargetSetSelection}.
-\begin{conjecture}[\textsc{Planted Dense Subgraph Conjecture} (PDS) ] \label{problem:PDS}
+\begin{conjecture}[\textsc{Planted Dense Subgraph Conjecture} (PDS)] \label{problem:PDS}
     Fix constants $0<\beta<\alpha<1$ with $2\alpha<1+\beta$, and let $k=\lceil\sqrt{N}\rceil$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when they have equal prior probabilities:
     \begin{itemize}
         \item the null distribution $G(N,N^{\alpha-1})$,
@@ -22,25 +22,26 @@ We first state the hardness assumption used both in our reduction, as well as in
 
 Since the setup itself is randomized, so is our reduction. In order to reason about the properties of the random graphs and our construction, throughout this section we use the following concentration bounds.
 \begin{theorem}[Chernoff Bound]\label{thm:chernoff}
-    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in[n]$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=p\cdot n$. Then, for every $\delta\in(0,1)$ it holds that:
+    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in[n]$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=p\cdot n$. Then, for every $\theta\in(0,1)$ it holds that:
     \begin{align*}
-        \mathbb{P}[X\leq (1-\delta)\mu] &\leq e^{-\frac{\delta^2\cdot\mu}{2}},\\
-        \mathbb{P}[X\geq (1+\delta)\mu] &\leq e^{-\frac{\delta^2\cdot\mu}{3}}.
+        \mathbb{P}[X\leq (1-\theta)\mu] &\leq e^{-\frac{\theta^2\cdot\mu}{2}},\\
+        \mathbb{P}[X\geq (1+\theta)\mu] &\leq e^{-\frac{\theta^2\cdot\mu}{3}}.
     \end{align*}
 \end{theorem}
 
 For a binomial random variable $X\sim\mathrm{Bin}(r,p)$ with mean $\mu=r\cdot p$, we also use the upper-tail estimate
 \[
-    \mathbb{P}[X\geq t]\leq\left(\frac{e\cdot\mu}{t}\right)^t\qquad(t\geq\mu),
+    \mathbb{P}[X\geq t]\leq\left(\frac{e\cdot\mu}{t}\right)^t,\qquad(t\geq\mu),
 \]
 which is useful when the threshold is larger than the range in the displayed Chernoff bounds. The zero-event bound
 \[
     \mathbb{P}[X=0]=(1-p)^r\leq e^{-r\cdot p}=e^{-\mu}
 \]
 follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i A_i]\leq\sum_i\mathbb{P}[A_i]$, which does not require the events $A_i$ to be independent.
+\DDfix{For convenience, we use integers for the vertex set $[N]$.}
 
 \begin{lemma}\label{lem:PDS-clique-count}
-    Fix an integer $r\geq2$ and a constant $\zeta>0$, and put $R=\binom{r}{2}$ and $q=N^{-2/(r+1)}$. For $G\sim G(N,q)$, let $F_G(X)$ be the number of cliques on exactly $r$ vertices contained in $X\subseteq[N]$. With probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
+    Fix an integer $r\geq2$, a constant $\zeta>0$, and put $R=\binom{r}{2}$ and $q=N^{-2/(r+1)}$. For $G\sim G(N,q)$, let $F_G(X)$ be the number of cliques on exactly $r$ vertices contained in $X\subseteq[N]$. With probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
     \[
         F_G(X)\leq C_r \cdot N^\zeta \cdot \br{q^R \cdot \spr{X}^r+\spr{X} \cdot \log N},
     \]
@@ -199,7 +200,7 @@ follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i
         p \cdot k=C \cdot \log N\, \cdot \rho^{-(r-1)/2}
         =C \cdot \log N\, \cdot k^{(1-\beta)\cdot(r-1)/2},
     \]
-    which grows polynomially because $1-\beta>0$. More explicitly, if $d=(1-\beta)\cdot(r-1)/2$, then $p\cdot k=C\cdot\log N\,\cdot k^d=\Theta(N^{d/2}\cdot\log N)$. Chernoff's inequality with $\delta=1/2$ gives $\mathbb{P}[Z_j<p\cdot k/2]\leq e^{-p\cdot k/8}$. We use disjoint blocks of marked vertices to obtain independent chances of covering $j$.
+    which grows polynomially because $1-\beta>0$. More explicitly, if $d=(1-\beta)\cdot(r-1)/2$, then $p\cdot k=C\cdot\log N\,\cdot k^d=\Theta(N^{d/2}\cdot\log N)$. Chernoff's inequality with $\theta=1/2$ gives $\mathbb{P}[Z_j<p\cdot k/2]\leq e^{-p\cdot k/8}$. We use disjoint blocks of marked vertices to obtain independent chances of covering $j$.
 
     Choose a constant $B$ with $B^r/r!>8$ and put $z=\lceil B\cdot\rho^{-(r-1)/2}\rceil$. The exponent $d=(1-\beta)\cdot(r-1)/2$ defined above satisfies, since $1-\beta=2/(r+1)+\delta$,
     \[
@@ -238,7 +239,7 @@ follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i
     \]
     The right-hand side tends to $r!/B^r<1/8$, uniformly over the marks, so $\mathbb{P}[Y=0\mid\mathcal M]\leq1/2$ for all sufficiently large $N$.
 
-    Let $A>3/\log 2$ be constant and $\ell=\lceil A\cdot\log N\rceil$. Since $C/(4\cdot B)>A$ is a strict inequality between fixed constants, for sufficiently large $N$,
+    Let $A>3/\log 2$ be constant and $\ell=\lceil A\cdot\log N\rceil$. Choose the constant $C$ in the definition of $p$ large enough that $C/(4\cdot B)>A$. Since this is a strict inequality between fixed constants, for sufficiently large $N$,
     \[
         \br{\frac{C}{4\cdot B}-A} \cdot \log N\geq2.
     \]
@@ -269,7 +270,7 @@ follows from $1-p\leq e^{-p}$. We also use the union bound $\mathbb{P}[\bigcup_i
     \[
         \mu_E=\nu \cdot p^r=\Theta(M) \cdot \frac{C^r \cdot (\log N)^r}{M}=\Theta((\log N)^r).
     \]
-    Applying the stated Chernoff bound with $\delta=1/2$ gives
+    Applying the stated Chernoff bound with $\theta=1/2$ gives
     \[
         \mathbb{P}[|E_K|>2\cdot\mu_E]
         \leq\mathbb{P}[|E_K|\geq\tfrac32\mu_E]
