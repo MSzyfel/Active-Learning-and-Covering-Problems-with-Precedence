@@ -1,7 +1,7 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
 
-In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea of these reductions is to use the solution of the appropriate covering problem in order to find a precedence-closed sequence of tests, such that performing all of them, guarantees that the size of each response is significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\cO\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\cO\br{\log n}$, the multiplicative loss in the approximation ratio is $\cO\br{\log n}$. In what follows we make these ideas precise. 
+In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea of these reductions is to use the solution of the appropriate covering problem in order to find a precedence-closed sequence of tests, such that performing all of them, guarantees that the size of each response is significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$. In what follows we make these ideas precise.
 
 We will require some additional notation.
 %For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$.
@@ -112,8 +112,8 @@ The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lem
 
 \begin{theorem} \label{thm:PCSC-to-PCWCDT}
 If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$, then there is a polynomial-time
-$\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. 
-% In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
+$\bigo\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$.
+% In particular when $\gamma = \bigo\br{1}$, the approximation is $\bigo\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
      Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$, where $\blackBox$ is a $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$.
@@ -151,9 +151,9 @@ Therefore, by Theorem \ref{thm:PCSC-to-PCWCDT} \DDfix{(using results proven late
 \begin{corollary}\label{cor:PCWCDT-special-cases}
     There exist polynomial-time algorithms for $\ProblemPCWCDT$ with the following guarantees:
     \begin{itemize}
-        \item $\cO\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
-        \item $\cO\br{\log^2n}$-approximation for outforests, by and Theorem~\ref{thm:BPCSC-outforest}.
-        \item General $\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation, by Theorem~\ref{thm:PCSC-RBSC} and Theorem~\ref{thm:PCSC-to-PCWCDT}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
+        \item $\bigo\br{\log^2n}$-approximation for outforests, by and Theorem~\ref{thm:BPCSC-outforest}.
+        \item General $\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation, by Theorem~\ref{thm:PCSC-RBSC} and Theorem~\ref{thm:PCSC-to-PCWCDT}.
     \end{itemize}
 \end{corollary}
 
@@ -222,7 +222,7 @@ We now explore a connection to $\ProblemPCMSSC$, which allows to use $\COSTA\br{
 %     2 \cdot \COSTA\br{D, \cI}
 %     \end{align*}
 %     where the second inequality is by Observation~\ref{obs:dec-tree-averaging} and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq \sum_{h\in\cH}p\br{h} = 1$.
-% %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \cO(nm)$.
+% %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \bigo(nm)$.
 % %
 % %     We now argue that $\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
 % %     \begin{align*}
@@ -239,7 +239,7 @@ We now explore a connection to $\ProblemPCMSSC$, which allows to use $\COSTA\br{
 % %     \end{align*}
 % %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 % \end{proof}
-% Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
+% Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\bigo(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
 Hence, we have an analogue of Lemma \ref{lemma:cover_sep_worst_case}.
 \DD{DOdalem $f=1/4$ w tym lemacie; tez w wielu miejscach podowawalem brakujace $\xi$ i pozmienialem notacje bo argumentami sepcovera byly czasem instacje set cover.}
 \begin{lemma}\label{lemma:cover_sep_average_case}
@@ -281,8 +281,8 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
 \end{proof}
 
 \begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCMSSC$, then there is a polynomial-time $\cO\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$.
-    % In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
+    If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCMSSC$, then there is a polynomial-time $\bigo\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$.
+    % In particular when $\mu = \bigo\br{1}$, the ratio is $\bigo\br{\beta \cdot \log \br{m+n}}$.
 \end{theorem}
 \begin{proof}
     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ where $\blackBox$ is an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$.
@@ -317,8 +317,8 @@ Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
 \begin{corollary}\label{cor:PCACDT-special-cases}
     There exist poly-time algorithms for $\ProblemPCACDT$ with the following guarantees:
     \begin{itemize}
-        \item $\cO\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
-        \item $\cO\br{\log^2 n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item $\cO\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
+        \item $\bigo\br{\log^2 n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
+        \item $\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
     \end{itemize}
 \end{corollary}
