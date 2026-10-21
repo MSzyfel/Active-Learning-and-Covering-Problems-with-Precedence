@@ -4,9 +4,9 @@ Consider a set $\cH$ of $n$ \emph{hypotheses}, a set $\cT$ of $m$ \emph{tests}, 
 Each test $t\in\cT$ is a partition of $\cH$, that is, $t$ consists of subsets of $\cH$ such that for any different $X,Y\in t$,  $X\cap Y=\emptyset$ and $\bigcup_{X\in t} X=\cH$.
 As a result of executing a test $t\in\cT$, the \questioner receives a \emph{reply} that reveals $H\in t$ such that $\target\in H$. Upon receiving this response, the \questioner adaptively selects the next test from $\cT$ to perform until the target hypothesis is identified (i.e., the intersection of all reply sets is a singleton). The goal is to conceive a strategy of testing, often modeled as a decision tree, which either minimizes the worst-case or the average-case number of tests performed until $\target$ is identified. We refer to the former problem as the \textsc{Worst Case Decision Tree} and to the latter as the \textsc{Average Case Decision Tree}. If the cost criterion is not mentioned explicitly, we refer to the problem as the \textsc{Optimal Decision Tree} ($\ProblemDT$).
 
-In this work we generalize the above setup by considering instances which are subject to arbitrary precedence constraints between tests given as a partial order $(\cT,\preceq)$ on the test set $\cT$.
-It is required that in any valid strategy of testing, a given test $t\in \cT$ can be performed only after all its predecessors have been performed previously (to which we refer as \emph{precedence-closed} solution). \DDfix{This setup is a natural generalization of the standard $\ProblemDT$, and one of the motivations comes from the area of operations research, where the effects of precedence constraints on the complexity of numerous scheduling problems have beeen intensively studied.}
-On the applicability side, $\ProblemDT$ includes numerous use cases, some of them in the area of medicine and biology \cite{BayesianLearnerOptimalNoisyBinarySearch}.
+In this work we generalize the above setup by considering instances which are subject to arbitrary precedence constraints between tests given as a partial order $(\cT,\preceq)$.
+Hence, any valid strategy may perform a given test $t\in \cT$ only after all its predecessors have been performed previously (to which we refer as \emph{precedence-closed} solution). \DDfix{One of the motivations comes from the area of operations research, where the effects of precedence constraints on the complexity of numerous scheduling problems have beeen intensively studied.}
+On the applicability side, $\ProblemDT$ includes numerous use cases e.g. in medicine and biology \cite{BayesianLearnerOptimalNoisyBinarySearch}.
 For example, hypotheses may represent possible conditions or diseases, and tests may represent medical procedures. Such a setup suggests including precedence constraints in various forms. For instance, some tests may be more invasive or expensive than others, and should be performed only after cheaper or less invasive tests have been performed. Additionally, it can also happen that a given test is a prerequisite for another test, e.g., a blood test may be required before performing a biopsy. Finally, a large test might consist of multiple stages, each with its own outcomes, with later stages performed only after earlier ones.
 
 % \begin{figure}[t!]
@@ -28,9 +28,8 @@ We are given a set $\cU$ of $n$ items, a collection $\cS$ of $m$ subsets of $\cU
 We say that a subfamily $\cC\subseteq\cS$ \emph{covers} a $f$-fraction of items from $\cU$ if $\spr{\bigcup_{C\in\cC}C}\geq f\cdot n$.
 We ask for a $\cC\subseteq\cS$ that covers a $f$-fraction of items in $\cU$ and is \emph{precedence-closed}, that is, for each $x\in\cC$ and each $y\in\cS$ such that $y\preceq x$ it holds $y\in\cC$. We measure the quality of such a family $\cC$ by either its size $\spr{\cC}$ or the min-sum time it takes to cover an item from $\cU$ (assuming some order of sets in $\cC$ closed under the precedence constraint). Depending on the cost objective we refer to the problem as the \textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$) or the \textsc{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$).
 % For a visual example of such a scenario consider Figure~\ref{fig:pccp_example}.
-Our main approach is to show how to reduce the \DDfix{precedence-constrained $\ProblemDT$ to the set coverings.} Then we develop approximation algorithms for the set covering problems themselves. The approximation algorithms that we propose en route, e.g. for precedence constrained set covering, are of independent interest.
+Our main approach is to show how to reduce the \DDfix{precedence-constrained $\ProblemDT$ to the set coverings.} Then we develop approximation algorithms for the set covering problems with precedence constraints themselves, which are of independent interest.
 
-% \medskip
 % \paraTitle{Outline.}
 % In the next section we formally state all problems we address in this work.
 % Section~\ref{sec:our-results} gives an overview of the main results of this work.
@@ -47,7 +46,7 @@ Our main approach is to show how to reduce the \DDfix{precedence-constrained $\P
 
 \subsection{Related Work}
 
-\paragraph{Optimal Decision Tree}
+\paragraph{Optimal Decision Tree.}
 \textsc{Optimal Decision Tree}, also referred to as \textsc{Binary Search Trees} in \cite{BoseCIKL20,DemaineHIP07}, is an extensively studied problem in computer science, starting with \cite{GareyPerfBoundsOnSplittingAlgForBinTesting} in the 1970s.
 Since then it has gathered a lot of attention due to its numerous applications including medical diagnosis, troubleshooting, active learning, and information retrieval. 
 Usually two optimization criteria are considered: the worst-case and the average-case cost.
@@ -67,7 +66,7 @@ To the best of our knowledge, the \textsc{Optimal Decision Tree} problem has not
 % A generalization of tree search to general graphs has also been recently studied, mostly in presence of noise, where some replies can be erroneous \cite{DereniowskiLU25,Emamjomeh-Zadeh16}.
 % For some applications of these problems see e.g. \cite{Emamjomeh-Zadeh17,KarpK07}.
 
-\paragraph{Set Cover with precedence constraints}
+\paragraph{Set Cover with precedence constraints.}
 
 \textsc{Set Cover} is among the most important problems in combinatorial approximation.
 It is well known that the greedy algorithm achieves an $H_n$-approximation for \textsc{Set Cover} \cite{GreedyHeuristicSetCoverProblem}, where $H_n=\bigo\br{\log n}$ is the $n$-th harmonic number. This is tight since it cannot be approximated within a $(1-\epsilon)\ln n$ factor for any $\epsilon > 0$ unless P=NP \cite{AnalyticalApproachToParallelRepetition}.
@@ -86,16 +85,17 @@ When allowing arbitrary precedence constraints, $\ProblemPCMSSC$ admits an $\big
 % \caption{Relationships between covering and decision tree problems, $\Pi_1 \to \Pi_2$ denotes that an approximation algorithm for problem $\Pi_1$ implies an approximation algorithm for problem $\Pi_2$.}\label{fig:reductions}
 % \end{figure}
 
-First, we provide in Section~\ref{sec:AL} an $\bigo(m^{1/3}\log^{4/3}m\log^2 n)$-approximation algorithm for \textsc{Precedence Constrained Worst Case Decision Tree} ($\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$), and an $\bigo(m^{1/3}\log^{4/3}m\log^2 n)$-approximation for \textsc{Precedence Constrained Average Case Decision Tree} ($\hyperref[problem:PCACDT]{\ProblemPCACDT}$) with arbitrary precedence constraints, where $m$ is the number of tests and $n$ is the number of hypotheses. These results are obtained through reductions to fractional set cover problems ($\hyperref[problem:PCSC]{\ProblemPCSC}$, $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$), which induces only a logarithmic factor loss in the approximation. The idea is to find a precedence-constrained sequence of tests whose execution separates the hypotheses relatively well, and then recurse, on the remaining subproblems. To find such a sequence we construct a corresponding covering instance, where the sets correspond to tests and the elements correspond to hypotheses.
+First, we provide in Section~\ref{sec:AL} an $\bigo(m^{1/3}\log^{4/3}m\log^2 n)$-approximation algorithm for \textsc{Precedence Constrained Worst Case Decision Tree} ($\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$), and an $\bigo(m^{1/3}\log^{4/3}m\log^2 n)$-approximation for \textsc{Precedence Constrained Average Case Decision Tree} ($\hyperref[problem:PCACDT]{\ProblemPCACDT}$) with arbitrary precedence constraints, where $m$ is the number of tests and $n$ is the number of hypotheses. These results are obtained through reductions to fractional set cover problems ($\hyperref[problem:PCSC]{\ProblemPCSC}$, $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$), which induces only a logarithmic factor loss. The idea is to find a precedence-constrained sequence of tests whose execution separates the hypotheses relatively well, and then recurse on the remaining subproblems. To that end we construct a corresponding covering instance, where the sets correspond to tests and the elements correspond to hypotheses.
 
-The remaining task is to obtain the promised approximation\footnote{All approximation algorithms we develop have polynomial running time.} \DD{dopisalem footnote} for the precedence-constrained covering problems. We adress this issue in Section~\ref{sec:SC}.
+The remaining task is to obtain the promised approximation\footnote{All approximation algorithms we develop have polynomial running time.} for the precedence-constrained covering problems (cf. Section~\ref{sec:SC}).
 We remark that there already exists an $\bigo(\sqrt{m})$-approximation for the \textsc{Precedence-Constrained Min-Sum Set Cover}~\cite{PCMSSC}, but it works only for $f=1$. As it turns out, we require $f=1/4$ for our decision tree algorithms to work.
 To remedy this issue, we obtain improved, $\bigo(m^{1/3}\log^{4/3}m\log n)$-approximation algorithms for both cost criteria and all values of $f$. Firstly, we show that we can diretly reduce $\ProblemPCSC$ to an instance of the previously known \textsc{Partial Red-Blue Set Cover} \cite{RedBlueSetCover} problem. However, the min-sum cost criterion turns out to be more challenging.
 The key in our analysis is to \DDfix{introduce and solve} yet another variant of set covering, which we call \textsc{Budgeted Precedence Constrained Set Cover} (denoted as $\ProblemBPCSC)$. The difference is that now we wish to find a (precedence-closed) subset of sets of size at most $b$ that covers as many elements as possible. This task can also be easily reduced to \textsc{Partial Red-Blue Set Cover}. In order to leverage this result for $\ProblemPCMSSC$, we find a good covering sequence by iteratively allowing exponentially growing budgets and applying the approximation for $\ProblemBPCSC$ at each step. Intuitively, since we start from a very low budget, this allows the algorithm to choose which elements need to be covered quickly.
 
-At last we concern ourselves with some special cases of precedence relations. For the inforests, where each test/set has at most one child, we show that $\ProblemBPCSC$ can be encoded as an instance of the well-known \textsc{Maximum Coverage}. This allows us to obtain an $\bigo(\log n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$. For the case of outforests, for which every test/set has at most one parent, we show that $\ProblemBPCSC$ can be reduced the \textsc{Group Steiner Orienteering Problem} \DD{moze usunas ``problem'' z nazwy problemu?} on trees, which yields an $\br{\bigo\br{\log n}, 1}$-bicriteria approximation for $\ProblemBPCSC$ and as a consequence an $\bigo\br{\log^2 n}$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$. For this subcase, the connection between our problems and graph exploration becomes apparent, since any sequence of sets becomes a tour of the precedence graph.
+At last we concern ourselves with some special cases of precedence relations. For the inforests, where each test/set has at most one child, we show that $\ProblemBPCSC$ can be encoded as an instance of the well-known \textsc{Maximum Coverage}. This allows us to obtain an $\bigo(\log n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$. For the case of outforests, for which every test/set has at most one parent, we show that $\ProblemBPCSC$ can be reduced \textsc{Group Steiner Orienteering} on trees, which yields an $\br{\bigo\br{\log n}, 1}$-bicriteria approximation for $\ProblemBPCSC$, and as a consequence $\bigo\br{\log^2 n}$-approximations for $\ProblemPCWCDT$ and $\ProblemPCACDT$.
+For this subcase, the connection between our problems and graph exploration becomes apparent, since any sequence of sets becomes a tour of the precedence graph.
 % The hierarchy of our reductions, is illustrated by Figure~\ref{fig:reductions}.
-Our approximation results, including best known results from the literature, are summarized in Table~\ref{tab:results}.
+Our results and the best known from the literature, are summarized in Table~\ref{tab:results}.
 
 \input{tables/approximation_results.tex}
 
@@ -108,10 +108,9 @@ We also give an entirely new reduction from \textsc{Label Cover}.
 In our construction the universe consists of a number of  $t$-stars, representing bundles of constraints from the \textsc{Label Cover} instance, which correspond to $t-1$-step walks over expanders built on appropriate vertex neighbourhoods. The choice of labels for particular vertices is encoded via an appropriate set selection, which is required to cover all $t$-stars
  Then, based on several conjectures regarding approximation hardness of \textsc{Label Cover}, we derive the following results for precedence-constrained coverings.
 \DDfix{For $x\in\brc{n,m}$, neither covering objective} can have a bicriteria $\br{\br{\log x}^{\bigo\br{1}},\br{\log x}^{\bigo\br{1}}}$ guarantee, unless $\text{P}=\text{NP}$. Parallel repetition rules out $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$-approximation for $0<\epsilon<1$ under ETH. Under the Projection Games Conjecture, the reduction prohibits $\br{\bigo\br{x^\rho},\bigo\br{x^\sigma}}$-bicriteria approximation whenever $\rho+2\sigma<\gamma_x$, where $\gamma_n=c/(1+2c)$ and $\gamma_m=c/(1+ac+2c)$ for its constants $a,c$. These instances have height-two precedence DAGs and sets of size at most one.
-\DDfix{The above hardness results transfer to $\ProblemPCWCDT$ and $\ProblemPCACDT$ as shown in Table~\ref{tab:hardness}.}
 
 For the special case of outforests, for any $\epsilon>0$ we establish $\bigo(\log^{2-\epsilon} n)$-hardness of approximating $\ProblemPCSC$ via a reduction from \textsc{Group Steiner Tree} on trees, which is known to be hard to approximate within $\bigo(\log^{2-\epsilon} n)$-factor, unless $\text{NP}\subseteq \text{ZTIME}(n^{\text{polylog}(n)})$.
-This hardness naturally extends to $\ProblemPCWCDT$ via our reduction hierarchy. A similar result also holds for $\ProblemPCMSSC$, however here $f\neq 1$ and thus the reduction does not carry over to $\ProblemPCACDT$. Table~\ref{tab:hardness} summarizes all our bounds.
+This naturally extends to $\ProblemPCWCDT$ via our reduction hierarchy. A similar result also holds for $\ProblemPCMSSC$, however here $f\neq 1$ and thus the reduction does not carry over to $\ProblemPCACDT$. See Table~\ref{tab:hardness} for a summary.
 
 % \begin{figure}[ht!]
 %     \centering
@@ -166,4 +165,3 @@ This hardness naturally extends to $\ProblemPCWCDT$ via our reduction hierarchy.
 % \input{figures/pccp_example}
 % \caption{Example of a PCCP instance with 39 elements and 9 covering sets. (a) Universe with covering sets. (b) Precedence DAG with three components. (c) Solution using 7 selected sets (colored).}\label{fig:pccp_example}
 % \end{figure}
-

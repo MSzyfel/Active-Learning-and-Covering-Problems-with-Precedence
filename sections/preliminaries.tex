@@ -4,7 +4,7 @@
 %For any set $X$, we denote by $\spr{X}$ its cardinality.
 %For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1, 2, \ldots, k}$.
 
-For any integer $k \geq 1$, we use $[k]$ to denote the set $\brc{1,\ldots,k}$. 
+For any integer $k \geq 1$, $[k]=\brc{1,\ldots,k}$. 
 Let $\sigma$ be a sequence and let $\ell\in[\spr{\sigma}]$. By $\pref{\sigma}{\ell}$ we mean the prefix of $\sigma$ of length $\ell$. For a given rooted tree $D=\br{V\br{D}, E\br{D}}$ we denote its root by $r\br{D}$. 
 For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
 
@@ -30,12 +30,12 @@ It should be remarked that it is possible for a test to appear multiple times in
 However, with a slight abuse of notation we assume that non-leaf vertices are subsets of $\cT$ whenever there is no ambiguity. Similarly, we may assume that the set of leaves of $D$ is $\cH$. When the tests are subject to precedence constraints $(\cT, \preceq)$, a decision tree $D$ is called \emph{precedence-closed} if for every node $v$ in $D$, the sequence of tests on the path from $r\br{D}$ to $v$ is precedence-closed. This means that a test $t$ is executed only if all its predecessors in $(\cT, \preceq)$ have already been performed.
 
 \paraTitle{Cost measures for decision trees.}
-Let $\tests{D}{v}$ denote the sequence of tests on the path from $r\br{D}$ to $v$ including $v$ if it denotes a test. The cost of identifying a hypothesis $h$ using a decision tree $D$ is $\COST\br{D, h}=\spr{\tests{D}{h}}$.
+Let $\tests{D}{v}$ denote the sequence of tests on the path from $r\br{D}$ to $v$ including $v$ if it denotes a test. The cost of identifying a hypothesis $h$ in $D$ is $\COST\br{D, h}=\spr{\tests{D}{h}}$.
 We consider two cost measures for decision trees: the worst-case cost 
 \[
 \COSTW\br{D} = \max_{h \in \cH} \brc{\COST\br{D, h}}
 \] 
-and the average-case cost\footnote{Here, for simplicity we do not divide by the number of hypotheses $n$, since this does not affect the approximation ratios.} 
+and the average-case cost\footnote{For simplicity, we do not divide by the number of hypotheses $n$, since this does not affect the approximation ratios.} 
 \[
 \COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}.
 \]
@@ -45,7 +45,6 @@ and the average-case cost\footnote{Here, for simplicity we do not divide by the 
 %\DD{For $X\subseteq\cH$, $p(X)=\sum_{x\in X}p(x)$.}
 %(Whenever the criterion is not important or we want to make a claim that applies both to $\ProblemPCWCDT$ and $\ProblemPCACDT$, we use the symbol $\ProblemPCDT$ to refer to a \emph{Precedence Constrained Decision Tree} instance).
 
-\medskip
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
 Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution for $\cI$.
 \begin{problem}[\textsc{Precedence Constrained Worst Case Decision Tree} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
@@ -63,7 +62,6 @@ Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v(D)=\cH_T(D)$, wh
 We usually write $\cH_T$ when $D$ is clear from the context.
 For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
 
-\medskip
 \paraTitle{Set covering problems.}
 %For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
 For a family of sets $(\cS,\preceq)$ and a set $S\in\cS$, let $\closure{S}$ be the minimal precedence-closed subset of $\cS$ containing $S$.
@@ -72,7 +70,7 @@ If $\cC$ is a sequence of sets, rather than a family, we analogously define $\co
 Let $\cC=\angl{C_1,\ldots,C_l}$. We say that $\cC$ is \emph{precedence-closed} if every strict predecessor of each $C_i$ occurs earlier in the sequence, that is, for every $Y\in\cS$ with $Y\preceq C_i$ and $Y\neq C_i$, there is a $j<i$ such that $C_j=Y$.
 The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such precedence-closed sequence $\cC$ is the minimum index $i$ such that $x\in C_i$ if such index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
 We denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
-\DD{uwaga: czasem uzywamy $\coverageTime(\cC)$.}
+\DDfix{When the universe is clear from the context we write $\coverageTime\br{\cC}$.}
 
 \begin{problem}[\textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$)] \label{problem:PCSC}
 Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
@@ -80,7 +78,7 @@ Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a p
 \begin{problem}[\textsc{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
 Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that minimizes $\coverageTime\br{\cC, \cU}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
 \end{problem}
-\medskip
+
 \paraTitle{Approximation conventions.}
 Throughout this paper, a bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose a factor $\beta\geq1$ on coverage (equivalently, it covers at least a $1/\beta$-fraction of the target amount) while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target; for budgeted problems, the budget may be exceeded by at most a factor of $\alpha$.
 
