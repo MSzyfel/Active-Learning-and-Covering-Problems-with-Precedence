@@ -38,7 +38,7 @@
 
 ## 6. The average-case bridge and budget doubling (about 2:50)
 
-**Visual:** Each hypothesis contributes its first cover time. Contrast that sum with total path length. Grow budgets geometrically, showing early-covered elements receive smaller contribution. Flow from budgeted precedence-constrained cover to Partial Red-Blue Set Cover, then back to min-sum cover and average decision trees.
+**Visual:** Each hypothesis contributes its first coverage time. Contrast that sum with total path length. Grow budgets geometrically, showing early-covered elements receive smaller contribution. Flow from budgeted precedence-constrained cover to Partial Red-Blue Set Cover, then back to min-sum cover and average decision trees.
 
 **Narration:** Use Chapter 6.
 

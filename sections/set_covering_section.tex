@@ -5,7 +5,7 @@
 We reduce $\ProblemPCSC$ to \textsc{Partial Red-Blue Set Cover}. This gives a direct approximation for the former and its budgeted version, $\ProblemBPCSC$. We then use the budgeted algorithm in the existing reduction to $\ProblemPCMSSC$. The forest-specific algorithms remain unchanged.
 
 \begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
-Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set cover $\cC$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
+Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 \begin{problem}[\textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$)] \label{problem:PRBSC}
 Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $k$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $k$ blue elements and minimizes $\spr{\cov\br{\cA',\cR}}$.
@@ -58,7 +58,7 @@ Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, \DDfix{where $\cCopt$ is an optim
 So, $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
 We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
 \input{pseudocodes/f_PCMSSC.tex}
-Each family returned by $\ProblemBPCSC$ is precedence-closed, so the union of the sets already appended is also precedence-closed. When a family is appended, only its new sets are used and they are ordered by $\operatorname{ord}$; every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets.
+Each family returned by $\ProblemBPCSC$ is precedence-closed, so the union of the sets already appended is also precedence-closed. When a family is appended, only its new sets are used \DDfix{(this is due to the set $P_l$ that keeps track of already appended sets)} and they are ordered by $\operatorname{ord}$; every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding \DDfix{(cf. the while loop)} and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
     \begin{lemma}\label{lem:pi-spread-cost}
         We have that $\spr{\pi_{l^*}} = \bigo\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$, and if $\spr{\pi_{l^*}}<m$, then $\spr{\pi_{l^*}}=\Omega\br{\alpha\cdot\beta}\cdot\spr{\cCopt}$. Moreover, $\coverageTime\br{\pi_{l^*},\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
@@ -92,8 +92,9 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
 
-        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $R_{i-1}=\cU\setminus\cov\br{\angl{\tau_{l^*}^1,\dots,\tau_{l^*}^{i-1}}}$ be the algorithmic residual at the beginning of iteration $i$. The family $\pref{\cCopt}{a^i}$ is precedence-closed, has size at most $a^i\leq a^{i+1}$, and is therefore feasible for the $i$-th $\ProblemBPCSC$ instance. Since it covers $n_i^*$ elements in total and the previously computed solutions cover $n_{i-1}$ elements, it covers at least $n_i^*-n_{i-1}$ elements in $R_{i-1}$. Thus, $\OPT\br{\cI_i}\geq n_i^*-n_{i-1}$.
-        By the $\br{\alpha,\beta}$-approximation guarantee, $n_i-n_{i-1}\geq\frac{n_i^*-n_{i-1}}{\beta}$. Rearranging gives $n-n_i\leq\frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_i^*}$.
+        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $R_{i-1}=\cU\setminus\cov\br{\angl{\tau_{l^*}^1,\dots,\tau_{l^*}^{i-1}}}$ be the algorithmic residual at the beginning of iteration $i$. The family $\pref{\cCopt}{a^i}$ is precedence-closed, has size at most $a^i\leq a^{i+1}$, and is therefore feasible for the $i$-th $\ProblemBPCSC$ instance. Since it covers $n_i^*$ elements in total and the previously computed solutions cover $n_{i-1}$ elements, it covers at least $n_i^*-n_{i-1}$ elements in $R_{i-1}$.
+        \DDfix{Thus, $n_i^*-n_{i-1}$ lower bounds the optimal value of the subproblem $\ProblemBPCSC$ instance in the $i$-th iteration.}
+        Hence, by the $\br{\alpha,\beta}$-approximation guarantee, $n_i-n_{i-1}\geq\frac{n_i^*-n_{i-1}}{\beta}$. Rearranging gives $n-n_i\leq\frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_i^*}$.
         Thus,
         \begin{align*}
             \frac{\br{a-1}\cdot Q}{\alpha}
@@ -119,15 +120,15 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         by our choice of $a$. One can easily check that for $\beta\geq 1$, $\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}\leq \frac{\br{\beta-1/3}}{\beta}$ so that:
         \begin{align*}
             Q&\leq
-            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{\br{3\beta-1}^2\cdot\br{\frac{2\cdot 3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1/3}}{\beta}}}
+            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{2\cdot\br{3\beta-1}^2\cdot\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1/3}}{\beta}}}
             \\&=
             \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot 6\beta\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4
-            \leq 864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}
+            \leq 864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}.
         \end{align*}
         The lemma follows.
     \end{proof}
 
-    If $\spr{\pi_{l^*}}=m$, then $\pi_{l^*}$ contains every set in $\cS$, and thus covers every element covered by $\cCopt$. The candidate is feasible and its latency is bounded by Lemma~\ref{lem:pi-spread-cost}. Otherwise, let $P_{l^*}$ be the family of sets in $\pi_{l^*}$, let $R_{l^*}=\cU\setminus\cov\br{P_{l^*}}$, and let $r=\spr{\cov\br{P_{l^*},\cU}}$. We then have the following lemmas:
+    If $\spr{\pi_{l^*}}=m$, then $\pi_{l^*}$ contains every set in $\cS$, and thus covers every element covered by $\cCopt$. The candidate is feasible and its latency is bounded by Lemma~\ref{lem:pi-spread-cost}. Otherwise, let $P_{l^*}$ be the family of sets in $\pi_{l^*}$, let $R_{l^*}=\cU\setminus\cov\br{P_{l^*}}$, and let $r=\spr{\cov\br{P_{l^*},\cU}}$.
     \begin{lemma}\label{lem:sigma-coverage}
         We have that $\spr{\cov\br{\sigma_{l^*},R_{l^*}}} \geq \frac{\max\brc{0,f\cdot n-r}}{\beta}$ and $\spr{\sigma_{l^*}} = \bigo\br{\alpha}\cdot \spr{\cCopt}$.
     \end{lemma}
@@ -139,7 +140,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         We have that $\spr{\cov\br{\pi_{l^*}^+,\cU}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*}^+,\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{lemma}
     \begin{proof}
-        By Lemma~\ref{lem:sigma-coverage}, the prefix and final solution together cover at least
+        By Lemma~\ref{lem:sigma-coverage}, the prefix and the final solution together cover at least
         \[
         r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}
         \]
@@ -149,8 +150,8 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         \[
         \coverageTime\br{\pi_{l^*},\cU}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}.
         \]
-        Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its cover time in $\pi_{l^*}^+$ is also $t_u$.
-        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\beta a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the cover time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)t_u\leq2t_u$.
+        Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its coverage time in $\pi_{l^*}^+$ is also $t_u$.
+        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\beta a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)t_u\leq2t_u$.
         As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we get that $\coverageTime\br{\pi_{l^*}^+,\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{proof}
 By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
