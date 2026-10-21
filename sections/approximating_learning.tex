@@ -27,7 +27,6 @@ The following definition gives a basic tool for analysis of our algorithms.
   Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcoverD{D}$.
   If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
 \end{definition}
-\DD{Uwaga: zmianilem oznaczenie dla sepcover, zamiast $\cS(D)$ (latwiej zapamietac).}
 % Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
 
 
@@ -127,7 +126,6 @@ $\bigo\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approx
      \COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'},
      \] 
      where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
-     \DDfix{Denote for brevity $l(D')$ to be the number of leaves in $D'$.}
      We have
 %         \begin{align*}
 %             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{D'(\cH')} \COSTW\br{D', \cI'} \\
@@ -138,12 +136,12 @@ $\bigo\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approx
 %        \end{align*}
         \begin{align*}
             \COSTW\br{D} \leq &\, \COSTW\br{D_{\cC}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\COSTW\br{D'}} \\
-            \leq &\, \alpha \cdot \spr{\sepcover{\cI}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log l(D') \cdot \OPT\br{\cI'}} \\
+            \leq &\, \alpha \cdot \spr{\sepcover{\cI}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'}} \\
             \leq &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
             = &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
             = &\, \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
         \end{align*}
-        where the second inequality is by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every for every $\cH'\in D\setminus D_{\cC}$.
+        where the second inequality is by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every for every $\cH'\in D\setminus D_{\cC}$.
         This concludes the proof of the theorem.
 \end{proof}
 
