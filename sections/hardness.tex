@@ -426,201 +426,84 @@ We distinguish two types of projections. A \emph{total projection} has $D_e=\Sig
 
 In our reduction, we require the Label Cover instance to have total projections. Any partial-projection instance with perfect completeness and soundness at most $s\in(0,1)$ can be converted to this form as follows. Let $r_0=\lceil1/s\rceil$, replace each constraint $e=uv$ by $r_0$ indexed copies $e_j$, and add a right label $\bot_{e,j}$ private to each copy. On $D_e$, keep the original projection and for $a\notin D_e$, map $a$ to $\bot_{e,j}$. Perfect completeness is preserved. In any labeling of the totalized instance, a private right label can satisfy at most one copied constraint at its right vertex. Replacing every private right label by an arbitrary original label therefore yields a labeling of the original instance whose value is at least the fraction of satisfied copied constraints minus $\spr{B}/(r_0\spr{E})$. With isolated vertices removed, $\spr{B}\leq\spr{E}$, so the totalized soundness is at most $s+1/r_0\leq2s$. The new constraint count and alphabet size are at most $r_0\spr{E}$ and $\spr{\Sigma_B}+r_0\spr{E}$, respectively; the conversion has polynomial size in the original explicit input and $s^{-1}$. Below, for the resulting total-projection instance, let $h=\spr{E}$ be its number of constraints, let $N=\spr{A}+\spr{B}+\spr{E}$ be its graph size, and let $Q=\spr{\Sigma_A}+\spr{\Sigma_B}$ be its combined alphabet size.
 
-\subsubsection{Explicit expanders of every size}
-We now provide an explicit construction of expander graphs of every size, which will be useful in our construction.
- An expander graph is a sparse graph that has strong connectivity properties, typically quantified by the spectral gap of its adjacency matrix. A normalized adjacency matrix of any multigraph is obtained by dividing its adjacency matrix by the degree of the graph.
-For each positive integer $d$, let $J_d$ denote the $d\times d$ all-ones matrix; thus $J_d/d$ is the orthogonal projection onto the constant vectors in $\mathbb{R}^d$.
-
-For vectors $x,y\in\mathbb{R}^d$, write $\langle x,y\rangle=x^\top y$ and $\|x\|_2=\sqrt{\langle x,x\rangle}$. For a matrix $A\in\mathbb{R}^{d\times d}$, its induced Euclidean operator norm is
-\[
-    \|A\|_{2\to2}=\sup_{x\neq0}\frac{\|Ax\|_2}{\|x\|_2};
-\]
-it is the largest factor by which $A$ can stretch a vector, and for symmetric $A$ it equals the largest absolute eigenvalue. For $S\subseteq[d]$, let $\mathbf{1}_S\in\mathbb{R}^d$ be its indicator vector and let $D_S$ be the diagonal matrix with diagonal $\mathbf{1}_S$.
-
-\begin{lemma}\label{lem:explicit-expanders-every-size}
-    For every fixed $\xi>0$ and every $\lambda\in(0,1)$, there is a degree $\Delta=\bigo_\xi\br{\lambda^{-(2+\xi)}}$, independent of $d$, such that for every integer $d\geq1$ a deterministic algorithm, polynomial in $d$ and $\lambda^{-1}$, constructs a $\Delta$-regular undirected multigraph on exactly $d$ vertices whose normalized adjacency matrix $P$ satisfies $\|P-J_d/d\|_{2\to2}\leq\lambda$. Equivalently, every eigenvalue of $P$ on the orthogonal complement of the constant vectors has absolute value at most $\lambda$. Loops are allowed.
-\end{lemma}
-\begin{proof}
-    Fix a base degree $D\geq3$. By~\cite{AlonExplicitExpandersEveryDegreeSize}, for all sufficiently large $d$ there is a deterministic polynomial-time construction of a $D$-regular graph on exactly $d$ vertices whose adjacency eigenvalues on the orthogonal complement of the constant vectors have absolute value at most $2\sqrt{D-1}+1$. Its normalized adjacency matrix therefore has eigenvalues on that subspace of absolute value at most
-    \[
-        \theta_D=\frac{2\sqrt{D-1}+1}{D}.
-    \]
-    As $D\to\infty$, $\theta_D<1$ and $\log D/\log(1/\theta_D)\to2$. Choose a fixed $D$ large enough that
-    \[
-        a_D=\frac{\log D}{\log(1/\theta_D)}<2+\xi,
-    \]
-    and let $d_0$ be a threshold above which the cited construction applies for this $D$.
-
-    Set $L=\operatorname{lcm}(1,2,\ldots,d_0)$, and for $d\geq d_0$, set
-    \[
-        k=\left\lceil\frac{\log(1/\lambda)}{\log(1/\theta_D)}\right\rceil.
-    \]
-    Let $P_0$ be the normalized adjacency matrix of the base graph. Since $P_0$ is symmetric and fixes the constant vectors, it preserves their orthogonal complement.     Form an undirected multigraph by adding one edge between the endpoints of each oriented length-$k$ walk in the base graph, counting reverse walks separately and allowing loops. With loops counted twice in the degree, its adjacency matrix is $2A^k$, where $A$ is the base adjacency matrix. Thus it is $2D^k$-regular, and its normalized adjacency matrix is $P_0^k$. Replace each edge by $L$ parallel copies. The resulting degree is the common value $\Delta=2\cdot L\cdot D^k$, and its normalized adjacency matrix remains $P_0^k$. On the constant vectors, $P_0^k-J_d/d$ is zero. On their orthogonal complement, its eigenvalues are the $k$th powers of those of $P_0$, so
-    \[
-        \left\|P_0^k-\frac{J_d}{d}\right\|_{2\to2}\leq\theta_D^k\leq\lambda.
-    \]
-    Moreover,
-    \[
-        \Delta=2\cdot L\cdot D^k\leq2\cdot L\cdot D\cdot\lambda^{-a_D}\leq2\cdot L\cdot D\cdot\lambda^{-(2+\xi)}.
-    \]
-    Enumerating these walks and making the $L$ copies takes time polynomial in $d$ and $\lambda^{-1}$, since their number is $dD^k$ and $L$ is fixed for the chosen $\xi$.
-
-    For $d<d_0$, use $2\cdot L\cdot D^k/d$ parallel edges between each pair of distinct vertices and $L\cdot D^k/d$ loops at each vertex. These are integer multiplicities because $d$ divides $L$. Counting each loop twice in the degree, the adjacency matrix is $2\cdot L\cdot D^k\cdot J_d/d$, so the graph is $\Delta$-regular with normalized adjacency matrix $J_d/d$. Hence its centered operator norm is zero. The degree bound above holds for all $d\geq1$.
-\end{proof}
-
-The following lemma is a standard estimate on the random-like behavior of a random-walk on
-an expander, whose derivation we include for completeness.
-\begin{lemma}[Expander walk concentration]\label{lem:expander-walk-concentration}
-    Let $P$ be the normalized adjacency matrix of a $d$-vertex regular undirected multigraph, and suppose $\|P-J_d/d\|_{2\to2}\leq\lambda$ for some $\lambda\in(0,1)$. For a set $S$ of vertices with density $p=|S|/d$ and an integer $\ell\geq0$, a walk of $\ell$ edges whose initial vertex is uniform has probability at most $p\cdot(p+\lambda)^\ell$ of having all its $\ell+1$ vertex positions in $S$.
-\end{lemma}
-\begin{proof}
-    If $\ell=0$, the event is just that the uniformly chosen initial vertex lies in $S$, which has probability $p$. Assume henceforth that $\ell\geq1$, and write $B=D_SPD_S$. The probability of a particular walk $(v_0,\ldots,v_\ell)$ is $d^{-1}\prod_{i=0}^{\ell-1}P_{v_i v_{i+1}}$. Summing over walks whose vertices all lie in $S$ gives
-    \[
-        \Pr[v_0,\ldots,v_\ell\in S]
-        =\frac{1}{d}\sum_{v_0,\ldots,v_\ell\in S}
-          \prod_{i=0}^{\ell-1}P_{v_i v_{i+1}}
-        =\frac{1}{d}\left\langle\mathbf{1}_S,B^\ell\mathbf{1}_S\right\rangle.
-    \]
-    To bound $\|B\|_{2\to2}$, split $P$ into its uniform part and its deviation from uniformity:
-    \[
-        B=D_S\frac{J_d}{d}D_S+D_S\left(P-\frac{J_d}{d}\right)D_S.
-    \]
-    The first term is rank one because
-    \[
-        D_S\frac{J_d}{d}D_S=\frac{1}{d}\mathbf{1}_S\mathbf{1}_S^\top.
-    \]
-    Applied to a vector $y$, this matrix returns $d^{-1}\mathbf{1}_S\langle\mathbf{1}_S,y\rangle$. By Cauchy-Schwarz, its output has norm at most $d^{-1}\|\mathbf{1}_S\|_2^2\|y\|_2=p\|y\|_2$, with equality when $y=\mathbf{1}_S$ if $S$ is nonempty. Thus its operator norm is $p$.
-
-    The matrix $D_S$ deletes coordinates outside $S$, so it cannot increase a vector's Euclidean norm: $\|D_Sy\|_2\leq\|y\|_2$. Therefore, using the assumed bound on $P-J_d/d$,
-    \[
-        \left\|D_S\left(P-\frac{J_d}{d}\right)D_Sy\right\|_2
-        \leq\lambda\|D_Sy\|_2
-        \leq\lambda\|y\|_2.
-    \]
-    This shows that the second term has operator norm at most $\lambda$. By the triangle inequality,
-    \[
-        \|B\|_{2\to2}\leq p+\lambda.
-    \]
-
-    The definition of operator norm gives $\|Bz\|_2\leq\|B\|_{2\to2}\|z\|_2$ for every vector $z$. Applying this inequality $\ell$ times yields
-    \[
-        \|B^\ell\mathbf{1}_S\|_2\leq\|B\|_{2\to2}^\ell\|\mathbf{1}_S\|_2.
-    \]
-    Finally, apply Cauchy-Schwarz to the probability expression and use $\|\mathbf{1}_S\|_2^2=|S|$:
-    \begin{align*}
-        \Pr[v_0,\ldots,v_\ell\in S]
-        &\leq\frac{1}{d}\|\mathbf{1}_S\|_2\|B^\ell\mathbf{1}_S\|_2\\
-        &\leq\frac{|S|}{d}\|B\|_{2\to2}^{\ell}\\
-        &\leq p \cdot (p+\lambda)^\ell.
-    \end{align*}
-\end{proof}
-
 \subsubsection{The construction}
-For any instance $\br{A,B,E,\Sigma_A,\Sigma_B,\{\pi_e\}_{e\in E}}$ of total-projection Label Cover, we define a $t$-star $\br{u, e_1,\ldots,e_t}$ to consist of a center $u$ and an ordered list $e_1,\ldots,e_t$ of constraints incident to $u$. Note, that the constraints may repeat. In our construction we will enumerate such objects, however we will only list a subset of all of them. To do so, for each vertex $u$, we will built an expander guaranteed above on all constraints incident to $u$. Then, we consider every $t-1$-step walk in this expander. Observe, that each such walk corresponds to a particular $t$-star, and that each $t$-star corresponds to at most one walk.
+The universe of our covering instance consists of the constraints of the Label Cover instance. For each vertex-label pair, a bundle of empty sets encodes choosing that label. A singleton witness covers a constraint only after the bundles for a satisfying pair of endpoint labels have been selected. A covering solution may select several labels at a vertex; the soundness proof shows that a cheap solution would nevertheless yield a labeling satisfying too many constraints.
 
-The overarching idea is that in our covering instance the universe required to be covered is the set of all $t$-stars generated by this process. In order to encode the choice of labels per vertices, for each vertex and each available label we introduce by a bundle of representative sets encoding choosing that assignment. For each $t$-star, there will be a corresponding witness set that can only be selected if the appropriate bundles satisfying each constraint in its ordered list have been chosen. In order to prove completeness, given Label Cover instance which is fully satisfiable, finding a cover is easy, the algorithm simply selects all bundles corresponding to the feasible assignment and all star representatives. However, in order to prove soundness, observe that, unlike in the \textsc{Label Cover} labeling, our construction allows picking several label representatives for each vertex. The crux of our analysis is to quantify this extensive choice for each vertex. We first show that in any cheap solution the number of vertices whose extent exceeds some prespecified value, which we call \emph{heavy} vertices, is not too large.  By extension, the number of $t$-stars covered only by the remaining, \emph{light} vertices must be significant. Then, using the fact that each light vertex has only a small number of chosen labels, an appropriate probability distribution allows assigning one label to each vertex so that many constraints are satisfied, in expectation. Since in the negative case only a small fraction of edges can be satisfied, this drives the cost of any solution very high, yielding the desired bound.
-
-Our construction is parametrized by a fixed integer $t\geq2$, denoting the number of constraint positions in each $t$-star, and constants
-\[
-    p_t=\frac{2\cdot t+1}{t+1},\qquad q_t=\frac{t}{t+1}.
-\]
-
-The reduction is as follows.
 \begin{lemma}\label{lem:label-cover-covering-gap}
-    For every fixed $\xi>0$ and total-projection Label Cover instance with $h\geq1$ constraints, there is a deterministic reduction producing an instance for both $\ProblemPCSC$ and $\ProblemPCMSSC$. Given a promise that the Label Cover value is either $1$ or at most $s\in(0,1)$, the output has
+    For every total-projection Label Cover instance with $h\geq1$ constraints, there is a deterministic polynomial-time reduction producing an instance for both $\ProblemPCSC$ and $\ProblemPCMSSC$ with
     \[
-        n=H,\qquad m=H \cdot \br{2 \cdot \spr{\Sigma_A}+t \cdot \spr{\Sigma_B}},\qquad
-        H=h \cdot \Delta^{t-1},\qquad
-        \Delta=\bigo_{t,\xi}\br{s^{-(2+\xi)/(t+1)}}.
+        n=h,\qquad m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}.
     \]
-    If the Label Cover value is $1$, the output has a full cover of size at most $(t+2)\cdot H$ and a full covering sequence of total coverage time at most $(t+2)\cdot H^2$. If its value is at most $s$, then there is a constant $c_t>0$ such that, for every $\theta\in(0,1]$, every precedence-closed family covering at least $\theta\cdot H$ elements has size at least $c_t\cdot\theta^{p_t}\cdot H\cdot s^{-q_t}$, and every feasible sequence covering at least $\theta\cdot H$ elements has total coverage time at least $c_t\cdot\theta^{p_t}\cdot H^2\cdot s^{-q_t}$. The precedence DAG has height two and every set has size at most one. The explicit output size is $\bigo_t(H^2\cdot Q)$, so the reduction runs in time polynomial in the source input size and $s^{-1}$.
+    If the Label Cover value is $1$, the output has a full cover of size at most $3h$ and a full covering sequence of total coverage time at most $3h^2$. If its value is at most $s\in(0,1)$, then there is an absolute constant $c_*>0$ such that, for every $\theta\in(0,1]$, every precedence-closed family covering at least $\theta h$ elements has size at least $c_*\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}$, and every feasible sequence covering at least $\theta h$ elements has total coverage time at least $c_*\cdot\theta^{3/2}\cdot h^2\cdot s^{-1/2}$. The precedence DAG has height two and every set has size at most one. The explicit output size is $\bigo(h^2\cdot Q)$.
 \end{lemma}
 \begin{proof}
-    For each $u\in A$, let $d_u=\deg(u)$ and construct, by Lemma~\ref{lem:explicit-expanders-every-size}, a $\Delta$-regular expander on the $d_u$ incident constraint positions. Write $P_u$ for its normalized adjacency matrix, which satisfies $\|P_u-J_{d_u}/d_u\|_{2\to2}\leq\lambda=s^{1/(t+1)}$. A $t$-walk in this expander has length $t-1$ and visits $t$ constraint positions in order. Reading the constraint at each visited position gives an ordered list $e_1,\ldots,e_t$, which may contain repetitions. We retain the transition-arc choices as part of the walk index, so distinct $t$-walks define distinct walk-indexed $t$-stars even if their ordered constraint lists agree. There are $d_u\cdot\Delta^{t-1}$ such $t$-walks centered at $u$, and hence $H=h\cdot\Delta^{t-1}$ walk-indexed $t$-stars in total. The universe consists of these indexed $t$-stars.
+    Remove isolated vertices and let $d_v=\deg(v)$ for every $v\in A\cup B$. The universe is $\cU=E$, with parallel constraints treated as distinct elements. For every vertex-label pair $(v,\ell)$, create a bundle $\mathcal B_{v,\ell}$ of $d_v$ empty sets, with all bundle sets indexed separately. For each constraint $e=uv$ and each $\ell\in\Sigma_A$, create a witness $W_{e,\ell}=\{e\}$. Require every set in $\mathcal B_{u,\ell}$ and $\mathcal B_{v,\pi_e(\ell)}$ to precede $W_{e,\ell}$. There are no other precedence constraints. Total projections ensure every constraint has witnesses, so the output is feasible.
 
-For every vertex $v\in A\cup B$, let $w_v$ be its number of occurrences as a center or in an ordered leaf position among all walk-indexed $t$-stars, counting multiplicity. Thus $\sum_{u\in A}w_u=H$ and $\sum_{v\in B}w_v=t\cdot H$. For every vertex-label pair $(v,\ell)$, create a bundle $\mathcal B_{v,\ell}$ of $w_v$ empty sets. For each $t$-star $\sigma$ centered at $u$, let $e_1,\ldots,e_t$ be its ordered constraint list and let $v_i$ be the right endpoint of $e_i$. For each $\ell\in\Sigma_A$, create the witness $W_{\sigma,\ell}=\{\sigma\}$. Require every set in $\mathcal B_{u,\ell}$ and in each bundle $\mathcal B_{v_i,\pi_{e_i}(\ell)}$ to precede $W_{\sigma,\ell}$, for every position $i$. If positions repeat, any repeated precedence relation is imposed only once. There are no other precedence constraints. Total projections ensure every $t$-star has witnesses, so the output is feasible. The bundle sets number $H\cdot\spr{\Sigma_A}+t\cdot H\cdot\spr{\Sigma_B}$ and the witnesses number $H\cdot\spr{\Sigma_A}$, giving the stated value of $m$. There are at most $\bigo_t(H^2\cdot Q)$ precedence arcs.
+    Since $\sum_{u\in A}d_u=\sum_{v\in B}d_v=h$, the bundle sets number $h\cdot\spr{\Sigma_A}+h\cdot\spr{\Sigma_B}$ and the witnesses number $h\cdot\spr{\Sigma_A}$, giving the stated value of $m$. There are at most
+    \[
+        \spr{\Sigma_A}\cdot\sum_{e=uv\in E}(d_u+d_v)
+        =\spr{\Sigma_A}\cdot\sum_{v\in A\cup B}d_v^2
+        \leq2h^2\cdot\spr{\Sigma_A}
+    \]
+    precedence arcs, so the explicit output size is $\bigo(h^2\cdot Q)$.
 
     \par\noindent\textbf{Completeness.}
-    Given a satisfying labeling, select the bundle for the assigned label at each vertex and, for each $t$-star centered at $u$, the witness corresponding to $a_u$. All its predecessors have been selected, since every constraint in its ordered list is satisfied. The selected bundles contain $H+t\cdot H$ sets and the witnesses contain $H$ sets, for a full cover of size $(t+2)\cdot H$. Ordering the bundles before the witnesses gives total coverage time at most $(t+2)\cdot H^2$.
+    Given a satisfying labeling, select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. The selected bundles contain $2h$ sets and the witnesses contain $h$ sets, for a full cover of size $3h$. Ordering the bundles before the witnesses gives total coverage time at most $3h^2$.
 
     \par\noindent\textbf{Soundness for partial coverage.}
-    Let $\mathcal C$ be a precedence-closed family of $T$ sets covering at least $\theta H$ walk-indexed $t$-stars. For each vertex $v$, let $L_v$ be the labels whose entire bundle is in $\mathcal C$. Since the bundles are pairwise disjoint,
+    Let $\mathcal C$ be a precedence-closed family of $T$ sets covering at least $\theta h$ constraints. For each vertex $v$, let $L_v$ be the labels whose entire bundle is in $\mathcal C$. Since the bundles are pairwise disjoint,
     \[
-        \sum_{v\in A\cup B}w_v \cdot \spr{L_v}\leq T.
+        \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq T.
     \]
-    Put $R=T/H$, $B_0=2\cdot R/\theta$, and call $v$ heavy if $\spr{L_v}>B_0$. Then $\sum_{v\text{ heavy}}w_v\leq T/B_0=\theta\cdot H/2$. By definition, this sum counts all positions occupied by heavy vertices across all $t$-stars, with multiplicity. Assign each covered $t$-star that touches a heavy vertex one of its heavy-vertex positions. Since positions are counted with multiplicity within each walk-indexed $t$-star and walk indices distinguish the $t$-stars, these assigned occurrences are distinct. Thus at most $\theta\cdot H/2$ covered $t$-stars touch a heavy vertex, and at least $\theta\cdot H/2$ covered $t$-stars have only light vertices.
+    Put $R=T/h$, $B_0=2R/\theta$, and call $v$ heavy if $\spr{L_v}>B_0$. Then
+    \[
+        \sum_{v\text{ heavy}}d_v\leq\frac{T}{B_0}=\frac{\theta h}{2}.
+    \]
+    Thus at most $\theta h/2$ constraints touch a heavy vertex, and at least $\theta h/2$ covered constraints have both endpoints light.
 
-For $u\in A$ and $\ell\in L_u$, let $S_{u,\ell}$ be the incident constraint positions whose right endpoint $v$ is light and for which $\pi_e(\ell)\in L_v$. Write $p_{u,\ell}=\spr{S_{u,\ell}}/d_u$, and let $p_u=\max_{\ell\in L_u}p_{u,\ell}$, taking $p_u=0$ if $L_u=\emptyset$. Let $F_u$ be the fraction of $t$-walks centered at $u$ whose associated $t$-star is covered and has only light vertices. For each label $\ell\in L_u$, coverage of a $t$-star with only light vertices requires all $t$ visited positions of its walk to lie in $S_{u,\ell}$. By Lemma~\ref{lem:expander-walk-concentration}, this event has probability at most $p_{u,\ell}\cdot(p_{u,\ell}+\lambda)^{t-1}$. A union bound over the at most $B_0$ labels in $L_u$ therefore gives the following cases:
-\begin{enumerate}
-    \item If $p_u\geq\lambda$, then $p_u+\lambda\leq2\cdot p_u$, so
+    Independently at each vertex $v$, choose a label uniformly from $L_v$ if $L_v\neq\emptyset$, and choose an arbitrary label otherwise. For each covered constraint $e=uv$ with light endpoints, a selected witness supplies a label $\ell\in L_u$ with $\pi_e(\ell)\in L_v$. Both lists are nonempty and have size at most $B_0$, so the probability of satisfying $e$ is at least
     \[
-        F_u\leq\min\brc{1,2^{t-1} \cdot B_0 \cdot p_u^t}
-        \leq2^{(t-1)/t} \cdot B_0^{1/t} \cdot p_u.
+        \frac{1}{\spr{L_u}\cdot\spr{L_v}}\geq B_0^{-2}.
     \]
-    \item If $p_u<\lambda$, then $p_u+\lambda\leq2\cdot\lambda$, so
+    The expected fraction of satisfied constraints is therefore at least $\theta/(2B_0^2)$. Since the Label Cover value is at most $s$,
     \[
-        F_u\leq2^{t-1} \cdot B_0 \cdot \lambda^{t-1} \cdot p_u.
-    \]
-\end{enumerate}
-    Since $2^{(t-1)/t}\leq2^{t-1}$, both cases imply
-    \[
-        F_u\leq C_t \cdot \br{B_0^{1/t}+B_0 \cdot \lambda^{t-1}} \cdot p_u,
-        \qquad C_t=2^{t-1}.
-    \]
-The covered $t$-stars whose positions are all light have total fraction at least $\theta/2$, and their centers are distributed with weight $d_u/h$. Hence
-    \[
-        \sum_{u\in A}\frac{d_u}{h} \cdot p_u
-        \geq\frac{\theta}{2\cdot C_t \cdot \br{B_0^{1/t}+B_0 \cdot \lambda^{t-1}}}.
-    \]
-For each left vertex $u$, choose a label $\widehat a_u\in L_u$ attaining $p_u$ if $L_u\neq\emptyset$, and otherwise choose an arbitrary label in $\Sigma_A$. Independently, for each right vertex $v$, choose $\widehat b_v$ uniformly from $L_v$ if $L_v\neq\emptyset$, and otherwise choose an arbitrary label in $\Sigma_B$. This defines a random total labeling. For each $u$ with $L_u\neq\emptyset$ and each constraint $e=uv\in S_{u,\widehat a_u}$, we have $\pi_e(\widehat a_u)\in L_v$, and $v$ is light, so $|L_v|\leq B_0$. Therefore
-\[
-    \Pr[\widehat b_v=\pi_e(\widehat a_u)]=\frac{1}{|L_v|}\geq\frac{1}{B_0},
-\]
-and $e$ is satisfied with probability at least $1/B_0$. When $L_u\neq\emptyset$, the set $S_{u,\widehat a_u}$ has size $d_u\cdot p_u$; when $L_u=\emptyset$, $p_u=0$. Thus the expected Label Cover value of this labeling is at least $B_0^{-1}\cdot\sum_u(d_u/h)\cdot p_u$. Since the Label Cover value is at most $s$,
-    \[
-        s\geq\frac{\theta}{2\cdot C_t \cdot \br{B_0^{1+1/t}+B_0^2 \cdot \lambda^{t-1}}}.
-    \]
-    With $\lambda=s^{1/(t+1)}$, we make the resulting lower bound explicit. Recall that $B_0=2\cdot R/\theta$ and $p_t=1+q_t$. Suppose, for a constant $c_t>0$ to be chosen, that $R<c_t\cdot\theta^{p_t}\cdot s^{-q_t}$. Then
-    \[
-        B_0<2\cdot c_t \cdot \theta^{q_t} \cdot s^{-q_t}.
-    \]
-    Since $q_t\cdot(1+1/t)=1$ and $-2\cdot q_t+(t-1)/(t+1)=-1$, we obtain
-    \[
-        B_0^{1+1/t}<(2\cdot c_t)^{1+1/t} \cdot \frac{\theta}{s},
+        s\geq\frac{\theta}{2B_0^2}=\frac{\theta^3}{8R^2},
         \qquad
-        B_0^2 \cdot \lambda^{t-1}<4\cdot c_t^2 \cdot \frac{\theta^{2\cdot q_t}}{s}
-        \leq4\cdot c_t^2 \cdot \frac{\theta}{s},
+        T\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
     \]
-    where the last inequality uses $2q_t\geq1$ and $\theta\leq1$. Choose $c_t$ small enough that
-    \[
-        2\cdot C_t \cdot \left((2\cdot c_t)^{1+1/t}+4\cdot c_t^2\right)<1.
-    \]
-    These bounds make the denominator in the last soundness inequality strictly less than $\theta/s$, so its right-hand side is strictly greater than $s$, a contradiction. Thus $R\geq c_t\cdot\theta^{p_t}\cdot s^{-q_t}$, and $T=R\cdot H\geq c_t\cdot\theta^{p_t}\cdot H\cdot s^{-q_t}$.
 
     \par\noindent\textbf{Latency.}
-    The same $\theta$ gives the latency bound: consider any sequence covering at least $\theta\cdot H$ walk-indexed $t$-stars. Stop at the first position when at least $\lceil\theta\cdot H/2\rceil$ $t$-stars have been covered. This prefix is precedence-closed, so the partial-coverage bound with threshold $\theta/2$ gives it length at least $c_t\cdot(\theta/2)^{p_t}\cdot H\cdot s^{-q_t}$. Since $\theta\leq1$, at least $H/2$ $t$-stars remain uncovered immediately before that position, and each has coverage time at least the prefix length. The total coverage time is therefore at least $c_t\cdot2^{-(p_t+1)}\cdot\theta^{p_t}\cdot H^2\cdot s^{-q_t}$. Decreasing $c_t$ if necessary gives the stated bound with the same constant in both soundness guarantees.
+    Consider any feasible sequence covering at least $\theta h$ constraints, and stop at the first position when at least $\lceil\theta h/2\rceil$ constraints have been covered. This prefix is precedence-closed, so the partial-coverage bound with threshold $\theta/2$ gives it length at least
+    \[
+        \frac{1}{\sqrt8}\cdot(\theta/2)^{3/2}\cdot h\cdot s^{-1/2}.
+    \]
+    Immediately before that position fewer than $\theta h/2\leq h/2$ elements have been covered. At least $h/2$ elements therefore have coverage time at least the prefix length, including any that remain uncovered at the end of the sequence. The total coverage time is at least
+    \[
+        \frac{1}{16}\cdot\theta^{3/2}\cdot h^2\cdot s^{-1/2}.
+    \]
+    Thus both soundness bounds hold with $c_*=1/16$.
 \end{proof}
 
-For a bicriteria algorithm with coverage-loss factor $\kappa\geq1$, the relaxed target is $\tau H$, where $\tau=f/\kappa$. In a YES instance, the optimum is at most $(t+2)H$ for $\ProblemPCSC$ and $(t+2)H^2$ for $\ProblemPCMSSC$. In a NO instance, applying the soundness bounds with $\theta=\tau$ gives cost lower bounds $c_t\cdot f^{p_t}\cdot\kappa^{-p_t}\cdot H\cdot s^{-q_t}$ for $\ProblemPCSC$ and $c_t\cdot f^{p_t}\cdot\kappa^{-p_t}\cdot H^2\cdot s^{-q_t}$ for $\ProblemPCMSSC$. Thus, for either objective, the reduction rules out a bicriteria ratio $(\alpha,\kappa)$ whenever
+For a bicriteria algorithm with coverage-loss factor $\kappa\geq1$, the relaxed target is $fh/\kappa$. In a YES instance, the optimum for target fraction $f$ is at most $3h$ for $\ProblemPCSC$ and $3h^2$ for $\ProblemPCMSSC$. In a NO instance, applying the soundness bounds with $\theta=f/\kappa$ gives cost lower bounds $c_*\cdot f^{3/2}\cdot\kappa^{-3/2}\cdot h\cdot s^{-1/2}$ for $\ProblemPCSC$ and $c_*\cdot f^{3/2}\cdot\kappa^{-3/2}\cdot h^2\cdot s^{-1/2}$ for $\ProblemPCMSSC$. Thus, for either objective, the reduction rules out a bicriteria ratio $(\alpha,\kappa)$ whenever
 \[
-    \alpha \cdot \kappa^{p_t}<\frac{c_t}{t+2} \cdot f^{p_t} \cdot s^{-q_t}.
+    \alpha\cdot\kappa^{3/2}<\frac{c_*}{3}\cdot f^{3/2}\cdot s^{-1/2}.
 \]
-For fixed $f$ and $t$, the gap is $\Omega_{f,t}(\kappa^{-p_t}\cdot s^{-q_t})$.
+For fixed $f$, the gap is $\Omega_f(\kappa^{-3/2}\cdot s^{-1/2})$.
 
 \subsubsection{Substituting concrete parameters}
 \par\noindent\textbf{Hardness based on P vs NP.}
-Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} show that, for every constant $c>0$, distinguishing Label Cover value $1$ from value at most $(\log N)^{-c}$ is NP-hard, with alphabet size at most $N$.
+Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} show that, for every constant $c>0$, distinguishing Label Cover value $1$ from value at most $(\log N_0)^{-c}$ is NP-hard, with alphabet size at most $N_0$, where $N_0$ is the source instance size.
 \begin{theorem}\label{thm:DS-covering-hardness}
     For every fixed $f\in(0,1]$ and constants $K,J\geq0$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{(\log n)^K},\bigo\br{(\log n)^J}}$ or $\br{\bigo\br{(\log m)^K},\bigo\br{(\log m)^J}}$-approximation unless $\text{P}=\text{NP}$. This holds even when the precedence DAG has height two.
 \end{theorem}
 \begin{proof}
-    Fix $t\geq2$, and choose a source soundness exponent $c_0>0$ such that $c_0\cdot q_t>K+p_t\cdot J$. Let $N$ be the graph size of the Dinur and Steurer instance, and set $s_0=(\log N)^{-c_0}$. After optional totalization, the constraint count is $h=\Theta(N/s_0)$, the alphabet size is $Q=\bigo(N/s_0)$, and the soundness is at most $s=2\cdot s_0$. Thus $\Delta$ is polylogarithmic in $N$, $n=H=N\,\cdot\mathrm{polylog}(N)$, and $m=\bigo(H\cdot N\,\cdot\mathrm{polylog}(N))$. Since the alphabets are nonempty, $m\geq H=n$, so $\log n,\log m=\Theta(\log N)$. The explicit output size $\bigo_t(H^2\cdot Q)$ is polynomial in $N$.
-    For either choice $x\in\{n,m\}$, suppose the coverage-loss factor is $\kappa=\bigo\br{(\log x)^J}$. Since $\log x=\Theta(\log N)$ and $s=2(\log N)^{-c_0}$, the resulting gap is
+    Choose a source soundness exponent $c_0>0$ such that $c_0/2>K+3J/2$. Let $N_0$ be the size of the Dinur and Steurer instance and set $s_0=(\log N_0)^{-c_0}$. After optional totalization, the constraint count and alphabet size satisfy $h,Q=\bigo(N_0/s_0)$, and the soundness is at most $s=2s_0$. Applying Lemma~\ref{lem:label-cover-covering-gap} gives $n=h$ and $m=\bigo(hQ)$, so $\log n,\log m=\bigo(\log N_0)$. The explicit output size $\bigo(h^2\cdot Q)$ is polynomial in $N_0$.
+    For either choice $x\in\{n,m\}$, suppose the coverage-loss factor is $\kappa=\bigo\br{(\log x)^J}$. Since $\log x=\bigo(\log N_0)$ and $s=2(\log N_0)^{-c_0}$, the resulting gap is
     \[
-        \Omega_{f,t}\br{\kappa^{-p_t} \cdot s^{-q_t}}
-        =        \Omega_{f,t}\br{(\log N)^{c_0\cdot q_t-p_t\cdot J}}.
+        \Omega_f\br{\kappa^{-3/2}\cdot s^{-1/2}}
+        =\Omega_f\br{(\log N_0)^{c_0/2-3J/2}}.
     \]
-    Since $c_0\cdot q_t-p_t\cdot J>K$, this gap exceeds the cost factor $\bigo\br{(\log x)^K}$ for sufficiently large $N$, giving the contradiction.
+    Since $c_0/2-3J/2>K$, this gap exceeds the cost factor $\bigo\br{(\log x)^K}$ for sufficiently large $N_0$, giving the contradiction.
 \end{proof}
 
 \par\noindent\textbf{Parallel repetition: an intermediate subpolynomial bound.}
@@ -634,19 +517,19 @@ The PCP theorem followed by parallel repetition gives absolute constants $a_0>1$
     This holds even when the precedence DAG has height two and every set has size at most one. In particular, ETH rules out all these approximation factors.
 \end{theorem}
 \begin{proof}
-    Fix $t\geq2$, the number of visited constraint positions in each $t$-walk, and an integer $b>(1-\epsilon)/\epsilon$. Set $\tau=\lceil(\log L)^b\rceil$. After optional totalization, apply Lemma~\ref{lem:label-cover-covering-gap} with $s=2\beta_0^\tau$. The totalized Label Cover graph and alphabets have size $L^{\bigo(\tau)}$, so $h,Q\leq L^{\bigo(\tau)}$. The expander degree is $\Delta=\exp(\bigo_{t,\xi}(\tau))$. Therefore
+    Choose an integer $b>(1-\epsilon)/\epsilon$ and set $\tau=\lceil(\log L)^b\rceil$. After optional totalization, apply Lemma~\ref{lem:label-cover-covering-gap} with $s=2\beta_0^\tau$. The totalized Label Cover graph and alphabets have size $L^{\bigo(\tau)}$, so $h,Q\leq L^{\bigo(\tau)}$. Therefore
     \[
-        n=H=h \cdot \Delta^{t-1}\leq L^{\bigo_{t,\xi}(\tau)},\qquad
-        m=H \cdot \br{2 \cdot \spr{\Sigma_A}+t \cdot \spr{\Sigma_B}}\leq L^{\bigo_{t,\xi}(\tau)}.
+        n=h\leq L^{\bigo(\tau)},\qquad
+        m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}\leq L^{\bigo(\tau)}.
     \]
-    The explicit output encoding has size $\bigo_t(H^2Q)\leq L^{\bigo_{t,\xi}(\tau)}$. For either choice $x\in\{n,m\}$, let $\alpha$ and $\kappa$ be the claimed cost and coverage-loss factors. Then
+    The explicit output encoding has size $\bigo(h^2\cdot Q)\leq L^{\bigo(\tau)}$. For either choice $x\in\{n,m\}$, let $\alpha$ and $\kappa$ be the claimed cost and coverage-loss factors. Then
     \[
         \log\alpha,\log\kappa
         =\bigo\br{(\log x)^{1-\epsilon}}
         =\bigo\br{(\log L)^{(b+1)(1-\epsilon)}}
         =o(\tau),
     \]
-    since $(b+1)(1-\epsilon)<b$. Hence $\alpha\cdot\kappa^{p_t}=2^{o(\tau)}$, whereas $f^{p_t}\cdot s^{-q_t}=2^{\Theta_t(\tau)}$, contradicting the required bicriteria gap. The reduction and algorithm run in time $L^{\bigo(\tau)}=2^{(\log L)^{\bigo(1)}}$, implying the stated containment. Such a quasipolynomial-time algorithm would also contradict ETH.
+    since $(b+1)(1-\epsilon)<b$. Hence $\alpha\cdot\kappa^{3/2}=2^{o(\tau)}$, whereas $f^{3/2}\cdot s^{-1/2}=2^{\Theta(\tau)}$, contradicting the required bicriteria gap. The reduction and algorithm run in time $L^{\bigo(\tau)}=2^{(\log L)^{\bigo(1)}}$, implying the stated containment. Such a quasipolynomial-time algorithm would also contradict ETH.
 \end{proof}
 
 These two results concern deterministic approximation algorithms. Excluding randomized algorithms with bounded error instead requires the corresponding assumptions that NP has no bounded-error randomized polynomial-time or quasipolynomial-time algorithms, respectively.
@@ -657,28 +540,27 @@ In order to provide a polynomial inapproximability result, we rely on the \texts
 \begin{theorem}\label{thm:PGC-covering-hardness}
     Assuming the \textsc{Projection Games Conjecture}, let $c>0$ and $a\geq1$ be the constants in its polynomial-soundness consequence stated above, and define
     \[
-        \gamma_n=\frac{c}{1+2\cdot c},\qquad
-        \gamma_m=\frac{c}{1+a\cdot c+2\cdot c}.
+        \gamma_n=\frac{c}{2},\qquad
+        \gamma_m=\frac{c}{2(1+a\cdot c)}.
     \]
-    For every fixed $f\in(0,1]$ and constants $\rho,\sigma\geq0$, neither covering problem admits a polynomial-time bicriteria $\br{\bigo\br{n^\rho},\bigo\br{n^\sigma}}$-approximation unless $\text{P}=\text{NP}$ whenever $
-    \rho+2\cdot\sigma<\gamma_n.$
-    Similarly, neither covering problem admits a polynomial-time bicriteria $\br{\bigo\br{m^\rho},\bigo\br{m^\sigma}}$-approximation unless $\text{P}=\text{NP}$ whenever $\rho+2\cdot\sigma<\gamma_m.$
+    For every fixed $f\in(0,1]$ and constants $\rho,\sigma\geq0$, neither covering problem admits a polynomial-time bicriteria $\br{\bigo\br{n^\rho},\bigo\br{n^\sigma}}$-approximation unless $\text{P}=\text{NP}$ whenever $\rho+\tfrac32\sigma<\gamma_n$.
+    Similarly, neither covering problem admits a polynomial-time bicriteria $\br{\bigo\br{m^\rho},\bigo\br{m^\sigma}}$-approximation unless $\text{P}=\text{NP}$ whenever $\rho+\tfrac32\sigma<\gamma_m$.
 \end{theorem}
 \begin{proof}
-    Fix $f\in(0,1]$ and suppose first that $\rho+2\cdot\sigma<\gamma_n$. Choose the fixed star length $t$ sufficiently large and then $\xi>0$ sufficiently small that
+    The PGC instances have $s=N^{-c}$, $Q=\bigo(N^{a\cdot c})$, and $h=\Theta(N)$. Lemma~\ref{lem:label-cover-covering-gap} gives
     \[
-        \br{1+\frac{(2+\xi)\cdot c\cdot(t-1)}{t+1}} \cdot \br{\rho+p_t\cdot\sigma}<c\cdot q_t.
+        n=h=\Theta(N),\qquad
+        m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}=\bigo\br{N^{1+a\cdot c}}.
     \]
-    The PGC instances have $s=N^{-c}$, $Q=\bigo(N^{a\cdot c})$, and $h=\Theta(N)$. The expander degree satisfies $\Delta=\bigo_{t,\xi}(N^{(2+\xi)\cdot c/(t+1)})$, so
+    For $n$-based factors, if $\rho+\tfrac32\sigma<\gamma_n=c/2$, then
     \[
-        n=H=\bigo\br{N^{1+(2+\xi)\cdot c\cdot(t-1)/(t+1)}},\qquad
-        m=\bigo\br{N^{1+a\cdot c+(2+\xi)\cdot c\cdot(t-1)/(t+1)}}.
+        \alpha\cdot\kappa^{3/2}=\bigo\br{N^{\rho+3\sigma/2}}=o\br{N^{c/2}}.
     \]
-    Hence $\alpha\cdot\kappa^{p_t}=\bigo\br{N^{(1+(2+\xi)\cdot c\cdot(t-1)/(t+1))\cdot(\rho+p_t\cdot\sigma)}}=o\br{N^{c\cdot q_t}}$, contradicting the source soundness and the gap $\Omega_{f,t}(s^{-q_t})$. For the $m$-based assertion, suppose $\rho+2\cdot\sigma<\gamma_m$ and choose $t$ large and $\xi$ small so that
+    For $m$-based factors, if $\rho+\tfrac32\sigma<\gamma_m=c/(2(1+a\cdot c))$, then
     \[
-        \br{1+a\cdot c+\frac{(2+\xi)\cdot c\cdot(t-1)}{t+1}} \cdot \br{\rho+p_t\cdot\sigma}<c\cdot q_t;
+        \alpha\cdot\kappa^{3/2}=\bigo\br{N^{(1+a\cdot c)(\rho+3\sigma/2)}}=o\br{N^{c/2}}.
     \]
-    then the same argument applies using the displayed bound on $m$. The explicit output size $\bigo_t(H^2\cdot Q)$ is polynomial in $N$, so both reductions run in polynomial time.
+    Both contradict the gap $\Omega_f(s^{-1/2})=\Omega_f(N^{c/2})$. The explicit output size $\bigo(h^2\cdot Q)=\bigo(N^{2+a\cdot c})$ is polynomial in $N$, so both reductions run in polynomial time.
 \end{proof}
 
 \subsection{Outforest precedence constraints}
@@ -773,8 +655,8 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
         \item For every $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log n)^{1-\epsilon}}}$- or $\bigo\br{2^{(\log m)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input. In particular, ETH rules out these approximation factors.
         \item Under the Projection Games Conjecture, let $a,c$ be its polynomial-soundness constants and set
         \[
-            \gamma_n=\frac{c}{1+2c},\qquad
-            \gamma_m=\frac{c}{1+ac+2c}.
+            \gamma_n=\frac{c}{2},\qquad
+            \gamma_m=\frac{c}{2(1+ac)}.
         \]
         For $0<\epsilon<\gamma_n$, neither problem admits a polynomial-time $\bigo\br{n^{\gamma_n-\epsilon}}$-approximation; for $0<\epsilon<\gamma_m$, neither admits a polynomial-time $\bigo\br{m^{\gamma_m-\epsilon}}$-approximation.
         \item For every $\epsilon>0$, no $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\text{ZTIME}\br{n^{\text{polylog}(n)}}$.
@@ -818,13 +700,13 @@ Chlamt\'a\v{c} et al. prove that, assuming the Hypergraph Dense-vs-Random Conjec
 \begin{corollary}[PGC hardness for RBSC]\label{cor:PRBSC-PGC-hardness}
     Assuming the \textsc{Projection Games Conjecture}, let
     \[
-        \gamma_k=\frac{c}{1+2c},\qquad
-        \gamma_m=\frac{c}{1+a\cdot c+2c},
+        \gamma_k=\frac{c}{2},\qquad
+        \gamma_m=\frac{c}{2(1+a\cdot c)},
     \]
     where $a,c$ are the constants in Theorem~\ref{thm:PGC-covering-hardness}. On instances in the image of Theorem~\ref{thm:PCSC-RBSC}, for every fixed $f\in(0,1]$ and $\rho,\sigma\geq0$:
     \begin{itemize}
-        \item if $\rho+2\cdot\sigma<\gamma_k$, there is no polynomial-time bicriteria $\br{\bigo\br{k^\rho},\bigo\br{k^\sigma}}$-approximation unless $\text{P}=\text{NP}$
-        \item if $\rho+2\cdot\sigma<\gamma_m$, there is no polynomial-time bicriteria $\br{\bigo\br{m^\rho},\bigo\br{m^\sigma}}$-approximation unless $\text{P}=\text{NP}$
+        \item if $\rho+\tfrac32\sigma<\gamma_k$, there is no polynomial-time bicriteria $\br{\bigo\br{k^\rho},\bigo\br{k^\sigma}}$-approximation unless $\text{P}=\text{NP}$
+        \item if $\rho+\tfrac32\sigma<\gamma_m$, there is no polynomial-time bicriteria $\br{\bigo\br{m^\rho},\bigo\br{m^\sigma}}$-approximation unless $\text{P}=\text{NP}$
     \end{itemize}
 \end{corollary}
 \begin{proof}
