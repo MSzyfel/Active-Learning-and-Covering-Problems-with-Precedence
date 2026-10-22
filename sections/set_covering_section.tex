@@ -165,21 +165,29 @@ It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSS
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    We show how to reduce such an instance to the well-known \textsc{Maximum Coverage} problem (without any precedence constraints) where we allow the non-uniform cost of the sets. In the latter setup including a set $S$ into the cover may impose arbitrary cost $c\br{S}$. For this task a $\br{1, \frac{e}{e-1}}$-approximation algorithm is known \cite{TheBudgetedMaximumCoverageProblem}. Observe that for precedence constraints of the inforest type, for any two sets $S, W\in \cS$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then one is a descendant of the other in the inforest, i.e., either $S\preceq W$ or $W\preceq S$. Thus, we can create an equivalent \textsc{Maximum Coverage} instance in the following way: for each set $S\in \cS$, we create a new set $S'$ in the \textsc{Maximum Coverage} instance, such that $S'=\bigcup_{W\in \closure{S}}W$ and $c\br{S'}=\spr{\closure{S}}$. It is easy to see that any reasonable cover for the \textsc{Maximum Coverage} instance picks at most one representative $S'$ of set $S$ from each tree $T$ in the inforest and this corresponds to picking all of the sets in $\closure{S}$ in the original instance. Thus, this choice corresponds to picking a precedence-closed subtree of this subtree $T$. It is also easy to see, that any precedence-closed subtree of $T$ corresponds to picking a representative $S'$ of some set $S$ in the \textsc{Maximum Coverage} instance. Therefore, any feasible solution to the \textsc{Maximum Coverage} instance corresponds to a feasible solution to $\ProblemBPCSC$ on the original instance with the same cost and coverage, and vice versa. Thus, by Corollary \ref{cor:BPCSC-to-PCSC}, the theorem follows.
+    \DDfix{In the budgeted \textsc{Maximum Coverage} problem with non-uniform costs, the input consists of a universe $\cX$, a family $\mathcal{A}\subseteq 2^\cX$, a cost function $c:\cA\to\mathbb{R}_{\geq 0}$, and a budget $B>0$. The goal is to choose a subfamily $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$ that maximizes $\spr{\cov\br{\cA'}}$. A $\br{1,\frac{e}{e-1}}$-approximation algorithm for this problem is known \cite{TheBudgetedMaximumCoverageProblem}.}
+    
+    \DDfix{
+    We reduce a given instance $(\cU,\cS,\preceq, b)$ or $(\cU,\cS,\preceq, f)$ of $\ProblemBPCSC$ or $\ProblemPCSC$, respectively, to this problem.
+    Observe that for inforest precedence constraints, for any two sets $S, W\in \cS$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then either $S\preceq W$ or $W\preceq S$.
+    For each set $S\in \cS$, we construct a new set $z(S)$ added to $\cA$, such that $z(S)=\cov\br{\closure{S}}$ and $c\br{z(S)}=\spr{\closure{S}}$.
+    It follows directly from picking any $z(S)$ as part of a solution to the \textsc{Maximum Coverage} instance, we are effectively picking all sets in $\closure{S}$ in the original instance, obtaining the same coverage and cost.
+    Thus, by Corollary \ref{cor:BPCSC-to-PCSC}, the theorem follows.
+    }
 \end{proof}
 
 Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the following result for $\ProblemPCMSSC$
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
-    There exists a bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest running in polynomial time.
+    There exists a bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation polynomial-time algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 
 \medskip
 \paraTitle{Steiner problems.}
 Let $(V,d)$ denote a symmetric metric with distance function $d: V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
 An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
-Let $\cX$ be a family of \emph{groups}, where for each $X \in \cX$, $X\subseteq V$.
+Let $\cX$ be a family of \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
 Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
-Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$ where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
+Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$, where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
 % For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
@@ -196,16 +204,19 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
     There exist polynomial-time bicriteria $\br{\bigo\br{\log n}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    We show how to reduce such an instance to $\ProblemGSO$ on tree metrics.
+    \DDfix{We reduce our set cover instances to} an instance to $\ProblemGSO$ on tree metrics.
     The latter problem admits a $\br{\bigo\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}.
-    It should be noted that they give a worse approximation ratio of $\br{\bigo\br{\log^2 n}, 4}$, however their algorithm consists of embedding a general metric into a tree metric with $\bigo\br{\log n}$ distortion.
-    Since our metric will be a tree metric, we can skip this step and obtain the improved approximation ratio.
+    It should be noted that this work gives a worse approximation ratio, namely $\br{\bigo\br{\log^2 n}, 4}$, however the algorithm consists of embedding a general metric into a tree metric with a $\bigo\br{\log n}$ distortion.
+    Since our metric will be a tree metric, we avoid this $\bigo\br{\log n}$-factor loss.
     
-    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
+    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$. \DD{czy ta waga na pewno dobrze ustawiona? (=1)}
 
     Let $\tau$ be any $r$-tour in this tree, and let $\cC_\tau=\brc{S\in\cS\mid v_S\text{ is visited by }\tau}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has exactly $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
 
-    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges. A tour that traverses each such edge once in each direction visits precisely the representatives in $\cC$, has length $\spr{\cC}$, and covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Hence, for every budget, tours of at most that length and precedence-closed families of at most that size achieve the same coverage. Thus the reduction preserves the optimum coverage, and by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
+    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges, \DDfix{and a DFS traversal along those edges  has length $\spr{\cC}$.
+    Morever, it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$.
+    %Hence, for every budget, tours of at most that length and precedence-closed families of at most that size achieve the same coverage.
+    Thus the reduction} preserves the optimum coverage, and by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
 \end{proof}
 
 
