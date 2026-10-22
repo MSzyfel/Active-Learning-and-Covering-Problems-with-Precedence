@@ -169,8 +169,9 @@ It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSS
     
     \DDfix{
     We reduce a given instance $(\cU,\cS,\preceq, b)$ or $(\cU,\cS,\preceq, f)$ of $\ProblemBPCSC$ or $\ProblemPCSC$, respectively, to this problem.
-    Observe that for inforest precedence constraints, for any two sets $S, W\in \cS$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then either $S\preceq W$ or $W\preceq S$.
+    Observe that for inforest precedence constraints, for any two sets $S, W$ in $\cS$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then either $S\preceq W$ or $W\preceq S$.
     For each set $S\in \cS$, we construct a new set $z(S)$ added to $\cA$, such that $z(S)=\cov\br{\closure{S}}$ and $c\br{z(S)}=\spr{\closure{S}}$.
+    Note that we may without loss of generality that any solution to \textsc{Maximum Coverage} does not pick a pair of elements whose corresponding closures intersect, since picking both would be redundant.
     It follows directly from picking any $z(S)$ as part of a solution to the \textsc{Maximum Coverage} instance, we are effectively picking all sets in $\closure{S}$ in the original instance, obtaining the same coverage and cost.
     Thus, by Corollary \ref{cor:BPCSC-to-PCSC}, the theorem follows.
     }
