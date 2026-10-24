@@ -1,5 +1,5 @@
 \begin{table}[ht!]
-\caption{Inapproximability results. For PGC, let $\gamma_n=c/2$ and $\gamma_m=c/(2(1+ac))$, where $a,c$ are conjecture constants. }
+\caption{Inapproximability results. The PGC bounds hold for some constant $\delta>0$.}
 \label{tab:hardness}
 \centering
 {\footnotesize
@@ -34,16 +34,16 @@
 \multicolumn{2}{c}{PDS, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
 & \multicolumn{2}{c}{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\quad (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$} &
 \multicolumn{2}{c}{$\log^{\bigo(1)} n,\quad \log^{\bigo(1)} m$} \\
-& \multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Thm.~\ref{thm:DS-covering-hardness}} &
+& \multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
 \multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
 & \multicolumn{2}{c}{{\scalebox{0.80}{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\quad (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}} &
 \multicolumn{2}{c}{$\bigo(2^{(\log n)^{1-\epsilon}}),\quad \bigo(2^{(\log m)^{1-\epsilon}})$} \\
-& \multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Thm.~\ref{thm:quasipolynomial-covering-hardness}} &
+& \multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
 \multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{{\scalebox{0.85}{$(\bigo(n^{\gamma_n-\frac32\sigma-\epsilon}),\bigo(n^\sigma)),\quad (\bigo(m^{\gamma_m-\frac32\sigma-\epsilon}),\bigo(m^\sigma))$}}} &
-\multicolumn{2}{c}{$\bigo(n^{\gamma_n-\epsilon}),\quad \bigo(m^{\gamma_m-\epsilon})$} \\
-& \multicolumn{2}{c}{PGC, Thm.~\ref{thm:PGC-covering-hardness}} &
-\multicolumn{2}{c}{PGC, Cor.~\ref{cor:decision-tree-inapproximability}} \\
+& \multicolumn{2}{c}{$(\bigo(n^\delta),\bigo(n^\delta)),\quad (\bigo(m^\delta),\bigo(m^\delta))$} &
+\multicolumn{2}{c}{$\bigo(n^\delta),\quad \bigo(m^\delta)$} \\
+& \multicolumn{2}{c}{PGC, $\text{P}\ne\text{NP}$, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} &
+\multicolumn{2}{c}{PGC, $\text{P}\ne\text{NP}$, Cor.~\ref{cor:decision-tree-inapproximability}} \\
 \bottomrule
 \end{tabular}
 }
