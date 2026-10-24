@@ -21,17 +21,23 @@ Fix a topological ordering of $(\cS,\preceq)$; $\operatorname{ord}(A)$ denotes i
             $U \gets U \setminus \cov(\tau_l^i)$.
 
             $\pi_l \gets \pi_l \circ \operatorname{ord}(\tau_l^i\setminus P_l)$.
+
             $P_l \gets P_l\cup\tau_l^i$.
         }
         $T_l\gets\min\brc{m,\cl{\alpha\cdot\beta\cdot a^l}}$.
+        
         \While{$\spr{\pi_l}<T_l$}{
             $S_l\gets$ the next set in the fixed topological ordering of $\cS$ that is not in $P_l$.
+
             $\pi_l\gets\pi_l\circ\angl{S_l}$.
+
             $P_l\gets P_l\cup\brc{S_l}$.
         }
 
         $R_l\gets\cU\setminus\cov(P_l)$.
+        
         $\sigma_l \gets $ Run the $\br{\alpha, \beta}$-approx. algorithm for $\ProblemBPCSC$ on $(R_l, \preceq, \cS, \budget=a^l)$.
+
         $\pi_l\gets\pi_l\circ\operatorname{ord}(\sigma_l\setminus P_l)$.
 
         \If{$\spr{\cov\br{\pi_l,\cU}}\geq f\cdot\spr{\cU}/\beta$}{
