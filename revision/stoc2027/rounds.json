@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 96,
+  "completed_rounds": 100,
   "changed_rounds": [
     5,
     6,
@@ -29,7 +29,8 @@
     91,
     92,
     93,
-    96
+    96,
+    100
   ],
   "rounds": [
     {
@@ -1319,6 +1320,72 @@
           "build_log": "build/round-096-main_arxiv-build.txt"
         }
       ]
+    },
+    {
+      "round": 97,
+      "topic": "Active algorithms and figures",
+      "outcome": "no change",
+      "evidence": "Only DecisionTree and fPCMSSC pseudocodes are active; both use normal-size fonts. No figures are input by either scientific edition.",
+      "reviewer": "review_10"
+    },
+    {
+      "round": 98,
+      "topic": "Reference and citation integrity",
+      "outcome": "no change",
+      "evidence": "Source traversal checks active labels, hyperrefs and citation keys; final build validation checks that references and citations resolve.",
+      "reviewer": "review_10"
+    },
+    {
+      "round": 99,
+      "topic": "AI methodology and end matter",
+      "outcome": "no change",
+      "evidence": "Both editions have the same factual Codex assistance disclosure, including proof development and parameter checking, plus the body scope note. No author verification certification was invented.",
+      "reviewer": "review_10"
+    },
+    {
+      "round": 100,
+      "topic": "One-line result pairs and final audit",
+      "outcome": "changed",
+      "evidence": "Per the latest explicit request, put all eight paired n/m results on one line inside the existing grouped cells. Keep measured minimum two-line settings and six dashed separators; redistribute remaining result width56/44 between covering and decision-tree columns. All ten agents approved exact source and preview. Final dual source-only builds, reference audit, first-twelve-page inspection, rendered table checks and intended-change review complete the manuscript audit. Retained table fonts remain below requested11pt.",
+      "reviewer": "review_10",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "source_only": true,
+          "source_file_count": 17,
+          "overfull_boxes": 0,
+          "unresolved_references": 0,
+          "unresolved_citations": 0,
+          "bibtex_warnings": 0,
+          "build_directory": "build/clean-final-main"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "source_only": true,
+          "source_file_count": 17,
+          "overfull_boxes": 0,
+          "unresolved_references": 0,
+          "unresolved_citations": 0,
+          "bibtex_warnings": 0,
+          "build_directory": "build/clean-final-main_arxiv"
+        }
+      ],
+      "final_audit": "See validation.json for source-only builds, reference integrity, source hashes, visual checks and remaining table-font limitation.",
+      "rendered_validation": "Both edition hardness tables rendered to PNG and visually inspected; no overlap or clipping. Root main.pdf and main_arxiv.pdf refreshed from validated isolated builds."
     }
   ],
   "resumed_baseline": "46ddc3c11b518666e3f3ac33195819f2c4d68883",
@@ -1337,5 +1404,8 @@
   ],
   "guidelines": "https://acm-stoc.org/stoc2027/stoc2027-cfp.html",
   "guidelines_checked": "2026-10-25",
-  "latest_table_instruction": "Retain table structure; consolidate shared hardness assumptions in setting cells. The approximation table is preserved byte-for-byte."
+  "latest_table_instruction": "Preserve five-column structure; two-line setting cells at the measured minimum width; shared hardness assumption on the second line; matching dashed rules between every setting; paired n/m results on one line.",
+  "remaining_formatting_issues": [
+    "Retained footnotesize table text and the existing0.80 scale are below the STOC call requested11-point size. Full formatting compliance is not certified."
+  ]
 }
