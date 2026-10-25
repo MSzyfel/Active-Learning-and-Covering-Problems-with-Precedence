@@ -609,7 +609,7 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
         \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
         \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\text{ZTIME}\br{n^{\text{polylog}(n)}}$.
     \end{enumerate}
-    The Label-Cover- and PGC-based bounds (items 2-4) hold even when every test has at most three outcomes and the precedence DAG has height two.
+    The Label-Cover- and PGC-based bounds (items 2--4) concern deterministic algorithms and hold even when every test has at most three outcomes and the precedence DAG has height two.
 \end{corollary}
 \begin{proof}
     Apply the covering-to-decision-tree reductions with $f=1$ to Corollary~\ref{cor:PDS-limiting-hardness} for item 1 and to the three parts of Theorem~\ref{thm:label-cover-hardness} for items 2--4. The reductions satisfy $n_{\rm DT}=2\cdot n_{\rm cov}$ and $m_{\rm DT}=m_{\rm cov}$, so both parameter-dependent bounds transfer. In items 2--4, the covering sets are empty or singletons, yielding tests with at most three outcomes, and the precedence DAG has height two. Item 5 follows from Theorem~\ref{thm:PCSC-outforest-hardness} via the full-cover reduction for $\ProblemPCWCDT$, and from Corollary~\ref{cor:PCACDT-outforest-hardness} for $\ProblemPCACDT$.

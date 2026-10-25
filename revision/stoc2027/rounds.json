@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 66,
+  "completed_rounds": 83,
   "changed_rounds": [
     5,
     6,
@@ -24,7 +24,8 @@
     55,
     56,
     64,
-    66
+    66,
+    83
   ],
   "rounds": [
     {
@@ -955,6 +956,155 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-066-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 67,
+      "topic": "PDS conjecture parameters",
+      "outcome": "no change",
+      "evidence": "The graph distributions and chosen alpha,beta,k satisfy the restricted conjecture parameter conditions.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 68,
+      "topic": "Clique overlap moments",
+      "outcome": "no change",
+      "evidence": "The exponent j(j-r+2)/(r+1)<=0 includes r=2; fixed moment order permits the required edge union bound.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 69,
+      "topic": "Clique packing and uniform counting",
+      "outcome": "no change",
+      "evidence": "Edge-disjoint clique events are independent; the N^x union bound is summable and greedy deletion loses at most R N^zeta.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 70,
+      "topic": "Planted-case completeness",
+      "outcome": "no change",
+      "evidence": "Marked counts provide disjoint blocks; conditional second moments give constant clique probability per block and O(N^(gamma-1)) union-bound error.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 71,
+      "topic": "Null-case cardinality soundness",
+      "outcome": "no change",
+      "evidence": "Uniform witness-size and clique-count bounds imply o(n) coverage for supports up to x0; fixed f,kappa suffice.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 72,
+      "topic": "Instance size and gap conversion",
+      "outcome": "no change",
+      "evidence": "Fixed-r enumeration is polynomial; mixed planted clique expectation bounds support both n and m gap exponents.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 73,
+      "topic": "PDS min-sum prefix lower bound",
+      "outcome": "no change",
+      "evidence": "A T-prefix leaves at least n/2 items uncovered; their coverage times are at least T, including items omitted by the sequence.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 74,
+      "topic": "Limiting exponents",
+      "outcome": "no change",
+      "evidence": "Fixed r>=1/epsilon yields limiting 1/2 and 1/4 exponents. Reviewer07 checked 495 exact-rational samples for r=2,...,100; full coverage supports both transfers.",
+      "reviewer": "review_07"
+    },
+    {
+      "round": 75,
+      "topic": "Label Cover constraint identities",
+      "outcome": "no change",
+      "evidence": "Partial and total projections are distinguished; parallel constraints retain separate identity and value contributions.",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 76,
+      "topic": "Projection totalization",
+      "outcome": "no change",
+      "evidence": "Private right labels satisfy at most one copied constraint. Removing isolated vertices gives |B|<=|E| and soundness at most 2s.",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 77,
+      "topic": "Label Cover encoding size and height",
+      "outcome": "no change",
+      "evidence": "Bundles contribute h|Sigma_A|+h|Sigma_B| sets and witnesses h|Sigma_A|; all arcs go from empty bundles to singleton witnesses.",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 78,
+      "topic": "Label Cover YES cost",
+      "outcome": "no change",
+      "evidence": "A satisfying assignment selects 2h bundle sets and h witnesses, covering all constraints with cardinality3h and latency at most3h^2.",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 79,
+      "topic": "Heavy-list soundness",
+      "outcome": "no change",
+      "evidence": "Threshold B0=2R/theta leaves theta h/2 covered constraints outside heavy vertices; independent random labels give s>=theta^3/(8R^2).",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 80,
+      "topic": "Min-sum Label Cover soundness",
+      "outcome": "no change",
+      "evidence": "The first prefix covering ceil(theta h/2) items is closed; at least h/2 elements have coverage time at least its length, giving constant1/16.",
+      "reviewer": "review_08"
+    },
+    {
+      "round": 81,
+      "topic": "NP and quasipolynomial substitutions",
+      "outcome": "no change",
+      "evidence": "The gap alpha*kappa^(3/2)=o(s^(-1/2)) is supported by c0>2K+3J and repeated-PCP choice b>(1-epsilon)/epsilon.",
+      "reviewer": "review_08",
+      "source": "https://www.bayesianestimation.org/paper/productgames.pdf"
+    },
+    {
+      "round": 82,
+      "topic": "PGC substitution and target fraction",
+      "outcome": "no change",
+      "evidence": "Polynomial alphabet and inverse-polynomial soundness allow small fixed delta; fixed f contributes only a constant.",
+      "reviewer": "review_08",
+      "source": "https://theoryofcomputing.org/articles/v011a007/v011a007.pdf"
+    },
+    {
+      "round": 83,
+      "topic": "Deterministic scope of hardness transfer",
+      "outcome": "changed",
+      "evidence": "Explicitly retain deterministic algorithm scope for the Label Cover and PGC decision-tree corollary items2--4.",
+      "reviewer": "review_08",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-083-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-083-main_arxiv-build.txt"
         }
       ]
     }
