@@ -1,14 +1,15 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 14,
+  "completed_rounds": 16,
   "changed_rounds": [
     5,
     6,
     8,
     9,
     12,
-    14
+    14,
+    16
   ],
   "rounds": [
     {
@@ -122,6 +123,48 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-014-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "topic": "Decision-tree partial-cover target",
+      "outcome": "no change",
+      "evidence": "The introduction target f=1/4 matches both cover-to-sepcover lemmas and the active algorithm.",
+      "reviewer": "review_01"
+    },
+    {
+      "round": 16,
+      "topic": "Forest orientation in the overview",
+      "outcome": "changed",
+      "evidence": "Use immediate successor/predecessor consistently with the formal poset definitions.",
+      "reviewer": "review_01",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-016-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-016-main_arxiv-build.txt"
         }
       ]
     }
