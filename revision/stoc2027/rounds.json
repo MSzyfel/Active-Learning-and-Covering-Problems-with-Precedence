@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 83,
+  "completed_rounds": 91,
   "changed_rounds": [
     5,
     6,
@@ -25,7 +25,8 @@
     56,
     64,
     66,
-    83
+    83,
+    91
   ],
   "rounds": [
     {
@@ -1105,6 +1106,92 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-083-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 84,
+      "topic": "GST source assumptions",
+      "outcome": "no change",
+      "evidence": "Halperin--Krauthgamer hardness uses quasipolynomial Las Vegas algorithms, consistent with the stated zero-error randomized exclusion.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 85,
+      "topic": "Integer-edge GST expansion",
+      "outcome": "no change",
+      "evidence": "Scaling preserves approximation ratios; chains charge integer edge length and preserve outforest order.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 86,
+      "topic": "Partial outforest latency reduction",
+      "outcome": "no change",
+      "evidence": "Dummy chain is dominated by the representative sequence and the remaining objective is between Lg|sigma| and (L+1)g|sigma|.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 87,
+      "topic": "Weighted-to-unit discretization",
+      "outcome": "no change",
+      "evidence": "Guessing the largest required cost preserves the reference solution; rounding adds at most B*, and expansion has at most gM^2 sets.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 88,
+      "topic": "Full-cover MGL citation",
+      "outcome": "no change",
+      "evidence": "The cited weighted reduction appears in arXiv2604.11388v5 Theorem4.4. Reviewer09 verified this version; journal theorem numbering was not independently verified from full text.",
+      "reviewer": "review_09",
+      "source": "https://arxiv.org/html/2604.11388v5"
+    },
+    {
+      "round": 89,
+      "topic": "Worst-case covering-to-tree transfer",
+      "outcome": "no change",
+      "evidence": "Duplicate representative hypotheses force full coverage; single nonsingleton replies give one internal path and equal costs.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 90,
+      "topic": "Average-case parameter transfer",
+      "outcome": "no change",
+      "evidence": "Sum of depths is twice coverage time; hypothesis count doubles and test count is preserved. Singleton witnesses give at most three outcomes.",
+      "reviewer": "review_09"
+    },
+    {
+      "round": 91,
+      "topic": "Journal bibliography entry type",
+      "outcome": "changed",
+      "evidence": "Correct DTsforEntIdent from inproceedings to article, restoring the TALG journal information in the bibliography.",
+      "reviewer": "review_09",
+      "source": "https://www.cse.iitd.ac.in/~pandit/TALG_Published.pdf",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-091-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-091-main_arxiv-build.txt"
         }
       ]
     }
