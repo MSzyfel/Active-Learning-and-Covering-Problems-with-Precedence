@@ -190,8 +190,7 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{theorem}
 \begin{proof}
     We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics.
-    On tree metrics, the algorithm of \cite[Section~5.1]{ApproxAlgsForOptDTsAndAdapTSPProblems} gives a $\br{\bigo\br{\log\spr{V}},4}$-approximation. Our tree has $\spr{V}=m+1$ vertices.
-    Its $\br{\bigo\br{\log^2 m},4}$ guarantee for general metrics includes a $\bigo\br{\log m}$ distortion from embedding into a tree metric. This step is unnecessary for our instance.
+    On tree metrics, the algorithm of \cite[Section~5.1]{ApproxAlgsForOptDTsAndAdapTSPProblems} returns a tour of length at most $\bigo\br{\log\spr{V}}\cdot b$ whose covered weight is at least one quarter of the optimum under budget $b$. This is a $\br{\bigo\br{\log\spr{V}},4}$-approximation in our cost/coverage convention. Our tree has $\spr{V}=m+1$ vertices. For general metrics, the same algorithm incurs an additional $\bigo\br{\log\spr{V}}$ factor from embedding into a tree metric; this step is unnecessary for our instance.
     
     We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
 
