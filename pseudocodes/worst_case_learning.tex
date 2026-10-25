@@ -1,44 +1,33 @@
+\begingroup
+\LinesNumbered
 \begin{algorithm}[h]
 \DontPrintSemicolon
-\LinesNumbered
-
 \caption{A generic approximation algorithm for $\ProblemPCACDT$ and $\ProblemPCWCDT$.}
 \label{alg:worstDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\ProcDecisionTree$(\cH, \cT, \preceq, \blackBox)$}{
-\If{$\spr{\cH} = 1$}{
-    \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$.
-}
-%\ForEach{$t \in \cT$}{
-%Set $t$ to cover $u\in \cH$ if for $u \in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot\spr{\cH}$.
-%}
-%$S \gets$ Run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $(\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4)$.
-$\cC \gets$ Call $\br{\alpha, \beta}$-approximation algorithm $\blackBox$ on instance $(\cU_{\xi}, \xi(\cT), \preceq_{\xi}, f=1/4)$.
-
-Order $\cC$ topologically if it is a family, and retain its shortest prefix covering at least $\spr{\cU_{\xi}}/(4\beta)$ hypotheses.
-
-$t_{1} \gets$ the test associated with the first set in $\cC$.
-
-$D\gets\br{\brc{t_1}, \emptyset}$.
-
-$\cH_{1} \gets \cH$. 
-
-\For{$i=1$ \KwTo $|\cC|$}{
-\ForEach{\textnormal{reply $H'$, $H'\in t_{i}\br{\cH_{i}}$, such that $1\leq\spr{H'} \leq \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
-    $D_{H'} \gets$ \ProcDecisionTree$(H', \cT, \preceq, \blackBox)$.
-
-    Attach $D_{H'}$ as a child of $t_{i}$ in $D$.
-}
-\If{\textnormal{there is no $H'$, $H'\in t_{i}\br{\cH_{i}}$, such that $\spr{H'} > \frac{5\beta-1}{5\beta}\cdot \spr{\cH}$}}{
-    \Return $D$.
-}
-
-$\cH_{i+1} \gets\argmax_{H', H'\in t_{i}\br{\cH_{i}}} \brc{\spr{H'}}$.
-
-$t_{i+1} \gets$ the test associated with $(i+1)$-th set in $\cC$.
-
-Attach $t_{i+1}$ as a child of $t_{i}$ in $D$.
-}
-\Return $D$.
+\Proc{\ProcDecisionTree$(\cH,\cT,\preceq,\blackBox)$}{
+    \If{$\spr{\cH}=1$}{
+        \Return the single-leaf decision tree for the only hypothesis in $\cH$.\;
+    }
+    Construct $\xi$, $\cU_{\xi}$, and $\preceq_{\xi}$ from the restricted tests $t(\cH)$ for the current hypothesis set $\cH$.\;
+    $\cC\gets$ Call the $\br{\alpha,\beta}$-approximation algorithm $\blackBox$ on $(\cU_{\xi},\xi(\cT),\preceq_{\xi},f=1/4)$.\;
+    Order $\cC$ topologically if it is a family, and retain its shortest prefix covering at least $\spr{\cU_{\xi}}/(4\cdot\beta)$ hypotheses.\;
+    $t_1\gets$ the test associated with the first set in $\cC$.\;
+    $D\gets\br{\brc{t_1},\emptyset}$\;
+    $\cH_1\gets\cH$\;
+    \For{$i=1$ \KwTo $\spr{\cC}$}{
+        \ForEach{$H'\in t_i\br{\cH_i}$ with $1\leq\spr{H'}\leq\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$}{
+            $D_{H'}\gets$ \ProcDecisionTree$(H',\cT,\preceq,\blackBox)$\;
+            Attach $D_{H'}$ as a child of $t_i$ in $D$.\;
+        }
+        \If{there is no $H'\in t_i\br{\cH_i}$ with $\spr{H'}>\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$}{
+            \Return $D$\;
+        }
+        $\cH_{i+1}\gets\argmax_{H'\in t_i\br{\cH_i}}\brc{\spr{H'}}$\;
+        $t_{i+1}\gets$ the test associated with the $(i+1)$-th set in $\cC$.\;
+        Attach $t_{i+1}$ as a child of $t_i$ in $D$.\;
+    }
+    \Return $D$\;
 }
 \end{algorithm}
+\endgroup

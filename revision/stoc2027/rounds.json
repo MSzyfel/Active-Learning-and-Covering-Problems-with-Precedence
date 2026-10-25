@@ -1,10 +1,11 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 6,
+  "completed_rounds": 8,
   "changed_rounds": [
     5,
-    6
+    6,
+    8
   ],
   "rounds": [
     {
@@ -42,6 +43,18 @@
       "topic": "Alphanumeric citation style",
       "outcome": "changed",
       "evidence": "All ten agents consulted. Main bibliography now uses alpha and the active et al. attribution names all three authors. Both versions compile. The existing table overflow is queued for round 8."
+    },
+    {
+      "round": 7,
+      "topic": "Hyperlink cross-referencing",
+      "outcome": "no change",
+      "evidence": "Existing hyperref links cover bibliography, statements and sections. No missing hyperlink mechanism was found."
+    },
+    {
+      "round": 8,
+      "topic": "Readable tables and algorithms",
+      "outcome": "changed",
+      "evidence": "All ten agents consulted and scope amendments applied. Tables use normal-size panels with explicit assumptions and correct baseline scopes. Algorithms use normal-size text with numbered statement boundaries and no rendered semicolons. Both versions compile with zero overfull warnings and no unresolved references. Rendered representative tables and algorithms were inspected."
     }
   ]
 }

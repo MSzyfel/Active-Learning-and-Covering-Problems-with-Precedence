@@ -31,11 +31,12 @@ However, with a slight abuse of notation we assume that non-leaf vertices are su
 
 \paraTitle{Cost measures for decision trees.}
 Let $\tests{D}{v}$ denote the sequence of tests on the path from $r\br{D}$ to $v$ including $v$ if it denotes a test. The cost of identifying a hypothesis $h$ in $D$ is $\COST\br{D, h}=\spr{\tests{D}{h}}$.
-The \emph{worst-case cost} and \emph{average-case cost}\footnote{For simplicity, we do not divide by the number of hypotheses $n$, since this does not affect the approximation ratios.} are, respectively,
+The \emph{worst-case cost} and \emph{average-case cost} are, respectively,
 \[
 \COSTW\br{D} = \max_{h \in \cH} \brc{\COST\br{D, h}},
 \qquad \COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}.
 \]
+We use the sum rather than the average over hypotheses, since the factor $n$ does not affect approximation ratios.
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
 %$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 %$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$

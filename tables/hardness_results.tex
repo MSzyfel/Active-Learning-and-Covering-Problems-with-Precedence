@@ -1,50 +1,100 @@
 \begin{table}[ht!]
-\caption{Inapproximability results. The PGC bounds hold for some constant $\delta>0$.}
+\caption{Inapproximability for covering problems.
+The unconstrained row concerns $f=1$ and assumes $\text{P}\ne\text{NP}$.
+The general-precedence rows hold for every fixed $f\in(0,1]$, with every fixed $\kappa\geq1$ in the PDS row.
+The Label Cover bounds concern deterministic algorithms.
+In the Label Cover rows, $x$ denotes either $n$ or $m$, and $\delta>0$ is some constant.
+Outforest bounds assume that $\text{NP}$ has no zero-error randomized quasipolynomial-time algorithm.
+Here $\text{QP}$ denotes deterministic quasipolynomial time, so ETH suffices for the row assuming $\text{NP}\not\subseteq\text{QP}$.
+Unless a range is specified, $\epsilon>0$ is arbitrary.}
 \label{tab:hardness}
 \centering
-{\footnotesize
-\setlength{\tabcolsep}{1.5pt}
-\begin{tabular}{p{0.08\linewidth}C{0.23\linewidth}C{0.23\linewidth}C{0.21\linewidth}C{0.21\linewidth}}
+\begingroup
+\normalsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}L{0.18\linewidth}C{0.38\linewidth}C{0.39\linewidth}@{}}
 \toprule
-\textbf{setting} & \textbf{\hyperref[problem:PCSC]{\ProblemPCSC}} & \textbf{\hyperref[problem:PCMSSC]{\ProblemPCMSSC}} & \textbf{\hyperref[problem:PCWCDT]{\ProblemPCWCDT}} & \textbf{\hyperref[problem:PCACDT]{\ProblemPCACDT}} \\
+\textbf{Precedence}
+& \textbf{\hyperref[problem:PCSC]{$\ProblemPCSC$}}
+& \textbf{\hyperref[problem:PCMSSC]{$\ProblemPCMSSC$}} \\
 \midrule
-\multirow{2}{\linewidth}{none} & $(1-o(1))\cdot H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $\br{4-\epsilon}$ \\
-& \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
-
-\addlinespace[2pt]
-\cdashline{2-5}
-\addlinespace[2pt]
-
-\shortstack[l]{outforest\\$f=1$} &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
-\shortstack[c]{$\bigo\br{\log^{1-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Cor.~\ref{cor:decision-tree-inapproximability}} &
-\shortstack[c]{$\bigo\br{\log^{1-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
-\shortstack[l]{outforest\\$f<1$} & &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
-
-\addlinespace[2pt]
-\cdashline{2-5}
-\addlinespace[2pt]
-
-\multirow[c]{8}{0.10\textwidth}{\makebox[0.10\textwidth][l]{\shortstack[l]{general\\DAGs}}} &
-\multicolumn{2}{c}{$(\bigo(n^{1/2-\epsilon}),\kappa),\quad (\bigo(m^{1/4-\epsilon}),\kappa)$} &
-\multicolumn{2}{c}{$\bigo(n^{1/2-\epsilon}),\quad \bigo(m^{1/4-\epsilon})$} \\
-& \multicolumn{2}{c}{PDS, Cor.~\ref{cor:PDS-limiting-hardness}} &
-\multicolumn{2}{c}{PDS, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\quad (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$} &
-\multicolumn{2}{c}{$\log^{\bigo(1)} n,\quad \log^{\bigo(1)} m$} \\
-& \multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
-\multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{{\scalebox{0.80}{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\quad (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}} &
-\multicolumn{2}{c}{$\bigo(2^{(\log n)^{1-\epsilon}}),\quad \bigo(2^{(\log m)^{1-\epsilon}})$} \\
-& \multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
-\multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{$(\bigo(n^\delta),\bigo(n^\delta)),\quad (\bigo(m^\delta),\bigo(m^\delta))$} &
-\multicolumn{2}{c}{$\bigo(n^\delta),\quad \bigo(m^\delta)$} \\
-& \multicolumn{2}{c}{PGC, $\text{P}\ne\text{NP}$, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} &
-\multicolumn{2}{c}{PGC, $\text{P}\ne\text{NP}$, Cor.~\ref{cor:decision-tree-inapproximability}} \\
+none
+& $(1-\epsilon)\cdot\ln n$\newline \cite{AnalyticalApproachToParallelRepetition}
+& $4-\epsilon$\newline \cite{ApproximatingMinSumSetCover} \\
+\addlinespace
+outforest\newline $f=1$
+& $\bigo(\log^{2-\epsilon}n)$\newline Thm.~\ref{thm:PCSC-outforest-hardness}
+& $\bigo(\log^{1-\epsilon}n)$\newline Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness} \\
+\addlinespace
+outforest\newline $f<1$ in input
+& ---
+& $\bigo(\log^{2-\epsilon}n)$\newline Thm.~\ref{thm:PCMSSC-outforest-hardness} \\
+\midrule
+general\newline PDS
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\br{\bigo(n^{1/2-\epsilon}),\kappa}$ and
+$\br{\bigo(m^{1/4-\epsilon}),\kappa}$\newline
+Cor.~\ref{cor:PDS-limiting-hardness}} \\
+\addlinespace
+general\newline $\text{P}\ne\text{NP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\br{\log^{\bigo(1)}x,\log^{\bigo(1)}x}$\newline
+Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} \\
+\addlinespace
+general\newline $\text{NP}\not\subseteq\text{QP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\br{\bigo(2^{(\log x)^{1-\epsilon}}),\bigo(2^{(\log x)^{1-\epsilon}})}$, $0<\epsilon<1$\newline
+Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} \\
+\addlinespace
+general\newline PGC and\newline $\text{P}\ne\text{NP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\br{\bigo(x^\delta),\bigo(x^\delta)}$\newline
+Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} \\
 \bottomrule
 \end{tabular}
-}
+\endgroup
 \end{table}
+
+\begin{table}[ht!]
+\ContinuedFloat
+\caption{Inapproximability for decision-tree problems (continued).
+The same conventions and complexity assumptions apply.
+The general-precedence bounds are given by Corollary~\ref{cor:decision-tree-inapproximability}.}
+\centering
+\begingroup
+\normalsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}L{0.18\linewidth}C{0.38\linewidth}C{0.39\linewidth}@{}}
+\toprule
+\textbf{Precedence}
+& \textbf{\hyperref[problem:PCWCDT]{$\ProblemPCWCDT$}}
+& \textbf{\hyperref[problem:PCACDT]{$\ProblemPCACDT$}} \\
+\midrule
+none
+& $o(\log n)$\newline \cite{HardnessOfMinHeightDTP}
+& $4-\epsilon$\newline \cite{DTsforEntIdent} \\
+\addlinespace
+outforest
+& $\bigo(\log^{2-\epsilon}n)$\newline Cor.~\ref{cor:decision-tree-inapproximability}
+& $\bigo(\log^{1-\epsilon}n)$\newline Cor.~\ref{cor:PCACDT-outforest-hardness} \\
+\midrule
+general\newline PDS
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\bigo(n^{1/2-\epsilon})$ and $\bigo(m^{1/4-\epsilon})$} \\
+\addlinespace
+general\newline $\text{P}\ne\text{NP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{$\log^{\bigo(1)}x$} \\
+\addlinespace
+general\newline $\text{NP}\not\subseteq\text{QP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{
+$\bigo(2^{(\log x)^{1-\epsilon}})$, $0<\epsilon<1$} \\
+\addlinespace
+general\newline PGC and\newline $\text{P}\ne\text{NP}$
+& \multicolumn{2}{C{0.77\linewidth}@{}}{$\bigo(x^\delta)$} \\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{table}
+
