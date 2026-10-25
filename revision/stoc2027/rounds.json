@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 39,
+  "completed_rounds": 48,
   "changed_rounds": [
     5,
     6,
@@ -18,7 +18,8 @@
     30,
     31,
     32,
-    39
+    39,
+    48
   ],
   "rounds": [
     {
@@ -589,6 +590,97 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-039-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 40,
+      "topic": "Sum versus expectation",
+      "outcome": "no change",
+      "evidence": "The sum and uniform expectation differ by n, preserving approximation factors.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 41,
+      "topic": "Test-node contribution identity",
+      "outcome": "no change",
+      "evidence": "Each executed test is counted once for every reaching hypothesis, including the last test of a path.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 42,
+      "topic": "Path and recursive-forest decomposition",
+      "outcome": "no change",
+      "evidence": "Current-path test nodes and recursive-subtree test nodes partition the cost contributions.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 43,
+      "topic": "Optimal average-case sepcover bound",
+      "outcome": "no change",
+      "evidence": "A sepcover path has a subset of the optimum tree nonnegative test contributions.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 44,
+      "topic": "Average-case cover-to-sepcover comparison",
+      "outcome": "no change",
+      "evidence": "The feasible prefix bounds covered and uncovered hypotheses by their sepcover participation counts.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 45,
+      "topic": "Factor-two average-case overhead",
+      "outcome": "no change",
+      "evidence": "At most one hypothesis lies outside U_xi; shortest-prefix truncation ensures its last set newly covers a hypothesis, so |C|<=ct(C).",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 46,
+      "topic": "Average-case induction",
+      "outcome": "no change",
+      "evidence": "rho=(5beta-1)/(5beta), a=2alpha/log(1/rho), disjoint subinstances and summed OPT give the displayed cancellation.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 47,
+      "topic": "Active average-case implementation",
+      "outcome": "no change",
+      "evidence": "Both editions use the generic DecisionTree algorithm; the older average_case_learning file is inactive. Concrete corollaries use constant beta.",
+      "reviewer": "review_04"
+    },
+    {
+      "round": 48,
+      "topic": "Covering-section roadmap",
+      "outcome": "changed",
+      "evidence": "Replace revision-history language with the red-blue, budgeted-min-sum and forest reduction outline.",
+      "reviewer": "review_05",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-048-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-048-main_arxiv-build.txt"
         }
       ]
     }
