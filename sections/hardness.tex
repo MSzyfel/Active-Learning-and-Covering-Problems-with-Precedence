@@ -338,20 +338,20 @@ and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a
     \item \textbf{YES case:} $\operatorname{val}(\mathcal L)=1$.
     \item \textbf{NO case:} $\operatorname{val}(\mathcal L)\leq s$.
 \end{itemize}
-We call vertices in $A$ the \emph{left vertices} and vertices in $B$ the \emph{right vertices}.
+We call the vertices in $A$ the \emph{left vertices} and the vertices in $B$ the \emph{right vertices}.
 We distinguish two types of projections. A \emph{total projection} has $D_e=\Sigma_A$ for every edge $e\in E$. A \emph{partial projection} allows $D_e\subsetneq\Sigma_A$ for some edges.
 
 Our reduction uses Label Cover instances with total projections.
 
 \begin{lemma}[Totalizing Label Cover]\label{lem:label-cover-totalization}
-    For every $s\in(0,1)$, a Label Cover instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
+    For every $s\in(0,1)$, a \textsc{Label Cover} instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
     \begin{itemize}
         \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, then $\operatorname{val}(\mathcal L')=1$.
         \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then $\operatorname{val}(\mathcal L')\leq2s$.
     \end{itemize}
 \end{lemma}
 \begin{proof}
-    Remove isolated vertices and put $r_0=\lceil1/s\rceil$. Keep the left alphabet unchanged and replace each constraint $e=uv\in E$ by $r_0$ distinct copies $e_j=uv$, for $j\in[r_0]$. For each pair $(e,j)$, introduce a \emph{private right label} $\bot_{e,j}$, distinct from all original labels and from all other new labels, and set $\Sigma_B'=\Sigma_B\cup\{\bot_{e,j}:e\in E,\ 1\leq j\leq r_0\}$. Here $e$ denotes the identity of a constraint, so parallel constraints receive distinct labels. Define the total projection of $e_j$ by
+    Remove isolated vertices and put $r_0=\lceil1/s\rceil$. Keep the left alphabet unchanged and replace each constraint $e=uv\in E$ by $r_0$ distinct copies $e_j=uv$, for $j\in[r_0]$. For each pair $(e,j)$, introduce a \emph{private right label} $\bot_{e,j}$, distinct from all original labels and from all other new labels, and set $\Sigma_B'=\Sigma_B\cup\{\bot_{e,j}:e\in E,\ 1\leq j\leq r_0\}$. Here $e$ denotes the identity of a constraint, so parallel constraints receive distinct labels. Define the \emph{total projection} of $e_j$ by
     \[
         \pi'_{e_j}(a)=
         \begin{cases}
@@ -380,7 +380,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 \subsubsection{The construction}
 
 \begin{lemma}\label{lem:label-cover-covering-gap}
-    There is an absolute constant $c_*>0$ such that, for every $s\in(0,1)$ and every total-projection Label Cover instance $\mathcal L$ with $h\geq1$ constraints, a deterministic reduction constructs a universe $\cU$ and a family $(\cS,\preceq)$ with
+    There is an absolute constant $c_*>0$ such that, for every $s\in(0,1)$ and every total-projection \textsc{Label Cover} instance $\mathcal L$ with $h\geq1$ constraints, a deterministic reduction constructs a universe $\cU$, $\spr{\cU}=n$, and a family $(\cS,\preceq)$, $\spr{\cS}=m$, with
     \[
         n=h,\qquad m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}.
     \]
@@ -403,13 +403,13 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 \begin{proof}
     Remove isolated vertices and let $d_v=\deg(v)$ for every $v\in A\cup B$. The universe is $\cU=E$. For every vertex-label pair $(v,\ell)$, create a \emph{bundle} $\mathcal B_{v,\ell}$ of $d_v$ empty sets, with all bundle sets indexed separately. For each constraint $e=uv$ and each $\ell\in\Sigma_A$, create a \emph{witness} $W_{e,\ell}=\{e\}$. Require every set in $\mathcal B_{u,\ell}$ and $\mathcal B_{v,\pi_e(\ell)}$ to precede $W_{e,\ell}$.
 
-    Since $\sum_{u\in A}d_u=\sum_{v\in B}d_v=h$, the bundle sets number $h\cdot\spr{\Sigma_A}+h\cdot\spr{\Sigma_B}$ and the witnesses number $h\cdot\spr{\Sigma_A}$, giving the stated value of $m$.
+    Since $\sum_{u\in A}d_u=\sum_{v\in B}d_v=h$, there are $h\cdot\spr{\Sigma_A}+h\cdot\spr{\Sigma_B}$ bundle sets and $h\cdot\spr{\Sigma_A}$ witness sets, giving the stated value of $m$.
 
     \par\noindent\textbf{YES case.}
-    Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. Select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to obtain a precedence-closed sequence $\cC$. Then $\cov\br{\cC,\cU}=\cU$, $\spr{\cC}=2h+h=3h$, and $\coverageTime\br{\cC,\cU}\leq h\cdot\spr{\cC}=3h^2$.
+    Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. For $\cC$, select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to make $\cC$ precedence-closed. Then $\cov\br{\cC,\cU}=\cU$, $\spr{\cC}=2h+h=3h$, and $\coverageTime\br{\cC,\cU}\leq h\cdot\spr{\cC}=3h^2$.
 
     \par\noindent\textbf{NO case.}
-    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC,\cU}}\geq\theta h$. For each vertex $v$, let $L_v$ be the labels whose entire bundle is in $\cC$. Since the bundles are pairwise disjoint,
+    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC,\cU}}\geq\theta h$. For each vertex $v$, let \DDfix{$L_v=\brc{\ell\in\Sigma_A\cup\Sigma_B\colon \mathcal B_{v,\ell}\subseteq\cC}$}. Since the bundles are pairwise disjoint,
     \[
         \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq\spr{\cC}.
     \]
@@ -417,7 +417,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \[
         \sum_{v\in H}d_v\leq\frac{\spr{\cC}}{B_0}=\frac{\theta h}{2}.
     \]
-    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside $H$, $F=\{e=uv\in\cov\br{\cC,\cU}:u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
+    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside of $H$, $F=\{e=uv\in\cov\br{\cC,\cU}:u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
 
     Choose a random labeling $(a,b)$ by independently selecting at each vertex $v$ a uniform label from $L_v$ if $L_v\neq\emptyset$, and a fixed arbitrary label otherwise. For each $e=uv\in F$, a selected witness supplies a label $\ell\in L_u$ with $\pi_e(\ell)\in L_v$. Both lists are nonempty and have size at most $B_0$, so
     \[
@@ -437,7 +437,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
         \spr{\cC}=Rh\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
     \]
 
-    Now let $\cC$ be a precedence-closed sequence with $\spr{\cov\br{\cC,\cU}}\geq\theta h$, and let $t$ be the first position with $\spr{\cov\br{\pref{\cC}{t},\cU}}\geq\lceil\theta h/2\rceil$. The prefix $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
+    \DDfix{Let $t$ be the first} position with $\spr{\cov\br{\pref{\cC}{t},\cU}}\geq\lceil\theta h/2\rceil$. The \DDfix{sequence} $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
     \[
         t=\spr{\pref{\cC}{t}}\geq\frac{1}{\sqrt8}\cdot(\theta/2)^{3/2}\cdot h\cdot s^{-1/2}.
     \]
