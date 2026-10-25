@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 64,
+  "completed_rounds": 66,
   "changed_rounds": [
     5,
     6,
@@ -23,7 +23,8 @@
     50,
     55,
     56,
-    64
+    64,
+    66
   ],
   "rounds": [
     {
@@ -911,6 +912,49 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-064-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 65,
+      "topic": "Outforest reverse map and transfers",
+      "outcome": "no change",
+      "evidence": "Closed DFS tour length equals selected-family size. Budget-to-cover and constant-beta min-sum transfers yield the stated factors.",
+      "reviewer": "review_06"
+    },
+    {
+      "round": 66,
+      "topic": "Prior PDS covering-hardness attribution",
+      "outcome": "changed",
+      "evidence": "ISAAC2017 Lemma7 gives prior n^(1/6-epsilon), m^(1/12-epsilon) bounds. Correct exponents and cite PCMSSC rather than target-set selection.",
+      "reviewer": "review_07",
+      "source": "https://drops.dagstuhl.de/storage/00lipics/lipics-vol092-isaac2017/LIPIcs.ISAAC.2017.55/LIPIcs.ISAAC.2017.55.pdf",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-066-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-066-main_arxiv-build.txt"
         }
       ]
     }
