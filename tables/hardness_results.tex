@@ -4,7 +4,10 @@
 \centering
 {\footnotesize
 \setlength{\tabcolsep}{1.5pt}
-\begin{tabular}{p{0.34\linewidth}C{0.155\linewidth}C{0.155\linewidth}C{0.155\linewidth}C{0.155\linewidth}}
+\newlength{\hardnesssettingwidth}
+\settowidth{\hardnesssettingwidth}{\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}}
+\addtolength{\hardnesssettingwidth}{0.5pt}
+\begin{tabular}{p{\hardnesssettingwidth}C{\dimexpr0.24\linewidth-0.25\hardnesssettingwidth\relax}C{\dimexpr0.24\linewidth-0.25\hardnesssettingwidth\relax}C{\dimexpr0.24\linewidth-0.25\hardnesssettingwidth\relax}C{\dimexpr0.24\linewidth-0.25\hardnesssettingwidth\relax}}
 \toprule
 \textbf{setting} & \textbf{\hyperref[problem:PCSC]{\ProblemPCSC}} & \textbf{\hyperref[problem:PCMSSC]{\ProblemPCMSSC}} & \textbf{\hyperref[problem:PCWCDT]{\ProblemPCWCDT}} & \textbf{\hyperref[problem:PCACDT]{\ProblemPCACDT}} \\
 \midrule
@@ -20,6 +23,10 @@
 \shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
 \shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Cor.~\ref{cor:decision-tree-inapproximability}} &
 \shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
+
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
 \shortstack[l]{outforest, variable \mbox{$f<1$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}} & &
 \shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
 
@@ -31,17 +38,26 @@
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$(\bigo(n^{1/2-\epsilon}),\kappa)$}\\\mbox{$(\bigo(m^{1/4-\epsilon}),\kappa)$}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$\bigo(n^{1/2-\epsilon})$}\\\mbox{$\bigo(m^{1/4-\epsilon})$}}} \\
 & \multicolumn{2}{c}{Cor.~\ref{cor:PDS-limiting-hardness}} &
-\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
 \multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\\mbox{$\text{P}\ne\text{NP}$}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n)$}\\\mbox{$(\log^{\bigo(1)} m,\log^{\bigo(1)} m)$}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$\log^{\bigo(1)} n$}\\\mbox{$\log^{\bigo(1)} m$}}} \\
 & \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
-\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
 \multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\\mbox{$\text{NP}\not\subseteq\text{QP}$} (e.g., ETH)}} &
 \multicolumn{2}{c}{\scalebox{0.80}{\shortstack[c]{\mbox{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}}))$}\\\mbox{$(\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$\bigo(2^{(\log n)^{1-\epsilon}})$}\\\mbox{$\bigo(2^{(\log m)^{1-\epsilon}})$}}} \\
 & \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
-\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
 \multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\PGC and \mbox{$\text{P}\ne\text{NP}$}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$(\bigo(n^\delta),\bigo(n^\delta))$}\\\mbox{$(\bigo(m^\delta),\bigo(m^\delta))$}}} &
 \multicolumn{2}{c}{\shortstack[c]{\mbox{$\bigo(n^\delta)$}\\\mbox{$\bigo(m^\delta)$}}} \\
