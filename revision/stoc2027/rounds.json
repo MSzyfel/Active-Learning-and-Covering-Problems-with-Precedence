@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 31,
+  "completed_rounds": 32,
   "changed_rounds": [
     5,
     6,
@@ -16,7 +16,8 @@
     24,
     26,
     30,
-    31
+    31,
+    32
   ],
   "rounds": [
     {
@@ -477,6 +478,41 @@
         }
       ],
       "rendered_validation": "Both edition hardness tables rendered to PNG and visually inspected; no overlap or clipping. Root main.pdf and main_arxiv.pdf refreshed from validated isolated builds."
+    },
+    {
+      "round": 32,
+      "topic": "Sepcover sequence and base case",
+      "outcome": "changed",
+      "evidence": "Call tests(D,v) a sequence, consistent with its definition and path-order proofs. Scope sepcover constructions to at least two hypotheses; singleton instances already return a leaf.",
+      "reviewer": "review_03",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-032-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-032-main_arxiv-build.txt"
+        }
+      ]
     }
   ],
   "resumed_baseline": "46ddc3c11b518666e3f3ac33195819f2c4d68883",
