@@ -13,7 +13,7 @@ Fix a topological ordering of $(\cS,\preceq)$. Let $\operatorname{ord}(A)$ denot
         $\pi_l\gets\emptyset$\;
         $P_l\gets\emptyset$\;
         \For{$1\leq i\leq l$}{
-            $\tau_l^i\gets$ Run the $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ on $(U,\preceq,\cS,\budget=a^{i+1})$.\;
+            $\tau_l^i\gets$ Run the $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ on $(U,\cS,\preceq,\budget=a^{i+1})$.\;
             $U\gets U\setminus\cov(\tau_l^i)$\;
             $\pi_l\gets\pi_l\circ\operatorname{ord}(\tau_l^i\setminus P_l)$\;
             $P_l\gets P_l\cup\tau_l^i$\;
@@ -25,7 +25,7 @@ Fix a topological ordering of $(\cS,\preceq)$. Let $\operatorname{ord}(A)$ denot
             $P_l\gets P_l\cup\brc{S_l}$\;
         }
         $R_l\gets\cU\setminus\cov(P_l)$\;
-        $\sigma_l\gets$ Run the $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ on $(R_l,\preceq,\cS,\budget=a^l)$.\;
+        $\sigma_l\gets$ Run the $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ on $(R_l,\cS,\preceq,\budget=a^l)$.\;
         $\pi_l\gets\pi_l\circ\operatorname{ord}(\sigma_l\setminus P_l)$\;
         \If{$\spr{\cov\br{\pi_l,\cU}}\geq f\cdot\spr{\cU}/\beta$}{
             $\cQ\gets\cQ\cup\brc{\pi_l}$\;
