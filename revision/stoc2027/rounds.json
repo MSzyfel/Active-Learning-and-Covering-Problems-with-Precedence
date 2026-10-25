@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 32,
+  "completed_rounds": 39,
   "changed_rounds": [
     5,
     6,
@@ -17,7 +17,8 @@
     26,
     30,
     31,
-    32
+    32,
+    39
   ],
   "rounds": [
     {
@@ -511,6 +512,83 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-032-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 33,
+      "topic": "Indexed test map and precedence",
+      "outcome": "no change",
+      "evidence": "The xi map preserves distinct indices, inherited precedence and sequence order even for equal-content sets.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 34,
+      "topic": "Covering universe bound",
+      "outcome": "no change",
+      "evidence": "For n<=4 a separating test covers all hypotheses under xi; for n>=5 at most one hypothesis is omitted, giving |U_xi|>=4n/5.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 35,
+      "topic": "Prefix closure and algorithm termination",
+      "outcome": "no change",
+      "evidence": "Topological prefixes are closed; covered hypotheses leave the path, forcing the final residual below the recursion threshold.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 36,
+      "topic": "Worst-case sepcover lower bound",
+      "outcome": "no change",
+      "evidence": "Before quarter-coverage, departed hypotheses number less than |U_xi|/4, giving a feasible prefix of size at most the optimal sepcover.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 37,
+      "topic": "Worst-case recurrence constants",
+      "outcome": "no change",
+      "evidence": "With rho=(5beta-1)/(5beta), a=alpha/log(1/rho), the additive path cost cancels a log rho. Restricted OPT is monotone.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 38,
+      "topic": "Construction size and repeated tests",
+      "outcome": "no change",
+      "evidence": "Child hypothesis sets partition and shrink, giving O(n) calls; deleting determined repeated tests preserves predecessors. Reviewer03 also checked 523 feasible small random instances by exact state enumeration.",
+      "reviewer": "review_03"
+    },
+    {
+      "round": 39,
+      "topic": "Average-case proof motivation",
+      "outcome": "changed",
+      "evidence": "Explain that every test contributes the number of hypotheses reaching it, and introduce the counting identity directly.",
+      "reviewer": "review_04",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-039-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-039-main_arxiv-build.txt"
         }
       ]
     }

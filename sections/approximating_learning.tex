@@ -139,8 +139,8 @@ Theorem~\ref{thm:PCSC-to-PCWCDT} and the covering algorithms in Section~\ref{sec
 
 \subsection{Precedence Constrained Average Case Decision Tree} \label{subsection:PCACDT}
 
-Here, the analysis becomes more involved, since in order to compare the cost of our solution with the cost of sepcover, rather then just comparing the size of sepcover with the cost of our solution, we need to take into account the contribution of each test to the objective function.
-We start with few observations.
+For the average-case objective, bounding the number of tests in a sepcover is insufficient: each test contributes the number of hypotheses that reach it. We therefore compare the total contribution of the selected tests with the corresponding contribution of an optimal sepcover.
+We begin with a counting identity.
 \begin{observation} \label{obs:dec-tree-averaging}
     If $D$ is a decision tree for $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in X}\spr{\cH_v}$, where $X$ is the set of all non-leaf vertices of $D$.
 \end{observation}
