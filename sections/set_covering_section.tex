@@ -20,6 +20,7 @@ We rely on the following approximation guarantee for $\ProblemPRBSC$.
     \alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log n}.
     \]
 \end{proposition}
+The algorithm is randomized and satisfies its approximation guarantee with high probability. We amplify each invocation so that all calls made by our reductions satisfy their guarantees simultaneously with high probability.
 
 We use the same exact reduction for both covering variants.
 Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T:T\in S^{+}}\cup\brc{b_u:u\in\cov\br{S^{+}}}$.

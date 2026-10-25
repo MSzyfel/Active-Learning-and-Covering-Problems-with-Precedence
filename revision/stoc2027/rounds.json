@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 48,
+  "completed_rounds": 50,
   "changed_rounds": [
     5,
     6,
@@ -19,7 +19,8 @@
     31,
     32,
     39,
-    48
+    48,
+    50
   ],
   "rounds": [
     {
@@ -681,6 +682,49 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-048-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 49,
+      "topic": "Exact red-blue correspondence",
+      "outcome": "no change",
+      "evidence": "Red unions equal selected predecessor closures and blue unions equal their coverage; the converse follows from closure.",
+      "reviewer": "review_05"
+    },
+    {
+      "round": 50,
+      "topic": "Partial red-blue algorithm guarantee",
+      "outcome": "changed",
+      "evidence": "Published CMV2023 Theorem3 and AppendixA support the dimensions and bound. AppendixA uses randomized rounding with high-probability success; disclose this and amplify all calls.",
+      "reviewer": "review_05",
+      "source": "https://drops.dagstuhl.de/storage/00lipics/lipics-vol275-approx-random2023/LIPIcs.APPROX-RANDOM.2023.11/LIPIcs.APPROX-RANDOM.2023.11.pdf",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-050-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-050-main_arxiv-build.txt"
         }
       ]
     }
