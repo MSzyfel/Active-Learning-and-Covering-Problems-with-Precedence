@@ -620,7 +620,7 @@ The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and cove
 For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
 
 \begingroup\setlength{\emergencystretch}{1em}
-Chlamt\'a\v{c} et al. prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 k}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 k$ loss on the restricted instances produced by our closure reduction.\par\endgroup
+Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 k}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 k$ loss on the restricted instances produced by our closure reduction.\par\endgroup
 
 \begin{corollary}[PDS hardness for Partial Red-Blue Set Cover]\label{cor:PRBSC-PDS-hardness}
     Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed target fraction $f\in(0,1]$, and fixed coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\bigo\br{k^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot k}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.

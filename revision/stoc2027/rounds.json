@@ -1,9 +1,10 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 5,
+  "completed_rounds": 6,
   "changed_rounds": [
-    5
+    5,
+    6
   ],
   "rounds": [
     {
@@ -35,6 +36,12 @@
       "topic": "Abstract placement and contribution summary",
       "outcome": "changed",
       "evidence": "Replaced generic text, defined n/m/soft-O, scoped LC claims, and used normal-size abstract text. All ten reviewers consulted in batch 01."
+    },
+    {
+      "round": 6,
+      "topic": "Alphanumeric citation style",
+      "outcome": "changed",
+      "evidence": "All ten agents consulted. Main bibliography now uses alpha and the active et al. attribution names all three authors. Both versions compile. The existing table overflow is queued for round 8."
     }
   ]
 }
