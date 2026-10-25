@@ -1,379 +1,644 @@
 \section{Hardness} \label{sec:hardness}
-\newcommand{\coord}[3]{h[#1, #2, #3]}
-\newcommand{\sepedge}[1]{t^{sep}[#1]}
-\newcommand{\varedge}[1]{t^{var}[#1]}
-\newcommand{\litedge}[1]{t^{cla}[#1]}
 
-In this section, we establish hardness and inapproximability results for the precedence-constrained covering and decision tree problems introduced in previous sections. Throughout all reductions involving fractional set cover ($\ProblemPCSC$), we assume that $f = 1$, meaning that each set can be selected at most once.
+\subsection{Hardness from Planted Dense Subgraph}
+We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out approximation factors $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$. The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ retains the original use of edges.
 
-\subsection{Binary search with precedence constrains}
+Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$. Second, we sharpen the probabilistic analysis to handle $r$-cliques in random graphs. This also strengthens the bounds for $r=2$, giving factors $\bigo\br{n^{1/4-\epsilon}}$ and $\bigo\br{m^{1/8-\epsilon}}$. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
-We begin by showing that the decision tree problem is \NPhard even for the very special of binary searching with precedence.
-In this problem we are given a linearly ordered set of hypotheses $h_1 \prec h_2 \prec \ldots \prec h_n$ and tests that correspond to binary queries of the form ``Is the unknown hypothesis $h_i$ less than or equal to $h_k$?''.
-Hence, there is $(n-1)$-meaningful tests to be performed.
-Additionally, a precedence constraints on queries are given which enforce certain queries to be performed before others.
+Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
 
-\MS{Ten akapit potencjalnie do zakomendowania}
-Interestingly, this problem is connected to a seemingly unrelated problem of parallel evaluation of arithmetic expressions. 
-In this problem we are given an arithmetic expression consisting of $n$ variables combined using arbitrary binary operations. Additionally, due to the order of operations of the usage of brackets, a precedence constraints on procesing the operations is given. The goals is to evaluate this expression using arbitrary number of parallel processors however it is required that any operand can undergo only one operation at a time and the precedence constraints are satisfied. The goal is to minimize the total time required to evaluate the expression. It is widely known that without the precedence constraints this problem is equivalent to binary searching on a linearly ordered set of hypotheses. This connection is still valid even when precedence constraints are present, however the precedence constraints on the operations must be reversed. In what follows we show that the problem of binary searching with precedence is \NPhard thereby implying that parallel evaluation of arithmetic expressions with precedence constraints is \NPhard as well.
-\begin{theorem}\label{thm:PCWCDT-NP-hard}
-    Worst-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.
+\subsubsection{Planted dense subgraphs and clique witnesses}
+Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph on vertex set $[N]$ with edge probability $p$. We use the \emph{log-density parameter} $\alpha$ to specify the distribution $G(N,N^{\alpha-1})$, whose expected vertex degree is $\Theta(N^\alpha)$.
+We use the following hardness assumption \cite{OnApproxTargetSetSelection}, also used in \cite{PCMSSC}.
+\begin{conjecture}[\textsc{Planted Dense Subgraph Conjecture} (PDS)] \label{problem:PDS}
+    Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when they have equal prior probabilities:
+    \begin{itemize}
+        \item the \emph{null distribution} $G(N,N^{\alpha-1})$,
+        \item the \emph{planted distribution} obtained by choosing a uniform $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, and including edges independently with probability $k^{\beta-1}$ inside $\mathcal{P}$ and $N^{\alpha-1}$ elsewhere.
+    \end{itemize}
+\end{conjecture}
+
+We use the following concentration bounds.
+\begin{theorem}[Markov's Inequality]\label{thm:markov}
+    Let $X$ be a nonnegative random variable with finite expectation. Then, for every $t>0$,
+    \[
+        \Pr[X\geq t]\leq\frac{\mathbb{E}[X]}{t}.
+    \]
+\end{theorem}
+
+\begin{theorem}[Chernoff Bound]\label{thm:chernoff}
+    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in[n]$, $\Pr[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=p\cdot n$. Then, for every $\theta\in(0,1)$ it holds that:
+    \[
+        \Pr[X\leq (1-\theta)\cdot\mu] \leq e^{-\frac{\theta^2\cdot\mu}{2}},
+        \qquad \Pr[X\geq (1+\theta)\cdot\mu] \leq e^{-\frac{\theta^2\cdot\mu}{3}}.
+    \]
+\end{theorem}
+
+\begin{lemma}\label{lem:PDS-clique-count}
+    Fix an integer $r\geq2$, a constant $\zeta>0$, and log density $\alpha=(r-1)/(r+1)$. For $G\sim G(N,N^{\alpha-1})$, let $F_G(X)$ be the number of cliques on exactly $r$ vertices contained in $X\subseteq[N]$. With probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
+    \[
+        F_G(X)\leq C_r \cdot N^\zeta \cdot \br{\br{\frac{\spr{X}}{N^\alpha}}^r+\spr{X} \cdot \log N},
+    \]
+    where $C_r$ depends only on $r$.
+\end{lemma}
+\begin{proof}
+    Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set the \emph{moment order} $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$. Fix a candidate edge $e\in\binom{[N]}{2}$, and let
+    \[
+        \mathcal{K}_e=\left\{K\in\binom{[N]}{r}:e\subseteq K\right\},
+        \qquad
+        I_K=\mathbf{1}\!\left\{\binom{K}{2}\subseteq E(G)\right\},
+        \qquad Z_e=\sum_{K\in\mathcal K_e}I_K.
+    \]
+    Here $\mathcal K_e$ consists of the candidate $r$-vertex sets containing both endpoints of $e$, and $I_K$ is the \emph{indicator} that $K$ induces a clique. Thus $Z_e$ counts these cliques and is zero if $e\notin E(G)$. Writing the $s$th power as a product of $s$ sums and distributing gives
+    \[
+        Z_e^s
+        =\br{\sum_{K\in\mathcal K_e}I_K}^s
+        =\prod_{i=1}^s\br{\sum_{K_i\in\mathcal K_e}I_{K_i}}
+        =\sum_{(K_1,\ldots,K_s)\in\mathcal K_e^s}
+        \prod_{i=1}^s I_{K_i}.
+    \]
+    Each factor contributes one choice $K_i\in\mathcal K_e$, so the sum runs over ordered $s$-tuples, with repetitions allowed. We count these tuples in their given order. For a fixed prefix $K_1,\ldots,K_{i-1}$, put
+    \[
+        U_{i-1}=e\cup\bigcup_{a=1}^{i-1}K_a,\qquad
+        j_i=\spr{K_i\setminus U_{i-1}},\qquad 0\leq j_i\leq r-2.
+    \]
+    There are at most $(i-1)\cdot(r-2)\leq s\cdot r$ vertices in $U_{i-1}\setminus e$. For each possible value of $j_i$, the $r-2-j_i$ vertices of $K_i$ in $U_{i-1}\setminus e$ and its $j_i$ vertices outside $U_{i-1}$ can therefore be chosen in at most $\binom{s\cdot r}{r-2-j_i}\cdot N^{j_i}$ ways.
+
+    Condition on $e$ and all preceding cliques being present. At most $\binom{r-j_i}{2}$ edges of $K_i$ have already been required, since such edges must have both endpoints in $U_{i-1}$. The remaining edges are independent of this conditioning. Thus the conditional probability that $K_i$ is a clique is at most $N^{-(1-\alpha)\cdot(R-\binom{r-j_i}{2})}$. For each $j_i$, the total conditional contribution is bounded by $\binom{s\cdot r}{r-2-j_i}$ times
+    \[
+        N^{j_i} \cdot N^{-(1-\alpha)\cdot(R-\binom{r-j_i}{2})}
+        =N^{j_i-\frac{2}{r+1}\cdot(R-\binom{r-j_i}{2})}
+        =N^{j_i\cdot(j_i-r+2)/(r+1)}\leq1,
+    \]
+    since $j_i\leq r-2$. Summing over $j_i=0,\ldots,r-2$ bounds the total conditional contribution of all choices of $K_i$ by a constant depending only on $r,s$, uniformly in the prefix. Successively summing over $K_s,\ldots,K_1$ in the moment expansion therefore gives $\mathbb{E}[Z_e^s\mid e\in E(G)]\leq C_{r,\zeta}$ for a constant $C_{r,\zeta}$ independent of $N$.
+    Since $Z_e=0$ when $e\notin E(G)$, also $\mathbb{E}[Z_e^s]\leq C_{r,\zeta}$. Using $Z_e\geq0$, applying Theorem~\ref{thm:markov} to $Z_e^s$, and taking a union bound over fewer than $N^2$ possible edges gives
+    \begin{align*}
+        &\Pr[\exists e\in E(G):Z_e>N^\zeta]
+        =\Pr[\exists e\in E(G):Z_e^s>N^{s\cdot\zeta}]\\
+        &\leq\sum_{e\in\binom{[N]}{2}}\frac{\mathbb{E}[Z_e^s]}{N^{s\cdot\zeta}}
+        \leq C_{r,\zeta} \cdot N^{2-s\cdot\zeta}\leq\frac{C_{r,\zeta}}{N}=o(1).
+    \end{align*}
+
+    Next let $B_G(X)$ be the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$, and write $x=\spr{X}$. For every positive integer $t$, counting candidate collections and using independence of their disjoint edge sets gives
+    \[
+        \Pr[B_G(X)\geq t]
+        \leq\binom{\binom{x}{r}}{t} \cdot N^{-r\cdot\alpha\cdot t}
+        \leq\br{\frac{e}{t}\cdot\br{\frac{x}{N^\alpha}}^r}^t.
+    \]
+    Here the probability is zero if $t>\binom{x}{r}$. Otherwise, the first inequality is a union bound over the candidate collections of $t$ cliques. Each collection has exactly $R\cdot t$ distinct edges, whose presence events are independent. The second inequality uses $\binom{x}{r}\leq x^r$ and $\binom{a}{t}\leq(e\cdot a/t)^t$. Put
+    \[
+        t_x=\left\lceil e^2 \cdot \br{\br{\frac{x}{N^\alpha}}^r+x \cdot \log N}\right\rceil.
+    \]
+    This is the threshold for the union bound over $x$-vertex sets. Since $t_x\geq e^2\cdot(x/N^\alpha)^r$ and $t_x\geq2\cdot x\cdot\log N$, the displayed tail bound gives
+    \[
+        \Pr[B_G(X)\geq t_x]
+        \leq e^{-t_x}
+        \leq N^{-2\cdot x}.
+    \]
+    There are at most $N^x$ choices for $X$ of size $x$. Therefore
+    \[
+        \Pr[\exists X\neq\emptyset:B_G(X)\geq t_{\spr{X}}]
+        \leq\sum_{x=1}^N N^x\cdot N^{-2\cdot x}
+        \leq\sum_{x=1}^{\infty}N^{-x}
+        =\frac{1}{N-1}=o(1).
+    \]
+    Thus, with probability $1-o(1)$, $B_G(X)<t_x$, and hence $B_G(X)\leq e^2\cdot\br{(x/N^\alpha)^r+x\cdot\log N}$, for every nonempty $X$ simultaneously.
+
+    On the first high-probability event, each edge belongs to at most $N^\zeta$ cliques. Consequently, any fixed $r$-clique shares an edge with at most $R\cdot N^\zeta$ cliques, by summing this bound over its $R$ edges. Repeatedly select one remaining clique in $X$ and delete every clique sharing one of its edges. Each selected clique deletes at most $R\cdot N^\zeta$ cliques. The selected cliques are pairwise edge-disjoint, so their number is at most $B_G(X)$. Thus
+    \[
+        F_G(X)\leq R \cdot N^\zeta \cdot B_G(X)
+        \leq e^2\cdot R \cdot N^\zeta \cdot \br{\br{\frac{x}{N^\alpha}}^r+x \cdot \log N}
+    \]
+    simultaneously for all nonempty $X$ on the intersection of the two high-probability events. Their failure probabilities are $\bigo_{r,\zeta}(N^{-1})$ and $\bigo(N^{-1})$, respectively. Taking $C_r=e^2\cdot R$ proves the lemma.
+\end{proof}
+
+\begin{theorem}\label{thm:PCSC-PDS-clique-hardness}
+    \setlength{\emergencystretch}{1em}
+    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCSC$ with target fraction $f$, even when the precedence DAG has height two.
 \end{theorem}
 \begin{proof}
-    \MS{Podzieliłem to na jakieś zjadliwe lematy. Trochę dziwnie się to dla mnie czyta w takich podpunktach, moze warto by to troche zredukowac i rozpisac bardziej opisowo. Uwaga ogólna, nie używaj nawiasów kwadratowych jako wtrąceń, to wygląda nienaturalnie.}
+    \par\noindent\textbf{Parameters and construction.}
+    It suffices to consider $0<\epsilon<(r-1)/(4\cdot r)$, since larger values weaken both claims. Let $N$ be the number of vertices in the input graph. The fixed integer $r$ is the number of vertices in each clique used by the reduction, and $R=\binom{r}{2}$ is its number of edges. Set
+    \[
+        \alpha=\frac{r-1}{r+1},\qquad \beta=\alpha-\frac{\epsilon}{2\cdot R},
+        \qquad k=\lfloor\sqrt{N}\rfloor.
+    \]
+    Here $k$ is the number of planted vertices, and $\alpha,\beta$ are the log-density parameters of the background graph and the graph induced by $\mathcal P$, with edge probabilities $N^{\alpha-1}$ and $k^{\beta-1}$, respectively. Since $\epsilon/(2\cdot R)<\min\{\alpha,1-\alpha\}$, we have $0<\beta<\alpha<1$ and $2\cdot\alpha<1+\beta$, as required by Conjecture~\ref{problem:PDS}. Define
+    \[
+        n=\lceil k^{r-(1-\beta)\cdot R}\rceil=\Theta(N^\gamma),\qquad
+        \gamma=\frac{r}{r+1}-\frac\epsilon4,\qquad
+        \lambda=\lceil n/k\rceil,\qquad p=\frac{\log^2 N}{n^{1/r}}.
+    \]
+    The universe size $n$ is of the same order as the expected number of planted $r$-cliques, and $\gamma$ is its exponent in $N$. Each graph vertex will have $\lambda$ empty representative sets. The choice $\lambda=\lceil n/k\rceil$ makes the cost $\lambda\cdot k=\Theta(n)$ of the planted representatives comparable to the expected number of planted clique sets. The probability $p$ determines membership in the auxiliary sets. Our choice of $\epsilon$ gives $1/2<\gamma<1$, hence $k=o(n)$ and $p=o(1)$.
 
-	Consider an instance of \ProblemThreeSat given as: a set of variables $\cX$, and a set of clauses $\cC$.
-	Each clause consist of exactly $3$ literals.
-	The idea is to:
-	\begin{itemize}
-		\item Construct tests corresponding, to  variables and clauses. 
-		Moreover, divide them into small segments, so each segment corresponds to a single variable, clause, respectively.
-		Use precedence constraints to force this separation.
-		\item All the variable-test (for hypotheses corresponding to variables) can be performed at the same time. \MS{Nie wiadomo co to znaczy at the same time, chodzi o ten sam poziom drzewa?}
-		Hence, either the variable-test or test corresponding to the negation of the variable can be performed in a given turn. \MS{Tu też ostrożnie, nmy budujemy drzewo decyzyjne, ta idea tur jest problematyczna, bo rózne testy sie wybiera w zaleznosci od odpowiedzi}
-		And, correspondingly, the tests corresponding to the negation (or the variable) can be performed in the next turn.
-		\item Construct literal-tests . Make every literal-test be preceded by the tests to corresponding variable tests. 
-		\item Now, if at least one variable-test was performed at the time $t$, then at least one literal-test can be performed in $t+1$. \MS{Należy napisać, że wykonaniu danego testu odpowiada jakiś moment w czasie, co więcej trzeba napisać, że z powodu budowy konstrukcji, kazdy test jest wykonywany w tym samym momencie czasu w każdej gałęzi drzewa decyzyjnego, w którym jest wykonany.}
-		\item If at least one literal-test was performed at given time then a clause segment can be performed in nearest time step, because some "middle" test of the segment was performed. 
-	\end{itemize}
-	
+    The universe is $\cU=[n]$, with target fraction $f$. Given the input graph $G$ on $[N]$, create $\lambda$ \emph{representative sets} $V_{v,i}=\emptyset$ for every vertex $v$. Independently of $G$, include each $j\in[n]$ in each \emph{auxiliary set} $\cU_v$ independently with probability $p$.
+    For every clique $K$ of $G$ on exactly $r$ vertices, create the \emph{witness set} $E_K=\bigcap_{v\in K}\cU_v$. The family of selectable sets is
+    \[
+        \cS=\{V_{v,i}:v\in[N],\ i\in[\lambda]\}
+        \cup\{E_K:K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
+    \]
+    with distinct indices even when two sets have identical contents. The sets $\cU_v$ are auxiliary. Impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. The resulting precedence DAG has height two.
 
-% 	\begin{figure}[htbp]
-% 		\centering
-% 		\input{figures/clause_gadget.tex}
-% 		\caption{Clause gadget for $c_i = \{v_i^1, v_i^2, v_i^3\}$.}
-% 		\label{fig:clause_gadget}
-% 	\end{figure}
-%
-% 	\begin{figure}[htbp]
-% 		\centering
-% 		\input{figures/variable_gadget.tex}
-% 		\caption{Variable gadget for $v_i$.}
-% 		\label{fig:variable_gadget}
-% 	\end{figure}
-%
-% 	\begin{figure}[htbp]
-% 		\centering
-% 		%\input{figures/reduction_example.tex}
-% 		\caption{Overall path structure in the reduction. Clause gadgets are connected by separator edges into a clause module, followed by variable gadgets connected into a variable module. The entire structure forms a single path.}
-% 		\label{fig:reduction_path}
-% 	\end{figure}
-%
-% 	\begin{figure}[htbp]
-% 		\centering
-% 		\input{figures/reduction_precedence.tex}
-% 		\caption{Precedence constraints DAG. Separator edges form a binary tree (top), which precede all variable edges (middle) and clause edges (bottom). Blue dashed arrows show precedence from variable edges to clause literal edges, green dashed arrows show that all variable edges precede clause boundary edges.}
-% 		\label{fig:reduction_precedence}
-% 	\end{figure}
+    Our choice of $p$ gives $\mathbb E[\spr{E_K}]=n\cdot p^r=\log^{2\cdot r}N$ for each clique $K$. The null-case analysis bounds all witness sizes by twice this mean with high probability, so the clique-count bound controls the coverage available from any small vertex set. The planted component must nevertheless supply a witness for every universe element. We prove this by finding cliques in disjoint groups of planted vertices whose auxiliary sets contain the element.
 
-	More formally, the mapping of an instance of \ProblemThreeSat given as a set of clauses, denoted by $\cC$, and variables, denoted by $\cX$, is as follows:
+    \par\noindent\textbf{Planted clique count.}
+    Condition throughout the planted-case analysis on a fixed vertex set $\mathcal P$. All bounds below are uniform in $\mathcal P$. Its induced graph has distribution $G(k,k^{\beta-1})$. Let $W$ count its $r$-cliques. Markov's inequality gives
+    \[
+        \mathbb{E}[W]=\binom{k}{r}\cdot k^{-(1-\beta)\cdot R}\leq\frac{n}{r!}\leq\frac n2,
+        \qquad \Pr[W>n]\leq\frac{\mathbb{E}[W]}{n}\leq\frac12.
+    \]
+    Let $\cC_{\mathcal P}$ consist of all planted vertex representatives and all planted clique witnesses. Since $k=o(n)$, we have $\lambda\cdot k\leq2\cdot n$ for sufficiently large $N$. Thus $\spr{\cC_{\mathcal P}}=\lambda\cdot k+W\leq3\cdot n$ with probability at least $1/2$. This constant probability suffices for the distinguishing argument below.
 
-	\begin{enumerate}
-		\item Let $d > 0$ be smallest value such a value that $\log (|\cC| + |\cX| - 2 + d) \in \mathbb{Z}$.
-		Add $d$ dummy variables -- i.e. variables unrelated to any clause.
-		From now, we assume that $|\cX| + |\cC| - 1 = 2^k-1$, for some $k > 0$.
-		\item For every $c_i = \{v_i^1, v_i^2, v_i^3\}$, construct a collection of tests given on hypotheses
-		\[
-			\coord{c}{i}{1}, \coord{c}{i}{v_i^1}, \coord{c}{i}{v_i^{12}}, \coord{c}{i}{v_i^{23}}, \coord{c}{i}{v_i^3}, \coord{c}{i}{2}.
-		\]
-		Denote the tests between the consecutive pairs of hypotheses as: $\litedge{i, 0}$, $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$, $\litedge{i, 0'}$.
-		\item For a variable $v_i$, construct a gadget compose of $3$ hypotheses as a path
-		\[
-			\coord{v}{i}{1}, \coord{v}{i}{2}, \coord{v}{i}{3}
-		\]
-		Denote the test between $\coord{v}{i}{1}$ and $\coord{v}{i}{2}$ as $\varedge{v_i^-}$.
-		Denote the test between $\coord{V}{v}{2}$ and $\coord{v}{i}{3}\}$ as $\varedge{v_i^+}$.
-		\item Compose the instance of learning in the following way.
-		Order the clauses components one by one, let the hypotheses $\coord{c}{i}{4}$ be before $\coord{c}{i+1}{1}$ by and the test between them be denoted as $\sepedge{i}$.
-		Let us denote such an test from this set as separator test.
-		Connect $\coord{c}{|\cC|}{4}$ to $\coord{v}{1}{1}$ by $\sepedge{|\cC|}$, $|\cC|$-th separator test.
-		Continue with variable gadgets in the same way; hence the total number of separator tests is $|\cC| + |\cX| - 1$.
-	\end{enumerate}
-	To define precedence constraints on tests we perform the following:
-	\begin{enumerate}
-		\item Observe that there are exactly $\sum_{i=1}^{k}2^i$ separator tests, for some $k > 0$ due to introduction of dummy variables.
-		We set the precedence constraints on separator tests to form a complete binary tree of height $k$.
-		\item Force all other tests to be preceded by the separator tests.
-		\item For every clause $c_i$ and every $v \in \{v_i^1,v_i^2,v_i^3\}$, if $v$ is positive literal; make $\varedge{v^+}$ precede $\litedge{i, v}$,  otherwise make $\varedge{v^-}$ precede $\litedge{i, v}$.
-		\item For every clause $c_i$, make all variable edges precede $\litedge{i, 0}$ and $\litedge{i, 0'}$. 
-	\end{enumerate}
-	Now, to prove that the problem is \NPhard we prove the decision version of the problem is \NPcomplete, 
-	i.e. the problem to determine if for a given input there exists a strategy of worst case number of tests less than or equal to $t$. To prove that the problem is in \NP we observe that given decision tree certifies maximum number of tests.
-	
-    \begin{lemma}
-        Assume that the instance of $(\cC, \cX)$ \ProblemThreeSat is of 'YES' type. Then, there exists an evaluation $f: \cX \leftarrow \{T, F\}$ which satisfies all the clauses.
-    \end{lemma}
+    \par\noindent\textbf{Planted coverage.}
+    Fix $j\in[n]$. A vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $Z_j=\spr{\{v\in\mathcal{P}:j\in\cU_v\}}$ count these marked vertices. This variable is binomial with mean
+    \[
+        \mathbb{E}[Z_j]=p\cdot k=\Theta\br{\log^2 N\cdot k^{(1-\beta)\cdot(r-1)/2}}.
+    \]
+    Since $\beta<1$, we have $p\cdot k/\log N\to\infty$. Chernoff's inequality with $\theta=1/2$ therefore gives $\Pr[Z_j<p\cdot k/2]\leq e^{-p\cdot k/8}\leq N^{-1}$ for sufficiently large $N$. We use disjoint blocks of marked vertices to obtain independent chances of covering $j$.
+
+    Each block will have $z=\lceil2\cdot r\cdot k^{(1-\beta)\cdot(r-1)/2}\rceil$ vertices. Since $\beta<1$ and $n\to\infty$, we have $z\to\infty$ and $z/k=\Theta_r(n^{-1/r})=o(1)$. Condition on all vertex marks and denote this information by $\mathcal M$. For a block $S$ of $z$ marked vertices chosen using only $\mathcal M$, the set $S$ is fixed under this conditioning and $G[S]\sim G(z,k^{\beta-1})$. For each $K\in\binom{S}{r}$, let $I_K$ indicate that $K$ is a clique, and set $Y=\sum_{K\in\binom{S}{r}}I_K$. Its conditional mean, which does not depend on the particular marks, is
+    \[
+        \mu_Y=\mathbb{E}[Y\mid\mathcal M]=\binom{z}{r} \cdot k^{-(1-\beta)\cdot R}
+        \longrightarrow\frac{(2\cdot r)^r}{r!}\geq2^r\geq4.
+    \]
+    In the variance of $Y$, the diagonal terms sum to at most $\mu_Y$. Indicators for cliques sharing at most one vertex are independent, since they depend on disjoint edge sets. For $2\leq a\leq r-1$, there are $\bigo_r(z^{2\cdot r-a})$ ordered pairs sharing $a$ vertices. Each pair requires $2\cdot R-\binom a2$ distinct edges, so its covariance is at most its joint probability $k^{-(1-\beta)\cdot(2\cdot R-\binom a2)}$. Consequently,
+    \[
+        \frac{\operatorname{Var}(Y\mid\mathcal M)}{\mu_Y^2}
+        \leq\frac{1}{\mu_Y}+\bigo_r\br{\sum_{a=2}^{r-1}z^{-a}\cdot k^{(1-\beta)\cdot\binom{a}{2}}}
+        =\frac{1}{\mu_Y}+\bigo_r\br{\sum_{a=2}^{r-1}k^{-(1-\beta)\cdot a\cdot(r-a)/2}}
+        =\frac{1}{\mu_Y}+o(1),
+    \]
+    since $z=\Theta_r(k^{(1-\beta)\cdot(r-1)/2})$ and $\beta<1$. For $r=2$, the sums are empty.
+    By Chebyshev's inequality, $\Pr[Y=0\mid\mathcal M] \leq\frac{\operatorname{Var}(Y\mid\mathcal M)}{\mu_Y^2}$. The upper bound $1/\mu_Y+o(1)$ tends to $r!/(2\cdot r)^r\leq1/4$, uniformly over the marks, so $\Pr[Y=0\mid\mathcal M]\leq1/2$ for all sufficiently large $N$.
+
+    Use $\ell=\lceil\log_2 N\rceil$ disjoint blocks for each universe element. Since
+    \[
+        \ell\cdot z=\bigo_r\br{k^{(1-\beta)\cdot(r-1)/2}\cdot\log N}=o(p\cdot k),
+    \]
+    we have $\ell\cdot z\leq p\cdot k/2$ for sufficiently large $N$, so $Z_j\geq p\cdot k/2$ supplies enough marked vertices. Choose the blocks using only the marks. Conditional on the marks, their induced graphs are independent copies of $G(z,k^{\beta-1})$ because they use disjoint edge sets. If no planted witness covers $j$, then none of these blocks contains a clique, an event of conditional probability at most $2^{-\ell}\leq N^{-1}$. A union bound over the $n=\bigo(N^\gamma)$ universe elements gives
+    \[
+        \Pr[\text{some }j\in[n]\text{ has no planted witness}]
+        \leq n \cdot \br{e^{-p\cdot k/8}+2^{-\ell}}
+        \leq\frac{2\cdot n}{N}=\bigo(N^{\gamma-1})=o(1),
+    \]
+    since $\gamma<1$. Independence between coverage events for different elements is not required. Thus $\cov\br{\cC_{\mathcal P}}=\cU$ with probability $1-o(1)$. Combining this with the planted clique-count bound, the precedence-closed family $\cC_{\mathcal P}$ is a full cover with $\spr{\cC_{\mathcal P}}\leq3\cdot n$ with probability at least $1/2-o(1)$.
+
+    \par\noindent\textbf{Null case.}
+    Apply Lemma~\ref{lem:PDS-clique-count} with exponent $\epsilon/8$. With high probability, simultaneously for every nonempty $X\subseteq[N]$,
+    \[
+        F_G(X)\leq C_r \cdot N^{\epsilon/8} \cdot \br{\br{\frac{\spr{X}}{N^\alpha}}^r+\spr{X} \cdot \log N}.
+    \]
+    For every potential $r$-vertex subset $K$, the size of $\bigcap_{v\in K}\cU_v$ has distribution $\operatorname{Bin}(n,p^r)$: membership of each universe element requires $r$ independent inclusions, and different universe elements are independent. Its mean is
+    \[
+        \mu_E=n\cdot p^r=\log^{2\cdot r} N.
+    \]
+    Applying the stated Chernoff bound with $\theta=1/2$ gives
+    \[
+        \Pr[|E_K|>2\cdot\mu_E]
+        \leq\Pr[|E_K|\geq\tfrac32\cdot\mu_E]
+        \leq e^{-\mu_E/12}.
+    \]
+    A union bound over at most $N^r$ choices of $K$ has failure probability at most $N^r\cdot e^{-\mu_E/12}=o(1)$. Thus, with probability $1-o(1)$, the clique-count bound holds together with
+    \[
+        \spr{E_K}\leq2\cdot\log^{2\cdot r} N\qquad\text{for every clique witness }E_K.
+    \]
+    Set $x_0=\lfloor n\cdot N^{-\epsilon/4}\rfloor$, the threshold on the number of graph vertices in the following coverage bound.
+    \begin{claim}\label{claim:PDS-no-coverage}
+        For $X\subseteq[N]$, let $\cC_X=\{E_K:K\subseteq X\}$ be the family of clique witnesses \emph{supported on} $X$. With high probability in the null case, every $X$ with $\spr{X}\leq x_0$ satisfies $\spr{\cov\br{\cC_X}}\leq f\cdot n/(2\cdot\kappa)$.
+    \end{claim}
     \begin{proof}
-    Let $f: \cX \leftarrow \{T, F\}$ be an evaluation which satisfies all the clauses.
-	Then, we build the decision tree as follows $D$: Firstly, construct a complete binary tree of height $k$ using separator tests. Observe that this step is forced by precedence constraints.
-    \MS{Żeby następne zdania miały sens trzeba precyzyjnie okreslic w ktorych galeziach drzewa jakie testy sa wykonywane. WAZNE: jeden test moze sie wykonywac w wielu galeziach i pewnie tak bedzie NIE wystarczy okreslic samego punktu w czasie}
-    For every variable $v$, if variable was assigned $T$, perform $\varedge{v^+}$ it in time $k+1$; otherwise perform $\varedge{v^-}$.Hence, they are performed in times $k+1$ and $k+2$, respectively. 
-	Now all the clause gadgets have at least one precondition met in time $k+1$. \MS{nie wiadomo czym jest precondition}
-	Due to this we can perform at least one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ in time $k+2$.
-	Due to the fact that each test can be performed in time $k+3$ or later we can complete the tests in time up to $k+4$ for every clause.
-	Due to this for the constructed instance there exists a decision tree of depth at most $k+4$.
+        Since $n=\bigo(N^{r/(r+1)})$, we have $n^{r-1}/N^{r\cdot\alpha}=\bigo_r(1)$. Thus, for $0<x=\spr{X}\leq x_0\leq n$, the clique-count bound gives $F_G(X)=\bigo_r(N^{\epsilon/8}\cdot x\cdot\log N)$. Using $\spr{\cov\br{\cC_X}}\leq\sum_{E_K\in\cC_X}\spr{E_K}$, we obtain
+        \[
+            \frac{\spr{\cov\br{\cC_X}}}{n}
+            \leq\frac{2\cdot\log^{2\cdot r} N}{n}\cdot F_G(X)
+            \leq\bigo_r\br{\frac{\log^{2\cdot r+1} N}{n}\cdot N^{\epsilon/8}\cdot x_0}
+            \leq\bigo_r\br{\log^{2\cdot r+1} N\cdot N^{-\epsilon/8}}=o(1).
+        \]
+        Since $f$ and $\kappa$ are fixed, the fraction is at most $f/(2\cdot\kappa)$ for sufficiently large $N$. The assertion is immediate when $X$ is empty.
     \end{proof}
-	
-    \begin{lemma}
-        Assume that for the constructed instance of path graph, order, and time $k+4$ the answer is 'YES'.
-        Then, the instance of $(\cC, \cX)$ \ProblemThreeSat is of 'YES' type.
-    \end{lemma}
-	\begin{proof}
-	We perform the following observations:
-	\begin{itemize}
-		\item For a given clause-gadget, due to the fact that there are $5$ edges, we need at least $3$ time units to perform all the tests. 
-		\item The earliest possible time to finish separator tests is $k$. \MS{operowanie na czasach jest bardzo niedokładne, trzeba precyzyjnie powiedzieć, ile separator testy kontrybuują do czasu identyfikacji w każdej gałęzi drzewa decyzyjnego}
-		\item Due to this we have to perform at least one test in time $k+2$ for every clause-gadget $c_i$.
-		Due to the fact that $\litedge{i, 0}$ and $\litedge{i, 0'}$ cannot be performed before $k+3$, it has to be the case that one of $\litedge{i, v_i^1}$, $\litedge{i, v_i^2}$, $\litedge{i, v_i^3}$ was performed. 
-        \item Hence, for at least one of these tests all of its precedeeing tests have been executed by the time $k+1$. 
-		The variable-tests performed in $k+1$ to an evaluation of the variables matching all the clauses. \MS{nie wiadomo o co chodzi}
-	\end{itemize}
-    \end{proof}
-    Hence, the theorem follows.
 
+    Let $\cC$ be any precedence-closed family with $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$, and let $X$ be the vertices for which all $\lambda$ representative sets belong to $\cC$. If a witness $E_K$ belongs to $\cC$, precedence closure forces all representatives for every vertex of $K$ into $\cC$, so $K\subseteq X$. If $\spr{X}\leq x_0$, Claim~\ref{claim:PDS-no-coverage} and the fact that the representative sets are empty give $\spr{\cov\br{\cC}}\leq f\cdot n/(2\cdot\kappa)<f\cdot n/\kappa$, a contradiction. Therefore $\spr{X}>x_0$ and
+    \[
+        \spr{\cC}\geq\lambda \cdot \spr{X}>\lambda \cdot x_0.
+    \]
+
+    \par\noindent\textbf{Gap and instance size.}
+    Since $\gamma-\epsilon/4>0$, we have $x_0=\Theta(N^{\gamma-\epsilon/4})$ and $x_0\to\infty$. Since $\lambda\geq n/k$, the ratio between the null cost lower bound and the planted cover upper bound is at least
+    \[
+        \frac{\lambda \cdot x_0}{3\cdot n}
+        =\Omega\br{\frac{x_0}{k}}
+        =\Omega\br{N^g},\qquad
+        g=\gamma-\frac12-\frac\epsilon4
+        =\frac\alpha2-\frac\epsilon2>0.
+    \]
+    Thus $g$ is the exponent in the lower bound on the cost gap in terms of $N$. The output has $\lambda\cdot N$ representative sets and one witness per input clique, so $m=\lambda\cdot N+F_G([N])$. We bound this clique count under both source distributions.
+
+    In the null case,
+    \[
+        \mathbb{E}[F_G([N])]=\binom{N}{r}\cdot N^{-(1-\alpha)\cdot R}
+        =\bigo(N^{r-r\cdot\alpha})=\bigo(N^{1+\alpha}).
+    \]
+    In the planted case, let $F_{G,j}$ count the $r$-cliques with exactly $j$ vertices in $\mathcal P$, for $0\leq j\leq r$. Since $\beta<\alpha$ and $(1-\alpha)\cdot\binom j2\leq j$, conditional on $\mathcal P$ we have
+    \begin{align*}
+        \mathbb{E}[F_{G,j}\mid\mathcal P]
+        &=\binom{k}{j} \cdot \binom{N-k}{r-j} \cdot k^{-(1-\beta)\cdot\binom{j}{2}} \cdot N^{-(1-\alpha)\cdot(R-\binom j2)}\\
+        &\leq N^{1+\alpha}\cdot\br{\frac{k}{N}}^j\cdot\br{\frac{N^{1-\alpha}}{k^{1-\beta}}}^{\binom j2}
+        \leq N^{1+\alpha}\cdot\br{\frac{k}{N}}^j\cdot\br{\frac{N}{k}}^j
+        =N^{1+\alpha}.
+    \end{align*}
+    Summing over $j$ and averaging over $\mathcal P$ gives the same expectation bound in the planted case. Markov's inequality therefore gives, under either distribution,
+    \[
+        \Pr[F_G([N])>N^{1+\alpha+\epsilon/8}]=\bigo_r(N^{-\epsilon/8})=o(1).
+    \]
+    Since $\gamma<(1+\alpha)/2$ and $\alpha>0$, the representative sets satisfy
+    \[
+        \lambda \cdot N=\bigo\br{n \cdot N/k+N}
+        =\bigo\br{N^{\gamma+1/2}}=\bigo(N^{1+\alpha}).
+    \]
+    Hence with probability $1-o(1)$ under either distribution,
+    \[
+        m=\bigo\br{N^{1+\alpha+\epsilon/8}}.
+    \]
+    Both target exponents lie in $(0,1)$, and $\gamma\leq(1+\alpha)/2$, so
+    \[
+        \gamma\cdot\br{\frac{r-1}{2\cdot r}-\epsilon}
+        \leq\frac\alpha2-\frac{1+\alpha}{2}\cdot\epsilon<g,\qquad
+        \br{1+\alpha+\frac\epsilon8}\cdot\br{\frac{r-1}{4\cdot r}-\epsilon}
+        \leq\frac\alpha2-\br{\alpha+\frac78}\cdot\epsilon<g,
+    \]
+    using $\alpha>0$. The size bounds therefore give
+    \[
+        n^{(r-1)/(2\cdot r)-\epsilon}=o(N^g),\qquad
+        m^{(r-1)/(4\cdot r)-\epsilon}=o(N^g).
+    \]
+
+    If the approximation algorithm is randomized, amplify its success probability to $1-o(1)$ by independent repetitions, retaining the cheapest precedence-feasible output covering at least $f\cdot n/\kappa$ elements.
+    To obtain a distinguisher, first check whether $\cov\br{\cS}=\cU$, which is computable from the explicit output. If not, declare the null case. Planted coverage shows that this happens with probability $o(1)$ in the planted case. Otherwise run the purported bicriteria algorithm with cost approximation factor $a$, and let $\cC$ be its output. In the planted case $\spr{\cC}\leq3\cdot a\cdot n$ with probability at least $1/2-o(1)$, while in the null case $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$ implies $\spr{\cC}>\lambda\cdot x_0$ with probability $1-o(1)$. The exponent inequalities above imply $a=o(\lambda\cdot x_0/n)$ for either stated $n$- or $m$-based approximation. Thus, for sufficiently large $N$, declaring the null case when $\spr{\cC}>\lambda\cdot x_0$ and the planted case otherwise succeeds with probability at least $3/4-o(1)$ under equal priors, contradicting Conjecture~\ref{problem:PDS}.
 \end{proof}
 
-\begin{theorem}
-    Average-Case Decision Tree With Precedence Constraints is \NPhard even when the input instance represents binary search in a linearly ordered set of hypotheses.x
+\begin{theorem}\label{thm:PCMSSC-PDS-clique-hardness}
+    \setlength{\emergencystretch}{1em}
+    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence DAG has height two.
 \end{theorem}
 \begin{proof}
-	The reduction is the same as in the worst-case variant; except that we have to consider the average number of tests.
-	Again assume that the instance of \ProblemThreeSat is of 'YES' type.
-	As previously, let $\log (|\cC| + |\cX|) = k$, hence $k \le 3 + \log m$.
-	Hence:
-	\begin{itemize}
-	\item In any reasonable solution the separator-tests will form a complete binary tree of height $k$.
-	\item 	Now, the $|\cX|$ variable-tests correspond to total testing time $|\cX|\cdot(3k+5)$, denoted by $T_{var}$, because 1 hypothesis is be decided in time $k+1$ and $2$ in $k+2$.
-	\item After this, consider the total number of tests for the hypotheses corresponding to the clauses.
-	For a satisfied clause, there can be one test performed in time $k+2$ and the other tests can be done in time $k+3, k+3, k+4, k+4$. 
-	Hence this gives total number of tests spent on these hypotheses is $|\cC|\cdot(6k + 22)$, denoted by $T_{clauses}$.  
-	\end{itemize} 
-	Together it gives the total number of tests $T_{var} + T_{clauses}$ in a search tree corresponding to a valuation of variables satisfying all the clauses.
-	The reverse direction, that a search tree of total number of tests $T_{var} + T_{clauses}$ corresponds to a valuation satisfying all the clauses, is left to the reader.
-	The correspondence between total number of tests and average number of tests is direct. 
+    Use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, ordering $\cC_{\mathcal P}$ topologically gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
+    \[
+        \coverageTime\br{\cC,\cU}\leq3\cdot n^2.
+    \]
+
+    In the null case, put $T=\lambda\cdot x_0\in\mathbb{Z}$, the number of representative sets for $x_0$ vertices. Let $\cC$ be any precedence-closed sequence with $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$. Its selected sets form a precedence-closed family meeting the same coverage target, so the cardinality soundness proof gives $\spr{\cC}>T$. Consider $\pref{\cC}{T}$, and let $X$ be the vertices for which all $\lambda$ representative sets have appeared in this prefix. Then
+    \[
+        \lambda \cdot \spr{X}\leq T=\lambda \cdot x_0,
+        \qquad\text{so}\qquad \spr{X}\leq x_0.
+    \]
+    Precedence closure implies that every witness in the prefix is supported on $X$. Since the representative sets are empty, Claim~\ref{claim:PDS-no-coverage} gives $\spr{\cov\br{\pref{\cC}{T}}}\leq f\cdot n/(2\cdot\kappa)$. Hence
+    \[
+        \spr{\cU\setminus\cov\br{\pref{\cC}{T}}}
+        \geq n-\frac{f\cdot n}{2\cdot\kappa}
+        =n \cdot \br{1-\frac{f}{2\cdot\kappa}}
+        \geq\frac{n}{2}
+    \]
+    because $f/\kappa\leq1$. Every $x\in\cU\setminus\cov\br{\pref{\cC}{T}}$ satisfies $\coverageTime\br{x,\cC}\geq T$: it is either covered later or remains uncovered, in which case its coverage time is $\spr{\cC}>T$. Therefore
+    \[
+        \coverageTime\br{\cC,\cU}\geq\frac{n}{2} \cdot T
+        =\frac{n \cdot \lambda \cdot x_0}{2}.
+    \]
+    Comparing this with the planted upper bound $3\cdot n^2$ gives a latency gap
+    \[
+        \Omega\br{\frac{\lambda \cdot x_0}{n}}
+        =\Omega\br{\frac{x_0}{k}}
+        =\Omega(N^g).
+    \]
+    The instance dimensions and exponent $g$ are the same as in Theorem~\ref{thm:PCSC-PDS-clique-hardness}, so its parameter choice gives both claimed latency gaps. After the same coverage feasibility precheck, declare the null case if the algorithm returns $\cC$ with $\coverageTime\br{\cC,\cU}\geq n\cdot T/2$, and the planted case otherwise. The planted case is recognized with probability at least $1/2-o(1)$ and the null case with probability $1-o(1)$, giving success probability at least $3/4-o(1)$ under equal priors and contradicting Conjecture~\ref{problem:PDS}.
 \end{proof}
-\subsection{Reductions from precedence constrained set cover}
-\begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
-    Approximating $\ProblemPCWCDT$ is as hard as approximating $\ProblemPCSC$.
+
+For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in $n$ and $(r-1)/(4\cdot r)=1/4-1/(4\cdot r)$ in $m$. Thus $r=3$ gives exponents $1/3$ and $1/6$, and as $r\to\infty$ through fixed constants the two exponents converge to $1/2$ and $1/4$.
+\begin{corollary}\label{cor:PDS-limiting-hardness}
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed $f\in(0,1]$, and fixed $\kappa\geq1$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation with target fraction $f$.
+\end{corollary}
+\begin{proof}
+    Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with exponent loss $\epsilon/2$ and the given $f,\kappa$. The resulting hardness exponents satisfy
+    \[
+        \frac{r-1}{2\cdot r}-\frac\epsilon2
+        =\frac12-\frac{1}{2\cdot r}-\frac\epsilon2\geq\frac12-\epsilon
+        \quad\text{and}\quad
+        \frac{r-1}{4\cdot r}-\frac\epsilon2
+        =\frac14-\frac{1}{4\cdot r}-\frac\epsilon2\geq\frac14-\epsilon.
+    \]
+\end{proof}
+
+\subsection{Hardness from Label Cover}
+A \textsc{Label Cover} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e:D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
+\[
+    \operatorname{val}_{\mathcal L}(a,b)
+    =\frac{\spr{\{e=uv\in E:a_u\in D_e,\ \pi_e(a_u)=b_v\}}}{\spr{E}},
+\]
+and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a\in\Sigma_A^A,\ b\in\Sigma_B^B}\operatorname{val}_{\mathcal L}(a,b)$. For a given \emph{soundness parameter} $s\in(0,1)$, the \textsc{Label Cover} problem asks to distinguish between the following two cases:
+\begin{itemize}
+    \item \textbf{YES case:} $\operatorname{val}(\mathcal L)=1$.
+    \item \textbf{NO case:} $\operatorname{val}(\mathcal L)\leq s$.
+\end{itemize}
+We call vertices in $A$ the \emph{left vertices} and vertices in $B$ the \emph{right vertices}.
+We distinguish two types of projections. A \emph{total projection} has $D_e=\Sigma_A$ for every edge $e\in E$. A \emph{partial projection} allows $D_e\subsetneq\Sigma_A$ for some edges.
+
+Our reduction uses Label Cover instances with total projections.
+
+\begin{lemma}[Totalizing Label Cover]\label{lem:label-cover-totalization}
+    For every $s\in(0,1)$, a Label Cover instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
+    \begin{itemize}
+        \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, then $\operatorname{val}(\mathcal L')=1$.
+        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then $\operatorname{val}(\mathcal L')\leq2s$.
+    \end{itemize}
+\end{lemma}
+\begin{proof}
+    Remove isolated vertices and put $r_0=\lceil1/s\rceil$. Keep the left alphabet unchanged and replace each constraint $e=uv\in E$ by $r_0$ distinct copies $e_j=uv$, for $j\in[r_0]$. For each pair $(e,j)$, introduce a \emph{private right label} $\bot_{e,j}$, distinct from all original labels and from all other new labels, and set $\Sigma_B'=\Sigma_B\cup\{\bot_{e,j}:e\in E,\ 1\leq j\leq r_0\}$. Here $e$ denotes the identity of a constraint, so parallel constraints receive distinct labels. Define the total projection of $e_j$ by
+    \[
+        \pi'_{e_j}(a)=
+        \begin{cases}
+            \pi_e(a), & a\in D_e,\\
+            \bot_{e,j}, & a\in\Sigma_A\setminus D_e.
+        \end{cases}
+    \]
+    Every labeling $(a,b)$ using only original labels satisfies all copies of a constraint if and only if it satisfies that original constraint. Thus $\operatorname{val}_{\mathcal L'}(a,b)=\operatorname{val}_{\mathcal L}(a,b)$. \par\noindent\textbf{YES case.}
+    If $\operatorname{val}(\mathcal L)=1$, choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. The equality above gives $\operatorname{val}(\mathcal L')=1$.
+
+    \par\noindent\textbf{NO case.}
+    Suppose $\operatorname{val}(\mathcal L)\leq s$, and fix any labeling $(a,b')$ of $\mathcal L'$. A right vertex assigned a private label $\bot_{e,j}$ can satisfy at most one incident constraint, since only $\pi'_{e_j}$ can output that label. Replace every private right label by an arbitrary label in $\Sigma_B$, keeping all other labels unchanged, to obtain $(a,b)$. This loses at most $\spr{B}$ satisfied copied constraints, so
+    \[
+        \operatorname{val}_{\mathcal L'}(a,b')
+        \leq\operatorname{val}_{\mathcal L'}(a,b)+\frac{\spr{B}}{r_0\spr{E}}
+        =\operatorname{val}_{\mathcal L}(a,b)+\frac{\spr{B}}{r_0\spr{E}}
+        \leq s+\frac1{r_0}\leq2s,
+    \]
+    using $\operatorname{val}_{\mathcal L}(a,b)\leq\operatorname{val}(\mathcal L)\leq s$, $\spr{B}\leq\spr{E}$, and $1/r_0\leq s$. Maximizing over $(a,b')$ gives $\operatorname{val}(\mathcal L')\leq2s$.
+
+    The construction has $\spr{E'}=r_0\spr{E}$ and $\spr{\Sigma_B'}=\spr{\Sigma_B}+r_0\spr{E}$.
+\end{proof}
+
+Below, for the resulting total-projection instance, let $h=\spr{E}$ be its number of constraints, let $N=\spr{A}+\spr{B}+\spr{E}$ be its graph size, and let $Q=\spr{\Sigma_A}+\spr{\Sigma_B}$ be its combined alphabet size.
+
+\subsubsection{The construction}
+
+\begin{lemma}\label{lem:label-cover-covering-gap}
+    There is an absolute constant $c_*>0$ such that, for every $s\in(0,1)$ and every total-projection Label Cover instance $\mathcal L$ with $h\geq1$ constraints, a deterministic reduction constructs a universe $\cU$ and a family $(\cS,\preceq)$ with
+    \[
+        n=h,\qquad m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}.
+    \]
+    The precedence DAG has height two and $\spr{S}\leq1$ for every $S\in\cS$. The following guarantees hold:
+    \begin{itemize}
+        \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, there is a precedence-closed sequence $\cC$ such that
+        \[
+            \cov\br{\cC,\cU}=\cU,\qquad
+            \spr{\cC}\leq3h,\qquad
+            \coverageTime\br{\cC,\cU}\leq3h^2.
+        \]
+        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then for every $\theta\in(0,1]$, every precedence-closed sequence $\cC$ of sets from $\cS$ with $\spr{\cov\br{\cC,\cU}}\geq\theta h$ satisfies
+        \[
+            \spr{\cC}\geq c_*\cdot\theta^{3/2}\cdot h\cdot s^{-1/2},
+            \qquad
+            \coverageTime\br{\cC,\cU}\geq c_*\cdot\theta^{3/2}\cdot h^2\cdot s^{-1/2}.
+        \]
+    \end{itemize}
+\end{lemma}
+\begin{proof}
+    Remove isolated vertices and let $d_v=\deg(v)$ for every $v\in A\cup B$. The universe is $\cU=E$. For every vertex-label pair $(v,\ell)$, create a \emph{bundle} $\mathcal B_{v,\ell}$ of $d_v$ empty sets, with all bundle sets indexed separately. For each constraint $e=uv$ and each $\ell\in\Sigma_A$, create a \emph{witness} $W_{e,\ell}=\{e\}$. Require every set in $\mathcal B_{u,\ell}$ and $\mathcal B_{v,\pi_e(\ell)}$ to precede $W_{e,\ell}$.
+
+    Since $\sum_{u\in A}d_u=\sum_{v\in B}d_v=h$, the bundle sets number $h\cdot\spr{\Sigma_A}+h\cdot\spr{\Sigma_B}$ and the witnesses number $h\cdot\spr{\Sigma_A}$, giving the stated value of $m$.
+
+    \par\noindent\textbf{YES case.}
+    Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. Select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to obtain a precedence-closed sequence $\cC$. Then $\cov\br{\cC,\cU}=\cU$, $\spr{\cC}=2h+h=3h$, and $\coverageTime\br{\cC,\cU}\leq h\cdot\spr{\cC}=3h^2$.
+
+    \par\noindent\textbf{NO case.}
+    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC,\cU}}\geq\theta h$. For each vertex $v$, let $L_v$ be the labels whose entire bundle is in $\cC$. Since the bundles are pairwise disjoint,
+    \[
+        \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq\spr{\cC}.
+    \]
+    Put $R=\spr{\cC}/h$, $B_0=2R/\theta$, and let $H=\{v\in A\cup B:\spr{L_v}>B_0\}$ be the set of \emph{heavy vertices}. Then
+    \[
+        \sum_{v\in H}d_v\leq\frac{\spr{\cC}}{B_0}=\frac{\theta h}{2}.
+    \]
+    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside $H$, $F=\{e=uv\in\cov\br{\cC,\cU}:u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
+
+    Choose a random labeling $(a,b)$ by independently selecting at each vertex $v$ a uniform label from $L_v$ if $L_v\neq\emptyset$, and a fixed arbitrary label otherwise. For each $e=uv\in F$, a selected witness supplies a label $\ell\in L_u$ with $\pi_e(\ell)\in L_v$. Both lists are nonempty and have size at most $B_0$, so
+    \[
+        \Pr_{a,b}[\pi_e(a_u)=b_v]
+        \geq\frac{1}{\spr{L_u}\cdot\spr{L_v}}\geq B_0^{-2}.
+    \]
+    Since $\operatorname{val}_{\mathcal L}(a,b)\leq\operatorname{val}(\mathcal L)$ for every labeling, linearity of expectation gives
+    \[
+        s\geq\operatorname{val}(\mathcal L)
+        \geq\mathbb{E}_{a,b}[\operatorname{val}_{\mathcal L}(a,b)]
+        =\frac1h\sum_{e=uv\in E}\Pr_{a,b}[\pi_e(a_u)=b_v]
+        \geq\frac{\spr{F}}{hB_0^2}\geq\frac{\theta}{2B_0^2}
+        =\frac{\theta^3}{8R^2}.
+    \]
+    Consequently,
+    \[
+        \spr{\cC}=Rh\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
+    \]
+
+    Now let $\cC$ be a precedence-closed sequence with $\spr{\cov\br{\cC,\cU}}\geq\theta h$, and let $t$ be the first position with $\spr{\cov\br{\pref{\cC}{t},\cU}}\geq\lceil\theta h/2\rceil$. The prefix $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
+    \[
+        t=\spr{\pref{\cC}{t}}\geq\frac{1}{\sqrt8}\cdot(\theta/2)^{3/2}\cdot h\cdot s^{-1/2}.
+    \]
+    Immediately before position $t$, fewer than $\theta h/2\leq h/2$ elements have been covered. Thus $\coverageTime\br{x,\cC}\geq t$ for at least $h/2$ elements $x\in\cU$, including any that remain uncovered at the end of $\cC$. Consequently,
+    \[
+        \coverageTime\br{\cC,\cU}\geq\frac{h}{2}\cdot t
+        \geq\frac{1}{16}\cdot\theta^{3/2}\cdot h^2\cdot s^{-1/2}.
+    \]
+    Thus both soundness bounds hold with $c_*=1/16$.
+\end{proof}
+
+\subsubsection{Substituting concrete parameters}
+\begin{theorem}\label{thm:label-cover-hardness}
+    For every fixed target fraction $f\in(0,1]$ and each $x\in\{n,m\}$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a deterministic polynomial-time bicriteria approximation with the following guarantees under the indicated assumptions:
+    \begin{enumerate}
+        \item\label{item:label-cover-polylog} $\br{\bigo\br{(\log x)^K},\bigo\br{(\log x)^J}}$ for any constants $K,J\geq0$, unless $\text{P}=\text{NP}$.
+        \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size. In particular, ETH rules out these guarantees.
+        \item\label{item:label-cover-polynomial} Assuming the \textsc{Projection Games Conjecture}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
+    \end{enumerate}
+    All three bounds hold even when the precedence DAG has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
-    Let $(U, \mathcal{S}, P)$ be an instance of $\ProblemPCSC$ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of $\ProblemPCWCDT$ as follows. For each element $u \in U$, we create two representative hypotheses $h_u^0$ and $h_u^1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u^i) = h_u^i$ if $u \in S$ and $t_S(h_u^i) = 0$ otherwise. The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in $\ProblemPCSC$, then $t_{S_1}$ must be selected before $t_{S_2}$ in $\ProblemPCWCDT$. Notice, that any valid decision tree for the constructed instance of $\ProblemPCWCDT$ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u^i$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Note that even when the candidate set contains only representatives of one element $u$, we still need to perform a test to distinguish between $h_u^0$ and $h_u^1$, which could not be a case if there was only one hypothesis per element.
-    Therefore, any valid decision tree for the constructed instance of $\ProblemPCWCDT$ corresponds to a valid selection of sets in $\ProblemPCSC$ and vice versa. Moreover, the cost of the decision tree is equal to the number of selected sets. Thus, since the size of the reduction is linear any $\alpha$-approximation for $\ProblemPCWCDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCSC$.
+    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting Label Cover soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The output has $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
+    \begin{equation}\label{eq:label-cover-gap-criterion}
+        \alpha\cdot\kappa^{3/2}=o(s^{-1/2}).
+    \end{equation}
+    We substitute the following source results, all of which have perfect completeness:
+    \begin{enumerate}
+        \item Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} give NP-hard Label Cover instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item The PCP theorem and parallel repetition \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition} give, after totalization, $s=2\beta_0^\tau$ and $h,Q\leq L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x\leq L^{\bigo(\tau)}$,
+        \[
+            \log\br{\alpha\cdot\kappa^{3/2}}
+            =\bigo\br{(\log L)^{(b+1)(1-\epsilon)}}
+            =o(\tau),
+        \]
+        which implies~\eqref{eq:label-cover-gap-criterion}. The reduction and approximation algorithm run in time $L^{\bigo(\tau)}=2^{(\log L)^{\bigo(1)}}$, giving the stated containment.
+        \item The Projection Games Conjecture implies NP-hardness of total-projection Label Cover with soundness $s=N^{-c}$ and alphabet size $Q=N^{\bigo(1)}$ for some constant $c>0$ \cite[Conjecture~2.2]{ProjectionGamesConjecture}. Thus $x=N^{\bigo(1)}$. Choose a sufficiently small constant $\delta>0$ so that $x^{5\delta/2}=o(N^{c/2})$. This gives~\eqref{eq:label-cover-gap-criterion} for $\alpha,\kappa=\bigo(x^\delta)$.
+    \end{enumerate}
 \end{proof}
-\begin{theorem}\label{thm:PCMSSC-to-PCACDT-hardness}
-    Approximating $\ProblemPCACDT$ is as hard as approximating $\ProblemPCMSSC$.
-\end{theorem}
-\begin{proof}
-    We use the same reduction as in the previous theorem. Note that since we doubled the number of hypotheses in the construction, the cost of any decision tree in the constructed instance of $\ProblemPCACDT$ is twice the number of selected sets in $\ProblemPCMSSC$. However, this does not affect the structure of the reduction and thus any $\alpha$-approximation for $\ProblemPCACDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCMSSC$.
-\end{proof}
-% \begin{theorem}\label{thm:PCSC-to-PCACDT-hardness}
-%     If there is no $\alpha$-approximation for $\ProblemPCSC$, then there is no $\cO\br{\alpha}$-approximation for $\ProblemPCACDT$.
-% \end{theorem}
-\begin{proof}
-	Let $(U, \mathcal{S}, P)$ be an instance of $\ProblemPCSC$ where $U$ is the universe of elements, $\mathcal{S}$ is the family of sets and $P$ are the precedence constraints on $\mathcal{S}$. We construct an instance of $\ProblemPCACDT$ as follows. For each element $u \in U$, we create a representative hypothesis $h_u$ with $p\br{h_u}=0$. We also create a dummy hypothesis $h$ such that $p\br{h}=1$. For each set $S \in \mathcal{S}$, we create a test $t_S$ such that $t_S(h_u) = h_u$ if $u \in S$ and $t_S(h_u) = 0$ otherwise ($t_S(h)=0$). The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in $\ProblemPCSC$, then $t_{S_1}$ must be selected before $t_{S_2}$ in $\ProblemPCWCDT$. Notice, that any valid decision tree for the constructed instance of $\ProblemPCWCDT$ is a path of tests (ignoring leafs) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Since the dummy hypothesis $h$ has probability $1$, the cost of any decision tree is equal to the number of tests performed in the path. In order to distinguish all hypotheses $h_u$ from the dummy hypothesis $h$, we need to perform tests that cover all elements in $U$.
-    Therefore, any valid decision tree for the constructed instance of $\ProblemPCWCDT$ corresponds to a valid selection of sets in $\ProblemPCSC$ and vice versa. Thus, since the size of the reduction is linear any $\alpha$-approximation for $\ProblemPCWCDT$ would yield an $\cO\br{\alpha}$-approximation for $\ProblemPCSC$.
-\end{proof}
+
 \subsection{Outforest precedence constraints}
+\begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
+Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V$, and a family of groups $\cX\subseteq2^V$, find a subtree $T'$ containing $r$ and at least one vertex from each group, minimizing $\sum_{e\in E(T')}d(e)$.
+\end{problem}
+
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
-    $\ProblemPCSC$ with outforest precedence constraints cannot be approximate within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    To show this we prove that $\ProblemGST$ on tree metrics is reducible to $\ProblemPCSC$ with outforest precedence constraints. 
+    Group Steiner Tree on trees with $g$ groups is hard to approximate within $\bigo\br{\log^{2-\epsilon}g}$ unless $\text{NP}\subseteq\text{ZTIME}\br{g^{\text{polylog}(g)}}$ \cite{PolylogarithmicInapproximability}. The hard instances in \cite[Section~3.3]{PolylogarithmicInapproximability} are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$.
 
-    Since $\ProblemGST$ on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{PolylogarithmicInapproximability}. Note that in the latter reduction all of the distances are of form $2^{-h}$ with exponent ranging from $0$ to $h=\cO\br{\log^{1-\epsilon} n}$. Therefore, we can scale all of them by $2^h=\text{poly}\br{n}$ to obtain integer weights without affecting the approximation ratio.
+    Let $(T=(V,E),d,r,\cX)$ be such an instance. Discard groups containing $r$, which are already met. Set $\cU=\cX$ and $f=1$. For each $v\neq r$, let $e_v$ be its parent edge and create a chain of $d(e_v)$ indexed \emph{representative sets}
+    \[
+        S_v^1\preceq\cdots\preceq S_v^{d(e_v)},\qquad
+        S_v^i=\emptyset\ (i<d(e_v)),\qquad
+        S_v^{d(e_v)}=\{X\in\cX:v\in X\}.
+    \]
+    If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{d(e_u)}\preceq S_v^1$. Every set then has at most one immediate predecessor.
 
-    Let $\br{T=(V, d), \mathcal{X}}$ be an instance of $\ProblemGST$ where $T$ is a tree metric with root $r$ and $\mathcal{X} \subseteq 2^V$ are the groups. We construct an instance of $\ProblemPCSC$ with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $d(e)$, for each vertex $v\neq r$ we create its $d(e)$ representatives $S_v^1 \preceq \ldots \preceq S_v^{d(e)}$ so that taking $S^{d(e)}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{d(e)}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $X \in \mathcal{X}$ we create a universe element $u_X$. If $v \in X$ and $e$ is the parent edge of $v$, we set $S_{d(e)}$ to cover $u_X$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of $\ProblemPCSC$ corresponds to a valid Steiner Tree in the instance of $\ProblemGST$ and vice versa. Moreover, the cost of the selected sets is equal to the cost of the Steiner Tree. Thus, $\ProblemPCSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    In any precedence-closed cover, an incomplete representative chain can be deleted: it covers nothing and no selected descendant depends on it. After these deletions, the selected chains correspond to a rooted subtree meeting every group, and the cover cardinality equals the subtree's total edge length. Conversely, every such subtree gives a full cover of the same cost. Since the covering universe has $n=g$ elements, the claimed hardness follows.
 \end{proof}
 \begin{theorem}\label{thm:PCMSSC-outforest-hardness}
-    $\ProblemPCMSSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    To show this we prove that $\ProblemLPGST$ on tree metrics is reducible to $\ProblemPCMSSC$ with outforest precedence constraints. 
-    Since $\ProblemLPGST$ on trees cannot be approximated within a factor of $\cO\br{\log^2 n}$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$ \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. 
-    Note that in the above problem some group weights might be $0$. To alleviate this difficuilty we scale up all of the weights up by a factor of $n^2$ and if a given weight is $0$ we set it to $1$. Observe that this scaling changes the optimal value by at most a factor of $2$ and thus does not affect the asymptotical hardness of approximation.
-    
-    Let $\br{T=(V, d), w, \mathcal{X}}$ be an instance of $\ProblemLPGST$ where $T$ is a tree metric with root $r$, $w: \mathcal{X} \to \mathbb{N}$ are the weights of groups and $\mathcal{X} \subseteq 2^V$ are the groups. We construct an instance of $\ProblemPCMSSC$ with outforest precedence constraints as follows. Since to include a node in the Steiner Tree we need to include its parent edge of cost $d(e)$, for each vertex $v\neq r$ we create its $d(e)$ representatives $S_v^1 \preceq \ldots \preceq S_v^{d(e)}$ so that taking $S^{d(e)}$ to the cover requires taking all of the previous representatives. Additionally, for any directed edge $uv\in E$ such that $u \neq r$ and $e$ is a parent edge of $u$, we set $S^{d(e)}_u \preceq S^1_v$ to enforce the condition that to including a node in a Steiner Tree requires including its parent node with its parent edge. For each group $X \in \mathcal{X}$ with weight $w_X = w(X)$, we create $w_X$ universe elements $u_X^1, u_X^2, \ldots, u_X^{w_X}$. If $v \in X$ and $e$ is the parent edge of $v$, we set $S_{d(e)}$ to cover all elements $u_X^1, u_X^2, \ldots, u_X^{w_X}$. It is easy to see that in order to cover any universe element by a vertex $v$ one needs to include all representatives of ancestors of $v$ excluding $r$. Therefore, any valid selection of sets in the constructed instance of $\ProblemPCMSSC$ corresponds to a valid solution in the instance of $\ProblemLPGST$ and vice versa. Moreover, the cost of the selected sets is equal to the cost in $\ProblemLPGST$. Thus, $\ProblemPCMSSC$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    Start from the hard $\ProblemGST$ instances and the vertex-representative construction in the proof of Theorem~\ref{thm:PCSC-outforest-hardness}, with integer and polynomially bounded edge lengths. Let $g=\spr{\cX}\geq2$, put $L=\sum_{e\in E(T)}d\br{e}$, and introduce $D=[L\cdot g]$, disjoint from $\cX$. Set $\cU=\cX\cup D$ and $f=g/\spr{\cU}$. In addition to the vertex representatives, create a chain $S_1\preceq\cdots\preceq S_{L\cdot g+1}$, where the first $L\cdot g$ sets are empty and $S_{L\cdot g+1}=D$.
+
+    A proper prefix of the new chain covers no elements and can be deleted. Taking all vertex representatives gives a feasible sequence $\sigma$ with
+    \[
+        \coverageTime\br{\sigma}\leq L\cdot g+L^2\cdot g
+        =L\cdot g\cdot\br{L+1}.
+    \]
+    In contrast, any sequence $\pi$ containing the last set of the chain satisfies
+    \[
+        \coverageTime\br{\pi}\geq\br{L\cdot g+1}\cdot L\cdot g,
+    \]
+    which is larger when $g\geq2$. Thus any feasible sequence can be replaced, without increasing its coverage time, by one containing only vertex representatives.
+
+    Let $\sigma$ be a feasible sequence containing only vertex representatives. Since $\cov\br{\sigma,D}=\emptyset$, we have
+    \[
+        \coverageTime\br{\sigma,D}=L\cdot g\cdot\spr{\sigma},
+        \qquad
+        0\leq\coverageTime\br{\sigma,\cX}\leq g\cdot\spr{\sigma}.
+    \]
+    Adding these contributions gives
+    \[
+        L\cdot g\cdot\spr{\sigma}
+        \leq\coverageTime\br{\sigma,\cU}
+        \leq(L+1)\cdot g\cdot\spr{\sigma}.
+    \]
+    Such a sequence must cover all $g$ groups to meet the target. After scaling by $L\cdot g$, its coverage-time objective and $\spr{\sigma}$ differ by at most a factor of $1+1/L$. By Theorem~\ref{thm:PCSC-outforest-hardness}, minimizing $\spr{\sigma}$ corresponds to minimizing the cost of the Steiner tree. The source instances have $\spr{V}=g^{\bigo(1)}$ and polynomially bounded integer edge lengths, so $n=(L+1)g=g^{\bigo(1)}$ and $\log n=\Theta(\log g)$. The source hardness therefore gives the claimed bound.
 \end{proof}
-As an immediate corollaries of Theorem \ref{thm:PCSC-to-PCWCDT-hardness} and \ref{thm:PCMSSC-to-PCACDT-hardness} we obtain the following results:
-\begin{corollary}\label{thm:PCWCDT-outforest-hardness}
-    $\ProblemPCWCDT$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
-\end{corollary}
+The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by discretizing the weighted MGL reduction of Szyfelbein.
 
-\begin{corollary}\label{thm:PCACDT-outforest-hardness}
-    $\ProblemPCACDT$ with outforest precedence constraints cannot be approximated within a factor of $\cO\br{\log^{2-\epsilon} n}$ for any $\epsilon > 0$ unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
-\end{corollary}
-
-\subsection{General precedence constraints}
-In this section we show strong inapproximability results for $\ProblemPCWCDT$ and $\ProblemPCACDT$ with general precedence constraints by reducing from the Planted Dense Subgraph Conjecture which is a widely believed statement about hardness of detecting a dense component within an Erdős-Renyi graph \cite{OnApproxTargetSetSelection,PCMSSC}.
-\begin{conjecture}[Planted Dense Subgraph (PDS) Conjecture] \label{problem:PDS}
-For any constants $\beta < \alpha$ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$: 
-\begin{itemize}
-    \item With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$.
-    \item With probability 1/2, an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
-\end{itemize}
-\end{conjecture}
-% The Planted Dense Subgraph Conjecture states that for any constants $ \beta < \alpha $ and any $k\geq \sqrt{N}$, there is no polynomial time algorithm that can distinguish between the following two distributions of graphs with any advantage $\epsilon > 0$:
-% \begin{itemize}
-%     \item With probability 1/2, $G_1$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$,
-%     \item With probability 1/2, $G_2$: an Erdős-Renyi graph $G(N, N^{\alpha - 1})$ with a planted subgraph of size $k$ and edge density $k^{\beta - 1}$.
-% \end{itemize}
-Using this conjecture one can show the following inapproximability results for $\ProblemPCMSSC$ \cite{PCMSSC}:
-\begin{theorem}\label{thm:PCMSSC-PDS-hardness}
-    For any $\epsilon>0$ $\ProblemPCMSSC$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
-\end{theorem}
-
-Using the reduction from $\ProblemPCMSSC$ to $\ProblemPCACDT$ from the previous section we immediately obtain the following results:
-\begin{corollary}\label{thm:PCACDT-PDS-hardness}
-    For any $\epsilon>0$ $\ProblemPCACDT$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
-\end{corollary}
-
-Below we show that a similar reduction can also be used to obtain the same inapproximability result for $\ProblemPCSC$. The construction and analysis is mostly the same as in \cite{PCMSSC} but we include it here for completeness. In the reduction we will often make use of the Chernoff Bound which is as follows:
-\begin{theorem}[Chernoff Bound]\label{thm:chernoff}
-    Let $X_1, X_2, \ldots, X_n$ be independent random variables taking values in $\brc{0,1}$ such that for every $i\in\{1,\ldots,n\}$, $\mathbb{P}[X_i=1]=p$. Let $X=\sum_{i=1}^n X_i$ and $\mu=\mathbb{E}[X]=pn$. Then, for every $\delta\in(0,1)$ it holds that:
-    \begin{align*}
-        \mathbb{P}[X\leq (1-\delta)\mu] &\leq e^{-\frac{\delta^2\mu}{2}},\\
-        \mathbb{P}[X\geq (1+\delta)\mu] &\leq e^{-\frac{\delta^2\mu}{3}}.
-    \end{align*}
-\end{theorem}
-
-We have the following theorem:
-\begin{theorem}\label{thm:PCSC-PDS-hardness}
-    For any $\epsilon>0$ PCSC cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture.
+\begin{theorem}\label{thm:PCMSSC-outforest-full-cover-hardness}
+    For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    \paragraph{Construction of the reduction.} We start by choosing appropriate parameters for our reduction. Let $k=\sqrt{N}$, $\alpha=1/2$ and $\beta=1/2-\gamma$ for some $\gamma > 0$ to be determined later. In our reduction we will embed the structure of the input graph into the precedence constraints, while the universe elements will enforce the covering requirement. 
-    
-    Given a graph $G=(\{1,\ldots,N\}, \mathcal{E})$ as input to the Planted Dense Subgraph problem, we construct an instance of $\ProblemPCSC$ as follows. For each vertex $v \in \{1,\ldots,N\}$ of $G$, we create $\lambda$ representative sets $V_{v, i}$ for $i \in \{1,\ldots,\lambda\}$, where $\lambda$ is an appropriately chosen natural number to be specified later. For each edge $uv\in\mathcal{E}$, we create one representative set $E_{uv}$ which must be preceded by all representatives of both $u$ and $v$. That is, for all $i \in \{1,\ldots,\lambda\}$, we have $V_{u, i} \preceq E_{uv}$ and $V_{v, i} \preceq E_{uv}$. 
+    We reduce from \textsc{Minimum Group Latency} (MGL), which minimizes the sum, over all groups, of the distance traveled from the root before first visiting a vertex in that group. On tree metrics with $g$ groups, MGL admits no polynomial-time $\bigo\br{\log^{1-\epsilon} g}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{N^{\text{polylog}(N)}}$ \cite[Theorem~2.5]{ChakrabartySwamy2016FacilityLocationClientLatencies}. We use the weighted covering reduction in the proof of \cite[Theorem~4.4]{szyfelbein2026minsumsetcoverparallel}.
 
-    Next, we define the universe of elements to be covered. Let $U=\{0,1,\dots, n\}$ for some appropriately chosen natural number $n$ to be determined later. Every vertex representative set contains only the special element $0$, that is, $V_{v, i}=\{0\}$ for all $v \in \{1,\ldots,N\}$ and $i \in \{1,\ldots,\lambda\}$. 
-    
-    To define the contents of edge representative sets, we use a randomized construction based on a parameter $p\in(0,1)$. For each vertex $v \in \{1,\ldots,N\}$, we define an auxiliary set $U_v \subseteq \{1,\dots, n\}$ by including each element $j \in \{1,\dots, n\}$ in $U_v$ independently with probability $p$. That is, for each $j \in \{1,\dots, n\}$ and each $v \in \{1,\ldots,N\}$, we have $\mathbb{P}[j \in U_v] = p$. The edge representative set $E_{uv}$ is then defined to cover the intersection of the auxiliary sets, that is, $E_{uv} = (U_u \cap U_v)$. 
-    
-    From this construction, we can compute the following expected values:
-    \begin{itemize}
-        \item $\mathbb{E}[\spr{U_v}] = p n$ for each vertex $v$,
-        \item $\mathbb{E}[\spr{\{v\colon j\in U_v\}}] = p N$ for each element $j \in \{1,\dots, n\}$,
-        \item $\mathbb{E}[\spr{E_{uv}}] = \mathbb{E}[\spr{U_u \cap U_v}] = np^2$ for each edge $uv$.
-    \end{itemize}
+    Let $(T=(V,E),d,r,\cX)$ be such an MGL instance. Remove groups containing $r$, since their latency is zero, and let $g$ be the number of remaining groups and $M=|V|-1$. For each $v\neq r$, create the \emph{weighted set} $S_v=\brc{X\in\cX:v\in X}$ with cost $c_v=d\br{\operatorname{parent}(v),v}$. If $u=\operatorname{parent}(v)\neq r$, impose $S_u\preceq S_v$, giving outforest precedence. The \emph{weighted coverage time} of a group is the sum of set costs through its first covering set. As in the cited reduction, an optimal MGL tour yields a full-cover weighted sequence $\sigma_0$ whose sum of weighted coverage times $C_0$ is at most $\OPT_{\mathrm{MGL}}$. Let $B^*$ be the largest set cost in this sequence. Every such edge lies on a root-to-first-hit path for some group, so $B^*\leq\OPT_{\mathrm{MGL}}$.
 
-    The intuition behind this construction is as follows: we choose $p$ to be the smallest value such that if a planted component exists, then with high probability it covers all of $U$ using only edge representatives from the planted component (and their required predecessors). On the other hand, if no planted component exists, then we show that any solution must use significantly more sets to cover $U$, thus establishing the desired inapproximability ratio. 
-    
-    \paragraph{Choice of parameters.}
-    Let $\mathcal{P}$ denote the planted component if it exists. Since $\mathcal{P}$ consists of $k = \sqrt{N}$ vertices, for any element $j \in \{1,\dots, n\}$, the expected number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$ is $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$. Therefore, the expected number of unordered pairs of vertices in $\mathcal{P}$ where both auxiliary sets contain $j$ is:
+    We convert the weighted sets to unit-cost sets without assuming polynomially bounded costs. For every guess $B$ among the input costs $c_v$, delete each set with $c_v>B$ and all its descendants. Skip the guess if the remaining sets do not cover every group. Set $\delta=B/(g\cdot M)$. Replace each remaining $S_v$ by a chain of
     \[
-    \mathbb{E}\left[\left|\left\{(v, u)\colon j\in U_v, j\in U_u, v,u \in V(\mathcal{P}), v < u\right\}\right|\right] = \binom{p\sqrt{N}}{2}.
+        q_v=\left\lceil\frac{c_v}{\delta}\right\rceil=\left\lceil\frac{g \cdot M \cdot c_v}{B}\right\rceil\leq g \cdot M
     \]
-    
-    Since each edge in $\mathcal{P}$ exists independently with probability $k^{\beta - 1} = (\sqrt{N})^{-1/2 - \gamma}=N^{-1/4-\gamma/2}$, the expected number of edge representative sets from $\mathcal{P}$ that cover element $j$ is:
-    \[
-    \mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] = \binom{p\sqrt{N}}{2} \cdot N^{-1/4-\gamma/2}\geq \frac{p^2\cdot N}{4} \cdot N^{-1/4-\gamma/2}=\frac{p^2\cdot N^{3/4-\gamma/2}}{4}.
-    \] 
-    For this expected value to be sufficiently large (specifically, to be $\Theta(\log^2 N)$), we choose:
-    $
-    p=32\cdot N^{-3/8+\gamma/4}\cdot \log N
-    $. 
-	We have $\mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv \in E(\mathcal{P})\}}] \geq 64\cdot\log^2 N$, which will allow us to apply concentration bounds effectively.
+    unit-cost sets, with the first $q_v-1$ copies empty and the last copy equal to $S_v$. Chain consecutive copies, and make the last copy of a parent precede the first copy of each child. This preserves outforest precedence and full coverage. Each guess creates at most $g\cdot M^2$ sets, so the construction is polynomial even when the encoded costs are numerically large.
 
-    \paragraph{Case 1: Planted component exists.} Assume that the input graph contains a planted component $\mathcal{P}$. We show that there exists a solution to $\ProblemPCSC$ using only sets corresponding to vertices and edges in $\mathcal{P}$ that covers all elements in $U$ with high probability, and that this solution has cost $O(\lambda\cdot\sqrt{N}+N^{3/4-\gamma/2})$.
-    Consider the solution that selects all vertex representatives $V_{v,i}$ for all $v \in V(\mathcal{P})$ and all $i \in \{1,\ldots,\lambda\}$, together with all edge representatives $E_{uv}$ for all edges $uv \in E(\mathcal{P})$. The special element $0$ is covered by any vertex representative, so we focus on covering elements in $\{1,\dots, n\}$.
-    
-    Fix an arbitrary element $j \in \{1,\dots, n\}$. We first bound the number of vertices in $\mathcal{P}$ whose auxiliary sets contain $j$. Since $\mathbb{E}[\spr{\{v\colon j\in U_v, v \in V(\mathcal{P})\}}] = p\sqrt{N}$, by Chernoff's bound (Theorem \ref{thm:chernoff}) with $\delta = 1/2$, we have:
+    For the correct guess $B=B^*$, the sequence $\sigma_0$ survives pruning. Expanding its sets into their copy chains gives a feasible unit-cost sequence. Rounding each set cost up adds at most $\delta$ per set to a group's coverage time, and there are at most $M$ sets in any prefix. Hence, if $\OPT_1$ is the optimum for this unit-cost instance,
     \[
-    \mathbb{P}\left[\left|\{v\colon j\in U_v, v \in V(\mathcal{P})\}\right| \leq \frac{p\sqrt{N}}{2}\right] \leq  e^{-p\sqrt{N}/8} = e^{-4\cdot N^{1/8+\gamma/4}\cdot \log N} = N^{-4\cdot N^{1/8+\gamma/4}},
-    \]
-    which is exponentially small. 
-    
-    Next, for large enough $x$, we have $\binom{x}{2} \geq x^2/4$. Therefore, the expected number of unordered pairs of vertices in $\mathcal{P}$ where both auxiliary sets contain $j$ is at least $p^2\cdot N/4$. Again by Chernoff's bound, we have:
-    \[
-    \mathbb{P}\left[\left|\{(u,v)\colon j\in U_u, j\in U_v, u,v \in V(\mathcal{P}), u < v\}\right| \leq \frac{p^2\cdot N}{16}\right] \leq N^{-4\cdot N^{1/8+\gamma/4}}.
+        \delta \cdot \OPT_1\leq C_0+g \cdot M \cdot \delta=C_0+B^*\leq 2 \cdot \OPT_{\mathrm{MGL}}.
     \]
 
-    Now, each such pair $(u,v)$ corresponds to an edge in $\mathcal{P}$ with probability $N^{-1/4-\gamma/2}$. Since edge existence is independent of the auxiliary set memberships, the expected number of edge representatives in $\mathcal{P}$ that cover $j$ is:
-    \[
-    \mu := \mathbb{E}[\spr{\{E_{uv}\colon j\in E_{uv}, uv\in E(\mathcal{P})\}}] \geq \frac{p^2\cdot N}{16} \cdot N^{-1/4-\gamma/2}=64\cdot\log^2 N.
-    \]
-
-    Applying Chernoff's bound once more, we obtain:
-    \[
-    \mathbb{P}[\spr{\{E_{uv}\colon j\in E_{uv}, uv\in E(\mathcal{P})\}} \leq \mu/2] \leq e^{-\mu/8} = e^{-8\log^2 N} = N^{-8\log N}.
-    \]
-
-    By the union bound over all $n$ elements in $\{1,\dots, n\}$, the probability that some element is not covered by the edge representatives in $\mathcal{P}$ is at most $n \cdot N^{-8\log N}$. We will choose $n = \Theta(N^{3/4})$ later, which makes this probability negligible for large $N$.
-    
-    Finally, we bound the number of sets in this solution. The number of vertex representative sets is exactly $\lambda\cdot\sqrt{N}$. For the edge representatives, observe that:
-    \[
-    \mathbb{E}[\spr{E(\mathcal{P})}]=\binom{\sqrt{N}}{2}\cdot N^{-1/4-\gamma/2}\leq \frac{N}{2} \cdot N^{-1/4-\gamma/2} = \frac{N^{3/4-\gamma/2}}{2}.
-    \]
-    
-    By Chernoff's bound with $\delta = 1$, we have:
-    \[
-    \mathbb{P}[\spr{E(\mathcal{P})} \geq N^{3/4-\gamma/2}] \leq e^{-N^{3/4-\gamma/2}/6},
-    \]
-    which is extremely small. Therefore, with high probability, the total number of sets in the solution is at most:
-    \[
-    \lambda\cdot\sqrt{N}+N^{3/4-\gamma/2}.
-    \]
-    
-    \paragraph{Case 2: No planted component.} Now assume that the input graph does not contain a planted component, so it is drawn entirely from $G(N, N^{-1/2})$. We show that any solution to $\ProblemPCSC$ must use significantly more sets to cover all elements in $U$ with high probability.
-    
-    Consider any solution to PCSC that selects representatives corresponding to some set $X \subseteq \{1,\ldots,N\}$ of vertices with $|X| = x$. Due to the precedence constraints, this solution must include all $\lambda x$ vertex representatives $V_{v,i}$ for $v \in X$ and $i \in \{1,\ldots,\lambda\}$. After selecting these vertex representatives, the solution can then select edge representatives $E_{uv}$ for edges $uv$ where both $u, v \in X$.
-    
-    We first bound the number of edges among the vertices in $X$. Since the graph is drawn from $G(N, N^{-1/2})$, each potential edge exists independently with probability $N^{-1/2}$. For any fixed set $X$ of size $x$, the expected number of edges with both endpoints in $X$ is:
-    \[
-    \mu_E := \binom{x}{2}\cdot N^{-1/2} \leq \frac{x^2}{2\sqrt{N}}.
-    \]
-    
-    There are at most $\binom{N}{x} \leq N^x$ possible sets $X$ of size $x$. By Chernoff's bound with $\delta = 1/2$, the probability that a specific set $X$ contains more than $3\mu_E/2$ edges is at most $e^{-\mu_E/12}$. By the union bound over all possible sets of size $x$, the probability that some set of size $x$ has more than $3\mu_E/2$ edges is at most:
-    \[
-    N^x \cdot e^{-\mu_E/12} = N^x \cdot \exp\left(-\frac{x^2}{24\sqrt{N}}\right).
-    \]
-    
-    For this probability to be at most $N^{-8}$, we would need $\mu_E \geq 12(x+8)\log N$, which translates to $x \geq 500\sqrt{N}\log N$. However, we are interested in the regime where $x \leq N^{(5-2\gamma)/8}$. For such values of $x$ and sufficiently large $N$ (note that $N^{(5-2\gamma)/8} < N^{5/8} < \sqrt{N}$ for large $N$), we can safely assume that with overwhelming probability, any set $X$ of size $x \leq N^{(5-2\gamma)/8}$ contains at most $x^2/\sqrt{N}$ edges.
-    
-    Next, we bound how many elements can be covered by these edge representatives. By construction, each edge representative $E_{uv}$ covers the elements in $(U_u \cap U_v)$. The size of $U_u \cap U_v$ has expectation $\mathbb{E}[\spr{U_u \cap U_v}]=np^2$. By Chernoff's bound, the probability that a single edge representative covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most $e^{-np^2/12}$. 
-    
-    The total number of edge representatives available after selecting vertices in $X$ is at most $x^2/\sqrt{N}$. By the union bound, the probability that at least one of these edge representatives covers more than $2np^2$ elements from $\{1,\dots, n\}$ is at most:
-    \[
-    \frac{x^2}{\sqrt{N}} \cdot e^{-np^2/12}.
-    \]
-    
-    Recall that $p^2 = (32)^2 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N = 1024 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N$. For the above probability to be negligible, we need $n \geq 200\cdot\log N/p^2$, which gives:
-    \[
-    n \geq \frac{200\cdot \log N}{1024 \cdot N^{-3/4+\gamma/2}\cdot \log^2 N} = \cO\left(\frac{N^{3/4-\gamma/2}}{\log N}\right).
-    \]
-    This condition is satisfied by choosing $n = \Theta(N^{3/4})$.
-    
-    Now, suppose $x \leq N^{(5-2\gamma)/8}$. Then, with high probability, after selecting $\lambda x$ vertex representatives and at most $x^2/\sqrt{N}$ edge representatives, the total number of elements from $\{1,\dots, n\}$ that are covered is at most:
-    \begin{align*}
-    2np^2 \cdot \frac{x^2}{\sqrt{N}} 
-	&= 
-    2048 \cdot n \cdot N^{-3/4+\gamma/2}\cdot \log^2 N \cdot \frac{x^2}{\sqrt{N}} = 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot x^2
-	\\&\leq 2048 \cdot n \cdot N^{-5/4+\gamma/2}\cdot \log^2 N \cdot N^{(5-2\gamma)/4} = 2048 \cdot n \cdot \log^2 N.
-    \end{align*}
-    
-    Since $n = \Theta(N^{3/4})$, we have $2048 \cdot n \cdot \log^2 N = o(n)$ for sufficiently large $N$. This means that when $x \leq N^{(5-2\gamma)/8}$, at most $o(n)$ elements from $\{1,\dots, n\}$ are covered, leaving $\Omega(n)$ elements uncovered.
-    
-    To cover all elements in $U$, any solution must eventually select enough sets to cover these remaining $\Omega(n)$ elements. However, due to the precedence constraints, to reach edge representatives that can cover many new elements, the solution must first select many vertex representatives. Specifically, to significantly increase coverage beyond what $x \leq N^{(5-2\gamma)/8}$ vertices provide, the solution must select at least $\lambda\cdot N^{(5-2\gamma)/8}$ vertex representatives plus at least $N^{(5-2\gamma)/4}$ edge representatives. Therefore, with high probability, the cost of any solution that covers all elements in $U$ is at least:
-    \[
-    \lambda\cdot N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}.
-    \]
-    
-    \paragraph{Comparison and conclusion.}
-    We now compare the costs in the two cases to establish the inapproximability ratio. By choosing $\lambda = N^{1/4}$ (or any $\lambda \geq N^{1/4}$) and letting $\gamma$ approach $0$ we have that the ratio between the costs in Case 2 and Case 1 is at least:
-    \[
-    \frac{\lambda\cdot N^{(5-2\gamma)/8} + N^{(5-2\gamma)/4}}{\lambda\cdot\sqrt{N} + N^{3/4-\gamma/2}} = \Omega\br{
-    \frac{N^{5/8}}{N^{1/2}}} = \Omega\br{N^{1/8}}.
-    \]
-
-    Since we chose $n = \Theta(N^{3/4})$, we have that the gap is $\Theta(N^{1/8}) = \Theta((N^{3/4})^{1/6}) = \Theta(n^{1/6})$. By choosing $\gamma$ sufficiently small, we can make this gap arbitrarily close to $n^{1/6}$.
-    Furthermore, the total number of sets $m$ in the constructed instance is $m = \lambda\cdot N + |\mathcal{E}|$. For a graph drawn from $G(N, N^{-1/2})$, the number of edges is highly concentrated around $\binom{N}{2} \cdot N^{-1/2} = \Theta(N^{3/2})$. With $\lambda = N^{1/4}$, we have $m = \Theta(N^{3/2})$. Therefore, $n = \Theta(N^{3/4}) = \Theta(m^{1/2})$, and the gap can also be expressed as:
-    $
-    \Theta(N^{1/8}) = \Theta((N^{3/2})^{1/12}) = \Theta(m^{1/12}).
-    $
-    
-    Thus, any polynomial-time algorithm for $\ProblemPCSC$ with approximation factor better than $\cO(n^{1/6-\epsilon})$ or $\cO(m^{1/12-\epsilon})$ for any $\epsilon > 0$ could distinguish between the two cases of the Planted Dense Subgraph problem with significant advantage. This completes the proof.
+    Conversely, compress any full-cover sequence of unit copies by ordering the original sets according to the positions of their last copies. This is a precedence-feasible weighted sequence. If a group is first covered at unit position $t$, all copies of every set through its first covering set occur by position $t$, and $c_v\leq\delta\cdot q_v$. Its weighted coverage time is therefore at most $\delta\cdot t$, so the total weighted cost is at most $\delta$ times the unit-sequence cost. Run an $\alpha$-approximation for every guess, compress each output, and select the cheapest resulting sequence. The correct guess gives a weighted sequence of cost at most $2\cdot\alpha\cdot\OPT_{\mathrm{MGL}}$. Applying the weighted-sequence-to-tour conversion in \cite{szyfelbein2026minsumsetcoverparallel} gives an $\bigo\br{\alpha}$-approximation for MGL. There are polynomially many guesses and $n=g$, so the claimed hardness follows.
 \end{proof}
-Therefore we immediately have that:
-\begin{corollary}\label{thm:PCWCDT-PDS-hardness}
-    For any $\epsilon>0$ $\ProblemPCWCDT$ cannot be approximated within a factor of $\cO\br{m^{1/6-\epsilon}}$ nor $\cO\br{n^{1/12-\epsilon}}$ condition to Planted Dense Subgraph Conjecture. 
+
+\begin{corollary}\label{cor:PCACDT-outforest-hardness}
+    For every $\epsilon>0$, $\ProblemPCACDT$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{corollary}
+\begin{proof}
+    The full-cover reduction in Theorem~\ref{thm:PCMSSC-to-PCACDT-hardness} preserves outforest precedence and transfers approximation ratios up to a constant factor. The result follows from Theorem~\ref{thm:PCMSSC-outforest-full-cover-hardness}.
+\end{proof}
+
+\subsection{Reductions from precedence constrained set cover}
+\begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
+    Approximating $\ProblemPCWCDT$ is as hard as approximating $\ProblemPCSC$ with $f=1$.
+\end{theorem}
+\begin{proof}
+    Let $(\cU,\cS,\preceq)$ be a full-cover $\ProblemPCSC$ instance. For each $u\in\cU$, create two \emph{representative hypotheses} $h_u^0,h_u^1$.
+    % \DD{tutaj chyba należałoby powiedzieć która hipoteza jest targetem w których sytuacjach?} 
+    For each $S\in\cS$, create one indexed test whose replies are
+    \[
+        H_S=\{h_u^i:u\in\cU\setminus S,\ i\in\{0,1\}\},
+        \qquad t_S=\bigl(\{\{h_u^i\}:u\in S,\ i\in\{0,1\}\}\cup\{H_S\}\bigr)\setminus\{\emptyset\}.
+    \]
+    Impose $t_S\preceq t_T$ exactly when $S\preceq T$.
+
+    A decision tree can be normalized by pruning unreachable branches, deleting later occurrences of a test on a path, and stopping as soon as the hypothesis is identified. These operations do not increase its cost. Each test has at most one nonsingleton reply, so the internal nodes of a normalized tree $D$ form a single path. Let $\cC$ be the sequence of corresponding sets. It is precedence-closed and covers every $u\in\cU$, since $h_u^0$ and $h_u^1$ are indistinguishable until a set containing $u$ is tested. Moreover, $\COSTW\br{D}=\spr{\cC}$.
+
+    Conversely, any precedence-closed full cover, ordered topologically, gives a decision tree of worst-case cost at most its cardinality. Hence the optimum costs are equal, and an $\alpha$-approximation for $\ProblemPCWCDT$ gives an $\alpha$-approximation for $\ProblemPCSC$.
+\end{proof}
+\begin{theorem}\label{thm:PCMSSC-to-PCACDT-hardness}
+    Approximating $\ProblemPCACDT$ is as hard as approximating $\ProblemPCMSSC$ with $f=1$.
+\end{theorem}
+\begin{proof}
+    \setlength{\emergencystretch}{1em}
+    Use the reduction from Theorem~\ref{thm:PCSC-to-PCWCDT-hardness}. Let $\cC$ be a precedence-closed sequence with $\cov\br{\cC,\cU}=\cU$, and let $D$ be the corresponding decision tree. For every $u\in\cU$, both hypotheses $h_u^0$ and $h_u^1$ are identified at depth $\coverageTime\br{u,\cC}$. Thus
+    \[
+        \COSTA\br{D}=2\sum_{u\in\cU}\coverageTime\br{u,\cC}
+        =2\cdot\coverageTime\br{\cC,\cU}.
+    \]
+    Conversely, normalize a decision tree $D$ as in Theorem~\ref{thm:PCSC-to-PCWCDT-hardness}. Its internal path yields a precedence-closed sequence $\cC$ with $\cov\br{\cC,\cU}=\cU$ and $\coverageTime\br{\cC,\cU}=\COSTA\br{D}/2$. Since normalization only decreases cost, an $\alpha$-approximation for $\ProblemPCACDT$ yields an $\alpha$-approximation for $\ProblemPCMSSC$ with $f=1$.
+\end{proof}
+% \begin{theorem}\label{thm:PCSC-to-PCACDT-hardness}
+%     If there is no $\alpha$-approximation for $\ProblemPCSC$, then there is no $\bigo\br{\alpha}$-approximation for $\ProblemPCACDT$.
+% \end{theorem}
+% \begin{proof}
+% 	Let $(\cU, \cS, \preceq)$ be an instance of $\ProblemPCSC$ where $\cU$ is the universe of elements, $\cS$ is the family of sets and $\preceq$ are the precedence constraints on $\cS$. We construct an instance of $\ProblemPCACDT$ as follows. For each element $u \in\cU$, we create a representative hypothesis $h_u$ with $p\br{h_u}=0$. We also create a dummy hypothesis $h$ such that $p\br{h}=1$. For each set $S \in \cS$, we create a test $t_S$ such that $t_S(h_u) = h_u$ if $u \in S$ and $t_S(h_u) = 0$ otherwise ($t_S(h)=0$). The precedence constraints on tests are the same as the precedence constraints on sets, i.e., if $S_1$ must be selected before $S_2$ in $\ProblemPCSC$, then $t_{S_1}$ must be selected before $t_{S_2}$ in $\ProblemPCWCDT$. Notice, that any valid decision tree for the constructed instance of $\ProblemPCWCDT$ is a path of tests (ignoring leaves) since performing any test $t_S$ either returns a response containing one of the hypotheses $h_u$, thus ending a process or returns $0$, which is a singular possible response leading to the next test. Since the dummy hypothesis $h$ has probability $1$, the cost of any decision tree is equal to the number of tests performed in the path. In order to distinguish all hypotheses $h_u$ from the dummy hypothesis $h$, we need to perform tests that cover all elements in $U$.
+%     Therefore, any valid decision tree for the constructed instance of $\ProblemPCWCDT$ corresponds to a valid selection of sets in $\ProblemPCSC$ and vice versa. Thus, since the size of the reduction is linear any $\alpha$-approximation for $\ProblemPCWCDT$ would yield an $\bigo\br{\alpha}$-approximation for $\ProblemPCSC$.
+% \end{proof}
+
+\begin{corollary}[Decision-tree inapproximability]\label{cor:decision-tree-inapproximability}
+    \setlength{\emergencystretch}{3em}
+    Let $n$ denote the number of hypotheses and $m$ the number of tests. The following conditional hardness results hold:
+    \begin{enumerate}
+        \item Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, neither $\ProblemPCWCDT$ nor $\ProblemPCACDT$ admits a polynomial-time $\bigo\br{n^{1/2-\epsilon}}$- or $\bigo\br{m^{1/4-\epsilon}}$-approximation.
+        \item For every $x\in\{n,m\}$ and fixed $K>0$, neither problem admits a polynomial-time $\bigo\br{(\log x)^K}$-approximation unless $\text{P}=\text{NP}$.
+        \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input. In particular, ETH rules out these approximation factors.
+        \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
+        \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    \end{enumerate}
+    The Label-Cover- and PGC-based bounds (items 2-4) hold even when every test has at most three outcomes and the precedence DAG has height two.
+\end{corollary}
+\begin{proof}
+    Apply the covering-to-decision-tree reductions with $f=1$ to Corollary~\ref{cor:PDS-limiting-hardness} for item 1 and to the three parts of Theorem~\ref{thm:label-cover-hardness} for items 2--4. The reductions satisfy $n_{\rm DT}=2\cdot n_{\rm cov}$ and $m_{\rm DT}=m_{\rm cov}$, so both parameter-dependent bounds transfer. In items 2--4, the covering sets are empty or singletons, yielding tests with at most three outcomes, and the precedence DAG has height two. Item 5 follows from Theorem~\ref{thm:PCSC-outforest-hardness} via the full-cover reduction for $\ProblemPCWCDT$, and from Corollary~\ref{cor:PCACDT-outforest-hardness} for $\ProblemPCACDT$.
+\end{proof}
+
+\subsection{Consequences for Partial Red-Blue Set Cover}
+The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and coverage, mapping a $\ProblemPCSC$ instance with $m$ sets and $n$ items to a $\ProblemPRBSC$ instance with $m$ red-blue sets, $m$ red elements, and $k=n$ blue elements.
+For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
+
+\begingroup\setlength{\emergencystretch}{1em}
+Chlamt\'a\v{c} et al. prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 k}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 k$ loss on the restricted instances produced by our closure reduction.\par\endgroup
+
+\begin{corollary}[PDS hardness for Partial Red-Blue Set Cover]\label{cor:PRBSC-PDS-hardness}
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed target fraction $f\in(0,1]$, and fixed coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\bigo\br{k^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot k}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.
+\end{corollary}
+\begin{proof}
+    Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Corollary~\ref{cor:PDS-limiting-hardness}.
+\end{proof}
+
+\begin{corollary}[Label-Cover hardness for RBSC]\label{cor:PRBSC-label-cover-hardness}\label{cor:PRBSC-PGC-hardness}
+    For every fixed $f\in(0,1]$, the three bicriteria inapproximability bounds in Theorem~\ref{thm:label-cover-hardness} hold for $\ProblemPRBSC$ with target $\cl{f\cdot k}$, with $n$ replaced by $k$ and under the same assumptions, on instances in the image of Theorem~\ref{thm:PCSC-RBSC}.
+\end{corollary}
+\begin{proof}
+    Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:label-cover-hardness}.
+\end{proof}
+
+\begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
+    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} k}$-approximation unless $\text{NP}\subseteq\text{ZTIME}\br{k^{\text{polylog}(k)}}$.
+\end{corollary}
+\begin{proof}
+    Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:PCSC-outforest-hardness}.
+\end{proof}

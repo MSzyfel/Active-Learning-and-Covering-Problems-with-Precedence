@@ -80,14 +80,55 @@
                   Juli{\'{a}}n Mestre and
                   Anthony Wirth},
   title        = {Precedence-Constrained Min Sum Set Cover},
-  booktitle    = {{ISAAC}  2017},
+  booktitle    = {{ISAAC}},
   volume       = {92},
   pages        = {55:1--55:12},
   year         = {2017},
   doi          = {10.4230/LIPICS.ISAAC.2017.55}
 }
 
-@InProceedings{ApproxAlgsForOptDTsAndAdapTSPProblems,
+@InProceedings{RedBlueSetCover,
+  author       = {Eden Chlamt{\'{a}}{\v{c}} and Yury Makarychev and Ali Vakilian},
+  title        = {Approximating Red-Blue Set Cover and Minimum Monotone Satisfying Assignment},
+  booktitle    = {{APPROX/RANDOM}},
+  volume       = {275},
+  pages        = {11:1--11:19},
+  year         = {2023},
+  doi          = {10.4230/LIPIcs.APPROX/RANDOM.2023.11}
+}
+
+@article{DenseSubhypergraphsLowDegree,
+  author       = {Abhishek Dhawan and Cheng Mao and Alexander S. Wein},
+  title        = {Detection of Dense Subhypergraphs by Low-Degree Polynomials},
+  journal      = {arXiv preprint arXiv:2304.08135},
+  year         = {2023},
+  doi          = {10.48550/arXiv.2304.08135}
+}
+
+@article{ProjectionGamesConjecture,
+  author       = {Dana Moshkovitz},
+  title        = {The Projection Games Conjecture and the {NP}-Hardness of
+                  {$\ln n$}-Approximating Set-Cover},
+  journal      = {Theory of Computing},
+  volume       = {11},
+  number       = {7},
+  pages        = {221--235},
+  year         = {2015},
+  doi          = {10.4086/toc.2015.v011a007}
+}
+
+@article{ProjectionGamesSuperSAT,
+  author       = {Priyanka Mukhopadhyay},
+  title        = {The Projection Games Conjecture and the Hardness of
+                  Approximation of super-{SAT} and related problems},
+  journal      = {Journal of Computer and System Sciences},
+  volume       = {123},
+  pages        = {186--201},
+  year         = {2022},
+  doi          = {10.1016/j.jcss.2021.09.002}
+}
+
+@article{ApproxAlgsForOptDTsAndAdapTSPProblems,
   author       = {Anupam Gupta and
                   Viswanath Nagarajan and
                   R. Ravi},
@@ -337,10 +378,12 @@
 @inproceedings{AverageCaseActiveLearningWithCosts,
   author       = {Andrew Guillory and
                   Jeff A. Bilmes},
+  title        = {Average-Case Active Learning with Costs},
   booktitle    = {{ALT}},
   volume       = {5809},
   pages        = {141--155},
   year         = {2009},
+  url          = {https://doi.org/10.1007/978-3-642-04414-4\_15},
   doi          = {10.1007/978-3-642-04414-4\_15}
 }
 
@@ -356,7 +399,7 @@
 }
 
 
-@inbook{TightAnalysisGreedyUniformDecisionTree,
+@inproceedings{TightAnalysisGreedyUniformDecisionTree,
   author       = {Ray Li and
                   Percy Liang and
                   Stephen Mussmann},
@@ -396,7 +439,7 @@
 
 
 
-@inbook{MinimumCostAdaptiveSubmodularCover,
+@inproceedings{MinimumCostAdaptiveSubmodularCover,
   author       = {Yubing Cui and
                   Viswanath Nagarajan},
   title        = {Minimum Cost Adaptive Submodular Cover},
@@ -426,7 +469,8 @@ author = {Hanneke, Steve},
 year = {2006},
 month = {07},
 pages = {},
-title = {The Cost Complexity of Interactive Learning}
+title = {The Cost Complexity of Interactive Learning},
+journal = {Unpublished manuscript.}
 }
 
 @article{Schaffer1989OptNodeRankOfTsInLinTime,
@@ -491,7 +535,7 @@ url = "http://dx.doi.org/10.17169/refubium-45704",
   doi          = {10.1007/978-3-642-14165-2_45}
 }
 
-@article{TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees,
+@inproceedings{TightApproximationBoundsOnASimpleAlgorithmForMinimumAverageSearchTimeInTrees,
   author       = {Svein H{\o}gemo},
   title        = {Tight Approximation Bounds on a Simple Algorithm for Minimum Average
                   Search Time in Trees},
@@ -556,14 +600,36 @@ url = "http://dx.doi.org/10.17169/refubium-45704",
   doi          = {10.1016/J.TCS.2016.07.019}
 }
 
-@article{szyfelbein2025approximatingaveragecasegraphsearch,
-  author       = {Michal Szyfelbein},
-  title        = {Approximating the Average-Case Graph Search Problem with Non-Uniform
-                  Costs},
-  journal      = {CoRR},
-  volume       = {abs/2511.06564},
-  year         = {2025},
-  doi          = {10.48550/ARXIV.2511.06564}
+@inproceedings{szyfelbein2025approximatingaveragecasegraphsearch,
+  author       = {Michał Szyfelbein},
+  title     = {Approximating the Average-Case Graph Search Problem with Non-uniform Costs},
+  booktitle = {{WALCOM}},
+  volume    = {16444},
+  pages     = {96--109},
+  year      = {2026},
+  doi       = {10.1007/978-981-95-7127-7_7},
+  isbn      = {978-981-95-7127-7}
+}
+
+@misc{szyfelbein2026minsumsetcoverparallel,
+  author        = {Szyfelbein, Micha{\l}},
+  title         = {Min-Sum Set Cover on Parallel Machines},
+  year          = {2026},
+  eprint        = {2604.11388},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.DS},
+  url           = {https://arxiv.org/abs/2604.11388}
+}
+
+@article{ChakrabartySwamy2016FacilityLocationClientLatencies,
+  author       = {Chakrabarty, Deeparnab and Swamy, Chaitanya},
+  title        = {Facility location with client latencies: {LP}-based techniques for minimum-latency problems},
+  journal      = {Mathematics of Operations Research},
+  volume       = {41},
+  number       = {3},
+  pages        = {865--883},
+  year         = {2016},
+  doi          = {10.1287/moor.2015.0758}
 }
 
 @inproceedings{AnalyticalApproachToParallelRepetition,
@@ -595,4 +661,21 @@ title = {Improved Approximation Algorithms for the Average-Case Tree Searching P
 volume = {68},
 journal = {Algorithmica},
 doi = {10.1007/s00453-012-9715-6}
+}
+
+@inproceedings{Feige2002RelationsBetweenAverageCaseComplexityAndApproximationComplexity,
+author = {Feige, Uriel},
+title = {Relations between average case complexity and approximation complexity},
+year = {2002},
+isbn = {1581134959},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/509907.509985},
+doi = {10.1145/509907.509985},
+abstract = {We investigate relations between average case complexity and the complexity of approximation. Our preliminary findings indicate that this is a research direction that leads to interesting insights. Under the assumption that refuting 3SAT is hard on average on a natural distribution, we derive hardness of approximation results for min bisection, dense k-subgraph, max bipartite clique and the 2-catalog segmentation problem. No NP-hardness of approximation results are currently known for these problems.},
+booktitle = {Proceedings of the Thirty-Fourth Annual ACM Symposium on Theory of Computing},
+pages = {534–543},
+numpages = {10},
+location = {Montreal, Quebec, Canada},
+series = {STOC '02}
 }

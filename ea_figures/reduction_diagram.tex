@@ -1,0 +1,25 @@
+\begin{tikzpicture}[
+    node distance=0.8cm and 2.1cm,
+    problem/.style={rectangle, draw, very thick, minimum width=1.9cm, minimum height=0.6cm, align=center, font=\scriptsize, fill=white, drop shadow, rounded corners=2pt},
+    arrow/.style={->, very thick},
+    edgelabel/.style={font=\tiny, fill=white, inner sep=1pt}
+]
+
+\node[problem] (rbsc) {$\hyperref[ea:problem:PRBSC]{\ProblemPRBSC}$};
+\node[problem, below left=0.9cm and 1.7cm of rbsc] (pcsc) {$\hyperref[ea:problem:PCSC]{\ProblemPCSC}$};
+\node[problem, below right=0.9cm and 1.7cm of rbsc] (bpcsc) {$\hyperref[ea:problem:BPCSC]{\ProblemBPCSC}$};
+\node[problem, below=0.9cm of pcsc] (pcwcdt) {$\hyperref[ea:problem:PCWCDT]{\ProblemPCWCDT}$};
+\node[problem, below=0.9cm of bpcsc] (pcmssc) {$\hyperref[ea:problem:PCMSSC]{\ProblemPCMSSC}$};
+\node[problem, right=2.2cm of bpcsc] (gso) {$\hyperref[ea:problem:GSO]{\ProblemGSO}$};
+\node[problem, below=0.9cm of pcmssc] (pcacdt) {$\hyperref[ea:problem:PCACDT]{\ProblemPCACDT}$};
+
+\draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:PCSC]{Sec.~\ref*{ea:subsection:PCSC}}} (pcsc);
+\draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:BPCSC]{Sec.~\ref*{ea:subsection:BPCSC}}} (bpcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[ea:cor:BPCSC-to-PCSC]{Cor.~\ref*{ea:cor:BPCSC-to-PCSC}}} (pcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:PCMSSC]{Sec.~\ref*{ea:subsection:PCMSSC}}} (pcmssc);
+\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:SpecialCases]{Sec.~\ref*{ea:subsection:SpecialCases}}} (bpcsc);
+\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:SpecialCases]{Sec.~\ref*{ea:subsection:SpecialCases}}} (pcmssc);
+\draw[arrow] (pcsc) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:PCWCDT]{Sec.~\ref*{ea:subsection:PCWCDT}}} (pcwcdt);
+\draw[arrow] (pcmssc) -- node[edgelabel, pos=0.5] {\hyperref[ea:subsection:PCACDT]{Sec.~\ref*{ea:subsection:PCACDT}}} (pcacdt);
+
+\end{tikzpicture}

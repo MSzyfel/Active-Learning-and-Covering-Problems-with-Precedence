@@ -1,0 +1,22 @@
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\LinesNumbered
+\caption{An $\alpha_{m,n}$-approximation algorithm for $\ProblemPCSC$}
+\label{ea:alg:PCSC}
+\SetKwProg{Proc}{procedure}{}{}
+\Proc{$\ProcedurePCSC(\cU, \cS, \preceq, k)$}{
+  $\cR\gets\brc{r_S:S\in\cS}$\;
+  $\cB\gets\brc{b_u:u\in\cU}$\;
+  $\cA\gets\emptyset$\;
+
+  \ForEach{$S\in\cS$}{
+    $D_S\gets\closure{S}$\;
+    $A_S\gets\brc{r_T:T\in D_S}\cup\brc{b_u:u\in\cov\br{D_S}}$\;
+    $\cA\gets\cA\cup\brc{A_S}$\;
+  }
+
+  $\cA'\gets$ Run the $\alpha_{m,n}$-approximation algorithm for $\ProblemPRBSC$ on $(\cR,\cB,\cA,k)$\;
+  $\cC\gets\bigcup_{A_S\in\cA'}D_S$\;
+  \Return $\cC$\;
+}
+\end{algorithm}

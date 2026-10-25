@@ -1,0 +1,49 @@
+\begin{tikzpicture}[scale=1.0]
+    % Define node styles
+    \tikzstyle{clauseblob}=[ellipse, fill=blue!30, draw=blue!80, very thick, minimum width=2.5cm, minimum height=1.5cm, font=\small, drop shadow]
+    \tikzstyle{varblob}=[ellipse, fill=green!30, draw=green!80, very thick, minimum width=2.5cm, minimum height=1.5cm, font=\small, drop shadow]
+    \tikzstyle{sepedge}=[very thick, red]
+    
+    % Module label
+    \node[font=\large\bfseries, blue!80] at (4.25, 1) {Clause module};
+    
+    % Clause module
+    \node[clauseblob] (c1) at (0, 0) {$c_1$\\6 vertices};
+    \node[clauseblob] (c2) at (3.5, 0) {$c_2$\\6 vertices};
+    \node at (6, 0) {$\cdots$};
+    \node[clauseblob] (cC) at (8.5, 0) {$c_{|C|}$\\6 vertices};
+    
+    % Separator edges between clauses
+    \draw[sepedge] (c1) -- node[midway, above, font=\scriptsize, red] {$e^{sep}[1]$} (c2);
+    \draw[sepedge] (c2) -- (5, 0);
+    \draw[sepedge] (7, 0) -- (cC);
+    
+    % Connection to variable module
+    \draw[sepedge, ->, rounded corners=5mm] (cC.east) -- ++(1, 0) -- ++(0, -2.5) -- ++(-9.5, 0) 
+        node[pos=0.5, right, font=\small, text=red] {path\\continues};
+    
+    % Module label
+    \node[font=\large\bfseries, green!80] at (4.25, -4.5) {Variable module};
+    
+    % Variable module
+    \node[varblob] (v1) at (0, -3.5) {$v_1$\\3 vertices};
+    \node[varblob] (v2) at (3.5, -3.5) {$v_2$\\3 vertices};
+    \node at (6, -3.5) {$\cdots$};
+    \node[varblob] (vV) at (8.5, -3.5) {$v_{|V|}$\\3 vertices};
+    
+    % Separator edges between variables
+    \draw[sepedge] (v1) -- node[midway, above, font=\scriptsize, red] {$e^{sep}[|C|+1]$} (v2);
+    \draw[sepedge] (v2) -- (5, -3.5);
+    \draw[sepedge] (7, -3.5) -- (vV);
+    
+    % Legend below (centered)
+    \node[clauseblob, minimum width=1.2cm, minimum height=0.8cm, font=\footnotesize] at (1, -6) {};
+    \node[font=\small] at (3.5, -6) {Clause gadget (6-vertex path)};
+    
+    \node[varblob, minimum width=1.2cm, minimum height=0.8cm, font=\footnotesize] at (1, -7) {};
+    \node[font=\small] at (3.5, -7) {Variable gadget (3-vertex path)};
+    
+    \draw[sepedge, line width=3pt] (0.5, -8) -- (1.5, -8);
+    \node[font=\small] at (3.5, -8) {Separator edge $e^{sep}[i]$};
+    
+\end{tikzpicture}

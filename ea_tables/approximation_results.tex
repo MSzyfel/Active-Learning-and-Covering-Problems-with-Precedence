@@ -1,0 +1,36 @@
+\begin{table}[ht!]
+\caption{Approximation guarantees for covering and decision tree problems under different precedence constraints.}
+\label{ea:tab:results}
+\centering
+{
+\footnotesize
+\begin{tabular}{p{0.077\linewidth}C{0.14\linewidth}C{0.14\linewidth}C{0.15\linewidth}C{0.13\linewidth}C{0.19\linewidth}}
+\toprule
+\textbf{prec.} & \textbf{\hyperref[problem:BPCSC]{$\ProblemBPCSC$}} & \textbf{\hyperref[problem:PCSC]{$\ProblemPCSC$}} & \textbf{\hyperref[problem:PCMSSC]{$\ProblemPCMSSC$}} & \textbf{\hyperref[problem:PCWCDT]{$\ProblemPCWCDT$}} & \textbf{\hyperref[problem:PCACDT]{$\ProblemPCACDT$}} \\
+\midrule
+\multirow{2}{\linewidth}{none} & $\br{1, \frac{e}{e-1}}$ & $\br{1, \frac{e}{e-1}}$  & $\br{\frac{4e}{e-1},1}$ & $\bigo(\log n)$  & $\bigo(\log n/\log\log n)$  \\
+      &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & \cite{EfficientSequencesOfTrials} &  \cite{DiagnosisDetermination} & \cite{TightAnalysisGreedyUniformDecisionTree} \\
+
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+inforest & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{1, \frac{e}{e-1}}$ (Thm.~\ref{thm:BPCSC-inforest}) & $\br{3421.7, \frac{e}{e-1}}$ (Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC}) & $\bigo(\log n)$ (Cor.~\ref{cor:PCWCDT-special-cases}) & $\bigo(\log n)$ (Cor.~\ref{cor:PCACDT-special-cases}) \\
+
+
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+outforest & $\br{\bigo(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\bigo(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\br{\bigo(\log n), 4}$ (Thm.~\ref{thm:BPCSC-outforest}) & $\bigo(\log^2 n)$ (Cor.~\ref{cor:PCWCDT-special-cases}) & $\bigo(\log^2n)$ (Cor.~\ref{cor:PCACDT-special-cases}) \\
+
+
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+general & \shortstack[c]{$\br{\alpha_{m,n},1}$\\(Thm.~\ref{thm:BPCSC})} & \shortstack[c]{$\br{\alpha_{m,n},1}$\\(Thm.~\ref{thm:PCSC-RBSC})} & \shortstack[c]{$\br{\bigo(\alpha_{m,n}),1}$\\(Thm.~\ref{thm:BPCSC-to-PCMSSC})} & \shortstack[c]{$\begin{gathered}\bigo(m^{1/3}\\\cdot\log^{4/3}m\\\cdot\log^2n)\end{gathered}$\\(Cor.~\ref{cor:PCWCDT-special-cases})} & \shortstack[c]{$\begin{gathered}\bigo(m^{1/3}\\\cdot\log^{4/3}m\\\cdot\log^2n)\end{gathered}$\\(Cor.~\ref{cor:PCACDT-special-cases})} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

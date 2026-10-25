@@ -1,0 +1,24 @@
+\begin{tikzpicture}[scale=1.2]
+    % Define node styles
+    \tikzstyle{vertex}=[circle, fill=green!40, draw=black, thick, minimum size=6mm]
+    \tikzstyle{edge_label}=[font=\small, midway, above]
+    
+    % Title
+    \node[font=\large\bfseries, green!80] at (3, 1) {Variable gadget for $v_i$};
+    
+    % Variable gadget for v_i
+    \node[vertex, label=below:{$v[v,i,1]$}] (v1) at (0, 0) {};
+    \node[vertex, label=below:{$v[v,i,2]$}] (v2) at (3, 0) {};
+    \node[vertex, label=below:{$v[v,i,3]$}] (v3) at (6, 0) {};
+    
+    % Draw edges
+    \draw[very thick, green!70!black] (v1) -- node[edge_label, green!70!black] {$e^{var}[v_i^-]$} (v2);
+    \draw[very thick, green!70!black] (v2) -- node[edge_label, green!70!black] {$e^{var}[v_i^+]$} (v3);
+    
+    % Explanation
+    \node[above=0.5cm of v2, align=center, font=\footnotesize] {
+        Query $e^{var}[v_i^-]$ if $v_i = \text{False}$\\
+        Query $e^{var}[v_i^+]$ if $v_i = \text{True}$
+    };
+    
+\end{tikzpicture}

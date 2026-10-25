@@ -1,0 +1,104 @@
+\newcommand{\br}[1]{\mathopen{}\left( #1 \right)}
+\newcommand{\brc}[1]{\mathopen{}\left\{ #1 \right\}}
+\newcommand{\spr}[1]{\mathopen{}\left| #1 \right|}
+\newcommand{\fl}[1]{\mathopen{}\left\lfloor #1 \right\rfloor}
+\newcommand{\cl}[1]{\mathopen{}\left\lceil #1 \right\rceil}
+\newcommand{\angl}[1]{\mathopen{}\langle #1 \rangle}
+\newcommand{\e}[1]{\exp\left\{ #1 \right\}}
+
+\newcommand{\ecc}{\operatorname{ecc}}
+\newcommand{\rad}{\operatorname{rad}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\Rim}{\operatorname{Rim}}
+\newcommand{\rim}{\operatorname{rim}}
+\newcommand{\Anc}{\operatorname{Anc}}
+\newcommand{\cov}{\operatorname{cov}}
+\newcommand{\prefix}[2]{\operatorname{prefix}\br{#1,#2}}
+\newcommand{\pref}[2]{\prefix{#1}{#2}}
+
+\newcommand{\NP}{\textnormal{$\mathcal{NP}$}\xspace}
+\newcommand{\Pclass}{\textnormal{$\mathcal{P}$}\xspace}
+
+\newcommand{\NPcomplete}{\textnormal{NP-Complete}\xspace}
+\newcommand{\NPhard}{\textnormal{NP-Hard}\xspace}
+\newcommand{\APXhard}{\textnormal{APX-Hard}\xspace}
+\newcommand{\polyAPXcomplete}{\textnormal{Poly-APX-Complete}\xspace}
+
+\newcommand{\Cent}{\text{Cent}}
+\newcommand{\APP}{\text{APP}}
+\newcommand{\OPT}{\textup{\text{OPT}}}
+\newcommand{\COST}{\textup{\text{COST}}}
+\newcommand{\COSTW}{\textup{\text{COST}}_W}
+\newcommand{\COSTA}{\textup{\text{COST}}_A}
+\newcommand{\LB}{\mathcal{LB}}
+\newcommand{\HB}{\mathcal{HB}}
+\newcommand{\THB}{\mathcal{THB}}
+\newcommand{\THH}{\text{TH}}
+
+\newcommand{\argmin}{\mathopen{}\operatorname*{arg\,min}}
+\newcommand{\argmax}{\mathopen{}\operatorname*{arg\,max}}
+
+\newcommand{\DD}[1]{\textbf{\textcolor{violet}{#1}}}
+\newcommand{\DDfix}[1]{\textcolor{violet}{#1}}
+\newcommand{\MS}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\TP}[1]{\textbf{\textcolor{green}{#1}}}
+
+% symbols
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cZ}{\mathcal{Z}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\questioner}{questioner }
+\newcommand{\target}{h^*}
+\newcommand{\bigo}{\mathcal{O}}
+
+% problem and algorithm names
+\newcommand{\ProblemDT}{\textup{\textsc{DT}}}
+\newcommand{\ProblemPCWCDT}{\textup{\textsc{PCWCDT}}}
+\newcommand{\ProblemPCACDT}{\textup{\textsc{PCACDT}}}
+\newcommand{\ProblemPCSC}{\textup{\textsc{f-PCSC}}}
+\newcommand{\ProblemBPCSC}{\textup{\textsc{b-PCSC}}}
+\newcommand{\ProblemPRBSC}{\textup{\textsc{Partial-RBSC}}}
+\newcommand{\ProblemPCMSSC}{\textup{\textsc{f-PCMSSC}}}
+\newcommand{\ProblemGST}{\textup{\textsc{GST}}}
+\newcommand{\ProblemPDS}{\textup{\textsc{PDS}}}
+\newcommand{\ProblemGSO}{\textup{\textsc{GSO}}}
+\newcommand{\ProblemLPGST}{\textup{\textsc{LPGST}}}
+\newcommand{\ProblemPCMK}{\textup{\textsc{PCMK}}}
+
+\newcommand{\ProcDecisionTree}{\textsc{DecisionTree}{} }
+\newcommand{\blackBox}{\textsc{FindCover}{} }
+\newcommand{\ProcedurePCSC}{\textsc{RBSC-PCSC}}
+\newcommand{\ProcedureBPCSC}{\textsc{RBSC-b-PCSC}}
+\newcommand{\ProcedureFPCMSSC}{\textsc{Procedure-f-PCMSSC}}
+
+% opt parameters
+\newcommand{\optPCSC}[1]{\OPT\br{#1}}
+\newcommand{\optPCMSSC}[1]{\OPT_{\sum}\br{#1}}
+\newcommand{\cCopt}{\cC^{*}} %optimal solution to PCSC
+
+% functions and parameters
+\newcommand{\ProblemThreeSat}{\textsc{3-SAT}\xspace}
+\newcommand{\ProblemMaxThreeSat}{\textsc{MAX3-SAT}\xspace}
+\newcommand{\ProblemAverageCaseBinarySearchPrecedanceConstraints}{\textsc{Average Case Binary Search with Precedence Constraints}\xspace}
+
+\newcommand{\cTinD}[1]{\cT[#1]}  % tests in decision tree #1
+\newcommand{\inner}[1]{\operatorname{inner}(#1)}  %inner nodes in a decision tree
+\newcommand{\tests}[2]{\operatorname{tests}(#1,#2)} %tests done in dec. tree #1 to arrive at node #2
+\newcommand{\paraTitle}[1]{\noindent\textbf{#1}}   %paragraph titles (to eliminate more sub-sub-subsections
+\newcommand{\sepcover}[1]{\operatorname{sepc}\br{#1}}
+\newcommand{\sepcoverD}[1]{\operatorname{sepc}\br{#1}}
+\newcommand{\coverageTime}{\operatorname{ct}}  %total coverage time of a sequence for PCMSSC
+\newcommand{\closure}[1]{\operatorname{closure}[#1]}
+\newcommand{\budget}{b}

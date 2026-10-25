@@ -1,39 +1,25 @@
 \begin{tikzpicture}[
-    node distance=0.7cm and 2cm,
-    problem/.style={rectangle, draw, very thick, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
+    node distance=0.8cm and 2.1cm,
+    problem/.style={rectangle, draw, very thick, minimum width=1.9cm, minimum height=0.6cm, align=center, font=\scriptsize, fill=white, drop shadow, rounded corners=2pt},
     arrow/.style={->, very thick},
     edgelabel/.style={font=\tiny, fill=white, inner sep=1pt}
 ]
 
-% Define positions based on the hand-drawn diagram
-% Top level
-\node[problem] (bmdpcs) {$\hyperref[problem:BMDPCS]{\ProblemBMDPCS}$};
+\node[problem] (rbsc) {$\hyperref[problem:PRBSC]{\ProblemPRBSC}$};
+\node[problem, below left=0.9cm and 1.7cm of rbsc] (pcsc) {$\hyperref[problem:PCSC]{\ProblemPCSC}$};
+\node[problem, below right=0.9cm and 1.7cm of rbsc] (bpcsc) {$\hyperref[problem:BPCSC]{\ProblemBPCSC}$};
+\node[problem, below=0.9cm of pcsc] (pcwcdt) {$\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$};
+\node[problem, below=0.9cm of bpcsc] (pcmssc) {$\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$};
+\node[problem, right=2.2cm of bpcsc] (gso) {$\hyperref[problem:GSO]{\ProblemGSO}$};
+\node[problem, below=0.9cm of pcmssc] (pcacdt) {$\hyperref[problem:PCACDT]{\ProblemPCACDT}$};
 
-% Second level - left and center
-\node[problem, below left=0.7cm and 2.5cm of bmdpcs] (mdpcs) {$\hyperref[problem:MDPCS]{\ProblemMDPCS}$};
-\node[problem, below=0.7cm of bmdpcs] (bpcsc) {$\hyperref[problem:BPCSC]{\ProblemBPCSC}$};
-
-% Second level - right
-\node[problem, above right=0cm and 1.5cm of bpcsc] (gso) {$\hyperref[problem:GSO]{\ProblemGSO}$};
-\node[problem, below right=0.7cm and 1.5cm of gso] (lpgst) {$\hyperref[problem:LPGST]{\ProblemLPGST}$};
-
-% Third level
-\node[problem, below left=0.7cm and 0.8cm of bpcsc] (fpcsc) {$\hyperref[problem:PCSC]{\ProblemPCSC}$};
-\node[problem, below right=0.7cm and 0.8cm of bpcsc] (fpcmssc) {$\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$};
-
-% Bottom level
-\node[problem, below=0.7cm of fpcsc] (pcwcdt) {$\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$};
-\node[problem, below=0.7cm of fpcmssc] (pcacdt) {$\hyperref[problem:PCACDT]{\ProblemPCACDT}$};
-
-% Arrows with theorem references
-\draw[arrow] (bmdpcs) -- node[edgelabel, pos=0.5] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}} (bpcsc);
-\draw[arrow] (mdpcs) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (fpcsc);
-\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (fpcsc);
-\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}} (fpcmssc);
+\draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (pcsc);
+\draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}} (bpcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[cor:BPCSC-to-PCSC]{Cor.~\ref*{cor:BPCSC-to-PCSC}}} (pcsc);
+\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}} (pcmssc);
 \draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (bpcsc);
-\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}} (lpgst);
-\draw[arrow] (lpgst) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (fpcmssc);
-\draw[arrow] (fpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCWCDT]{Sec.~\ref*{subsection:PCWCDT}}} (pcwcdt);
-\draw[arrow] (fpcmssc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCACDT]{Sec.~\ref*{subsection:PCACDT}}} (pcacdt);
+\draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (pcmssc);
+\draw[arrow] (pcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCWCDT]{Sec.~\ref*{subsection:PCWCDT}}} (pcwcdt);
+\draw[arrow] (pcmssc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCACDT]{Sec.~\ref*{subsection:PCACDT}}} (pcacdt);
 
 \end{tikzpicture}

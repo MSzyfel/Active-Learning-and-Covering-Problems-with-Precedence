@@ -1,0 +1,7 @@
+.venv/
+.cache/
+media/
+output/voiceover/*.wav
+custom_config.yml
+__pycache__/
+*.pyc

@@ -1,8 +1,11 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
 
-In this section we present approximation algorithms for the problems $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to the problems $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. 
-We begin with few additional symbols. For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$. Let $\cH'\subseteq \cH$. By $t\br{\cH}$ we denote the test $t$ restricted to hypotheses in $\cH'$, i.e., for each response $H\in t$, we have a response $H\cap \cH'$ in $t\br{\cH'}$. Finally, by $D\setminus V$ denote the collection of subtrees (a forest) obtained by the removal of all nodes in $V$ from $D$.
+In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea of these reductions is to use the solution of the appropriate covering problem in order to find a precedence-closed sequence of tests, such that performing all of them, guarantees that the size of each response is significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$. In what follows we make these ideas precise.
+
+We consider feasible instances, so some test distinguishes each pair of hypotheses. We will require some additional notation.
+%For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$.
+Let $\cH'\subseteq \cH$. By $t\br{\cH'}$ we denote the test $t$ restricted to hypotheses in $\cH'$, i.e., for each reply $H\in t$, we have a reply $H\cap \cH'$ in $t\br{\cH'}$ (if it is nonempty). By $D\setminus V$ we denote the collection of subtrees (a forest) obtained by the removal of all nodes in $V$ from $D$.
 We will use the following immediate monotonicity properties. 
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
@@ -10,56 +13,63 @@ We will use the following immediate monotonicity properties.
 \end{lemma}
 \begin{lemma}\label{lemma:subinstances_avg}
     Let $\cI=(\cH, \cT, \preceq)$ be an instance of $\ProblemPCACDT$.
-    Let $\cH_1,\dots,\cH_t\subseteq \cH$ be such that $\bigcup_{i=1}^t \cH_i \subseteq \cH$ and for any $i\neq j$, $\cH_i\cap \cH_j = \emptyset$.
-    Then, $\OPT\br{\cI} \geq \sum_{i=1}^t \OPT\br{\br{\cH_i, \cT, \preceq}}$.
+    Let $\cH_1,\dots,\cH_k\subseteq \cH$ be such that $\bigcup_{i=1}^k \cH_i \subseteq \cH$ and for any $i\neq j$, $\cH_i\cap \cH_j = \emptyset$.
+    Then, $\OPT\br{\cI} \geq \sum_{i=1}^k \OPT\br{\br{\cH_i, \cT, \preceq}}$.
 \end{lemma}
 
 The following definition gives a basic tool for analysis of our algorithms.
 \begin{definition}[Sepcover]
-  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \cF}$.
+  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$.
   Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
-  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcover{D}$.
-  If $\COSTW\br{D}=\OPT\br{\cI}$, then we write $\sepcover{\cI} = \sepcover{D}$ (ties broken arbitrarily).
+  Then the set $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcoverD{D}$.
+  If $D$ is optimal for the decision-tree objective under consideration, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
 \end{definition}
-Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
-%We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a response $\cH'$ of size at most $\spr{\cH}/2$.
-Consider a set of hypotheses $\cH$ and the corresponding tests $\cT$.
+% Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
+
+
+% \begin{figure}[h]
+% \centering
+% \input{figures/sepcover.tex}
+% \caption{Sepcover sequence in a decision tree}
+% \label{fig:sepcover}
+% \end{figure}
+
+Intuitively, our idea is to construct a set covering instance such that its optimal solution is connected to the cost of tests in the sepcover of an optimal decision tree. This is done as follows.
+%We will say that a test in $\sepcover{\cI}$ \emph{sepcovers} an element $u \in \cH$ in $C$ if after applying the test $t$ in $C$, $u$ belongs to a reply $\cH'$ of size at most $\spr{\cH}/2$.
+Consider a set of hypotheses $\cH$ and tests $\cT$.
 For each test $t\in\cT$, let
-$
-\xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\spr{\cH}}.
-$
-Then, $\xi(\cT)=\brc{\xi(t)\mid t\in\cT}$ and if $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
-By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. We also set $\cU=\bigcup_{t\in\cT}\xi(t)$. 
+\[
+\xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\cdot\spr{\cH}}.
+\]
+We regard $\xi\br{\cT}=\brc{\xi(t)\mid t\in\cT}$ as an \emph{indexed family}: distinct tests give distinct sets even when their contents coincide. If $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
+By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. For a sequence $S$, the map $\xi$ preserves its order.
+We also set $\cU_{\xi}=\bigcup_{t\in\cT}\xi(t)$.
+For a family or sequence $\cC$ of indexed sets, $\xi^{-1}(\cC)$ is the corresponding family or sequence of tests.
 \begin{lemma}
-    We have $\spr{\cU}\geq 3\cdot\spr{\cH}/4$.
+    If $\spr{\cH}\geq2$, then $\spr{\cU_{\xi}}\geq \spr{\cH}-1$ and $\spr{\cU_{\xi}}\geq \frac{4}{5}\cdot\spr{\cH}$.
 \end{lemma}
 \begin{proof}
-    If $\spr{\cH}=4$, then any test covers all $\cH$ and the claim holds trivially. Assume that $\spr{\cH}>4$. We actually show, that there is at most one hypothesis that is not in $\cU$. To see this observe that if a hypothesis $h_1$ is uncovered, then for every test $t\in\cT$, it holds that for the response $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\spr{\cH}$. Assume that there is a second hypothesis $h_2$ that is also uncovered. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$ so $h_2$ needs to belong to a response of size at most $\spr{\cH}/4$, a contradiction.
+    If $\spr{\cH}\leq4$, then there exists a test $t$ which separates some pair of hypotheses and thus for every $H\in t$, $\spr{H}\leq\frac{3}{4}\cdot\spr{\cH}$, and therefore $\xi\br{t}=\cH$. Assume that $\spr{\cH}\geq5$. We show that there is at most one hypothesis that is not in $\cU_{\xi}$. To see this observe that if a hypothesis $h_1\notin \cU_{\xi}$, then for every test $t\in\cT$, it holds that for the reply $H\in t$ containing $h_1$, $\spr{H}>\frac{3}{4}\cdot\spr{\cH}$. Assume that there is a second hypothesis $h_2\notin \cU_{\xi}$. By definition we know that there exists a test which distinguishes $h_1$ and $h_2$, so $h_2$ needs to belong to a reply of size at most $\frac{3}{4}\cdot\spr{\cH}$, a contradiction. Thus $\spr{\cU_{\xi}}\geq \min_{i\geq5}\brc{\frac{i-1}{i}}\cdot\spr{\cH}=\frac{4}{5}\cdot\spr{\cH}$.
 \end{proof}
  
 %In our construction, in order to solve a $\ProblemPCDT$ for an instance $\cI=\br{\cH, \cT, \preceq}$, we will apply an algorithm for $\ProblemPCSC$ with an input $\cI=\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
 
-\begin{figure}[h]
-\centering
-\input{figures/sepcover.tex}
-\caption{Sepcover sequence in a decision tree}
-\label{fig:sepcover}
-\end{figure}
-
-\medskip
-The idea behind the algorithms for the worst case (Section~\ref{subsection:PCWCDT}) and average case (Section~\ref{subsection:PCACDT}) is similar.
-Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}) used in both cases.
-The only difference is a black-box procedure that is used to solve a particular subproblem -- either $\ProblemPCSC$ or $\ProblemPCMSSC$ respectively.
-Let $\cC$ be the cover obtained by the black-box procedure on the corresponding instance. Assume that $\cC$ contains some ordering of its elements. If $\cC$ is the output of an approximation algorithm for $\ProblemPCSC$, then the ordering is a topological ordering of the tests in $\cC$ according to the precedence constraints.
-Note that the $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
-We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$. During each such iteration, we look at all possible responses to the appended test and for each sufficiently small response $\cH'$ ($\spr{\cH'} \leq \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$), we recursively call \ProcDecisionTree on the subinstance induced by $\cH'$. If there exists a large response $\cH'$ ($\spr{\cH'} > \frac{16\beta-3}{16\beta}\cdot \spr{\cH}$), then we do not make a recursive call for it and simply continue appending tests from $\cC$ as a response associated with $\cH'$. Note that since $\frac{16\beta-3}{16\beta}>\frac{1}{2}$ for any $\beta \geq 1$, there is at most one such response. 
-% Hence we indeed can afford constructing an arbitrary decision tree $D_S$ on the tests corresponding to the cover in $S$.
+The idea behind the algorithms for the $\ProblemPCWCDT$ (Section~\ref{subsection:PCWCDT}) and the $\ProblemPCACDT$ (Section~\ref{subsection:PCACDT}) is similar.
+Hence we extract here the common generic subroutine (see Algorithm~\ref{alg:worstDecisionTree}).
+The only difference is a black-box procedure (we call it $\blackBox$) that is used to solve a particular subproblem - either $\ProblemPCSC$ or $\ProblemPCMSSC$, respectively.
+Let $\cC$ be the set cover obtained for the instance $\br{\cU_{\xi}, \xi\br{\cT}, \preceq_{\xi}, f=1/4}$ by the black-box procedure.
+If $\cC$ is returned as a family by an approximation algorithm for $\ProblemPCSC$, order it topologically. In either case, retain only the shortest prefix covering at least $\spr{\cU_{\xi}}/(4\cdot\beta)$ hypotheses. This preserves precedence closure and does not increase either objective.
+% Note that $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
+We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$.
+During each such iteration, we look at all possible replies to the appended test and for each sufficiently small reply $\cH'$ ($\spr{\cH'} \leq \frac{5\cdot\beta-1}{5\cdot\beta}\cdot \spr{\cH}$), we recursively call \ProcDecisionTree on the subinstance induced by $\cH'$. If there exists a large reply $\cH'$ ($\spr{\cH'} > \frac{5\cdot\beta-1}{5\cdot\beta}\cdot \spr{\cH}$), then we continue appending tests from $\cC$ as a reply associated with $\cH'$. Note that since $\frac{5\cdot\beta-1}{5\cdot\beta}>\frac{1}{2}$ for any $\beta \geq 1$, there is at most one such reply.
+% We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
+Every hypothesis covered by $\cC$ leaves the current path by its covering test. Since $\spr{\cov\br{\cC}}\geq\spr{\cU_{\xi}}/(4\cdot\beta)\geq\spr{\cH}/(5\cdot\beta)$, no reply after the last test exceeds the recursion threshold, so the procedure returns within the loop. Recursive calls may repeat an earlier test. Its reply is already determined, so these repetitions can be deleted afterward without increasing cost or violating precedence.
 \input{pseudocodes/worst_case_learning.tex}
 
 
 \subsection{Precedence Constrained Worst Case Decision Tree} \label{subsection:PCWCDT}
 
-We will use sepcovers to lowerbound the cost of optimal solution:
+We have the following immediate corollary of the definition of sepcover.
 \begin{observation} \label{obs:sepcoverWC}
     Let $\cI$ be any instance of $\ProblemPCWCDT$.
     Then, $\spr{\sepcover{\cI}} \leq \OPT\br{\cI}$.
@@ -68,82 +78,60 @@ We will use sepcovers to lowerbound the cost of optimal solution:
 %We will use $\spr{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCWCDT$.
 \begin{lemma}\label{lemma:cover_sep_worst_case}
     Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCWCDT$ instance.
-    Let $\cC^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cU, \xi(\cT), \preceq_{\xi}, f=1/4}$.
+    Let $\cC^*$ be an optimal solution to $\ProblemPCSC$ on instance $\br{\cU_{\xi}, \xi(\cT), \preceq_{\xi}, f=1/4}$.
     %and a test $t$ covers $h\in \cH$ if $\brc{U_{t}\br{u}}\leq \frac{3}{4}\cdot \brc{\mathcal{U}}$.
     Then, $\spr{\cC^*} \leq \spr{\sepcover{\cI}}$.
 \end{lemma}
-    \begin{proof}
-        It is enough to argue that $\xi(\sepcover{\cI})$ covers at least $\spr{\cU/4}$ elements from $\cU$.
-        Assume towards a contradiction that this is not the case, i. e. less than $\spr{\cU}/4$ elements are covered by $\xi(\sepcover{\cI})$.
-%Therefore there exists $t\in \sepcover{\cI}$ and a response $\cH'$ of size $\spr{\cH'}\leq \spr{\cH}/2$ such that hypotheses in $\cH'$ are not covered by $\sepcover{\cI}$, otherwise the claim holds trivially, since all hypotheses are covered. Let $\cH'\subseteq U_{t,j}$ (since $\cH'$ is a response to a test $t$, such $U_{t,j}$ always exists). By assumption, we have that $\spr{U_{t,j}-\cH'} < \spr{\cH}/4$. Therefore, we have that $\spr{U_{t,j}} = \spr{\cH'}+\spr{U_{t,j}-\cH'}<3/4\cdot \spr{\cH}$ which by definition means that $h$ is covered by $\sepcover{\cI}$, a contradiction.
-        Therefore there exists first test $t\in \sepcover{\cI}$ and a response $H\in t$ that corresponds to a child $u$ of $t$ such that hypotheses in $H$ are not covered by $\xi(\sepcover{\cI})$ and $\spr{\cU_u}\leq\spr{\cU}/2$.
-        (Here we refer to a decision tree $D$ such that $\sepcover{D}=\sepcover{\cI}$).
-        Otherwise the claim holds trivially, since all hypotheses would be covered.
-        Note that $\cU_u\subseteq H$.
-        We have that $H\setminus\cU_u$ is a subset of hypotheses covered by other tests in $\sepcover{\cI}$ and hence by assumption, $\spr{H\setminus\cU_u}< \spr{\cU}/4$.
-        Therefore, we have that $\spr{H} = \spr{\cU_u}+\spr{H\setminus\cU_u}<3/4\cdot \spr{\cU}$ which means that hypothesis in $H$ are covered by $\sepcover{\cI}$, a contradiction.
-    \end{proof}
+\begin{proof}
+    Write $S=\angl{t_1,\ldots,t_\ell}=\sepcover{\cI}$ in path order and put $n=\spr{\cH}$. Before the first prefix of $\xi(S)$ covers at least $\spr{\cU_{\xi}}/4$ hypotheses, we claim that every hypothesis that has left the path is already covered. This holds before $t_1$. Suppose it holds before $t_i$, and let $\cH_i$ be the hypotheses still on the path. For any reply $H\in t_i$ that leaves the path, the sepcover property gives $\spr{H\cap\cH_i}\leq n/2$. The induction hypothesis gives
+    \[
+    \spr{H}=\spr{H\cap\cH_i}+\spr{H\setminus\cH_i}
+    \leq \frac n2+\spr{\cH\setminus\cH_i}
+    <\frac n2+\frac{\spr{\cU_{\xi}}}{4}\leq\frac{3\cdot n}{4}.
+    \]
+    Thus $H\subseteq\xi(t_i)$, proving the claim. At $t_\ell$, all replies leave the path, so some prefix must reach the target. This prefix is precedence-closed and has at most $\spr{S}$ sets, proving the lemma.
+\end{proof}
 
-
-%\DD{I tak bedziemy oszczedzac miejsce, wiec moze nie warto parafrazowac algorytmu, a dac jakas intuicje jako klej?}
-%We now state an algorithm (Algorithm~\ref{alg:worstDecisionTree}) that outputs a decision tree for an input instance $\cI=\br{\cH, \cT, \preceq}$ of $\ProblemPCWCAL$.
-
-%     Algorithm \ref{alg:worstDecisionTree} is recursive and works as follows.
-%     Given an instance $\cI=\br{\cH, \cT, \preceq}$, if $\spr{\cH}=1$ we return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\cH$. Otherwise, we run the $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ on instance $\br{\cH, \xi(\cT), \preceq_{\xi}, \spr{\cH}/4}$.
-%     Let $S\subseteq\cT$ be the output. We build a decision tree $D_S$ on tests from $S$ closed under $\preceq_{\xi}$.
-%     For each $\cH' \in \cH\setminus S$, we recursively call \ProcWorstDecisionTree on instance $\br{\cH', \cT\setminus S, \preceq-S}$ and attach the returned decision tree to the leaf of $D_S$ corresponding to $\cH'$. Finally, we return the constructed decision tree $D$.
-
-
-Let $D_{\cC}$ be a decision tree restricted only to tests from $\cC$. The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}.:
+For a sequence $S$ of tests along a path from the root of $D$, denote this path by $D_S$, with $\COSTW\br{D_S}=\spr{S}$. For the cover $\cC$ returned by $\blackBox$, we write $D_{\cC}$ for the path built during the current call to Algorithm~\ref{alg:worstDecisionTree}. Its tests form a prefix of $\xi^{-1}(\cC)$.
+The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}:
     \begin{observation} \label{obs:DS}
-        Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses an $\br{\gamma,\alpha}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
+        Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses a $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
         %Let $D_S$ be the decision tree built on tests from $S$ respecting the precedence constraints $\preceq$.
         Then, $\COSTW\br{D_{\cC}} \leq \alpha \cdot \spr{\sepcover{\cI}}$.
     \end{observation}
 
 
 \begin{theorem} \label{thm:PCSC-to-PCWCDT}
-If there is an $\br{\alpha, \beta}$-bicriteria approximation algorithm for $\ProblemPCSC$, then there is an
-$\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$. 
-% In particular when $\gamma = \cO\br{1}$, the approximation is $\cO\br{\alpha \cdot \log n}$.
+If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCSC$, then there is a polynomial-time
+$\bigo\br{\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}} \cdot \log n}$-approximation algorithm for $\ProblemPCWCDT$.
+% In particular when $\gamma = \bigo\br{1}$, the approximation is $\bigo\br{\alpha \cdot \log n}$.
 \end{theorem}
 \begin{proof}
-     Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ and $\blackBox$, where $\blackBox$ is a $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$.
-     Let $D$ be the decision tree returned by this call.
-     In order to prove the theorem it is enough to argue that
+     \setlength{\emergencystretch}{2em}
+     Run \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$ using a $\br{\alpha,\beta}$-approximation for $\ProblemPCSC$ as $\blackBox$.
+     We prove by induction on $n=\spr{\cH}$ that
      \begin{equation} \label{eq:D}
-     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI}.
+     \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
      \end{equation}
 
-     The proof is by induction on $n$. The base case when $n=1$ is trivial since the the cost of the decision tree is 0.
-     Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTW\br{D'} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
-     To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
-     We have
-%         \begin{align*}
-%             \COSTW\br{D, \cI} \leq & \COSTW\br{D_S, \cI} + \max_{D'(\cH')} \COSTW\br{D', \cI'} \\
-%             \leq & \alpha \cdot \spr{S^*} + \max_{D'(\cH')} \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-%             \leq & \alpha \cdot \spr{\sepcover{\cI}} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log \br{\frac{\br{{4\gamma-1}}\cdot n}{4\gamma}} \cdot \OPT\br{\cI} \\
-%             = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-%             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} \\
-%        \end{align*}
+     Put $\rho=(5\cdot\beta-1)/(5\cdot\beta)$ and $a=\alpha/\log(1/\rho)$. The base case $n=1$ has cost zero. Assume that every recursive call on $\cI'=\br{\cH',\cT,\preceq}$ returns $D'$ with $\COSTW\br{D'}\leq a\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}$. Let $\cF=D\setminus V\br{D_{\cC}}$ be the forest of recursive subtrees. Then
         \begin{align*}
-            \COSTW\br{D} \leq & \COSTW\br{D_{\cC}} + \max_{\cH'(D')} \COSTW\br{D'(\cH')} \\
-            \leq & \alpha \cdot \spr{\sepcover{\cI}} + \max_{\cH'(D')} \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-            \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log \br{\frac{\br{{16\beta-3}}\cdot n}{16\beta}} \cdot \OPT\br{\cI} \\
-            = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-            = & \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI},
+            &\COSTW\br{D} \leq \COSTW\br{D_{\cC}}+\max_{D'\in\cF}\COSTW\br{D'} \\
+            &\leq \alpha\cdot\spr{\sepcover{\cI}}+\max_{D'\in\cF}\brc{a\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}}
+            \leq \alpha\cdot\OPT\br{\cI}+a\cdot\log(\rho\cdot n)\cdot\OPT\br{\cI} \\
+            &=\alpha\cdot\OPT\br{\cI}+a\cdot\log n\cdot\OPT\br{\cI}-\alpha\cdot\OPT\br{\cI}
+            =a\cdot\log n\cdot\OPT\br{\cI}.
         \end{align*}
-        where the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{3}{4}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(16\beta -3)}{16\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
-        This concludes the proof of the theorem.
+        The second inequality uses the induction hypothesis and Observation~\ref{obs:DS}. The third uses Observation~\ref{obs:sepcoverWC}, Lemma~\ref{lemma:subspace_opt}, and $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\rho\cdot n$ for every $D'\in\cF$. Finally, $a\cdot\log\rho=-\alpha$, proving~\eqref{eq:D}.
 \end{proof}
 
-Therefore by Theorem \ref{thm:PCSC-to-PCWCDT} we obtain the following corollary:
+Theorem~\ref{thm:PCSC-to-PCWCDT} and the covering algorithms in Section~\ref{sec:SC} give the following corollary:
 \begin{corollary}\label{cor:PCWCDT-special-cases}
     There exist polynomial-time algorithms for $\ProblemPCWCDT$ with the following guarantees:
     \begin{itemize}
-        \item $\cO\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
-        \item $\cO\br{\log^2n}$-approximation for outforests, by and Theorem~\ref{thm:BPCSC-outforest}.
-        \item General $\cO\br{\sqrt{m}\cdot\log n}$-approximation, by Theorem~\ref{thm:MDPCStoPCSC}, and Theorem~\ref{thm:MDPCStoPCSC}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
+        \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
+        \item General $\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation, by Theorem~\ref{thm:PCSC-RBSC} and Theorem~\ref{thm:PCSC-to-PCWCDT}.
     \end{itemize}
 \end{corollary}
 
@@ -151,22 +139,18 @@ Therefore by Theorem \ref{thm:PCSC-to-PCWCDT} we obtain the following corollary:
 
 \subsection{Precedence Constrained Average Case Decision Tree} \label{subsection:PCACDT}
 
-We start with few observations that will be used for a lower bound on an optimal solution.
-%For a decision tree $D$ and its node $v$, let $c\br{D, v} = p(v)\cdot\spr{\cH_v}$.
+Here, the analysis becomes more involved, since in order to compare the cost of our solution with the cost of sepcover, rather then just comparing the size of sepcover with the cost of our solution, we need to take into account the contribution of each test to the objective function.
+We start with few observations.
 \begin{observation} \label{obs:dec-tree-averaging}
-    If $D$ is a decision tree for a $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in V(D)}\spr{\cH_v}$.
-%    $$
-%    \COSTA\br{D} = \sum_{t \in X} p(\cH_t)\cdot\spr{\cH_t},
-%    $$
-%    where $X$ is the set of all non-leaf vertices of $D$.
+    If $D$ is a decision tree for $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in X}\spr{\cH_v}$, where $X$ is the set of all non-leaf vertices of $D$.
 \end{observation}
-% Here, $D-S\br$ is the collection of subtrees (a forest) obtained by the removal of all nodes in $S$ from $D$.
+For a subtree $D'$ of $D$ with the same root, define $\COSTA\br{D'}=\sum_{v\in V(D')\cap\inner{D}}\spr{\cH_v(D)}$, where $\inner{D}$ is the set of test nodes of $D$. In particular, the last test of a path is counted even though it is a leaf of the path.
 Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criterion as follows.
 \begin{observation} \label{obs:WCdecomposition}
     Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
     Then,
     \[
-    \COSTA\br{D} = \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \COSTA\br{D'}.
+    \COSTA\br{D} = \COSTA\br{D_{S}} + \sum_{D'\in D\setminus V\br{D_{S}}} \COSTA\br{D'}.
     \]
 %     $$
 %     \COSTA\br{D, \cI} = \COSTA\br{S, \cI} + \sum_{D'\in D\setminus S} \COSTA\br{D', \cI}.
@@ -174,16 +158,13 @@ Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criteri
 
 \end{observation}
 \paraTitle{Remark on notation.}
-Throughout this subsection, we treat $\sepcover{\cI}$ as a sequence rather than a set, since the order of tests matters for computing the average-case cost. 
-While formally $\sepcover{\cI}$ is defined as the set of tests along a path in the decision tree, when we write $\COSTA\br{\sepcover{\cI}}$ we implicitly refer to the natural ordering of these tests induced by their position on the path from the root.
+Throughout this subsection, we order $\sepcover{\cI}$ along its path in an optimal average-case decision tree and write $\COSTA\br{\sepcover{\cI}}$ for the cost of that path.
 As an immediate corollary, by taking an optimal $D^*$ and the corresponding $\sepcover{\cI}$ we have:
 \begin{observation} \label{obs:sepcoverAC}
     Let $\cI$ be any instance of $\ProblemPCACDT$.
     Then, $\COSTA\br{\sepcover{\cI}} \leq \OPT\br{\cI}$.
 \end{observation}
-We follow a similar idea as the one for worst case cost, by using the connection to $\ProblemPCMSSC$ instead of $\ProblemPCSC$.
-This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$ in the analysis of the approximation algorithm for $\ProblemPCACDT$.
-
+We now explore a connection to $\ProblemPCMSSC$, which allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}$.
 % However, since in this case we have an arbitrary probability distrubution on hypotheses, we firstly employ a rounding technique which scales the probabilities to represent them as polynomial-size integers.
 % Below we argue that this incurrs only a 2-factor loss in the approximation.
 % Formally, for an instance $\cI=\br{\cH, \cT, \preceq, p}$, define $p'(h)=z(h)/s_z$ for each $h\in\cH$, where  $z(h) = \cl{p(h)/q}$ and $s_z=\sum_{h\in\cH}z(h)$, $q=\frac{1}{nm}$, $n=\spr{\cH}$ and $m=\spr{\cT}$.
@@ -210,7 +191,7 @@ This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}
 %     2 \cdot \COSTA\br{D, \cI}
 %     \end{align*}
 %     where the second inequality is by Observation~\ref{obs:dec-tree-averaging} and $\spr{\cH_v}\leq n$ for each node $v$, the third inequality is by $s_z\geq nm$ and the last inequality follows since $\COSTA\br{D, \cI} \geq \sum_{h\in\cH}p\br{h} = 1$.
-% %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \cO(nm)$.
+% %     Let $q=\frac{1}{nm}$. For every $h\in\cH$, let $p'(h) = \cl{p(h)/q}$. Therefore, $p'(h) \leq p(h)/q + 1$ and as a consequence, $p'\br{\cH} \leq \sum_{h \in \cH} \br {\frac{p(h)}{q} + 1} = \frac{1}{q} \sum_{h \in \cH} p(h) + n = nm + n = \bigo(nm)$.
 % %
 % %     We now argue that $\OPT\br{\cI'} \leq 2 \cdot \OPT\br{\cI}$. Let $D'$ be an optimal decision tree for $\cI'$ and let $D$ be the optimal decision tree for $\cI$.
 % %     \begin{align*}
@@ -227,69 +208,70 @@ This allows to use $\COSTA\br{\sepcover{\cI}}$ as a lower bound on $\OPT\br{\cI}
 % %     \end{align*}
 % %     where the first inequality follows since clearly, for every $h\in\cH$, we have that $p(u)\leq q\cdot p'(h)$, the second inequality is due to the optimality of $D$ for $\cI$, the third inequality follows since for every $h\in\cH$, $q\cdot p'(h) \leq p(h) + q$, the fourth inequality follows since the depth of $D$ is at most $m$, the equality is by definition of $q$ and the last inequality follows since $\COSTA\br{D, \cI} \geq p\br{\cH} = 1$.
 % \end{proof}
-
-% Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\cO(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
-We have the following lemma, analogous to Lemma \ref{lemma:cover_sep_worst_case}.
+% Therefore, from now on we will assume that the input instance $\cI=\br{\cH, \cT, \preceq, p}$ of $\ProblemPCACDT$ is such that for each $h\in\cH$, $p(h)=i/j$ for integers $i<j=\bigo(nm)$, without impacting the asymptotic approximation ratio of our algorithm.
+Hence, we have an analogue of Lemma \ref{lemma:cover_sep_worst_case}.
 \begin{lemma}\label{lemma:cover_sep_average_case}
-    Let $\cI=\br{\cH, \cT, \preceq}$ be any $\ProblemPCACDT$ instance. Let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on instance $\br{\cU, \xi(\cT), \preceq_{\xi}, f=1/4}$.
+    Let $\cI=\br{\cH,\cT,\preceq}$ be a $\ProblemPCACDT$ instance, and let $\cC^*$ be an optimal solution to $\ProblemPCMSSC$ on $\br{\cU_{\xi},\xi\br{\cT},\preceq_{\xi},f=1/4}$.
     %, where a test $t$ covers element $u \in \cH$ if for $u\in U_{t,j}$, $\spr{U_{t,j}}\leq \frac{3}{4}\cdot \spr{\cH}$.
     Then, $\coverageTime\br{\cC^*} \leq \COSTA\br{\sepcover{\cI}}$.
 \end{lemma}
 \begin{proof}
-    Assume towards a contradiction that $\coverageTime\br{\cC^*} > \COSTA\br{\sepcover{\cI}}$.
-    We will show that in such case there exists a cover $\sigma \subseteq \xi(\sepcover{\cI})$ such that $\coverageTime\br{\sigma} \leq \COSTA\br{\sepcover{\cI}}$, contradicting the optimality of $\cC^*$.
-    Let $\sigma$ be the shortest prefix of $\sepcover{\cI}$ that covers at least $\spr{\cU}/4$ items.
-    Note that because we consider a prefix, the precedence constraints are satisfied.
-    Such a subsequence exists, by repeating the argument used in the proof of Lemma \ref{lemma:cover_sep_worst_case}.
-    Take an arbitrary $h \in \cH$.
-    There are two cases to consider:
-    \begin{itemize}
-        \item $\sigma$ covers $h$. Consider the first test $t$ that sepcovered $h$ in $\sepcover{\cI}$. By definition, the tests prior to $t$ in $\sigma$ cover at most $\spr{\cU}/4$ items. Since at the moment of sepcovering, $h$ belonged to a response of size at most $\spr{\cU}/2$, we know that $t$ also covers $h$ in $\sigma$. This means that the contribution of $h$ to $\coverageTime\br{\sigma}$ is at most its contribution to $\COSTA\br{\sepcover{\cI}}$.
-        \item $\sigma$ does not cover $h$. Since $h$ is sepcovered by some test $t$ in $\sepcover{\cI}$ but not covered by $\sigma$, the contribution of $h$ to $\coverageTime\br{\sigma}$ is $p\br{\sigma}$ and its contribution to $\COSTA\br{\sepcover{\cI}}$ is at least $p\br{\sigma}$.
-    \end{itemize}
-    Thus, we have that $\coverageTime\br{\sigma} < \COSTA\br{\sepcover{\cI}}$, a contradiction.
+    Let $\sigma$ be the shortest prefix of $\xi(\sepcover{\cI})$ that covers at least $\spr{\cU_{\xi}}/4$ hypotheses. By the proof of Lemma~\ref{lemma:cover_sep_worst_case}, this prefix exists and is precedence-closed. For $h\in\cU_{\xi}$, let $d(h)$ be the number of tests on the sepcover path performed when the target is $h$. If $h$ leaves the path by the end of $\sigma$, the same proof shows that $h$ is covered no later than its departure, so $\coverageTime\br{h,\sigma}\leq d(h)$. Otherwise, $\coverageTime\br{h,\sigma}\leq\spr{\sigma}\leq d(h)$. Summing gives
+    \[
+    \coverageTime\br{\cC^*}\leq\coverageTime\br{\sigma}
+    =\sum_{h\in\cU_{\xi}}\coverageTime\br{h,\sigma}
+    \leq\sum_{h\in\cU_{\xi}}d(h)
+    \leq\COSTA\br{\sepcover{\cI}}.\qedhere
+    \]
 \end{proof}
 
-The following observation is analogous to Observation~\ref{obs:DS}:
+The following is analogous to Observation~\ref{obs:DS} however requires a more careful consideration.
 \begin{observation} \label{obs:DS-average}
     Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$ as the $\blackBox$ subroutine.
-    Then, $\COSTA\br{D_{\cC}} \leq \alpha \cdot \COSTA\br{\sepcover{\cI}}$.
+    Then, $\COSTA\br{D_{\cC}} \leq 2\cdot\alpha \cdot \COSTA\br{\sepcover{\cI}}$, where $\cI=\br{\cH,\cT,\preceq}$ is the input instance to $\ProblemPCACDT$.
 \end{observation}
-
-\begin{theorem}\label{thm:PCMSSC-to-PCACDT}
-    If there is an $\br{\alpha, \beta}$-bicriteria approximation algorithm for $\ProblemPCMSSC$, then there is a $\cO\br{\frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$. 
-    % In particular when $\mu = \cO\br{1}$, the ratio is $\cO\br{\beta \cdot \log \br{m+n}}$.
-\end{theorem}
 \begin{proof}
-    Consider a call to \ProcDecisionTree on input $\cI=\br{\cH, \cT, \preceq}$ and $\blackBox$, where $\blackBox$ is an $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCMSSC$.
-    Let $D$ be the decision tree returned by this call.
-    In order to prove the theorem it is enough to argue that
-    \begin{equation} \label{eq:D-average}
-     \COSTA\br{D} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI}.
-    \end{equation}
-
-    The proof is by induction on $n$. The base case when $n=1$ is trivial since the cost of the decision tree is 0.
-    Assume by induction that for every $\cI' = \br{\cH', \cT, \preceq}$ such that $\spr{\cH'}<\spr{\cH}$ and $n' = \spr{\cH'}$ we have $\COSTA\br{D'} \leq \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'}$, where $D'$ is the decision tree recursively returned by \ProcDecisionTree on input $\cI'$.
-    To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
-    We have
-\begin{align*}
-    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{\cH'(D')} \COSTA\br{D'(\cH')} \\
-    \leq & \alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{\cH'(D')} \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n' \cdot \OPT\br{\cI'} \\
-    \leq & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log \br{\frac{\br{{16\beta-3}}\cdot n}{16\beta}} \cdot \OPT\br{\cI} \\
-    = & \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-    = & \frac{\alpha}{\log\br{\frac{16\beta}{16\beta -3}}}\cdot \log n \cdot \OPT\br{\cI},
-\end{align*}
-where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second inequality follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third inequality follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $n'=\spr{\cH'} \leq \br{1-\frac{3}{4}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(16\beta -3)}{16\beta}\cdot n$ for every response $\cH'$ associated with a test outside of $D_{\cC}$.
-This concludes the proof of the theorem.
+    If $h\in\cU_{\xi}$ is first covered by $\cC$ at position $j$, then $h$ belongs to a reply of $t_j$ of size at most $3\cdot\spr{\cH}/4\leq (5\cdot\beta-1)\cdot\spr{\cH}/(5\cdot\beta)$. Thus $h$ leaves the current path by test $t_j$, unless the path has already ended. Its contribution to $\COSTA\br{D_{\cC}}$ is at most $j=\coverageTime\br{h,\cC}$. If $h$ is not covered, its contribution is at most $\spr{\cC}=\coverageTime\br{h,\cC}$.
+    There is at most one hypothesis in $\cH\setminus\cU_{\xi}$, and its contribution to $\COSTA\br{D_{\cC}}$ is at most $\spr{\cC}$. Since $\cC$ was truncated at the first prefix attaining the required coverage, its last set covers a new hypothesis, so $\spr{\cC}\leq\coverageTime\br{\cC}$.
+    Hence, we get that 
+    \[
+    \COSTA\br{D_{\cC}} \leq \coverageTime\br{\cC} + \spr{\cC} \leq 2\cdot \coverageTime\br{\cC}\leq 
+    2\cdot\alpha \cdot \COSTA\br{\sepcover{\cI}}. \qedhere
+    \]
 \end{proof}
 
-Therefore by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
+\begin{theorem}\label{thm:PCMSSC-to-PCACDT}
+    \setlength{\emergencystretch}{2em}
+    If there is a polynomial-time bicriteria $\br{\alpha, \beta}$-approximation algorithm for $\ProblemPCMSSC$, then there is a polynomial-time $\bigo\br{\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}}\cdot \log n}$-approximation algorithm for $\ProblemPCACDT$.
+    % In particular when $\mu = \bigo\br{1}$, the ratio is $\bigo\br{\beta \cdot \log \br{m+n}}$.
+\end{theorem}
+\begin{proof}
+    \setlength{\emergencystretch}{2em}
+    Run \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$ using a $\br{\alpha,\beta}$-approximation for $\ProblemPCMSSC$ as $\blackBox$.
+    We argue by induction on $n$ that
+    \begin{equation} \label{eq:D-average}
+     \COSTA\br{D} \leq \frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
+    \end{equation}
+    where $D$ is the decision tree returned by Algorithm \ref{alg:worstDecisionTree}.
+
+    Put $\rho=(5\cdot\beta-1)/(5\cdot\beta)$ and $a=2\cdot\alpha/\log(1/\rho)$. The base case $n=1$ has cost zero. Assume that every recursive call on $\cI'=\br{\cH',\cT,\preceq}$ returns $D'$ with $\COSTA\br{D'}\leq a\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}$. Let $\cF=D\setminus V\br{D_{\cC}}$ be the forest of recursive subtrees. Then
+\begin{align*}
+    &\COSTA\br{D} =\COSTA\br{D_{\cC}}+\sum_{D'\in\cF}\COSTA\br{D'} \\
+    &\leq 2\cdot\alpha\cdot\COSTA\br{\sepcover{\cI}}+\sum_{D'\in\cF}a\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}
+    \leq 2\cdot\alpha\cdot\OPT\br{\cI}+a\cdot\log(\rho\cdot n)\cdot\OPT\br{\cI} \\
+    &=2\cdot\alpha\cdot\OPT\br{\cI}+a\cdot\log n\cdot\OPT\br{\cI}-2\cdot\alpha\cdot\OPT\br{\cI}
+    =a\cdot\log n\cdot\OPT\br{\cI}.
+\end{align*}
+The equality uses Observation~\ref{obs:WCdecomposition}. The first inequality uses the induction hypothesis and Observation~\ref{obs:DS-average}. For the second inequality, use Observation~\ref{obs:sepcoverAC}, $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\rho\cdot n$, and Lemma~\ref{lemma:subinstances_avg}, since the hypothesis sets of the recursive calls are disjoint. Finally, $a\cdot\log\rho=-2\cdot\alpha$, proving~\eqref{eq:D-average}.
+\end{proof}
+
+Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
 
 \begin{corollary}\label{cor:PCACDT-special-cases}
     There exist poly-time algorithms for $\ProblemPCACDT$ with the following guarantees:
     \begin{itemize}
-        \item $\cO\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
-        \item $\cO\br{\log^2 n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item $\cO\br{\sqrt{m}\cdot\log^{3/2} n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
+        \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
+        \item $\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log^2 n}$-approximation for general precedence constraints, by Theorem~\ref{thm:BPCSC-to-PCMSSC} and Theorem~\ref{thm:BPCSC}.
     \end{itemize}
 \end{corollary}

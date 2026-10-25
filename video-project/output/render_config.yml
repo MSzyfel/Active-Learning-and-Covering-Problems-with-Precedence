@@ -1,0 +1,5 @@
+﻿directories:
+  base: "C:/Users/micha/projects/Active Learning and Covering Problems with Precedence/video-project/output/manim"
+  cache: "C:/Users/micha/projects/Active Learning and Covering Problems with Precedence/video-project/.cache/manim"
+file_writer:
+  ffmpeg_bin: "C:/Users/micha/projects/Active Learning and Covering Problems with Precedence/video-project/.venv/Lib/site-packages/imageio_ffmpeg/binaries/ffmpeg-win-x86_64-v7.1.exe"
