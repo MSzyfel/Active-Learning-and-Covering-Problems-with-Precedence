@@ -1,11 +1,12 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 8,
+  "completed_rounds": 9,
   "changed_rounds": [
     5,
     6,
-    8
+    8,
+    9
   ],
   "rounds": [
     {
@@ -55,6 +56,12 @@
       "topic": "Readable tables and algorithms",
       "outcome": "changed",
       "evidence": "All ten agents consulted and scope amendments applied. Tables use normal-size panels with explicit assumptions and correct baseline scopes. Algorithms use normal-size text with numbered statement boundaries and no rendered semicolons. Both versions compile with zero overfull warnings and no unresolved references. Rendered representative tables and algorithms were inspected."
+    },
+    {
+      "round": 9,
+      "topic": "Substantive AI disclosure",
+      "outcome": "changed",
+      "evidence": "All ten agents consulted. Added factual end-matter disclosure and a body scope note for Codex assistance with proof development, checking and exposition. No author verification or originality certification was invented. Both editions compile with resolved links and zero overfull warnings. Cleaned trailing blank table lines."
     }
   ]
 }
