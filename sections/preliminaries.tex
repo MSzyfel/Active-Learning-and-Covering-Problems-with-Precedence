@@ -15,7 +15,7 @@ For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and al
 Throughout this paper, we work with POSETs $(\cX, \preceq)$, where $\preceq$ is a reflexive, transitive, and antisymmetric binary relation.
 For two different elements $X, Y \in \cX$, we say that $Y$ is a \emph{predecessor} of $X$ if $Y \preceq X$, and that $X$ is a \emph{successor} of $Y$.
 A subset $\cS \subseteq \cX$ is \emph{precedence-closed} if for all $X \in \cS$ and all $Y \in \cX$ such that $Y \preceq X$, it holds that $Y \in \cS$.
-A sequence $(X_1, X_2, \ldots, X_k)$ of elements from $\cX$ is \emph{precedence-closed} if for any two different $X_i$ and $X_j$ such that $X_i \preceq X_j$, we have $i < j$. We consider two special types of partial orders: An \emph{inforest} is a partial order in which every element has at most one immediate successor. An \emph{outforest} is a partial order in which every element has at most one immediate predecessor.
+A sequence $(X_1, X_2, \ldots, X_k)$ of elements from $\cX$ is \emph{precedence-closed} if every strict predecessor of each $X_i$ occurs earlier: for every $Y\in\cX$ with $Y\preceq X_i$ and $Y\neq X_i$, there is a $j<i$ such that $X_j=Y$. We consider two special types of partial orders: An \emph{inforest} is a partial order in which every element has at most one immediate successor. An \emph{outforest} is a partial order in which every element has at most one immediate predecessor.
 
 \paraTitle{Decision trees.}
 Consider a set of $n$ \emph{hypotheses} $\cH$ and a set of $m$ \emph{tests} $\cT$, and an unknown \emph{target hypothesis} $\target\in\cH$.
@@ -27,18 +27,16 @@ For each reply $H_i$, $i\in[l]$, take inductively defined decision tree $D_i$ de
 Then, $D$ is obtained by making the roots of $D_1,\ldots,D_l$ the children of $r$, and the edge connecting $r$ to the root of $D_i$ is labeled with the reply $H_i$.
 To complete the inductive definition, if $\cS$ is a trivial strategy that outputs the target hypothesis $h^*\in \cH$, then the corresponding decision tree is a leaf labeled with $h^*$.
 It should be remarked that it is possible for a test to appear multiple times in a decision tree.
-However, with a slight abuse of notation we assume that non-leaf vertices are subsets of $\cT$ whenever there is no ambiguity. Similarly, we may assume that the set of leaves of $D$ is $\cH$. When the tests are subject to precedence constraints $(\cT, \preceq)$, a decision tree $D$ is called \emph{precedence-closed} if for every node $v$ in $D$, the sequence of tests on the path from $r\br{D}$ to $v$ is precedence-closed. This means that a test $t$ is executed only if all its predecessors in $(\cT, \preceq)$ have already been performed.
+With a slight abuse of notation, we identify an internal node with its test label whenever there is no ambiguity. Similarly, we may assume that the set of leaves of $D$ is $\cH$. When the tests are subject to precedence constraints $(\cT, \preceq)$, a decision tree $D$ is called \emph{precedence-closed} if for every node $v$ in $D$, the sequence of tests on the path from $r\br{D}$ to $v$ is precedence-closed. This means that a test $t$ is executed only if all its predecessors in $(\cT, \preceq)$ have already been performed.
 
 \paraTitle{Cost measures for decision trees.}
 Let $\tests{D}{v}$ denote the sequence of tests on the path from $r\br{D}$ to $v$ including $v$ if it denotes a test. The cost of identifying a hypothesis $h$ in $D$ is $\COST\br{D, h}=\spr{\tests{D}{h}}$.
-We consider two cost measures for decision trees: the worst-case cost 
+The \emph{worst-case cost} and \emph{average-case cost} are, respectively,
 \[
-\COSTW\br{D} = \max_{h \in \cH} \brc{\COST\br{D, h}}
-\] 
-and the average-case cost\footnote{For simplicity, we do not divide by the number of hypotheses $n$, since this does not affect the approximation ratios.} 
-\[
-\COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}.
+\COSTW\br{D} = \max_{h \in \cH} \brc{\COST\br{D, h}},
+\qquad \COSTA\br{D} = \sum_{h \in \cH} \COST\br{D, h}.
 \]
+All tests have unit cost, and the average-case objective uses the uniform distribution on $\cH$. We use the sum rather than the average over hypotheses, since the factor $n$ does not affect approximation ratios.
 %The criteria we consider for any $\ProblemPCDT$ instance $\cI$ are denoted by
 %$$\OPTA\br{\cI}=\min\brc{\COSTA\br{D} \mid D\textup{ is a decision tree}},$$
 %$$\OPTW\br{\cI}=\min\brc{\COSTW\br{D} \mid D\textup{ is a decision tree}}.$$
@@ -63,14 +61,15 @@ We usually write $\cH_T$ when $D$ is clear from the context.
 For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
 
 \paraTitle{Set covering problems.}
+Set families are indexed, so distinct members may have identical contents.
 %For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
 For a family of sets $(\cS,\preceq)$ and a set $S\in\cS$, let $\closure{S}$ be the minimal precedence-closed subset of $\cS$ containing $S$.
-For a family of sets $\cC\subseteq \cS$ \DDfix{over a universe $\cU$,} its \emph{coverage} is defined as $\cov\br{\cC}=\bigcup_{C\in\cC}C$, and by extension, $\cov\br{\cC, X} = \cov\br{\cC} \cap X$ for any set $X\subseteq\cU$.
+For a family of sets $\cC\subseteq \cS$ over a universe $\cU$, its \emph{coverage} is defined as $\cov\br{\cC}=\bigcup_{C\in\cC}C$, and by extension, $\cov\br{\cC, X} = \cov\br{\cC} \cap X$ for any set $X\subseteq\cU$.
 If $\cC$ is a sequence of sets, rather than a family, we analogously define $\cov\br{\cC}=\bigcup_{C\in\cC}C$.
-Let $\cC=\angl{C_1,\ldots,C_l}$. We say that $\cC$ is \emph{precedence-closed} if every strict predecessor of each $C_i$ occurs earlier in the sequence, that is, for every $Y\in\cS$ with $Y\preceq C_i$ and $Y\neq C_i$, there is a $j<i$ such that $C_j=Y$.
+Let $\cC=\angl{C_1,\ldots,C_l}$ be a precedence-closed sequence.
 The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such precedence-closed sequence $\cC$ is the minimum index $i$ such that $x\in C_i$ if such index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
 We denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
-\DDfix{When the universe is clear from the context we write $\coverageTime\br{\cC}$.}
+When the universe is clear from the context we write $\coverageTime\br{\cC}$.
 
 \begin{problem}[\textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$)] \label{problem:PCSC}
 Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
@@ -80,5 +79,5 @@ Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a p
 \end{problem}
 
 \paraTitle{Approximation conventions.}
-Throughout this paper, a bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose a factor $\beta\geq1$ on coverage (equivalently, it covers at least a $1/\beta$-fraction of the target amount) while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target; for budgeted problems, the budget may be exceeded by at most a factor of $\alpha$.
+Throughout this paper, a bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose a factor $\beta\geq1$ on coverage (equivalently, it covers at least a $1/\beta$-fraction of the target amount) while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target. For budgeted problems, the budget may be exceeded by at most a factor of $\alpha$.
 

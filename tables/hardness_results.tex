@@ -1,49 +1,68 @@
 \begin{table}[ht!]
-\caption{Inapproximability results. For PGC, let $\gamma_n=c/(1+2c)$ and $\gamma_m=c/(1+ac+2c)$, where $a,c$ are conjecture constants. }
+\caption{Inapproximability results. The PGC bounds hold for some constant \mbox{$\delta>0$}.}
 \label{tab:hardness}
 \centering
 {\footnotesize
 \setlength{\tabcolsep}{1.5pt}
-\begin{tabular}{p{0.08\linewidth}C{0.23\linewidth}C{0.23\linewidth}C{0.21\linewidth}C{0.21\linewidth}}
+\newlength{\hardnesssettingwidth}
+\settowidth{\hardnesssettingwidth}{\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}}
+\addtolength{\hardnesssettingwidth}{0.5pt}
+\begin{tabular}{p{\hardnesssettingwidth}C{\dimexpr0.2688\linewidth-0.28\hardnesssettingwidth\relax}C{\dimexpr0.2688\linewidth-0.28\hardnesssettingwidth\relax}C{\dimexpr0.2112\linewidth-0.22\hardnesssettingwidth\relax}C{\dimexpr0.2112\linewidth-0.22\hardnesssettingwidth\relax}}
 \toprule
 \textbf{setting} & \textbf{\hyperref[problem:PCSC]{\ProblemPCSC}} & \textbf{\hyperref[problem:PCMSSC]{\ProblemPCMSSC}} & \textbf{\hyperref[problem:PCWCDT]{\ProblemPCWCDT}} & \textbf{\hyperref[problem:PCACDT]{\ProblemPCACDT}} \\
 \midrule
-\multirow{2}{\linewidth}{none} & $(1-o(1))\cdot H_n$ & $(4-\epsilon)$ & $o(\log n)$ & $\br{4-\epsilon}$ \\
+\multirow{2}{\linewidth}{\shortstack[l]{none\\\mbox{$\text{P}\ne\text{NP}$}}} & \mbox{$(1-\epsilon)\ln n$} & \mbox{$(4-\epsilon)$} & \mbox{$o(\log n)$} & \mbox{$\br{4-\epsilon}$} \\
 & \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
 
 \addlinespace[2pt]
 \cdashline{2-5}
 \addlinespace[2pt]
 
-\shortstack[l]{outforest\\$f=1$} &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
-\shortstack[c]{$\bigo\br{\log^{1-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Cor.~\ref{cor:decision-tree-inapproximability}} &
-\shortstack[c]{$\bigo\br{\log^{1-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
-\shortstack[l]{outforest\\$f<1$} & &
-\shortstack[c]{$\bigo\br{\log^{2-\epsilon}n}$\\$\text{NP}\not\subseteq\text{ZQP}$\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
+\shortstack[l]{outforest, \mbox{$f=1$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Cor.~\ref{cor:decision-tree-inapproximability}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
+
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
+\shortstack[l]{outforest, variable \mbox{$f<1$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}} & &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
 
 \addlinespace[2pt]
 \cdashline{2-5}
 \addlinespace[2pt]
 
-\multirow[c]{8}{0.10\textwidth}{\makebox[0.10\textwidth][l]{\shortstack[l]{general\\DAGs}}} &
-\multicolumn{2}{c}{$(\bigo(n^{1/2-\epsilon}),\kappa),\quad (\bigo(m^{1/4-\epsilon}),\kappa)$} &
-\multicolumn{2}{c}{$\bigo(n^{1/2-\epsilon}),\quad \bigo(m^{1/4-\epsilon})$} \\
-& \multicolumn{2}{c}{PDS, Cor.~\ref{cor:PDS-limiting-hardness}} &
-\multicolumn{2}{c}{PDS, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\quad (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$} &
-\multicolumn{2}{c}{$\log^{\bigo(1)} n,\quad \log^{\bigo(1)} m$} \\
-& \multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Thm.~\ref{thm:DS-covering-hardness}} &
-\multicolumn{2}{c}{$\text{P}\ne\text{NP}$, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{{\scalebox{0.80}{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\quad (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}} &
-\multicolumn{2}{c}{$\bigo(2^{(\log n)^{1-\epsilon}}),\quad \bigo(2^{(\log m)^{1-\epsilon}})$} \\
-& \multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Thm.~\ref{thm:quasipolynomial-covering-hardness}} &
-\multicolumn{2}{c}{$\text{NP}\not\subseteq\text{QP}$, ETH, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{{\scalebox{0.85}{$(\bigo(n^{\gamma_n-2\sigma-\epsilon}),\bigo(n^\sigma)),\quad (\bigo(m^{\gamma_m-2\sigma-\epsilon}),\bigo(m^\sigma))$}}} &
-\multicolumn{2}{c}{$\bigo(n^{\gamma_n-\epsilon}),\quad \bigo(m^{\gamma_m-\epsilon})$} \\
-& \multicolumn{2}{c}{PGC, Thm.~\ref{thm:PGC-covering-hardness}} &
-\multicolumn{2}{c}{PGC, Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\PDS}} &
+\multicolumn{2}{c}{\mbox{$(\bigo(n^{1/2-\epsilon}),\kappa),\; (\bigo(m^{1/4-\epsilon}),\kappa)$}} &
+\multicolumn{2}{c}{\mbox{$\bigo(n^{1/2-\epsilon}),\; \bigo(m^{1/4-\epsilon})$}} \\
+& \multicolumn{2}{c}{Cor.~\ref{cor:PDS-limiting-hardness}} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
+\multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\\mbox{$\text{P}\ne\text{NP}$}}} &
+\multicolumn{2}{c}{\mbox{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\; (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$}} &
+\multicolumn{2}{c}{\mbox{$\log^{\bigo(1)} n,\; \log^{\bigo(1)} m$}} \\
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
+\multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\\mbox{$\text{NP}\not\subseteq\text{QP}$} (e.g., ETH)}} &
+\multicolumn{2}{c}{\scalebox{0.80}{\mbox{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\; (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}} &
+\multicolumn{2}{c}{\mbox{$\bigo(2^{(\log n)^{1-\epsilon}}),\; \bigo(2^{(\log m)^{1-\epsilon}})$}} \\
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
+\addlinespace[2pt]
+\cdashline{2-5}
+\addlinespace[2pt]
+\multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\PGC and \mbox{$\text{P}\ne\text{NP}$}}} &
+\multicolumn{2}{c}{\mbox{$(\bigo(n^\delta),\bigo(n^\delta)),\; (\bigo(m^\delta),\bigo(m^\delta))$}} &
+\multicolumn{2}{c}{\mbox{$\bigo(n^\delta),\; \bigo(m^\delta)$}} \\
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
 \bottomrule
 \end{tabular}
 }

@@ -1,0 +1,143 @@
+{
+  "completed_rounds": 100,
+  "changed_rounds": 28,
+  "continuation_changed_rounds": 23,
+  "reviewers": [
+    "review_01",
+    "review_02",
+    "review_03",
+    "review_04",
+    "review_05",
+    "review_06",
+    "review_07",
+    "review_08",
+    "review_09",
+    "review_10"
+  ],
+  "builds": [
+    {
+      "edition": "main",
+      "pages": 38,
+      "source_only": true,
+      "source_file_count": 17,
+      "overfull_boxes": 0,
+      "unresolved_references": 0,
+      "unresolved_citations": 0,
+      "bibtex_warnings": 0,
+      "build_directory": "build/clean-final-main"
+    },
+    {
+      "edition": "main_arxiv",
+      "pages": 32,
+      "source_only": true,
+      "source_file_count": 17,
+      "overfull_boxes": 0,
+      "unresolved_references": 0,
+      "unresolved_citations": 0,
+      "bibtex_warnings": 0,
+      "build_directory": "build/clean-final-main_arxiv"
+    }
+  ],
+  "reference_audit": [
+    {
+      "edition": "main",
+      "active_files": 15,
+      "labels": 79,
+      "references": 152,
+      "citation_keys": 35,
+      "duplicate_labels": [],
+      "missing_references": [],
+      "missing_citations": [],
+      "files": [
+        "macros.tex",
+        "main.tex",
+        "pseudocodes/f_PCMSSC.tex",
+        "pseudocodes/worst_case_learning.tex",
+        "sections/abstract.tex",
+        "sections/ai_methodology.tex",
+        "sections/approximating_learning.tex",
+        "sections/conclusions.tex",
+        "sections/hardness.tex",
+        "sections/introduction.tex",
+        "sections/preliminaries.tex",
+        "sections/set_covering_section.tex",
+        "sections/set_covering_with_constrainst.tex",
+        "tables/approximation_results.tex",
+        "tables/hardness_results.tex"
+      ]
+    },
+    {
+      "edition": "main_arxiv",
+      "active_files": 14,
+      "labels": 79,
+      "references": 152,
+      "citation_keys": 35,
+      "duplicate_labels": [],
+      "missing_references": [],
+      "missing_citations": [],
+      "files": [
+        "main_arxiv.tex",
+        "pseudocodes/f_PCMSSC.tex",
+        "pseudocodes/worst_case_learning.tex",
+        "sections/abstract.tex",
+        "sections/ai_methodology.tex",
+        "sections/approximating_learning.tex",
+        "sections/conclusions.tex",
+        "sections/hardness.tex",
+        "sections/introduction.tex",
+        "sections/preliminaries.tex",
+        "sections/set_covering_section.tex",
+        "sections/set_covering_with_constrainst.tex",
+        "tables/approximation_results.tex",
+        "tables/hardness_results.tex"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "bib-pcal.bib": "e2ca2beaafcfea5c0dee065f50ffdcccab51ed3bd050966d3542bca94c42e956",
+    "macros.tex": "e75b27addb689d536dd335d770efb3c98c1e7a2077b2ffbbe96ec45133b46f49",
+    "main.tex": "3d1c92e5370c7b10709561b31342fa23c912a01fba80badc40b2bdad33011a77",
+    "main_arxiv.tex": "6acd63a952602d036c7d3f4fc4a7c9b0e42db3ab04fc163fe6f5c648f0403a0d",
+    "pseudocodes/f_PCMSSC.tex": "551e706ffe1071ed30f1ff99eef1241d6122d8def7ead1dacc23e337aecf0bb9",
+    "pseudocodes/worst_case_learning.tex": "5cb876ef1ff19cb1c3a136323f7ced8faeb1d1e5df8c217148abb47d7dd75f8a",
+    "sections/abstract.tex": "8b5c6b9f1100e9a2b81c8b0716e281d9e4bb747ccbd0e3a20b6bf2e5c829fda3",
+    "sections/ai_methodology.tex": "4a6e817971ca96c834d6178cb0a6850d4dd5bc09449c966ec1dcc575c99e0d79",
+    "sections/approximating_learning.tex": "02d39f5a6e1847cf8266e705eed762695b4bd2fb59621025a13f5960d7560aca",
+    "sections/conclusions.tex": "5de6616893693515b374930b902bd58c7a5e9f13d3488e91e263bb3a96cc6162",
+    "sections/hardness.tex": "cc0d0107584f1566e58799a54f63a5e8e022dc49943247e02c8d4c38b580716e",
+    "sections/introduction.tex": "7dba755cb95ebb4d61e6aff35b3794522e8bcc0cc73d3becdce793d190f8daca",
+    "sections/preliminaries.tex": "0b870499e2f568437c4b38546274f3c3bcfd2d3e7cd65415f48f7375d63c3a07",
+    "sections/set_covering_section.tex": "7e2c9858bd4d0c8a9984bd32918e7305a2b2edad8073cde7d309113cfa581e94",
+    "sections/set_covering_with_constrainst.tex": "7f1a137dae9d37212493df16c69e40ac7f3e2da188948c0151f9ac2d61244daa",
+    "tables/approximation_results.tex": "664355561ebf2019823d5ab84ca452fef19de53a93df74e65e3495f898f3552f",
+    "tables/hardness_results.tex": "f4f9853244e584f0dcc1aad42fbb23ff242277c080257c58ed4f7bf36705c773"
+  },
+  "rendered_inspection": {
+    "main": [
+      1,
+      4,
+      5,
+      9,
+      12,
+      15,
+      36
+    ],
+    "main_arxiv": [
+      4
+    ],
+    "result": "Final table pages inspected in both editions. Seven settings each use two lines; six matching dashed rules separate settings; all eight paired n/m result cells use one line. No overlap or clipping observed. Other sampled manuscript pages and the final first-twelve-page text were inspected."
+  },
+  "table_preservation": {
+    "approximation_table_byte_identical_to_resumed_baseline": true,
+    "hardness_table_columns": 5,
+    "setting_width": "Measured longest full assumption +0.5pt in the active table font",
+    "remaining_width_split": "56 percent covering,44 percent decision-tree results"
+  },
+  "limitations": [
+    "Retained footnotesize table text and the existing0.80 scale are below the STOC call requested11-point size. Full formatting compliance is not certified."
+  ],
+  "final_independent_reviews": {
+    "review_01": "No material unintended manuscript changes or new issue found in assigned exposition scope.",
+    "review_10": "No material unintended change; active references, shared scientific inputs, table formulas and preserved approximation table verified."
+  }
+}

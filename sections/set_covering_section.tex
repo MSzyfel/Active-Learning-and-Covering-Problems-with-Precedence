@@ -2,7 +2,7 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-We reduce $\ProblemPCSC$ to \textsc{Partial Red-Blue Set Cover}. This gives a direct approximation for the former and its budgeted version, $\ProblemBPCSC$. We then use the budgeted algorithm in the existing reduction to $\ProblemPCMSSC$. The forest-specific algorithms remain unchanged.
+We reduce $\ProblemPCSC$ and its budgeted version, $\ProblemBPCSC$, to \textsc{Partial Red-Blue Set Cover}. We then use the budgeted algorithm to approximate $\ProblemPCMSSC$. For inforests and outforests, reductions to budgeted \textsc{Maximum Coverage} and \textsc{Group Steiner Orienteering}, respectively, yield stronger guarantees.
 
 \begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
@@ -14,22 +14,17 @@ Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $
 \subsection{$\ProblemPCSC$ and $\ProblemBPCSC$ via Partial Red-Blue Set Cover}
 \label{subsection:PCSC}\label{subsection:BPCSC}
 We rely on the following approximation guarantee for $\ProblemPRBSC$.
-\begin{proposition}[Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian \cite{RedBlueSetCover}, Theorem~1.3 and Appendix~A] \label{pro:partial-red-blue}
-    There exists a polynomial-time $\alpha_{m,n}$-approximation algorithm for $\ProblemPRBSC$, where $m$ is the number of sets and $n$ is the number of elements, and
+\begin{proposition}[Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian \cite{RedBlueSetCover}, Theorem~3 and Appendix~A] \label{pro:partial-red-blue}
+    Instances of $\ProblemPRBSC$ with $m$ sets, $m$ red elements and $n$ blue elements admit a polynomial-time $\alpha_{m,n}$-approximation algorithm, where
     \[
     \alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log n}.
     \]
 \end{proposition}
+The algorithm is randomized and satisfies its approximation guarantee with high probability. We amplify each invocation so that all calls made by our reductions satisfy their guarantees simultaneously with high probability.
 
 We use the same exact reduction for both covering variants.
-Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set
-\[
-A_S=\brc{r_T:T\in S^{+}}\cup\brc{b_u:u\in\cov\br{S^{+}}}.
-\]
-The instance has one available set $A_S$ for each original set $S$. For any selected subfamily indexed by $\mathcal{J}\subseteq\cS$, define a precedence-closed family
-\[
-\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}S^{+}.
-\]
+Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T:T\in S^{+}}\cup\brc{b_u:u\in\cov\br{S^{+}}}$.
+The instance has one available set $A_S$ for each original set $S$. For any selected subfamily indexed by $\mathcal{J}\subseteq\cS$, define a precedence-closed family $\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}S^{+}$.
 The red elements covered by the selected red-blue sets are exactly $\brc{r_T:T\in\cC_{\mathcal{J}}}$, and the blue elements covered are exactly $\brc{b_u:u\in\cov\br{\cC_{\mathcal{J}}}}$.
 Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$, respectively.
 Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers exactly the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$: each $S^{+}\subseteq\cC$, and every $S\in\cC$ belongs to $S^{+}$. Hence, the reduction preserves cost and coverage in both directions.
@@ -43,7 +38,8 @@ For $\ProblemPCSC$, apply the above construction and for the input for $\Problem
 For $\ProblemBPCSC$, run the algorithm from Proposition~\ref{pro:partial-red-blue} for each integer target $k\in[\spr{\cov\br{\cS,\cU}}]$, converting each output to a precedence-closed family. Also include the empty family as a candidate, and return the candidate of largest coverage whose size is at most $\alpha_{m,n}\cdot\budget$. Let $\cC^*$ be an optimal family under budget $\budget$, and let $t^*=\spr{\cov\br{\cC^*,\cU}}$. If $t^*=0$, the empty family is optimal. Otherwise, the red-blue instance with target $t^*$ has optimum red cost at most $\spr{\cC^*}\leq\budget$. Its $\alpha_{m,n}$-approximate solution converts to a family of size at most $\alpha_{m,n}\cdot\budget$ covering at least $t^*$ elements. This candidate is considered by the algorithm, so the returned family covers at least as many elements as $\cC^*$. There are at most $n$ target values, so the algorithm runs in polynomial time.
 \end{proof}
 
-Additionally, observe that a polynomial-time $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ gives a polynomial-time $\br{\alpha, \beta}$-approximation for $\ProblemPCSC$ by simply guessing the optimal budget $\budget^*=\spr{\cCopt}$ and running the $\ProblemBPCSC$ algorithm with budget $\budget^*$. We have the following corollary.
+\begingroup\setlength{\emergencystretch}{2em}
+Trying all integer budgets $\budget\in[m]$ includes the optimal budget $\budget^*=\spr{\cCopt}$. Applying a $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ and returning the smallest family with coverage at least $f\cdot n/\beta$ therefore gives the same guarantee for $\ProblemPCSC$.\par\endgroup
 \begin{corollary}\label{cor:BPCSC-to-PCSC}
     If there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time $(\alpha,\beta)$-approximation algorithm for $\ProblemPCSC$.
 \end{corollary}
@@ -52,13 +48,13 @@ Additionally, observe that a polynomial-time $\br{\alpha, \beta}$-approximation 
 \subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
 We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. Note that, however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
 
-Let $\alpha,\beta\geq 1$ and $a=\frac{3\beta-1}{3\beta-2}$, so $1<a\leq 2$.
+Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta-1}{3\cdot\beta-2}$, so $1<a\leq 2$.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
-Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, \DDfix{where $\cCopt$ is an optimal solution to $\ProblemPCMSSC$.}
+Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, where $\cCopt$ is an optimal solution to $\ProblemPCMSSC$.
 So, $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
 We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
 \input{pseudocodes/f_PCMSSC.tex}
-Each family returned by $\ProblemBPCSC$ is precedence-closed, so the union of the sets already appended is also precedence-closed. When a family is appended, only its new sets are used \DDfix{(this is due to the set $P_l$ that keeps track of already appended sets)} and they are ordered by $\operatorname{ord}$; every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding \DDfix{(cf. the while loop)} and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets.
+Each family returned by $\ProblemBPCSC$ is precedence-closed, so the family $P_l$ of sets already appended is also precedence-closed. When a family is appended, only sets outside $P_l$ are used and they are ordered by $\operatorname{ord}$. Every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets. In the analysis, $\pi_l$ denotes the padded prefix before the final family is appended.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
     \begin{lemma}\label{lem:pi-spread-cost}
         We have that $\spr{\pi_{l^*}} = \bigo\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$, and if $\spr{\pi_{l^*}}<m$, then $\spr{\pi_{l^*}}=\Omega\br{\alpha\cdot\beta}\cdot\spr{\cCopt}$. Moreover, $\coverageTime\br{\pi_{l^*},\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
@@ -68,63 +64,54 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         \begin{equation} \label{eq:pi}
         \spr{\pi_{l^*}} \leq \max\brc{\alpha\cdot \sum_{i=1}^{l^*} a^{i+1},\min\brc{m,\cl{\alpha\cdot\beta\cdot a^{l^*}}}}\leq \frac{\alpha\cdot a^{l^*+3}}{a-1}\leq \frac{\alpha\cdot a^{4}}{a-1}\cdot\spr{\cCopt}=\bigo\br{\alpha\cdot\beta}\cdot\spr{\cCopt}.
         \end{equation}
-        Here we used $\cl{x}\leq x+1$, $\alpha a^{l^*}\geq1$, $\beta\leq1/(a-1)$, and $a^{l^*}\leq a\spr{\cCopt}$. If $\spr{\pi_{l^*}}<m$, the padding target is not capped by $m$, and hence $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}\geq\alpha\cdot\beta\cdot\spr{\cCopt}$. If $\spr{\pi_{l^*}}=m$, then the prefix contains every set in $\cS$; this case will be handled after the latency bound.
+        Here we used $\cl{x}\leq x+1$, $\alpha\cdot a^{l^*}\geq1$, $\beta\leq1/(a-1)$, and $a^{l^*}\leq a\cdot\spr{\cCopt}$. If $\spr{\pi_{l^*}}<m$, the padding target is not capped by $m$, and hence $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}\geq\alpha\cdot\beta\cdot\spr{\cCopt}$. If $\spr{\pi_{l^*}}=m$, then the prefix contains every set in $\cS$. This case will be handled after the latency bound.
 
-        For every $i\in [l^*]$, denote $n_i^*=\spr{\cov\br{\pref{\cCopt}{a^{i}}}}$ and note that $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Accordingly, for every $i\in [l^*]$ let $n_i=\spr{\cov\br{\angl{\tau_{l^*}^1,\dots, \tau_{l^*}^i}}}$. Additionally, define $n_0=n_0^*=0$. We have:
+        For every $i\in [l^*]$, let $\ell_i=\min\brc{\spr{\cCopt},\fl{a^i}}$ and $n_i^*=\spr{\cov\br{\pref{\cCopt}{\ell_i}}}$, so $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Let $n_i=\spr{\cov\br{\bigcup_{j=1}^{i}\tau_{l^*}^j}}$ and $n_0=n_0^*=0$. We have:
         \begin{align*}
-            \coverageTime\br{\pi,\cU}&\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
+            &\coverageTime\br{\pi_{l^*},\cU}\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&\leq
             \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&=
-            \sum_{i=1}^{l^*}\br{\br{n-n_{i-1}}-\br{n-n_i}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
-            \\&\leq
+            \sum_{i=1}^{l^*}\br{\br{n-n_{i-1}}-\br{n-n_i}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}} \leq
             \sum_{i=0}^{l^*}\br{n-n_i}\cdot \frac{\alpha\cdot a^{i+3}}{a-1} =: Q.
         \end{align*}
-        where the last inequality is due to \eqref{eq:pi}.
+        Here the last inequality follows from \eqref{eq:pi}.
         Moreover, we have that:
         \begin{align*}
-        2\cdot\coverageTime\br{\cCopt,\cU}&\geq a^{l^*-1}\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\cCopt}
-        \\&\geq
-        a^{l^*-1}\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
-        \\&=
-        \br{n-n_0^*}+\sum_{i=1}^{l^*-1}\br{a^{i}-a^{i-1}}\cdot\br{n-n_{i}^*}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
-        \\&\geq
+            &2\cdot\coverageTime\br{\cCopt,\cU}\geq a^{l^*-1}\cdot\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\cdot\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\cCopt}
+            \\&\geq
+        a^{l^*-1}\cdot\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\cdot\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
+            \\&=
+        \br{n-n_0^*}+\sum_{i=1}^{l^*-1}\br{a^{i}-a^{i-1}}\cdot\br{n-n_{i}^*}+\br{n-n_{l^*}^*}\cdot a^{l^*-1} \geq
         \br{1-\frac{1}{a}}\cdot\sum_{i=0}^{l^*}a^{i}\cdot \br{n-n_i^*}.
         \end{align*}
 
-        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $R_{i-1}=\cU\setminus\cov\br{\angl{\tau_{l^*}^1,\dots,\tau_{l^*}^{i-1}}}$ be the algorithmic residual at the beginning of iteration $i$. The family $\pref{\cCopt}{a^i}$ is precedence-closed, has size at most $a^i\leq a^{i+1}$, and is therefore feasible for the $i$-th $\ProblemBPCSC$ instance. Since it covers $n_i^*$ elements in total and the previously computed solutions cover $n_{i-1}$ elements, it covers at least $n_i^*-n_{i-1}$ elements in $R_{i-1}$.
-        \DDfix{Thus, $n_i^*-n_{i-1}$ lower bounds the optimal value of the subproblem $\ProblemBPCSC$ instance in the $i$-th iteration.}
-        Hence, by the $\br{\alpha,\beta}$-approximation guarantee, $n_i-n_{i-1}\geq\frac{n_i^*-n_{i-1}}{\beta}$. Rearranging gives $n-n_i\leq\frac{\beta-1}{\beta}\br{n-n_{i-1}}+\frac{1}{\beta}\br{n-n_i^*}$.
+        Consider any iteration $i\in \brc{1,\dots,l^*}$ of the inner for loop. Let $R_{i-1}=\cU\setminus\cov\br{\bigcup_{j=1}^{i-1}\tau_{l^*}^j}$ be the algorithmic residual at the beginning of iteration $i$. The family $\pref{\cCopt}{\ell_i}$ is precedence-closed, has size $\ell_i\leq a^i\leq a^{i+1}$, and is therefore feasible for the $i$-th $\ProblemBPCSC$ instance. Since it covers $n_i^*$ elements in total and the previously computed solutions cover $n_{i-1}$ elements, it covers at least $n_i^*-n_{i-1}$ elements in $R_{i-1}$.
+        Thus, $n_i^*-n_{i-1}$ lower bounds the optimum residual coverage in this iteration.
+        Hence, by the $\br{\alpha,\beta}$-approximation guarantee, $n_i-n_{i-1}\geq\frac{n_i^*-n_{i-1}}{\beta}$. Rearranging gives $n-n_i\leq\frac{\beta-1}{\beta}\cdot\br{n-n_{i-1}}+\frac{1}{\beta}\cdot\br{n-n_i^*}$.
         Thus,
         \begin{align*}
-            \frac{\br{a-1}\cdot Q}{\alpha}
-            &=
-            \sum_{i=0}^{l^*}a^{i+3}\cdot \br{n-n_i}
-            \\&\leq
+            &\frac{\br{a-1}\cdot Q}{\alpha}
+            =
+            \sum_{i=0}^{l^*}a^{i+3}\cdot \br{n-n_i} \leq
             a^3\cdot n + \frac{1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_i^*} + \frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&\leq
             \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&=
-            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}}
-            \\&\leq
+            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}} \leq
             \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
         \end{align*}
-        By rearranging the above inequality we obtain:
+        Rearranging and substituting $a=(3\cdot\beta-1)/(3\cdot\beta-2)$ gives
         \begin{align*}
-            Q&\leq \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{2\cdot a^4}{\br{a-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot a}{\beta}}}
-            \\&=
-            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{2\cdot\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{\frac{3\beta-1}{3\beta-2}-1}^2\cdot\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
-            \\&=
-            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{2\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}}}
+            \frac{Q}{\alpha\cdot\coverageTime\br{\cCopt,\cU}}
+            &\leq \frac{2\cdot a^4}{(a-1)^2\cdot\br{1-\frac{(\beta-1)\cdot a}{\beta}}}
+            =\frac{2\cdot\br{\frac{3\cdot\beta-1}{3\cdot\beta-2}}^4}{\br{\frac{3\cdot\beta-1}{3\cdot\beta-2}-1}^2\cdot\br{1-\frac{(\beta-1)\cdot(3\cdot\beta-1)}{\beta\cdot(3\cdot\beta-2)}}} \\
+            &\leq \frac{2\cdot(3\cdot\beta-1)^2\cdot a^4}{1-\frac{(\beta-1)\cdot a}{\beta}}
+            \leq\frac{2\cdot(3\cdot\beta-1)^2\cdot a^4}{1-\frac{\beta-2/3}{\beta}}
+            =3\cdot\beta\cdot(3\cdot\beta-1)^2\cdot a^4
+            \leq432\cdot\beta^3.
         \end{align*}
-        by our choice of $a$. One can easily check that for $\beta\geq 1$, $\frac{\br{\beta-1}\cdot \br{3\beta-1}}{\beta\cdot\br{3\beta-2}}\leq \frac{\br{\beta-1/3}}{\beta}$ so that:
-        \begin{align*}
-            Q&\leq
-            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{2\cdot\br{3\beta-1}^2\cdot\br{\frac{3\beta-1}{3\beta-2}}^4}{\br{1-\frac{\br{\beta-1/3}}{\beta}}}
-            \\&=
-            \alpha\cdot\coverageTime\br{\cCopt,\cU}\cdot 6\beta\cdot \br{3\beta-1}^2\cdot \br{\frac{3\beta-1}{3\beta-2}}^4
-            \leq 864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}.
-        \end{align*}
+        Here $(a-1)^{-2}=(3\cdot\beta-2)^2\leq(3\cdot\beta-1)^2$, and $1-(\beta-1)\cdot a/\beta=(2\cdot\beta-1)/(\beta\cdot(3\cdot\beta-2))\geq2/(3\cdot\beta)$ for $\beta\geq1$. The final inequality uses $a\leq2$ and $3\cdot\beta-1\leq3\cdot\beta$.
         The lemma follows.
     \end{proof}
 
@@ -133,52 +120,48 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         We have that $\spr{\cov\br{\sigma_{l^*},R_{l^*}}} \geq \frac{\max\brc{0,f\cdot n-r}}{\beta}$ and $\spr{\sigma_{l^*}} = \bigo\br{\alpha}\cdot \spr{\cCopt}$.
     \end{lemma}
     \begin{proof}
-        Since $\cCopt$ satisfies $\spr{\cCopt}\leq a^{l^*}$, it is feasible for the final $\ProblemBPCSC$ instance on residual universe $R_{l^*}$. It covers at least $\max\brc{0,f\cdot n-r}$ elements of that residual. The approximation guarantee gives the coverage bound, while $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\alpha a\spr{\cCopt}=\bigo\br{\alpha}\spr{\cCopt}$ gives the size bound.
+        Since $\cCopt$ satisfies $\spr{\cCopt}\leq a^{l^*}$, it is feasible for the final $\ProblemBPCSC$ instance on residual universe $R_{l^*}$. It covers at least $\max\brc{0,f\cdot n-r}$ elements of that residual. The approximation guarantee gives the coverage bound, while $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\alpha\cdot a\cdot\spr{\cCopt}=\bigo\br{\alpha}\cdot\spr{\cCopt}$ gives the size bound.
     \end{proof}
     Let $\pi_{l^*}^+=\pi_{l^*}\circ\operatorname{ord}\br{\sigma_{l^*}\setminus P_{l^*}}$ denote the sequence obtained by appending only the final solution's new sets.
     \begin{lemma}\label{lem:combined-coverage-cost}
         We have that $\spr{\cov\br{\pi_{l^*}^+,\cU}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*}^+,\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
     \end{lemma}
     \begin{proof}
-        By Lemma~\ref{lem:sigma-coverage}, the prefix and the final solution together cover at least
-        \[
-        r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}
-        \]
-        elements. Here the residual coverage from $\sigma_{l^*}$ is disjoint from the prefix coverage by definition of $R_{l^*}$.
+        By Lemma~\ref{lem:sigma-coverage}, the prefix and the final solution together cover at least $r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}$ elements. Here the residual coverage from $\sigma_{l^*}$ is disjoint from the prefix coverage by definition of $R_{l^*}$.
         For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$.
         Lemma \ref{lem:pi-spread-cost} implies that 
         \[
         \coverageTime\br{\pi_{l^*},\cU}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}.
         \]
         Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its coverage time in $\pi_{l^*}^+$ is also $t_u$.
-        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\beta a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)t_u\leq2t_u$.
-        As a consequence, due to Lemma~\ref{lem:pi-spread-cost} we get that $\coverageTime\br{\pi_{l^*}^+,\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u\leq2\cdot t_u$.
+        The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives $\coverageTime\br{\pi_{l^*}^+,\cU}\leq2\cdot\coverageTime\br{\pi_{l^*},\cU}\leq864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}=\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}$.
     \end{proof}
+Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo(\beta^2\log^2 m)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size; all applications below use constant $\beta$.
 By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
-    If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
+    \setlength{\emergencystretch}{2em}
+    If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, with $\beta$ polynomially bounded in the input size, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
 It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding a $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
 \begin{theorem}\label{thm:BPCSC-inforest}
+    \setlength{\emergencystretch}{2em}
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    \DDfix{In the budgeted \textsc{Maximum Coverage} problem with non-uniform costs, the input consists of a universe $\cX$, a family $\mathcal{A}\subseteq 2^\cX$, a cost function $c:\cA\to\mathbb{R}_{\geq 0}$, and a budget $B>0$. The goal is to choose a subfamily $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$ that maximizes $\spr{\cov\br{\cA'}}$. A $\br{1,\frac{e}{e-1}}$-approximation algorithm for this problem is known \cite{TheBudgetedMaximumCoverageProblem}.}
-    
-    \DDfix{
-    We reduce a given instance $(\cU,\cS,\preceq, b)$ or $(\cU,\cS,\preceq, f)$ of $\ProblemBPCSC$ or $\ProblemPCSC$, respectively, to this problem.
-    Observe that for inforest precedence constraints, for any two sets $S, W$ in $\cS$ if $\closure{S}\cap\closure{W}\neq \emptyset$, then either $S\preceq W$ or $W\preceq S$.
-    For each set $S\in \cS$, we construct a new set $z(S)$ added to $\cA$, such that $z(S)=\cov\br{\closure{S}}$ and $c\br{z(S)}=\spr{\closure{S}}$.
-    Note that we may without loss of generality that any solution to \textsc{Maximum Coverage} does not pick a pair of elements whose corresponding closures intersect, since picking both would be redundant.
-    It follows directly from picking any $z(S)$ as part of a solution to the \textsc{Maximum Coverage} instance, we are effectively picking all sets in $\closure{S}$ in the original instance, obtaining the same coverage and cost.
-    Thus, by Corollary \ref{cor:BPCSC-to-PCSC}, the theorem follows.
-    }
+    In \emph{budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c:\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$. This problem admits a $\br{1,\frac{e}{e-1}}$-approximation \cite{TheBudgetedMaximumCoverageProblem}.
+
+    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,b)$, set $\cX=\cU$ and $B=b$. For each $S\in\cS$, create an indexed set $z_S=\cov\br{\closure{S}}$ with cost $c(z_S)=\spr{\closure{S}}$.
+    In an inforest, intersecting closures are nested: $\closure{S}\cap\closure{W}\neq\emptyset$ implies $S\preceq W$ or $W\preceq S$.
+    Thus, from any selected family of the $z_S$, we can discard sets whose closures are contained in another selected closure without changing coverage or increasing cost. The remaining closures are disjoint, so their union is precedence-closed and has the same size and coverage as the cost and coverage of the retained family.
+    Conversely, every precedence-closed family $\cC$ is the disjoint union of the closures of its maximal members. Selecting the corresponding $z_S$ therefore preserves both cost and coverage. The budgeted approximation follows, and Corollary~\ref{cor:BPCSC-to-PCSC} gives the result for $\ProblemPCSC$.
 \end{proof}
 
 Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the following result for $\ProblemPCMSSC$
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
+    \setlength{\emergencystretch}{2em}
     There exists a bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation polynomial-time algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 
@@ -189,7 +172,7 @@ An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by
 Let $\cX$ be a family of \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
 Let $w: \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$, where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
-% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$; if $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
@@ -202,22 +185,18 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
 % \end{problem}
 
 \begin{theorem}\label{thm:BPCSC-outforest}
-    There exist polynomial-time bicriteria $\br{\bigo\br{\log n}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
+    \setlength{\emergencystretch}{2em}
+    There exist polynomial-time bicriteria $\br{\bigo\br{\log m}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    \DDfix{We reduce our set cover instances to} an instance to $\ProblemGSO$ on tree metrics.
-    The latter problem admits a $\br{\bigo\br{\log n}, 4}$-approximation algorithm \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}.
-    It should be noted that this work gives a worse approximation ratio, namely $\br{\bigo\br{\log^2 n}, 4}$, however the algorithm consists of embedding a general metric into a tree metric with a $\bigo\br{\log n}$ distortion.
-    Since our metric will be a tree metric, we avoid this $\bigo\br{\log n}$-factor loss.
+    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics.
+    On tree metrics, the algorithm of \cite[Section~5.1]{ApproxAlgsForOptDTsAndAdapTSPProblems} returns a tour of length at most $\bigo\br{\log\spr{V}}\cdot b$ whose covered weight is at least one quarter of the optimum under budget $b$. This is a $\br{\bigo\br{\log\spr{V}},4}$-approximation in our cost/coverage convention. Our tree has $\spr{V}=m+1$ vertices. For general metrics, the same algorithm incurs an additional $\bigo\br{\log\spr{V}}$ factor from embedding into a tree metric; this step is unnecessary for our instance.
     
-    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$. \DD{czy ta waga na pewno dobrze ustawiona? (=1)}
+    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
 
-    Let $\tau$ be any $r$-tour in this tree, and let $\cC_\tau=\brc{S\in\cS\mid v_S\text{ is visited by }\tau}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has exactly $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
+    Expand each edge of an $r$-tour $\tau$ in the tree metric along its tree path, preserving its length and all groups it covers. For the resulting walk, let $\cC_\tau=\brc{S\in\cS\mid v_S\text{ is visited by }\tau}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has exactly $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
 
-    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges, \DDfix{and a DFS traversal along those edges  has length $\spr{\cC}$.
-    Morever, it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$.
-    %Hence, for every budget, tours of at most that length and precedence-closed families of at most that size achieve the same coverage.
-    Thus the reduction} preserves the optimum coverage, and by Corollary \ref{cor:BPCSC-to-PCSC} and Theorem \ref{thm:BPCSC-to-PCMSSC} the theorem follows.
+    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has exactly $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Thus the reduction preserves the optimum coverage for each budget, and Corollary~\ref{cor:BPCSC-to-PCSC} and Theorem~\ref{thm:BPCSC-to-PCMSSC} imply the theorem.
 \end{proof}
 
 
@@ -236,7 +215,7 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
 % %     There exist the following polynomial-time approximation algorithms for $\ProblemPCMK$:
 % %     \begin{itemize}
 % %         \item $\br{1, \frac{e}{e-1}}$-approximation when the precedence constraints form an inforest.
-% %         \item $\br{\bigo\br{\log n}, 4}$-approximation when the precedence constraints form an outforest.
+% %         \item $\br{\bigo\br{\log m}, 4}$-approximation when the precedence constraints form an outforest.
 % %         \item $\br{\bigo\br{\sqrt{n}\log n}}$-approximation for general precedence constraints.
 % %     \end{itemize}
 % % \end{corollary}

@@ -5,7 +5,7 @@
 \usepackage[english]{babel}
 
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{natbib}
+\usepackage[numbers]{natbib}
 \usepackage[margin=1in]{geometry}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -36,7 +36,7 @@
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 % Configure algorithm2e style
-\SetAlFnt{\small}
+\SetAlFnt{\normalsize}
 \SetAlCapFnt{\normalsize}
 \SetAlCapNameFnt{\normalsize}
 \SetNlSty{textbf}{}{}
@@ -88,7 +88,9 @@ Gdańsk University of Technology, 80-233 Gdańsk, Poland\\
 \input{sections/hardness}
 \input{sections/conclusions}
 
-\bibliographystyle{plain}
+\input{sections/ai_methodology}
+
+\bibliographystyle{alpha}
 \bibliography{bib-pcal}
 
 \end{document}
