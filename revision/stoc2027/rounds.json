@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 19,
+  "completed_rounds": 23,
   "changed_rounds": [
     5,
     6,
@@ -11,7 +11,8 @@
     14,
     16,
     17,
-    19
+    19,
+    23
   ],
   "rounds": [
     {
@@ -244,6 +245,62 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-019-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 20,
+      "topic": "Early presentation of proof structure",
+      "outcome": "no change",
+      "evidence": "The introduction explains reductions and contributions; the first twelve baseline pages include definitions, covering map, balanced recursion and both decision-tree analyses. Final pagination is rechecked in round100.",
+      "reviewer": "review_01"
+    },
+    {
+      "round": 21,
+      "topic": "Reflexive orders and strict prerequisites",
+      "outcome": "no change",
+      "evidence": "Sequence feasibility explicitly excludes self-precedence.",
+      "reviewer": "review_02"
+    },
+    {
+      "round": 22,
+      "topic": "Formal forest restrictions",
+      "outcome": "no change",
+      "evidence": "Inforests have at most one immediate successor and outforests at most one immediate predecessor, matching the reductions.",
+      "reviewer": "review_02"
+    },
+    {
+      "round": 23,
+      "topic": "Internal-node test labels",
+      "outcome": "changed",
+      "evidence": "Correct the type error that non-leaf vertices are subsets of the test family.",
+      "reviewer": "review_02",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-023-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-023-main_arxiv-build.txt"
         }
       ]
     }
