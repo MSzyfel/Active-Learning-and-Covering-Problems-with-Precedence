@@ -132,11 +132,11 @@ $\bigo\br{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}} \cdot \log n}$-approx
 %             = & \frac{\alpha}{\log\br{\frac{4\gamma}{4\gamma -1}}}\cdot \log n \cdot \OPT\br{\cI} \\
 %        \end{align*}
         \begin{align*}
-            \COSTW\br{D} \leq &\, \COSTW\br{D_{\cC}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\COSTW\br{D'}} \\
-            \leq &\, \alpha \cdot \spr{\sepcover{\cI}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'}} \\
-            \leq &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
-            = &\, \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
-            = &\, \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
+            \COSTW\br{D} & \leq \COSTW\br{D_{\cC}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\COSTW\br{D'}} \\
+            & \leq \alpha \cdot \spr{\sepcover{\cI}} + \max_{D'\in D\setminus V\br{D_{\cC}}} \brc{\frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \spr{\cH'} \cdot \OPT\br{\cI'}} \\
+            & \leq \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
+            & = \alpha \cdot \OPT\br{\cI} + \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - \alpha\cdot \OPT\br{\cI} \\
+             & = \frac{\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
         \end{align*}
         where the second inequality is by the induction hypothesis and Observation~\ref{obs:DS}, the third inequality follows by Observation~\ref{obs:sepcoverWC}, Lemma \ref{lemma:subspace_opt} and the fact that $\spr{\cH'} \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every for every $\cH'\in D\setminus D_{\cC}$.
         This concludes the proof of the theorem.
@@ -288,11 +288,11 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
     % To point out the dependency of $D'$ on $\cH'$, we write $D'(\cH')$.
     We have
 \begin{align*}
-    \COSTA\br{D} \leq & \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \COSTA\br{D'} \\
-    \leq & 2\alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log\spr{\cH'} \cdot \OPT\br{\cI'} \\
-    \leq & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
-    = & 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
-    = & \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
+    \COSTA\br{D}  & \leq \COSTA\br{D_{\cC}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \COSTA\br{D'} \\
+    & \leq 2\alpha \cdot \COSTA\br{\sepcover{\cI}} + \sum_{D'\in D\setminus V\br{D_{\cC}}} \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log\spr{\cH'} \cdot \OPT\br{\cI'} \\
+    & \leq 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log \br{\frac{\br{{5\beta-1}}\cdot n}{5\beta}} \cdot \OPT\br{\cI} \\
+    & = 2\alpha \cdot \OPT\br{\cI} + \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI} - 2\alpha\cdot \OPT\br{\cI} \\
+    & = \frac{2\alpha}{\log\br{\frac{5\beta}{5\beta -1}}}\cdot \log n \cdot \OPT\br{\cI},
 \end{align*}
 where the first inequality is by Observation~\ref{obs:WCdecomposition}, the second follows by the induction hypothesis and Observation~\ref{obs:DS-average}, the third follows by Observation~\ref{obs:sepcoverAC}, Lemma~\ref{lemma:subspace_opt} and the fact that $l(D') \leq \br{1-\frac{4}{5}\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{(5\beta -1)}{5\beta}\cdot n$ for every $D'\in D\setminus V\br{D_{S}}$.
 This concludes the proof of the theorem.
