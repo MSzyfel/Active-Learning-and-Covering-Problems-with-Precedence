@@ -137,10 +137,11 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u\leq2\cdot t_u$.
         The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives $\coverageTime\br{\pi_{l^*}^+,\cU}\leq2\cdot\coverageTime\br{\pi_{l^*},\cU}\leq864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}=\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}$.
     \end{proof}
+Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo(\beta^2\log^2 m)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size; all applications below use constant $\beta$.
 By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
-    If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
+    If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, with $\beta$ polynomially bounded in the input size, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
 \end{theorem}
 It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding a $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 

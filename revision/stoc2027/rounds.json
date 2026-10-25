@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 55,
+  "completed_rounds": 56,
   "changed_rounds": [
     5,
     6,
@@ -21,7 +21,8 @@
     39,
     48,
     50,
-    55
+    55,
+    56
   ],
   "rounds": [
     {
@@ -789,6 +790,41 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-055-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 56,
+      "topic": "Polynomial runtime parameter range",
+      "outcome": "changed",
+      "evidence": "There are O(beta^2 log^2 m) oracle calls; state the polynomial beta requirement. All applications have constant beta.",
+      "reviewer": "review_05",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-056-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-056-main_arxiv-build.txt"
         }
       ]
     }
