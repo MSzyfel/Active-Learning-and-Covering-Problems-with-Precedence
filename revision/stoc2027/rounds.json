@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 26,
+  "completed_rounds": 30,
   "changed_rounds": [
     5,
     6,
@@ -14,7 +14,8 @@
     19,
     23,
     24,
-    26
+    26,
+    30
   ],
   "rounds": [
     {
@@ -382,6 +383,63 @@
           "build_log": "build/round-026-main_arxiv-build.txt"
         }
       ]
+    },
+    {
+      "round": 27,
+      "topic": "Partial min-sum uncovered-item convention",
+      "outcome": "no change",
+      "evidence": "Uncovered items receive sequence length, consistent with both algorithm and hardness arguments.",
+      "reviewer": "review_02"
+    },
+    {
+      "round": 28,
+      "topic": "Bicriteria reference optimum",
+      "outcome": "no change",
+      "evidence": "Minimization compares cost to the original target optimum; budget augmentation is defined separately.",
+      "reviewer": "review_02"
+    },
+    {
+      "round": 29,
+      "topic": "Notation and macro interfaces",
+      "outcome": "no change",
+      "evidence": "Reviewed prefix, coverage, closure and objective macros against active uses; no semantic correction warranted.",
+      "reviewer": "review_02"
+    },
+    {
+      "round": 30,
+      "topic": "Clean builds and shared hardness assumptions",
+      "outcome": "changed",
+      "evidence": "Qualify the recursion depth for constant coverage loss; explicitly configure natbib numeric mode with alpha labels for clean builds in both editions; immediately apply the user-requested shared hardness assumptions in setting cells. All ten reviewers approved every exact edit and the table width amendment.",
+      "reviewer": "review_03",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-030-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-030-main_arxiv-build.txt"
+        }
+      ],
+      "rendered_validation": "Both edition hardness tables on page5 rendered to PNG and visually inspected; no overlap or clipping. Root main.pdf and main_arxiv.pdf refreshed from validated isolated builds."
     }
   ],
   "resumed_baseline": "46ddc3c11b518666e3f3ac33195819f2c4d68883",

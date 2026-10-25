@@ -4,47 +4,46 @@
 \centering
 {\footnotesize
 \setlength{\tabcolsep}{1.5pt}
-\begin{tabular}{p{0.08\linewidth}C{0.22\linewidth}C{0.22\linewidth}C{0.22\linewidth}C{0.22\linewidth}}
+\begin{tabular}{p{0.10\linewidth}C{0.215\linewidth}C{0.215\linewidth}C{0.215\linewidth}C{0.215\linewidth}}
 \toprule
 \textbf{setting} & \textbf{\hyperref[problem:PCSC]{\ProblemPCSC}} & \textbf{\hyperref[problem:PCMSSC]{\ProblemPCMSSC}} & \textbf{\hyperref[problem:PCWCDT]{\ProblemPCWCDT}} & \textbf{\hyperref[problem:PCACDT]{\ProblemPCACDT}} \\
 \midrule
-\multirow{3}{\linewidth}{none} & \mbox{$(1-\epsilon)\ln n$} & \mbox{$(4-\epsilon)$} & \mbox{$o(\log n)$} & \mbox{$\br{4-\epsilon}$} \\
-& \mbox{$\text{P}\ne\text{NP}$} & \mbox{$\text{P}\ne\text{NP}$} & \mbox{$\text{P}\ne\text{NP}$} & \mbox{$\text{P}\ne\text{NP}$} \\
+\multirow{2}{\linewidth}{\shortstack[l]{none\\\mbox{$\text{P}\ne\text{NP}$}}} & \mbox{$(1-\epsilon)\ln n$} & \mbox{$(4-\epsilon)$} & \mbox{$o(\log n)$} & \mbox{$\br{4-\epsilon}$} \\
 & \cite{AnalyticalApproachToParallelRepetition} & \cite{ApproximatingMinSumSetCover} & \cite{HardnessOfMinHeightDTP} & \cite{DTsforEntIdent} \\
 
 \addlinespace[2pt]
 \cdashline{2-5}
 \addlinespace[2pt]
 
-\shortstack[l]{outforest\\\mbox{$f=1$}} &
-\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
-\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
-\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}\\Cor.~\ref{cor:decision-tree-inapproximability}} &
-\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
-\shortstack[l]{outforest\\variable\\\mbox{$f<1$}} & &
-\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\\mbox{$\text{NP}\not\subseteq\text{ZTIME}(n^{\text{polylog}(n)})$}\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
+\shortstack[l]{outforest\\\mbox{$f=1$}\\\mbox{$\text{NP}\not\subseteq$}\\\mbox{$\text{ZTIME}($}\\\mbox{$n^{\text{polylog}(n)})$}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Cor.~\ref{cor:decision-tree-inapproximability}} &
+\shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Cor.~\ref{cor:PCACDT-outforest-hardness}} \\
+\shortstack[l]{outforest\\variable\\\mbox{$f<1$}\\\mbox{$\text{NP}\not\subseteq$}\\\mbox{$\text{ZTIME}($}\\\mbox{$n^{\text{polylog}(n)})$}} & &
+\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
 
 \addlinespace[2pt]
 \cdashline{2-5}
 \addlinespace[2pt]
 
-\multirow[c]{8}{0.08\textwidth}{\shortstack[l]{general\\DAGs}} &
+\shortstack[l]{general\\DAGs\\PDS} &
 \multicolumn{2}{c}{\mbox{$(\bigo(n^{1/2-\epsilon}),\kappa),\quad (\bigo(m^{1/4-\epsilon}),\kappa)$}} &
 \multicolumn{2}{c}{\mbox{$\bigo(n^{1/2-\epsilon}),\quad \bigo(m^{1/4-\epsilon})$}} \\
-& \multicolumn{2}{c}{PDS, Cor.~\ref{cor:PDS-limiting-hardness}} &
-\multicolumn{2}{c}{PDS, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{\mbox{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\quad (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$}} &
+& \multicolumn{2}{c}{Cor.~\ref{cor:PDS-limiting-hardness}} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\shortstack[l]{general\\DAGs\\\mbox{$\text{P}\ne\text{NP}$}} & \multicolumn{2}{c}{\mbox{$(\log^{\bigo(1)} n,\log^{\bigo(1)} n),\quad (\log^{\bigo(1)} m,\log^{\bigo(1)} m)$}} &
 \multicolumn{2}{c}{\mbox{$\log^{\bigo(1)} n,\quad \log^{\bigo(1)} m$}} \\
-& \multicolumn{2}{c}{\mbox{$\text{P}\ne\text{NP}$}, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
-\multicolumn{2}{c}{\mbox{$\text{P}\ne\text{NP}$}, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{{\scalebox{0.80}{\mbox{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\quad (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}}} &
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polylog})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\shortstack[l]{general\\DAGs\\\mbox{$\text{NP}\not\subseteq$}\\QP\\(e.g., ETH)} & \multicolumn{2}{c}{{\scalebox{0.80}{\mbox{$(\bigo(2^{(\log n)^{1-\epsilon}}),\bigo(2^{(\log n)^{1-\epsilon}})),\quad (\bigo(2^{(\log m)^{1-\epsilon}}),\bigo(2^{(\log m)^{1-\epsilon}}))$}}}} &
 \multicolumn{2}{c}{\mbox{$\bigo(2^{(\log n)^{1-\epsilon}}),\quad \bigo(2^{(\log m)^{1-\epsilon}})$}} \\
-& \multicolumn{2}{c}{\mbox{$\text{NP}\not\subseteq\text{QP}$}, ETH, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
-\multicolumn{2}{c}{\mbox{$\text{NP}\not\subseteq\text{QP}$}, ETH, Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
-& \multicolumn{2}{c}{\mbox{$(\bigo(n^\delta),\bigo(n^\delta)),\quad (\bigo(m^\delta),\bigo(m^\delta))$}} &
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-subpolynomial})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\[2pt]
+\shortstack[l]{general\\DAGs\\PGC and\\\mbox{$\text{P}\ne\text{NP}$}} & \multicolumn{2}{c}{\mbox{$(\bigo(n^\delta),\bigo(n^\delta)),\quad (\bigo(m^\delta),\bigo(m^\delta))$}} &
 \multicolumn{2}{c}{\mbox{$\bigo(n^\delta),\quad \bigo(m^\delta)$}} \\
-& \multicolumn{2}{c}{PGC, \mbox{$\text{P}\ne\text{NP}$}, Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} &
-\multicolumn{2}{c}{PGC, \mbox{$\text{P}\ne\text{NP}$}, Cor.~\ref{cor:decision-tree-inapproximability}} \\
+& \multicolumn{2}{c}{Thm.~\ref{thm:label-cover-hardness}(\ref{item:label-cover-polynomial})} &
+\multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
 \bottomrule
 \end{tabular}
 }
