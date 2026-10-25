@@ -1,0 +1,40 @@
+{
+  "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
+  "branch": "szyfel",
+  "completed_rounds": 5,
+  "changed_rounds": [
+    5
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "topic": "Submission geometry and spacing",
+      "outcome": "no change",
+      "evidence": "main.tex uses 11pt, letter paper, one-inch margins, single column and single spacing."
+    },
+    {
+      "round": 2,
+      "topic": "First twelve pages and audience",
+      "outcome": "reviewed",
+      "evidence": "Contribution narrative is early. Mechanism refinements are queued for round 17 to avoid duplicate edits."
+    },
+    {
+      "round": 3,
+      "topic": "Author identification and title page",
+      "outcome": "no change",
+      "evidence": "Both human authors and affiliations are present."
+    },
+    {
+      "round": 4,
+      "topic": "Submission versus arXiv metadata",
+      "outcome": "no change",
+      "evidence": "main.tex is the submission version. arXiv-specific geometry is retained."
+    },
+    {
+      "round": 5,
+      "topic": "Abstract placement and contribution summary",
+      "outcome": "changed",
+      "evidence": "Replaced generic text, defined n/m/soft-O, scoped LC claims, and used normal-size abstract text. All ten reviewers consulted in batch 01."
+    }
+  ]
+}
