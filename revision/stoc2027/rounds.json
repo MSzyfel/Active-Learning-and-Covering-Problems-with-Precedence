@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 17,
+  "completed_rounds": 19,
   "changed_rounds": [
     5,
     6,
@@ -10,7 +10,8 @@
     12,
     14,
     16,
-    17
+    17,
+    19
   ],
   "rounds": [
     {
@@ -201,6 +202,48 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-017-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 18,
+      "topic": "Uniform and nonuniform scope",
+      "outcome": "no change",
+      "evidence": "The main algorithms use the uniform prior; the conclusion identifies nonuniform distributions as further work.",
+      "reviewer": "review_01"
+    },
+    {
+      "round": 19,
+      "topic": "Strict epsilon endpoint",
+      "outcome": "changed",
+      "evidence": "The invoked GST hardness supports epsilon>0 and does not establish the endpoint zero.",
+      "reviewer": "review_01",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-019-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-019-main_arxiv-build.txt"
         }
       ]
     }
