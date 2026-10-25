@@ -1,13 +1,14 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 12,
+  "completed_rounds": 14,
   "changed_rounds": [
     5,
     6,
     8,
     9,
-    12
+    12,
+    14
   ],
   "rounds": [
     {
@@ -81,6 +82,65 @@
       "topic": "Restore requested tables and single-line formulas",
       "outcome": "changed",
       "evidence": "All ten reviewers consulted. Restored exactly two original-format tables, used alpha in both general decision-tree entries, restored the full ZTIME assumption in every outforest cell, and added source-verified P != NP to each None cell. Boxed all table formulas and minimally redistributed column widths without reducing fonts or changing total width. Both editions compile with no overfull boxes or unresolved references; all four rendered table pages were inspected. Per the latest user instruction, finish after these table repairs."
+    },
+    {
+      "round": 13,
+      "topic": "Abstract scope and dimensions",
+      "outcome": "no change",
+      "evidence": "The abstract specifies four objectives, uniform average-case identification, m/n and soft-O, and deterministic Label Cover hardness.",
+      "reviewer": "review_01"
+    },
+    {
+      "round": 14,
+      "topic": "Partial-cover terminology",
+      "outcome": "changed",
+      "evidence": "Correct integral partial-cover terminology, agreement and the adjacent typo.",
+      "reviewer": "review_01",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-014-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-014-main_arxiv-build.txt"
+        }
+      ]
     }
-  ]
+  ],
+  "resumed_baseline": "46ddc3c11b518666e3f3ac33195819f2c4d68883",
+  "review_protocol": "100 separately scoped focused revision rounds, with evidence and an outcome for every round; no edit manufactured for no-change rounds.",
+  "reviewers": [
+    "review_01",
+    "review_02",
+    "review_03",
+    "review_04",
+    "review_05",
+    "review_06",
+    "review_07",
+    "review_08",
+    "review_09",
+    "review_10"
+  ],
+  "guidelines": "https://acm-stoc.org/stoc2027/stoc2027-cfp.html",
+  "guidelines_checked": "2026-10-25",
+  "latest_table_instruction": "Retain table structure; consolidate shared hardness assumptions in setting cells. The approximation table is preserved byte-for-byte."
 }
