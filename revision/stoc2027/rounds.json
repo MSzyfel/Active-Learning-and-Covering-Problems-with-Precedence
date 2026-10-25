@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 93,
+  "completed_rounds": 96,
   "changed_rounds": [
     5,
     6,
@@ -28,7 +28,8 @@
     83,
     91,
     92,
-    93
+    93,
+    96
   ],
   "rounds": [
     {
@@ -1268,6 +1269,56 @@
         }
       ],
       "rendered_validation": "Both edition hardness tables rendered to PNG and visually inspected; no overlap or clipping. Root main.pdf and main_arxiv.pdf refreshed from validated isolated builds."
+    },
+    {
+      "round": 94,
+      "topic": "Approximation table numeric audit",
+      "outcome": "no change",
+      "evidence": "The inforest 3421.7 entry rounds upward from3421.692192...; no approximation-table change is needed.",
+      "reviewer": "review_10"
+    },
+    {
+      "round": 95,
+      "topic": "Hardness table scope and parameters",
+      "outcome": "no change",
+      "evidence": "Unconstrained covering means f=1, Label Cover bounds concern deterministic algorithms, epsilon is in(0,1) for subpolynomial rows, and QP means deterministic quasipolynomial time.",
+      "reviewer": "review_10"
+    },
+    {
+      "round": 96,
+      "topic": "Uniform versus weighted decision-tree hardness",
+      "outcome": "changed",
+      "evidence": "Correct the introductory blanket logarithmic-hardness claim. TALG Theorem4.1 treats weighted priors and Theorem4.3 gives uniform4-epsilon hardness.",
+      "reviewer": "review_10",
+      "source": "https://www.cse.iitd.ac.in/~pandit/TALG_Published.pdf",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-096-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-096-main_arxiv-build.txt"
+        }
+      ]
     }
   ],
   "resumed_baseline": "46ddc3c11b518666e3f3ac33195819f2c4d68883",
