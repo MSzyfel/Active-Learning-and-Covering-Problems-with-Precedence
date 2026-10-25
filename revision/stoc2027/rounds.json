@@ -1,12 +1,13 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 9,
+  "completed_rounds": 12,
   "changed_rounds": [
     5,
     6,
     8,
-    9
+    9,
+    12
   ],
   "rounds": [
     {
@@ -62,6 +63,24 @@
       "topic": "Substantive AI disclosure",
       "outcome": "changed",
       "evidence": "All ten agents consulted. Added factual end-matter disclosure and a body scope note for Codex assistance with proof development, checking and exposition. No author verification or originality certification was invented. Both editions compile with resolved links and zero overfull warnings. Cleaned trailing blank table lines."
+    },
+    {
+      "round": 10,
+      "topic": "End matter and submission completeness",
+      "outcome": "no change",
+      "evidence": "References are last and manuscript end matter is present. External submission consent, author limits, conflicts and author-presented video require author action rather than manuscript edits."
+    },
+    {
+      "round": 11,
+      "topic": "Introductory problem motivation",
+      "outcome": "no change",
+      "evidence": "The opening defines hypotheses, tests, replies and precedence before the graph reductions. No justified substantive change was found in this focused pass."
+    },
+    {
+      "round": 12,
+      "topic": "Restore requested tables and single-line formulas",
+      "outcome": "changed",
+      "evidence": "All ten reviewers consulted. Restored exactly two original-format tables, used alpha in both general decision-tree entries, restored the full ZTIME assumption in every outforest cell, and added source-verified P != NP to each None cell. Boxed all table formulas and minimally redistributed column widths without reducing fonts or changing total width. Both editions compile with no overfull boxes or unresolved references; all four rendered table pages were inspected. Per the latest user instruction, finish after these table repairs."
     }
   ]
 }

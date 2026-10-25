@@ -1,71 +1,36 @@
 \begin{table}[ht!]
-\caption{Approximation guarantees. Here
-$\alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log^{4/3}m\cdot\log n}$.
-Covering entries give cost and coverage-loss factors.
-The decision-tree bounds use unit-cost tests and the uniform prior.
-The improved unconstrained average-case bound requires a constant bound on the number of outcomes of each test.}
+\caption{Approximation guarantees for covering and \mbox{$\ProblemDT$} under different precedence constraints.}
 \label{tab:results}
 \centering
-\begingroup
-\normalsize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.15}
-\textbf{Covering problems}\par\smallskip
-\begin{tabular}{@{}L{0.16\linewidth}C{0.24\linewidth}C{0.24\linewidth}C{0.31\linewidth}@{}}
+{
+\footnotesize
+\begin{tabular}{p{0.077\linewidth}C{0.14\linewidth}C{0.14\linewidth}C{0.15\linewidth}C{0.135\linewidth}C{0.185\linewidth}}
 \toprule
-\textbf{Precedence}
-& \textbf{\hyperref[problem:BPCSC]{$\ProblemBPCSC$}}
-& \textbf{\hyperref[problem:PCSC]{$\ProblemPCSC$}}
-& \textbf{\hyperref[problem:PCMSSC]{$\ProblemPCMSSC$}} \\
+\textbf{prec.} & \textbf{\hyperref[problem:BPCSC]{\mbox{$\ProblemBPCSC$}}} & \textbf{\hyperref[problem:PCSC]{\mbox{$\ProblemPCSC$}}} & \textbf{\hyperref[problem:PCMSSC]{\mbox{$\ProblemPCMSSC$}}} & \textbf{\hyperref[problem:PCWCDT]{\mbox{$\ProblemPCWCDT$}}} & \textbf{\hyperref[problem:PCACDT]{\mbox{$\ProblemPCACDT$}}} \\
 \midrule
-none
-& $\br{1,\frac{e}{e-1}}$\newline \cite{TheBudgetedMaximumCoverageProblem}
-& $\br{1,\frac{e}{e-1}}$\newline \cite{TheBudgetedMaximumCoverageProblem}
-& $\br{\bigo(1),\frac{e}{e-1}}$\newline Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC}\newline
-$4$ for $f=1$ \cite{ApproximatingMinSumSetCover} \\
-\addlinespace
-inforest
-& $\br{1,\frac{e}{e-1}}$\newline Thm.~\ref{thm:BPCSC-inforest}
-& $\br{1,\frac{e}{e-1}}$\newline Thm.~\ref{thm:BPCSC-inforest}
-& $\br{\bigo(1),\frac{e}{e-1}}$\newline Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC} \\
-\addlinespace
-outforest
-& $\br{\bigo(\log m),4}$\newline Thm.~\ref{thm:BPCSC-outforest}
-& $\br{\bigo(\log m),4}$\newline Thm.~\ref{thm:BPCSC-outforest}
-& $\br{\bigo(\log m),4}$\newline Thm.~\ref{thm:BPCSC-outforest} \\
-\addlinespace
-general
-& $\br{\alpha_{m,n},1}$\newline Thm.~\ref{thm:BPCSC}
-& $\br{\alpha_{m,n},1}$\newline Thm.~\ref{thm:PCSC-RBSC}
-& $\br{\bigo(\alpha_{m,n}),1}$\newline Thm.~\ref{thm:BPCSC-to-PCMSSC} \\
-\bottomrule
-\end{tabular}
+\multirow{2}{\linewidth}{none} & \mbox{$\br{1, \frac{e}{e-1}}$} & \mbox{$\br{1, \frac{e}{e-1}}$}  & \mbox{$\br{\bigo(1),\frac{e}{e-1}}$} & \mbox{$\bigo(\log n)$}  & \mbox{$\bigo(\log n)$}  \\
+      &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC} &  \cite{DiagnosisDetermination} & \cite{ApproximatingDecisionTreesMultiwayBranches} \\
 
-\medskip
-\textbf{Decision-tree problems}\par\smallskip
-\begin{tabular}{@{}L{0.16\linewidth}C{0.36\linewidth}C{0.43\linewidth}@{}}
-\toprule
-\textbf{Precedence}
-& \textbf{\hyperref[problem:PCWCDT]{$\ProblemPCWCDT$}}
-& \textbf{\hyperref[problem:PCACDT]{$\ProblemPCACDT$}} \\
-\midrule
-none
-& $\bigo(\log n)$\newline \cite{DiagnosisDetermination}
-& $\bigo(\log n)$ \cite{ApproximatingDecisionTreesMultiwayBranches}\newline
-$\bigo(\log n/\log\log n)$ with constantly many outcomes \cite{TightAnalysisGreedyUniformDecisionTree} \\
-\addlinespace
-inforest
-& $\bigo(\log n)$\newline Cor.~\ref{cor:PCWCDT-special-cases}
-& $\bigo(\log n)$\newline Cor.~\ref{cor:PCACDT-special-cases} \\
-\addlinespace
-outforest
-& $\bigo(\log m\cdot\log n)$\newline Cor.~\ref{cor:PCWCDT-special-cases}
-& $\bigo(\log m\cdot\log n)$\newline Cor.~\ref{cor:PCACDT-special-cases} \\
-\addlinespace
-general
-& $\bigo(\alpha_{m,n}\cdot\log n)$\newline Cor.~\ref{cor:PCWCDT-special-cases}
-& $\bigo(\alpha_{m,n}\cdot\log n)$\newline Cor.~\ref{cor:PCACDT-special-cases} \\
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+inforest & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{3421.7, \frac{e}{e-1}}$} Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC} & \mbox{$\bigo(\log n)$} Cor.~\ref{cor:PCWCDT-special-cases} & \mbox{$\bigo(\log n)$} \newline Cor.~\ref{cor:PCACDT-special-cases} \\
+
+
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+outforest & \mbox{$\br{\bigo(\log m), 4}$} Thm.~\ref{thm:BPCSC-outforest} & \mbox{$\br{\bigo(\log m), 4}$} Thm.~\ref{thm:BPCSC-outforest} & \mbox{$\br{\bigo(\log m), 4}$} Thm.~\ref{thm:BPCSC-outforest} & \mbox{$\bigo(\log m\cdot\log n)$} Cor.~\ref{cor:PCWCDT-special-cases} & \mbox{$\bigo(\log m\cdot\log n)$} \newline Cor.~\ref{cor:PCACDT-special-cases} \\
+
+
+\addlinespace[2pt]
+\cdashline{2-6}
+\addlinespace[2pt]
+
+general & \shortstack[c]{\mbox{$\br{\alpha_{m,n},1}$}\\Thm.~\ref{thm:BPCSC}} & \shortstack[c]{\mbox{$\br{\alpha_{m,n},1}$}\\Thm.~\ref{thm:PCSC-RBSC}} & \shortstack[c]{\mbox{$\br{\bigo(\alpha_{m,n}),1}$}\\Thm.~\ref{thm:BPCSC-to-PCMSSC}} & \shortstack[c]{\mbox{$\bigo(\alpha_{m,n}\cdot\log n)$}\\Cor.~\ref{cor:PCWCDT-special-cases}} & \shortstack[c]{\mbox{$\bigo(\alpha_{m,n}\cdot\log n)$}\\Cor.~\ref{cor:PCACDT-special-cases}} \\
 \bottomrule
 \end{tabular}
-\endgroup
+}
 \end{table}

@@ -96,7 +96,7 @@ We introduce \textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$
 At last we concern ourselves with some special cases of precedence relations. For the inforests, where each test/set has at most one child, we show that $\ProblemBPCSC$ can be encoded as an instance of the well-known \textsc{Maximum Coverage}. This allows us to obtain an $\bigo(\log n)$-approximation for $\ProblemPCWCDT$ and $\ProblemPCACDT$. For the case of outforests, for which every test/set has at most one parent, we show that $\ProblemBPCSC$ can be reduced to \textsc{Group Steiner Orienteering} on trees, which yields an $\br{\bigo\br{\log m}, 4}$-bicriteria approximation for $\ProblemBPCSC$, and as a consequence $\bigo\br{\log m\cdot\log n}$-approximations for $\ProblemPCWCDT$ and $\ProblemPCACDT$.
 For this subcase, the connection between our problems and graph exploration becomes apparent, since any sequence of sets becomes a tour of the precedence graph.
 % The hierarchy of our reductions, is illustrated by Figure~\ref{fig:reductions}.
-Our results and the best known from the literature, are summarized in Table~\ref{tab:results}.
+Table~\ref{tab:results} compares our approximation guarantees with the known bounds. We write $\alpha_{m,n}=\bigo(m^{1/3}\cdot\log^{4/3}m\cdot\log n)$ for the factor used in the general-precedence covering bounds.
 
 \par\endgroup
 \input{tables/approximation_results.tex}
@@ -104,12 +104,12 @@ Our results and the best known from the literature, are summarized in Table~\ref
 
 
 \paragraph{Hardness Results.} 
-Section~\ref{sec:hardness} provides two technical routes towards obtaining lower bounds. Firstly, we refine the construction of \cite{PCMSSC}, which maps graphs from the \textsc{Planted Dense Subgraph Conjecture} ($\ProblemPDS$) to precedence-constrained covering instances. We improve this construction by encoding $r$-cliques instead of graph edges and we give a sharpened probabilistic analysis, improving $\br{\bigo\br{n^{1/6-\epsilon}}}$ and $\br{\bigo\br{m^{1/12-\epsilon}}}$ lower bounds to bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- and $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-inapproximability for both $\ProblemPCSC$ and $\ProblemPCMSSC$. These bounds hold for every fixed target fraction $f\in(0,1]$, even when the precedence DAG has height two.
+Section~\ref{sec:hardness} provides two technical routes towards obtaining lower bounds. Firstly, we refine the construction of \cite{PCMSSC}, which maps graphs from the \textsc{Planted Dense Subgraph Conjecture} ($\ProblemPDS$) to precedence-constrained covering instances. We improve this construction by encoding $r$-cliques instead of graph edges and we give a sharpened probabilistic analysis, improving $\br{\bigo\br{n^{1/6-\epsilon}}}$ and $\br{\bigo\br{m^{1/12-\epsilon}}}$ lower bounds to bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- and $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-inapproximability for both $\ProblemPCSC$ and $\ProblemPCMSSC$. These bounds hold for every fixed target fraction $f\in(0,1]$ and every fixed coverage-loss factor $\kappa\geq1$, even when the precedence DAG has height two.
 
 We also give an entirely new reduction from \textsc{Label Cover}. 
 In our construction the universe consists of the constraints of the \textsc{Label Cover} instance. For each vertex-label pair, a bundle of empty sets encodes choosing that label. A singleton witness set covers a constraint only after the bundles for a satisfying pair of endpoint labels have been selected.
 Then, based on several hardness results and conjectures regarding \textsc{Label Cover}, we derive the following results for precedence-constrained coverings (Theorem~\ref{thm:label-cover-hardness}).
-For $x\in\brc{n,m}$, neither covering objective can have a bicriteria $\br{\br{\log x}^{\bigo\br{1}},\br{\log x}^{\bigo\br{1}}}$ guarantee, unless $\text{P}=\text{NP}$. Parallel repetition rules out $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$-approximation for $0<\epsilon<1$ under ETH. Under the Projection Games Conjecture and $\text{P}\ne\text{NP}$, there is a constant $\delta>0$ for which neither covering objective admits a bicriteria $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$-approximation. The covering instances have height-two precedence DAGs and sets of size at most one.
+For every fixed target fraction $f\in(0,1]$ and $x\in\brc{n,m}$, neither covering objective can have a bicriteria $\br{\br{\log x}^{\bigo\br{1}},\br{\log x}^{\bigo\br{1}}}$ guarantee, unless $\text{P}=\text{NP}$. Parallel repetition rules out $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$-approximation for $0<\epsilon<1$ under ETH. Under the Projection Games Conjecture and $\text{P}\ne\text{NP}$, there is a constant $\delta>0$ for which neither covering objective admits a bicriteria $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$-approximation. The covering instances have height-two precedence DAGs and sets of size at most one.
 
 For the special case of outforests, for any $\epsilon>0$ we establish $\bigo(\log^{2-\epsilon} n)$-hardness of approximating $\ProblemPCSC$ via a reduction from \textsc{Group Steiner Tree} on trees, which is known to be hard to approximate within $\bigo(\log^{2-\epsilon} n)$-factor, unless $\text{NP}\subseteq \text{ZTIME}(n^{\text{polylog}(n)})$.
 This naturally extends to $\ProblemPCWCDT$ via our reduction hierarchy. A similar result also holds for $\ProblemPCMSSC$, however here $f\neq 1$ and thus the reduction does not carry over to $\ProblemPCACDT$. See Table~\ref{tab:hardness} for a summary.
@@ -120,6 +120,8 @@ This naturally extends to $\ProblemPCWCDT$ via our reduction hierarchy. A simila
 %     \caption{Inapproximability relations between problems, $\Pi_1 \to \Pi_2$ denotes that an inapproximability result for problem $\Pi_1$ implies an inapproximability result for problem $\Pi_2$.}
 %     \label{fig:hardness_diagram}
 % \end{figure}
+
+In Table~\ref{tab:hardness}, the unconstrained covering bounds concern $f=1$. The bounds without precedence constraints and the Label Cover bounds concern deterministic algorithms, with $0<\epsilon<1$ in the subpolynomial rows. Here $\text{QP}$ denotes deterministic quasipolynomial time.
 
 \input{tables/hardness_results.tex}
 
