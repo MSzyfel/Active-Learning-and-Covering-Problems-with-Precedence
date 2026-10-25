@@ -1,7 +1,7 @@
 {
   "baseline": "a273eac88aad177fe4f954caa3e5251b36749ee9",
   "branch": "szyfel",
-  "completed_rounds": 23,
+  "completed_rounds": 24,
   "changed_rounds": [
     5,
     6,
@@ -12,7 +12,8 @@
     16,
     17,
     19,
-    23
+    23,
+    24
   ],
   "rounds": [
     {
@@ -301,6 +302,41 @@
           "undefined_references": 0,
           "overfull_boxes": 0,
           "build_log": "build/round-023-main_arxiv-build.txt"
+        }
+      ]
+    },
+    {
+      "round": 24,
+      "topic": "Prior and test-cost assumptions",
+      "outcome": "changed",
+      "evidence": "Make unit test costs and the uniform prior explicit beside the sum-of-depths objective.",
+      "reviewer": "review_02",
+      "consulted_reviewers": [
+        "review_01",
+        "review_02",
+        "review_03",
+        "review_04",
+        "review_05",
+        "review_06",
+        "review_07",
+        "review_08",
+        "review_09",
+        "review_10"
+      ],
+      "validation": [
+        {
+          "edition": "main",
+          "pages": 38,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-024-main-build.txt"
+        },
+        {
+          "edition": "main_arxiv",
+          "pages": 32,
+          "undefined_references": 0,
+          "overfull_boxes": 0,
+          "build_log": "build/round-024-main_arxiv-build.txt"
         }
       ]
     }
