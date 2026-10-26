@@ -460,13 +460,13 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     All three bounds hold even when the precedence DAG has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
-    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting Label Cover soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The output has $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
+    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textsc{Label Cover} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The \DDfix{set cover instaces have} $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
     \begin{equation}\label{eq:label-cover-gap-criterion}
         \alpha\cdot\kappa^{3/2}=o(s^{-1/2}).
     \end{equation}
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
-        \item Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} give NP-hard Label Cover instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} give NP-hard \textsc{Label Cover} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
         \item The PCP theorem and parallel repetition \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition} give, after totalization, $s=2\beta_0^\tau$ and $h,Q\leq L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x\leq L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
@@ -487,7 +487,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     For every $\epsilon>0$, $\ProblemPCSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    Group Steiner Tree on trees with $g$ groups is hard to approximate within $\bigo\br{\log^{2-\epsilon}g}$ unless $\text{NP}\subseteq\text{ZTIME}\br{g^{\text{polylog}(g)}}$ \cite{PolylogarithmicInapproximability}. The hard instances in \cite[Section~3.3]{PolylogarithmicInapproximability} are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$.
+    \textsc{Group Steiner Tree} on trees with $g$ groups is hard to approximate within $\bigo\br{\log^{2-\epsilon}g}$ unless $\text{NP}\subseteq\text{ZTIME}\br{g^{\text{polylog}(g)}}$ \cite{PolylogarithmicInapproximability}. The hard instances in \cite[Section~3.3]{PolylogarithmicInapproximability} are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$.
 
     Let $(T=(V,E),d,r,\cX)$ be such an instance. Discard groups containing $r$, which are already met. Set $\cU=\cX$ and $f=1$. For each $v\neq r$, let $e_v$ be its parent edge and create a chain of $d(e_v)$ indexed \emph{representative sets}
     \[
@@ -503,7 +503,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     For every $\epsilon>0$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
 \end{theorem}
 \begin{proof}
-    Start from the hard $\ProblemGST$ instances and the vertex-representative construction in the proof of Theorem~\ref{thm:PCSC-outforest-hardness}, with integer and polynomially bounded edge lengths. Let $g=\spr{\cX}\geq2$, put $L=\sum_{e\in E(T)}d\br{e}$, and introduce $D=[L\cdot g]$, disjoint from $\cX$. Set $\cU=\cX\cup D$ and $f=g/\spr{\cU}$. In addition to the vertex representatives, create a chain $S_1\preceq\cdots\preceq S_{L\cdot g+1}$, where the first $L\cdot g$ sets are empty and $S_{L\cdot g+1}=D$.
+    Take a $\ProblemGST$ instance and consider the vertex-representative construction in the proof of Theorem~\ref{thm:PCSC-outforest-hardness}, with integer and polynomially bounded edge lengths. Let $g=\spr{\cX}\geq2$, put $L=\sum_{e\in E(T)}d\br{e}$, and introduce $D=[L\cdot g]$, disjoint from $\cX$. Set $\cU=\cX\cup D$ and $f=g/\spr{\cU}$. In addition to the vertex representatives, create a chain $S_1\preceq\cdots\preceq S_{L\cdot g+1}$, where the first $L\cdot g$ sets are empty and $S_{L\cdot g+1}=D$.
 
     A proper prefix of the new chain covers no elements and can be deleted. Taking all vertex representatives gives a feasible sequence $\sigma$ with
     \[
