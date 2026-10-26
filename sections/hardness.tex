@@ -1,24 +1,24 @@
 \section{Hardness} \label{sec:hardness}
 
 \subsection{Hardness from Planted Dense Subgraph}
-We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out approximation factors $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$. The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ retains the original use of edges.
-
-Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$. Second, we sharpen the probabilistic analysis to handle $r$-cliques in random graphs. This also strengthens the bounds for $r=2$, giving factors $\bigo\br{n^{1/4-\epsilon}}$ and $\bigo\br{m^{1/8-\epsilon}}$. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
+We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out approximation factors $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$. The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
+Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$. Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving factors $\bigo\br{n^{1/4-\epsilon}}$ and $\bigo\br{m^{1/8-\epsilon}}$-inapproximability even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
 Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
 
 \subsubsection{Planted dense subgraphs and clique witnesses}
-Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph on vertex set $[N]$ with edge probability $p$. We use the \emph{log-density parameter} $\alpha$ to specify the distribution $G(N,N^{\alpha-1})$, whose expected vertex degree is $\Theta(N^\alpha)$.
+Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph with vertices $1,\ldots,N$, in which each pair of distinct vertices is joined by an edge independently with probability $p$. Write $E(G)$ for the edge set of $G$. An \emph{$r$-clique} is a set of $r$ vertices with every pair joined by an edge. For a vertex set $X$, let $G[X]$ be the graph consisting of the vertices in $X$ and all edges of $G$ between them, and let $\binom{X}{r}$ denote the family of all $r$-element subsets of $X$. We use the \emph{log-density parameter} $\alpha$ to specify the distribution $G(N,N^{\alpha-1})$, whose expected vertex degree is $\Theta(N^\alpha)$.
+Unless stated otherwise, limits in this subsection are taken as $N\to\infty$, with $r$ fixed. We write $\log$ for the natural logarithm and \emph{with high probability} for probability $1-o(1)$. A subscript on $\bigo$ indicates which fixed parameters its implicit constant may depend on.
 We use the following hardness assumption \cite{OnApproxTargetSetSelection}, also used in \cite{PCMSSC}.
-\begin{conjecture}[\textsc{Planted Dense Subgraph Conjecture} (PDS)] \label{problem:PDS}
-    Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when they have equal prior probabilities:
+\begin{conjecture}[\textsc{Planted Dense Subgraph} conjecture (PDS)] \label{problem:PDS}
+    Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when each distribution is chosen with probability $1/2$:
     \begin{itemize}
         \item the \emph{null distribution} $G(N,N^{\alpha-1})$,
         \item the \emph{planted distribution} obtained by choosing a uniform $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, and including edges independently with probability $k^{\beta-1}$ inside $\mathcal{P}$ and $N^{\alpha-1}$ elsewhere.
     \end{itemize}
 \end{conjecture}
 
-We use the following concentration bounds.
+We use the following probability inequalities.
 \begin{theorem}[Markov's Inequality]\label{thm:markov}
     Let $X$ be a nonnegative random variable with finite expectation. Then, for every $t>0$,
     \[
@@ -35,21 +35,26 @@ We use the following concentration bounds.
 \end{theorem}
 
 \begin{lemma}\label{lem:PDS-clique-count}
-    Fix an integer $r\geq2$, a constant $\zeta>0$, and log density $\alpha=(r-1)/(r+1)$. For $G\sim G(N,N^{\alpha-1})$, let $F_G(X)$ be the number of cliques on exactly $r$ vertices contained in $X\subseteq[N]$. With probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
+    Fix an integer $r\geq2$, a constant $\zeta>0$, and set $\alpha=(r-1)/(r+1)$. For a graph $G$ on $[N]$ and $X\subseteq[N]$, let $F_G(X)$ be the number of $r$-cliques contained in $X$. If $G\sim G(N,N^{\alpha-1})$, then with probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
     \[
         F_G(X)\leq C_r \cdot N^\zeta \cdot \br{\br{\frac{\spr{X}}{N^\alpha}}^r+\spr{X} \cdot \log N},
     \]
     where $C_r$ depends only on $r$.
 \end{lemma}
 \begin{proof}
-    Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set the \emph{moment order} $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$. Fix a candidate edge $e\in\binom{[N]}{2}$, and let
+    Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$. We will bound the expected value of $Z_e^s$ for the clique count $Z_e$ defined below. Fix a pair of vertices $e\in\binom{[N]}{2}$, and define
     \[
-        \mathcal{K}_e=\left\{K\in\binom{[N]}{r}:e\subseteq K\right\},
-        \qquad
-        I_K=\mathbf{1}\!\left\{\binom{K}{2}\subseteq E(G)\right\},
+        \mathcal{K}_e=\left\{K\in\binom{[N]}{r}:e\subseteq K\right\}.
+    \]
+    For each $K\in\mathcal K_e$, define
+    \[
+        I_K=\begin{cases}
+            1,&\text{if every pair of vertices in }K\text{ is an edge of }G,\\
+            0,&\text{otherwise},
+        \end{cases}
         \qquad Z_e=\sum_{K\in\mathcal K_e}I_K.
     \]
-    Here $\mathcal K_e$ consists of the candidate $r$-vertex sets containing both endpoints of $e$, and $I_K$ is the \emph{indicator} that $K$ induces a clique. Thus $Z_e$ counts these cliques and is zero if $e\notin E(G)$. Writing the $s$th power as a product of $s$ sums and distributing gives
+    Thus $\mathcal K_e$ consists of all $r$-vertex sets containing both endpoints of $e$, $I_K$ is $1$ when $K$ is a clique, and $Z_e$ counts these cliques (and is zero if $e\notin E(G)$). Writing the $s$th power as a product of $s$ sums and distributing gives
     \[
         Z_e^s
         =\br{\sum_{K\in\mathcal K_e}I_K}^s
@@ -57,44 +62,44 @@ We use the following concentration bounds.
         =\sum_{(K_1,\ldots,K_s)\in\mathcal K_e^s}
         \prod_{i=1}^s I_{K_i}.
     \]
-    Each factor contributes one choice $K_i\in\mathcal K_e$, so the sum runs over ordered $s$-tuples, with repetitions allowed. We count these tuples in their given order. For a fixed prefix $K_1,\ldots,K_{i-1}$, put
+    Each factor contributes one choice $K_i\in\mathcal K_e$, so the sum runs over ordered lists of $s$ sets, with repetitions allowed. We count these choices in their given order. For fixed earlier choices $K_1,\ldots,K_{i-1}$, put
     \[
         U_{i-1}=e\cup\bigcup_{a=1}^{i-1}K_a,\qquad
         j_i=\spr{K_i\setminus U_{i-1}},\qquad 0\leq j_i\leq r-2.
     \]
     There are at most $(i-1)\cdot(r-2)\leq s\cdot r$ vertices in $U_{i-1}\setminus e$. For each possible value of $j_i$, the $r-2-j_i$ vertices of $K_i$ in $U_{i-1}\setminus e$ and its $j_i$ vertices outside $U_{i-1}$ can therefore be chosen in at most $\binom{s\cdot r}{r-2-j_i}\cdot N^{j_i}$ ways.
 
-    Condition on $e$ and all preceding cliques being present. At most $\binom{r-j_i}{2}$ edges of $K_i$ have already been required, since such edges must have both endpoints in $U_{i-1}$. The remaining edges are independent of this conditioning. Thus the conditional probability that $K_i$ is a clique is at most $N^{-(1-\alpha)\cdot(R-\binom{r-j_i}{2})}$. For each $j_i$, the total conditional contribution is bounded by $\binom{s\cdot r}{r-2-j_i}$ times
+    Condition on the event that $e$ is an edge and each of $K_1,\ldots,K_{i-1}$ is a clique. At most $\binom{r-j_i}{2}$ edges of $K_i$ have already been required, since such edges must have both endpoints in $U_{i-1}$. The remaining edges are independent of this conditioning. Thus the conditional probability that $K_i$ is a clique is at most $N^{-(1-\alpha)\cdot(R-\binom{r-j_i}{2})}$. For each $j_i$, summing this probability over all choices of $K_i$ with that value of $j_i$ gives at most $\binom{s\cdot r}{r-2-j_i}$ times
     \[
         N^{j_i} \cdot N^{-(1-\alpha)\cdot(R-\binom{r-j_i}{2})}
         =N^{j_i-\frac{2}{r+1}\cdot(R-\binom{r-j_i}{2})}
         =N^{j_i\cdot(j_i-r+2)/(r+1)}\leq1,
     \]
-    since $j_i\leq r-2$. Summing over $j_i=0,\ldots,r-2$ bounds the total conditional contribution of all choices of $K_i$ by a constant depending only on $r,s$, uniformly in the prefix. Successively summing over $K_s,\ldots,K_1$ in the moment expansion therefore gives $\mathbb{E}[Z_e^s\mid e\in E(G)]\leq C_{r,\zeta}$ for a constant $C_{r,\zeta}$ independent of $N$.
-    Since $Z_e=0$ when $e\notin E(G)$, also $\mathbb{E}[Z_e^s]\leq C_{r,\zeta}$. Using $Z_e\geq0$, applying Theorem~\ref{thm:markov} to $Z_e^s$, and taking a union bound over fewer than $N^2$ possible edges gives
+    since $j_i\leq r-2$. Summing over $j_i=0,\ldots,r-2$ bounds the sum of these conditional probabilities by a constant depending only on $r,s$, independently of the earlier choices. Successively summing over $K_s,\ldots,K_1$ in the expansion of $Z_e^s$ therefore gives $\mathbb{E}[Z_e^s\mid e\in E(G)]\leq C_{r,\zeta}$ for a constant $C_{r,\zeta}$ independent of $N$.
+    Since $Z_e=0$ when $e\notin E(G)$, also $\mathbb{E}[Z_e^s]\leq C_{r,\zeta}$. Apply Theorem~\ref{thm:markov} to $Z_e^s$ and use the union bound: the probability that at least one of a collection of events occurs is at most the sum of their probabilities. Summing over fewer than $N^2$ possible edges gives
     \begin{align*}
-        &\Pr[\exists e\in E(G):Z_e>N^\zeta]
-        =\Pr[\exists e\in E(G):Z_e^s>N^{s\cdot\zeta}]\\
-        &\leq\sum_{e\in\binom{[N]}{2}}\frac{\mathbb{E}[Z_e^s]}{N^{s\cdot\zeta}}
-        \leq C_{r,\zeta} \cdot N^{2-s\cdot\zeta}\leq\frac{C_{r,\zeta}}{N}=o(1).
+        \Pr[\exists e\in E(G)\colon Z_e>N^\zeta]
+        &=\Pr[\exists e\in E(G)\colon Z_e^s>N^{s\cdot\zeta}]\\
+        &\leq\sum_{e\in\binom{[N]}{2}}\frac{\mathbb{E}[Z_e^s]}{N^{s\cdot\zeta}}\\
+        &\leq C_{r,\zeta} \cdot N^{2-s\cdot\zeta}\leq\frac{C_{r,\zeta}}{N}=o(1).
     \end{align*}
 
-    Next let $B_G(X)$ be the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$, and write $x=\spr{X}$. For every positive integer $t$, counting candidate collections and using independence of their disjoint edge sets gives
+    Next let $B_G(X)$ be the independence number of the auxiliary graph whose vertices are the $r$-cliques of $G[X]$, with two distinct vertices adjacent if and only if the corresponding cliques share an edge of $G$. Thus $B_G(X)$ is the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$, meaning that no two selected cliques share an edge. Write $x=\spr{X}$. For every positive integer $t$, counting possible collections of $t$ such cliques and using independence of their disjoint edge sets gives
     \[
         \Pr[B_G(X)\geq t]
         \leq\binom{\binom{x}{r}}{t} \cdot N^{-r\cdot\alpha\cdot t}
         \leq\br{\frac{e}{t}\cdot\br{\frac{x}{N^\alpha}}^r}^t.
     \]
-    Here the probability is zero if $t>\binom{x}{r}$. Otherwise, the first inequality is a union bound over the candidate collections of $t$ cliques. Each collection has exactly $R\cdot t$ distinct edges, whose presence events are independent. The second inequality uses $\binom{x}{r}\leq x^r$ and $\binom{a}{t}\leq(e\cdot a/t)^t$. Put
+    Here the probability is zero if $t>\binom{x}{r}$. Otherwise, the first inequality uses the union bound over collections of $t$ $r$-element subsets of $X$ whose required edge sets are pairwise disjoint. Each such collection requires $R\cdot t$ distinct edges, whose independent presence events have joint probability $N^{-(1-\alpha)\cdot R\cdot t}=N^{-r\cdot\alpha\cdot t}$. The second inequality uses $\binom{x}{r}\leq x^r$ and the standard binomial coefficient bound $\binom{a}{t}\leq a^t/t!\leq(e\cdot a/t)^t$, which follows from $t!\geq(t/e)^t$. Put
     \[
         t_x=\left\lceil e^2 \cdot \br{\br{\frac{x}{N^\alpha}}^r+x \cdot \log N}\right\rceil.
     \]
-    This is the threshold for the union bound over $x$-vertex sets. Since $t_x\geq e^2\cdot(x/N^\alpha)^r$ and $t_x\geq2\cdot x\cdot\log N$, the displayed tail bound gives
-    \[
+    We use this value when applying the union bound over all $x$-vertex sets. Its definition gives $t_x\geq e^2\cdot(x/N^\alpha)^r$ and $t_x\geq e^2\cdot x\cdot\log N\geq2\cdot x\cdot\log N$. Substituting $t=t_x$ into the preceding probability bound and using these two lower bounds in turn yields
+    \begin{align*}
         \Pr[B_G(X)\geq t_x]
-        \leq e^{-t_x}
-        \leq N^{-2\cdot x}.
-    \]
+        &\leq\br{\frac{e}{t_x}\cdot\br{\frac{x}{N^\alpha}}^r}^{t_x}\leq\br{\frac{e}{e^2\cdot(x/N^\alpha)^r}\cdot\br{\frac{x}{N^\alpha}}^r}^{t_x}\\
+        &=\br{\frac{1}{e}}^{t_x}=e^{-t_x}\leq e^{-2\cdot x\cdot\log N}=N^{-2\cdot x}.
+    \end{align*}
     There are at most $N^x$ choices for $X$ of size $x$. Therefore
     \[
         \Pr[\exists X\neq\emptyset:B_G(X)\geq t_{\spr{X}}]
@@ -104,7 +109,7 @@ We use the following concentration bounds.
     \]
     Thus, with probability $1-o(1)$, $B_G(X)<t_x$, and hence $B_G(X)\leq e^2\cdot\br{(x/N^\alpha)^r+x\cdot\log N}$, for every nonempty $X$ simultaneously.
 
-    On the first high-probability event, each edge belongs to at most $N^\zeta$ cliques. Consequently, any fixed $r$-clique shares an edge with at most $R\cdot N^\zeta$ cliques, by summing this bound over its $R$ edges. Repeatedly select one remaining clique in $X$ and delete every clique sharing one of its edges. Each selected clique deletes at most $R\cdot N^\zeta$ cliques. The selected cliques are pairwise edge-disjoint, so their number is at most $B_G(X)$. Thus
+    Whenever each edge belongs to at most $N^\zeta$ cliques, any fixed $r$-clique shares an edge with at most $R\cdot N^\zeta$ cliques, by summing this bound over its $R$ edges. Repeatedly select one remaining clique in $X$ and delete every clique sharing one of its edges. Each selected clique deletes at most $R\cdot N^\zeta$ cliques. The selected cliques form an independent set in the auxiliary graph, so their number is at most $B_G(X)$. Thus
     \[
         F_G(X)\leq R \cdot N^\zeta \cdot B_G(X)
         \leq e^2\cdot R \cdot N^\zeta \cdot \br{\br{\frac{x}{N^\alpha}}^r+x \cdot \log N}
@@ -123,79 +128,171 @@ We use the following concentration bounds.
         \alpha=\frac{r-1}{r+1},\qquad \beta=\alpha-\frac{\epsilon}{2\cdot R},
         \qquad k=\lfloor\sqrt{N}\rfloor.
     \]
-    Here $k$ is the number of planted vertices, and $\alpha,\beta$ are the log-density parameters of the background graph and the graph induced by $\mathcal P$, with edge probabilities $N^{\alpha-1}$ and $k^{\beta-1}$, respectively. Since $\epsilon/(2\cdot R)<\min\{\alpha,1-\alpha\}$, we have $0<\beta<\alpha<1$ and $2\cdot\alpha<1+\beta$, as required by Conjecture~\ref{problem:PDS}. Define
+    Here $k$ is the number of vertices in $\mathcal P$. In the null case every edge has probability $N^{\alpha-1}$. In the planted case edges with both endpoints in $\mathcal P$ have probability $k^{\beta-1}$, while all other edges have probability $N^{\alpha-1}$. Since $\epsilon/(2\cdot R)<\min\{\alpha,1-\alpha\}$, we have $0<\beta<\alpha<1$ and $2\cdot\alpha<1+\beta$, as required by Conjecture~\ref{problem:PDS}. Define
     \[
         n=\lceil k^{r-(1-\beta)\cdot R}\rceil=\Theta(N^\gamma),\qquad
         \gamma=\frac{r}{r+1}-\frac\epsilon4,\qquad
         \lambda=\lceil n/k\rceil,\qquad p=\frac{\log^2 N}{n^{1/r}}.
     \]
-    The universe size $n$ is of the same order as the expected number of planted $r$-cliques, and $\gamma$ is its exponent in $N$. Each graph vertex will have $\lambda$ empty representative sets. The choice $\lambda=\lceil n/k\rceil$ makes the cost $\lambda\cdot k=\Theta(n)$ of the planted representatives comparable to the expected number of planted clique sets. The probability $p$ determines membership in the auxiliary sets. Our choice of $\epsilon$ gives $1/2<\gamma<1$, hence $k=o(n)$ and $p=o(1)$.
+    The universe size $n$ is of the same order as the expected number of $r$-cliques contained in $\mathcal P$, and $\gamma$ is its exponent in $N$. We will create $\lambda$ empty selectable sets for each graph vertex and one selectable set for each $r$-clique. The choice $\lambda=\lceil n/k\rceil$ makes the number $\lambda\cdot k=\Theta(n)$ of empty sets for the vertices in $\mathcal P$ comparable to the expected number of cliques contained in $\mathcal P$. The probability $p$ will determine the contents of the sets below. Our choice of $\epsilon$ gives $1/2<\gamma<1$, hence $k=o(n)$ and $p=o(1)$.
 
-    The universe is $\cU=[n]$, with target fraction $f$. Given the input graph $G$ on $[N]$, create $\lambda$ \emph{representative sets} $V_{v,i}=\emptyset$ for every vertex $v$. Independently of $G$, include each $j\in[n]$ in each \emph{auxiliary set} $\cU_v$ independently with probability $p$.
-    For every clique $K$ of $G$ on exactly $r$ vertices, create the \emph{witness set} $E_K=\bigcap_{v\in K}\cU_v$. The family of selectable sets is
+    The universe is $\cU=[n]$, with target fraction $f$. Given the input graph $G$ on $[N]$, create the \emph{representative sets} $V_{v,i}=\emptyset$ for every $v\in[N]$ and $i\in[\lambda]$. For each $v\in[N]$, form an \emph{auxiliary set} $\cU_v\subseteq\cU$ by including each $j\in[n]$ independently with probability $p$. Make these choices independently for all pairs $(v,j)$ and independently of $G$.
+    For every $K\in\binom{[N]}{r}$, define $E_K=\bigcap_{v\in K}\cU_v$. If $K$ is a clique of $G$, include $E_K$ as a selectable \emph{witness set}. The family of selectable sets is
     \[
         \cS=\{V_{v,i}:v\in[N],\ i\in[\lambda]\}
         \cup\{E_K:K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
     \]
-    with distinct indices even when two sets have identical contents. The sets $\cU_v$ are auxiliary. Impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. The resulting precedence DAG has height two.
+    with distinct indices even when two sets have identical contents. The sets $\cU_v$ are used only to define the witness sets and are not themselves selectable. For every $r$-clique $K$ of $G$, impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. Thus selecting $E_K$ requires selecting all $\lambda$ representatives of every vertex in $K$. All precedence arcs go from representative sets to witness sets, so a directed path has at most one edge and the precedence DAG has height two.
 
-    Our choice of $p$ gives $\mathbb E[\spr{E_K}]=n\cdot p^r=\log^{2\cdot r}N$ for each clique $K$. The null-case analysis bounds all witness sizes by twice this mean with high probability, so the clique-count bound controls the coverage available from any small vertex set. The planted component must nevertheless supply a witness for every universe element. We prove this by finding cliques in disjoint groups of planted vertices whose auxiliary sets contain the element.
+    Our choice of $p$ gives $\mathbb E[\spr{E_K}]=n\cdot p^r=\log^{2\cdot r}N$ for each clique $K$. The null-case analysis bounds all witness sizes by twice this mean with high probability, so the clique-count bound limits how many elements can be covered by witnesses indexed by cliques in a small vertex set. The planted component, $G[\mathcal P]$, must supply a witness for every universe element. We prove this by finding cliques in disjoint subsets of $\mathcal P$ whose auxiliary sets all contain that element.
 
-    \par\noindent\textbf{Planted clique count.}
-    Condition throughout the planted-case analysis on a fixed vertex set $\mathcal P$. All bounds below are uniform in $\mathcal P$. Its induced graph has distribution $G(k,k^{\beta-1})$. Let $W$ count its $r$-cliques. Markov's inequality gives
+    \par\noindent\textbf{Planted component.}
+    Condition throughout the following claims on a fixed vertex set $\mathcal P$. The bounds do not depend on which $k$-vertex set was chosen.
+    Define the family of representatives and witnesses for the planted vertices by
     \[
-        \mathbb{E}[W]=\binom{k}{r}\cdot k^{-(1-\beta)\cdot R}\leq\frac{n}{r!}\leq\frac n2,
-        \qquad \Pr[W>n]\leq\frac{\mathbb{E}[W]}{n}\leq\frac12.
+        \cC_{\mathcal P}
+        =\{V_{v,i}:v\in\mathcal P,\ i\in[\lambda]\}
+        \cup\{E_K:K\in\textstyle\binom{\mathcal P}{r},\ K\text{ is a clique of }G\}.
     \]
-    Let $\cC_{\mathcal P}$ consist of all planted vertex representatives and all planted clique witnesses. Since $k=o(n)$, we have $\lambda\cdot k\leq2\cdot n$ for sufficiently large $N$. Thus $\spr{\cC_{\mathcal P}}=\lambda\cdot k+W\leq3\cdot n$ with probability at least $1/2$. This constant probability suffices for the distinguishing argument below.
+    \begin{claim}[Size of the planted family]\label{claim:PDS-planted-size}
+        For sufficiently large $N$, $\Pr[\spr{\cC_{\mathcal P}}\leq3\cdot n]\geq1/2$.
+    \end{claim}
+    \begin{proof}
+        The graph $G[\mathcal P]$ has distribution $G(k,k^{\beta-1})$, and its $r$-clique count is $F_G(\mathcal P)$. Markov's inequality gives
+        \begin{align*}
+            \mathbb{E}[F_G(\mathcal P)]&=\binom{k}{r}\cdot k^{-(1-\beta)\cdot R}\leq\frac{n}{r!}\leq\frac n2,\qquad
+            \Pr[F_G(\mathcal P)>n]\leq\frac{\mathbb{E}[F_G(\mathcal P)]}{n}\leq\frac12.
+        \end{align*}
+        Since $k=o(n)$, we have $\lambda\cdot k\leq2\cdot n$ for sufficiently large $N$. Thus $\spr{\cC_{\mathcal P}}=\lambda\cdot k+F_G(\mathcal P)\leq3\cdot n$ with probability at least $1/2$.
+    \end{proof}
 
-    \par\noindent\textbf{Planted coverage.}
-    Fix $j\in[n]$. A vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $Z_j=\spr{\{v\in\mathcal{P}:j\in\cU_v\}}$ count these marked vertices. This variable is binomial with mean
+    For each $j\in[n]$, a vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $\mathcal M_j=\{v\in\mathcal P:j\in\cU_v\}$ be the random set of marked vertices, and let $m_j=\spr{\mathcal M_j}$ be its size.
+    \begin{claim}[Number of marked vertices]\label{claim:PDS-marked-size}
+        For each fixed $j\in[n]$ and sufficiently large $N$,
+        \[
+            \Pr[m_j<p\cdot k/2]\leq N^{-1}.
+        \]
+    \end{claim}
+    \begin{proof}
+    The variable $m_j$ is binomial with mean
     \[
-        \mathbb{E}[Z_j]=p\cdot k=\Theta\br{\log^2 N\cdot k^{(1-\beta)\cdot(r-1)/2}}.
+        \mathbb{E}[m_j]=p\cdot k=\Theta\br{\log^2 N\cdot k^{(1-\beta)\cdot(r-1)/2}}.
     \]
-    Since $\beta<1$, we have $p\cdot k/\log N\to\infty$. Chernoff's inequality with $\theta=1/2$ therefore gives $\Pr[Z_j<p\cdot k/2]\leq e^{-p\cdot k/8}\leq N^{-1}$ for sufficiently large $N$. We use disjoint blocks of marked vertices to obtain independent chances of covering $j$.
+    Since $\beta<1$, we have $p\cdot k/\log N\to\infty$. Chernoff's inequality with $\theta=1/2$ therefore gives $\Pr[m_j<p\cdot k/2]\leq e^{-p\cdot k/8}\leq N^{-1}$ for sufficiently large $N$.
+    \end{proof}
 
-    Each block will have $z=\lceil2\cdot r\cdot k^{(1-\beta)\cdot(r-1)/2}\rceil$ vertices. Since $\beta<1$ and $n\to\infty$, we have $z\to\infty$ and $z/k=\Theta_r(n^{-1/r})=o(1)$. Condition on all vertex marks and denote this information by $\mathcal M$. For a block $S$ of $z$ marked vertices chosen using only $\mathcal M$, the set $S$ is fixed under this conditioning and $G[S]\sim G(z,k^{\beta-1})$. For each $K\in\binom{S}{r}$, let $I_K$ indicate that $K$ is a clique, and set $Y=\sum_{K\in\binom{S}{r}}I_K$. Its conditional mean, which does not depend on the particular marks, is
+    To prove that every universe element is covered, we will find an $r$-clique among its marked vertices. The next claim bounds the probability that one fixed subset contains no such clique.
+
+    Set $z=\lceil2\cdot r\cdot k^{(1-\beta)\cdot(r-1)/2}\rceil$, the number of vertices in each subset. Since $\beta<1$ and $n\to\infty$, we have $z\to\infty$ and $z/k=\Theta_r(n^{-1/r})=o(1)$. For every $S\in\binom{\mathcal P}{z}$ and $K\in\binom{S}{r}$, define
     \[
-        \mu_Y=\mathbb{E}[Y\mid\mathcal M]=\binom{z}{r} \cdot k^{-(1-\beta)\cdot R}
+        I_{S,K}=\begin{cases}
+            1,&\text{if }\binom{K}{2}\subseteq E(G),\\
+            0,&\text{otherwise},
+        \end{cases}
+        \qquad
+        Y_S=\sum_{K\in\binom{S}{r}}I_{S,K}.
+    \]
+    Thus $Y_S$ counts the $r$-cliques in $G[S]$.
+    \begin{claim}[Clique in a fixed subset]\label{claim:PDS-subset-clique}
+        For every fixed $j\in[n]$, $M\subseteq\mathcal P$ with $\spr{M}\geq z$, and $S\in\binom{M}{z}$, we have
+        \[
+            \Pr[Y_S=0\mid\mathcal M_j=M]\leq1/2
+        \]
+        for sufficiently large $N$.
+    \end{claim}
+    \begin{proof}
+    Fix $j,M,S$ as in the statement, and condition on the event $\mathcal M_j=M$. This event means that $j\in\cU_v$ for every $v\in M$ and $j\notin\cU_v$ for every $v\in\mathcal P\setminus M$. Since the auxiliary sets are chosen independently of $G$, this conditioning leaves the graph edges independent with their original probabilities. The subset $S$ is fixed, so $G[S]\sim G(z,k^{\beta-1})$. The conditional mean of $Y_S$, which is the same for every such $M$ and $S$, is
+    \[
+        \mu_S=\mathbb{E}[Y_S\mid\mathcal M_j=M]=\binom{z}{r} \cdot k^{-(1-\beta)\cdot R}
         \longrightarrow\frac{(2\cdot r)^r}{r!}\geq2^r\geq4.
     \]
-    In the variance of $Y$, the diagonal terms sum to at most $\mu_Y$. Indicators for cliques sharing at most one vertex are independent, since they depend on disjoint edge sets. For $2\leq a\leq r-1$, there are $\bigo_r(z^{2\cdot r-a})$ ordered pairs sharing $a$ vertices. Each pair requires $2\cdot R-\binom a2$ distinct edges, so its covariance is at most its joint probability $k^{-(1-\beta)\cdot(2\cdot R-\binom a2)}$. Consequently,
-    \[
-        \frac{\operatorname{Var}(Y\mid\mathcal M)}{\mu_Y^2}
-        \leq\frac{1}{\mu_Y}+\bigo_r\br{\sum_{a=2}^{r-1}z^{-a}\cdot k^{(1-\beta)\cdot\binom{a}{2}}}
-        =\frac{1}{\mu_Y}+\bigo_r\br{\sum_{a=2}^{r-1}k^{-(1-\beta)\cdot a\cdot(r-a)/2}}
-        =\frac{1}{\mu_Y}+o(1),
-    \]
-    since $z=\Theta_r(k^{(1-\beta)\cdot(r-1)/2})$ and $\beta<1$. For $r=2$, the sums are empty.
-    By Chebyshev's inequality, $\Pr[Y=0\mid\mathcal M] \leq\frac{\operatorname{Var}(Y\mid\mathcal M)}{\mu_Y^2}$. The upper bound $1/\mu_Y+o(1)$ tends to $r!/(2\cdot r)^r\leq1/4$, uniformly over the marks, so $\Pr[Y=0\mid\mathcal M]\leq1/2$ for all sufficiently large $N$.
+    Expanding the conditional variance of this sum gives
+    \begin{align*}
+        \operatorname{Var}(Y_S\mid\mathcal M_j=M)=\sum_{K\in\binom{S}{r}}\operatorname{Var}(I_{S,K}\mid\mathcal M_j=M)\quad+\sum_{K,L\in\binom{S}{r}\colon K\neq L}
+        \operatorname{Cov}(I_{S,K},I_{S,L}\mid\mathcal M_j=M).
+    \end{align*}
+    Since $I_{S,K}$ takes values $0$ and $1$, its conditional variance is at most its conditional expectation. The first sum is therefore at most $\mu_S$.
 
-    Use $\ell=\lceil\log_2 N\rceil$ disjoint blocks for each universe element. Since
+    Consider two distinct sets $K,L\in\binom{S}{r}$. If $\spr{K\cap L}\leq1$, then $\binom{K}{2}$ and $\binom{L}{2}$ are disjoint edge sets. Hence $I_{S,K}$ and $I_{S,L}$ are conditionally independent, and their conditional covariance is zero.
+
+    For $2\leq a\leq r-1$, define
     \[
-        \ell\cdot z=\bigo_r\br{k^{(1-\beta)\cdot(r-1)/2}\cdot\log N}=o(p\cdot k),
+        Q_{S,a}=\spr{\left\{(K,L)\in\binom{S}{r}\times\binom{S}{r}:\spr{K\cap L}=a\right\}}.
     \]
-    we have $\ell\cdot z\leq p\cdot k/2$ for sufficiently large $N$, so $Z_j\geq p\cdot k/2$ supplies enough marked vertices. Choose the blocks using only the marks. Conditional on the marks, their induced graphs are independent copies of $G(z,k^{\beta-1})$ because they use disjoint edge sets. If no planted witness covers $j$, then none of these blocks contains a clique, an event of conditional probability at most $2^{-\ell}\leq N^{-1}$. A union bound over the $n=\bigo(N^\gamma)$ universe elements gives
+    We count these pairs by choosing $K$, then the $a$ vertices of $L$ inside $K$, and then its $r-a$ vertices outside $K$. This gives
+    \begin{align*}
+        Q_{S,a}&=\binom{z}{r}\cdot\binom{r}{a}\cdot\binom{z-r}{r-a}\leq\frac{z^r}{r!}\cdot\binom{r}{a}\cdot\frac{(z-r)^{r-a}}{(r-a)!}\\
+        &\leq\frac{\binom{r}{a}}{r!\cdot(r-a)!}\cdot z^r\cdot z^{r-a}=\frac{\binom{r}{a}}{r!\cdot(r-a)!}\cdot z^{2\cdot r-a}
+        =\bigo_r(z^{2\cdot r-a}).
+    \end{align*}
+    The first inequality uses $\binom{u}{v}\leq u^v/v!$, and the second uses $z-r\leq z$. The last bound holds because $\binom{r}{a}/(r!\cdot(r-a)!)$ is bounded by a constant depending only on $r$ for $2\leq a\leq r-1$.
+
+    For each such pair $(K,L)$, both indicators equal $1$ iff all edges in $\binom{K}{2}\cup\binom{L}{2}$ are present. This union contains $2\cdot R-\binom{a}{2}$ distinct edges, so
+    \begin{align*}
+        \operatorname{Cov}(I_{S,K},I_{S,L}\mid\mathcal M_j=M)
+        &\leq\mathbb{E}[I_{S,K}\cdot I_{S,L}\mid\mathcal M_j=M]=k^{-(1-\beta)\cdot(2\cdot R-\binom{a}{2})}.
+    \end{align*}
+    The inequality holds because, for nonnegative random variables, covariance is at most the expectation of their product.
+    Group the covariance terms according to $a=\spr{K\cap L}$. For each $a=2,\ldots,r-1$, there are $Q_{S,a}$ ordered pairs, each with the covariance bound above. Adding their contributions to the individual variances and dividing by $\mu_S^2$ gives
+    \begin{align*}
+        \frac{\operatorname{Var}(Y_S\mid\mathcal M_j=M)}{\mu_S^2}
+        &\leq\frac{1}{\mu_S}+\frac{1}{\mu_S^2}\sum_{a=2}^{r-1}Q_{S,a}\cdot k^{-(1-\beta)\cdot(2\cdot R-\binom{a}{2})}=\frac{1}{\mu_S}+\bigo_r\br{\sum_{a=2}^{r-1}z^{-a}\cdot k^{(1-\beta)\cdot\binom{a}{2}}}\\
+        &=\frac{1}{\mu_S}+\bigo_r\br{\sum_{a=2}^{r-1}k^{-(1-\beta)\cdot a\cdot(r-a)/2}}=\frac{1}{\mu_S}+o(1).
+    \end{align*}
+    The first equality substitutes $Q_{S,a}=\bigo_r(z^{2\cdot r-a})$ and $\mu_S^2=\Theta_r(z^{2\cdot r}\cdot k^{-2\cdot(1-\beta)\cdot R})$. The next equality uses $z=\Theta_r(k^{(1-\beta)\cdot(r-1)/2})$. Since $\beta<1$ and $2\leq a\leq r-1$, each power of $k$ in the sum tends to zero, giving the final equality. For $r=2$, the sums are empty.
+    Chebyshev's inequality, $\Pr[|Y_S-\mu_S|\geq\mu_S\mid\mathcal M_j=M]\leq\operatorname{Var}(Y_S\mid\mathcal M_j=M)/\mu_S^2$, implies
+    \[
+        \Pr[Y_S=0\mid\mathcal M_j=M]
+        \leq\frac{\operatorname{Var}(Y_S\mid\mathcal M_j=M)}{\mu_S^2}.
+    \]
+    The upper bound $1/\mu_S+o(1)$ tends to $r!/(2\cdot r)^r\leq1/4$, with the same bound for every such $M$ and $S$. Thus $\Pr[Y_S=0\mid\mathcal M_j=M]\leq1/2$ for all sufficiently large $N$.
+    \end{proof}
+
+    \begin{claim}[Coverage by the planted family]\label{claim:PDS-planted-coverage}
+        With probability $1-o(1)$, $\cov\br{\cC_{\mathcal P}}=\cU$.
+    \end{claim}
+    \begin{proof}
+    Fix $j\in[n]$ and set $\ell=\lceil\log_2 N\rceil$. We will apply Claim~\ref{claim:PDS-subset-clique} to $\ell$ subsets of $\mathcal M_j=\{v\in\mathcal P:j\in\cU_v\}$, each of size $z$, with no vertex belonging to two subsets. To verify that enough marked vertices are available, note that
+    \[
+        \ell\cdot z=\bigo_r\br{k^{(1-\beta)\cdot(r-1)/2}\cdot\log N}=o(p\cdot k).
+    \]
+    Thus $\ell\cdot z\leq p\cdot k/2$ for sufficiently large $N$. Recall that $m_j=\spr{\mathcal M_j}$ counts the vertices $v\in\mathcal P$ for which $j\in\cU_v$. Whenever $m_j\geq p\cdot k/2$, there are therefore at least $\ell\cdot z$ marked vertices from which to choose the subsets.
+
+    Fix any possible marked set $M$ with $\spr{M}\geq p\cdot k/2$, and condition on $\mathcal M_j=M$. We now choose $S_1,\ldots,S_\ell$ from $M$: choose any $z$ vertices of $M$ for $S_1$, then $z$ vertices not yet chosen for $S_2$, and continue for $\ell$ steps. This is possible because $\spr{M}\geq\ell\cdot z$. Make these choices without inspecting the edges of $G$. The resulting subsets satisfy
+    \[
+        S_i\subseteq M,\qquad \spr{S_i}=z\quad(i\in[\ell]),
+        \qquad S_i\cap S_h=\emptyset\quad(i\neq h).
+    \]
+    Conditional on $\mathcal M_j=M$, all these subsets are fixed. The graphs $G[S_1],\ldots,G[S_\ell]$ have independent edges, each present with probability $k^{\beta-1}$, and no edge belongs to two of these graphs. Therefore the counts $Y_{S_1},\ldots,Y_{S_\ell}$ are conditionally independent. Claim~\ref{claim:PDS-subset-clique} gives $\Pr[Y_{S_i}=0\mid\mathcal M_j=M]\leq1/2$ for each $i\in[\ell]$. If no witness indexed by a clique contained in $\mathcal P$ covers $j$, then $Y_{S_1}=\cdots=Y_{S_\ell}=0$, an event of conditional probability at most $2^{-\ell}\leq N^{-1}$. Averaging over these possible values of $\mathcal M_j$ and including the possibility of too few marked vertices gives
+    \[
+        \Pr[\text{no planted witness covers }j]
+        \leq\Pr[m_j<p\cdot k/2]+2^{-\ell}
+        \leq N^{-1}+2^{-\ell}.
+    \]
+    A union bound over the $n=\bigo(N^\gamma)$ universe elements gives
     \[
         \Pr[\text{some }j\in[n]\text{ has no planted witness}]
-        \leq n \cdot \br{e^{-p\cdot k/8}+2^{-\ell}}
+        \leq n \cdot \br{N^{-1}+2^{-\ell}}
         \leq\frac{2\cdot n}{N}=\bigo(N^{\gamma-1})=o(1),
     \]
-    since $\gamma<1$. Independence between coverage events for different elements is not required. Thus $\cov\br{\cC_{\mathcal P}}=\cU$ with probability $1-o(1)$. Combining this with the planted clique-count bound, the precedence-closed family $\cC_{\mathcal P}$ is a full cover with $\spr{\cC_{\mathcal P}}\leq3\cdot n$ with probability at least $1/2-o(1)$.
+    since $\gamma<1$. Here the bound on $\Pr[m_j<p\cdot k/2]$ is Claim~\ref{claim:PDS-marked-size}. Independence between coverage events for different elements is not required. Thus $\cov\br{\cC_{\mathcal P}}=\cU$ with probability $1-o(1)$.
+    \end{proof}
+
+    Combining Claims~\ref{claim:PDS-planted-size} and~\ref{claim:PDS-planted-coverage} by the union bound, the precedence-closed family $\cC_{\mathcal P}$ covers all universe elements and has $\spr{\cC_{\mathcal P}}\leq3\cdot n$ with probability at least $1/2-o(1)$. This bound is conditional on the planted case; Conjecture~\ref{problem:PDS} measures success when the null and planted distributions are each chosen with probability $1/2$.
 
     \par\noindent\textbf{Null case.}
-    Apply Lemma~\ref{lem:PDS-clique-count} with exponent $\epsilon/8$. With high probability, simultaneously for every nonempty $X\subseteq[N]$,
+    Apply Lemma~\ref{lem:PDS-clique-count} with $\zeta=\epsilon/8$. With high probability, simultaneously for every nonempty $X\subseteq[N]$,
     \[
         F_G(X)\leq C_r \cdot N^{\epsilon/8} \cdot \br{\br{\frac{\spr{X}}{N^\alpha}}^r+\spr{X} \cdot \log N}.
     \]
-    For every potential $r$-vertex subset $K$, the size of $\bigcap_{v\in K}\cU_v$ has distribution $\operatorname{Bin}(n,p^r)$: membership of each universe element requires $r$ independent inclusions, and different universe elements are independent. Its mean is
+    For every $K\in\binom{[N]}{r}$, the size $\spr{E_K}$ has the binomial distribution $\operatorname{Bin}(n,p^r)$: each of the $n$ universe elements belongs to $E_K$ independently with probability $p^r$. Its mean is
     \[
         \mu_E=n\cdot p^r=\log^{2\cdot r} N.
     \]
     Applying the stated Chernoff bound with $\theta=1/2$ gives
     \[
-        \Pr[|E_K|>2\cdot\mu_E]
-        \leq\Pr[|E_K|\geq\tfrac32\cdot\mu_E]
+        \Pr[\spr{E_K}>2\cdot\mu_E]
+        \leq\Pr[\spr{E_K}\geq\tfrac32\cdot\mu_E]
         \leq e^{-\mu_E/12}.
     \]
     A union bound over at most $N^r$ choices of $K$ has failure probability at most $N^r\cdot e^{-\mu_E/12}=o(1)$. Thus, with probability $1-o(1)$, the clique-count bound holds together with
@@ -204,15 +301,15 @@ We use the following concentration bounds.
     \]
     Set $x_0=\lfloor n\cdot N^{-\epsilon/4}\rfloor$, the threshold on the number of graph vertices in the following coverage bound.
     \begin{claim}\label{claim:PDS-no-coverage}
-        For $X\subseteq[N]$, let $\cC_X=\{E_K:K\subseteq X\}$ be the family of clique witnesses \emph{supported on} $X$. With high probability in the null case, every $X$ with $\spr{X}\leq x_0$ satisfies $\spr{\cov\br{\cC_X}}\leq f\cdot n/(2\cdot\kappa)$.
+        For $X\subseteq[N]$, let $\cC_X=\{E_K:K\in\binom{X}{r},\ K\text{ is a clique of }G\}$ be the family of witness sets indexed by $r$-cliques contained in $X$. With high probability in the null case, every $X$ with $\spr{X}\leq x_0$ satisfies $\spr{\cov\br{\cC_X}}\leq f\cdot n/(2\cdot\kappa)$.
     \end{claim}
     \begin{proof}
         Since $n=\bigo(N^{r/(r+1)})$, we have $n^{r-1}/N^{r\cdot\alpha}=\bigo_r(1)$. Thus, for $0<x=\spr{X}\leq x_0\leq n$, the clique-count bound gives $F_G(X)=\bigo_r(N^{\epsilon/8}\cdot x\cdot\log N)$. Using $\spr{\cov\br{\cC_X}}\leq\sum_{E_K\in\cC_X}\spr{E_K}$, we obtain
         \[
             \frac{\spr{\cov\br{\cC_X}}}{n}
             \leq\frac{2\cdot\log^{2\cdot r} N}{n}\cdot F_G(X)
-            \leq\bigo_r\br{\frac{\log^{2\cdot r+1} N}{n}\cdot N^{\epsilon/8}\cdot x_0}
-            \leq\bigo_r\br{\log^{2\cdot r+1} N\cdot N^{-\epsilon/8}}=o(1).
+            =\bigo_r\br{\frac{\log^{2\cdot r+1} N}{n}\cdot N^{\epsilon/8}\cdot x_0}
+            =\bigo_r\br{\log^{2\cdot r+1} N\cdot N^{-\epsilon/8}}=o(1).
         \]
         Since $f$ and $\kappa$ are fixed, the fraction is at most $f/(2\cdot\kappa)$ for sufficiently large $N$. The assertion is immediate when $X$ is empty.
     \end{proof}
@@ -222,7 +319,7 @@ We use the following concentration bounds.
         \spr{\cC}\geq\lambda \cdot \spr{X}>\lambda \cdot x_0.
     \]
 
-    \par\noindent\textbf{Gap and instance size.}
+    \par\noindent\textbf{Comparing the costs and bounding the number of sets.}
     Since $\gamma-\epsilon/4>0$, we have $x_0=\Theta(N^{\gamma-\epsilon/4})$ and $x_0\to\infty$. Since $\lambda\geq n/k$, the ratio between the null cost lower bound and the planted cover upper bound is at least
     \[
         \frac{\lambda \cdot x_0}{3\cdot n}
@@ -231,14 +328,14 @@ We use the following concentration bounds.
         g=\gamma-\frac12-\frac\epsilon4
         =\frac\alpha2-\frac\epsilon2>0.
     \]
-    Thus $g$ is the exponent in the lower bound on the cost gap in terms of $N$. The output has $\lambda\cdot N$ representative sets and one witness per input clique, so $m=\lambda\cdot N+F_G([N])$. We bound this clique count under both source distributions.
+    Thus $g$ is the exponent in the lower bound on this cost ratio in terms of $N$. The constructed family has $\lambda\cdot N$ representative sets and one witness set per $r$-clique of $G$, so its number of selectable sets is $m=\lambda\cdot N+F_G([N])$. We bound this clique count in both the null and planted cases.
 
     In the null case,
     \[
         \mathbb{E}[F_G([N])]=\binom{N}{r}\cdot N^{-(1-\alpha)\cdot R}
         =\bigo(N^{r-r\cdot\alpha})=\bigo(N^{1+\alpha}).
     \]
-    In the planted case, let $F_{G,j}$ count the $r$-cliques with exactly $j$ vertices in $\mathcal P$, for $0\leq j\leq r$. Since $\beta<\alpha$ and $(1-\alpha)\cdot\binom j2\leq j$, conditional on $\mathcal P$ we have
+    In the planted case, let $F_{G,j}$ count the $r$-cliques with $j$ vertices in $\mathcal P$, for $0\leq j\leq r$. Since $\beta<\alpha$ and $(1-\alpha)\cdot\binom j2\leq j$, conditional on $\mathcal P$ we have
     \begin{align*}
         \mathbb{E}[F_{G,j}\mid\mathcal P]
         &=\binom{k}{j} \cdot \binom{N-k}{r-j} \cdot k^{-(1-\beta)\cdot\binom{j}{2}} \cdot N^{-(1-\alpha)\cdot(R-\binom j2)}\\
@@ -272,8 +369,13 @@ We use the following concentration bounds.
         m^{(r-1)/(4\cdot r)-\epsilon}=o(N^g).
     \]
 
-    If the approximation algorithm is randomized, amplify its success probability to $1-o(1)$ by independent repetitions, retaining the cheapest precedence-feasible output covering at least $f\cdot n/\kappa$ elements.
-    To obtain a distinguisher, first check whether $\cov\br{\cS}=\cU$, which is computable from the explicit output. If not, declare the null case. Planted coverage shows that this happens with probability $o(1)$ in the planted case. Otherwise run the purported bicriteria algorithm with cost approximation factor $a$, and let $\cC$ be its output. In the planted case $\spr{\cC}\leq3\cdot a\cdot n$ with probability at least $1/2-o(1)$, while in the null case $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$ implies $\spr{\cC}>\lambda\cdot x_0$ with probability $1-o(1)$. The exponent inequalities above imply $a=o(\lambda\cdot x_0/n)$ for either stated $n$- or $m$-based approximation. Thus, for sufficiently large $N$, declaring the null case when $\spr{\cC}>\lambda\cdot x_0$ and the planted case otherwise succeeds with probability at least $3/4-o(1)$ under equal priors, contradicting Conjecture~\ref{problem:PDS}.
+    If the approximation algorithm is randomized with a fixed positive success probability, run it independently $\lceil\log_2 N\rceil$ times and retain the output with the fewest sets among those that respect precedence and cover at least $f\cdot n/\kappa$ elements. The probability that every repetition fails to achieve the approximation guarantee is $o(1)$. If no output meets the precedence and coverage requirements, declare the null case.
+    We now describe an algorithm deciding whether the input graph comes from the null or planted distribution. First check whether $\cov\br{\cS}=\cU$, using the constructed set family $\cS$. If not, declare the null case. The planted coverage bound shows that this happens with probability $o(1)$ in the planted case. Otherwise run the assumed bicriteria algorithm with cost approximation factor $a$, using the repetitions just described if needed, and let $\cC$ be its output. In the planted case $\spr{\cC}\leq3\cdot a\cdot n$ with probability at least $1/2-o(1)$, while in the null case $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$ implies $\spr{\cC}>\lambda\cdot x_0$ with probability $1-o(1)$. The exponent inequalities above imply $a=o(\lambda\cdot x_0/n)$ for either stated $n$- or $m$-based approximation. Thus, for sufficiently large $N$, declaring the null case when $\spr{\cC}>\lambda\cdot x_0$ and the planted case otherwise recognizes the null case with probability $1-o(1)$ and the planted case with probability at least $1/2-o(1)$. Since each distribution is chosen with probability $1/2$, the overall success probability is at least
+    \[
+        \frac12\cdot\br{1-o(1)}+\frac12\cdot\br{\frac12-o(1)}
+        =\frac34-o(1).
+    \]
+    This exceeds $1/2$ by a fixed positive constant for sufficiently large $N$, contradicting Conjecture~\ref{problem:PDS}.
 \end{proof}
 
 \begin{theorem}\label{thm:PCMSSC-PDS-clique-hardness}
@@ -281,17 +383,17 @@ We use the following concentration bounds.
     Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence DAG has height two.
 \end{theorem}
 \begin{proof}
-    Use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, ordering $\cC_{\mathcal P}$ topologically gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
+    Use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, placing all representative sets of $\cC_{\mathcal P}$ before its witness sets gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
     \[
         \coverageTime\br{\cC,\cU}\leq3\cdot n^2.
     \]
 
-    In the null case, put $T=\lambda\cdot x_0\in\mathbb{Z}$, the number of representative sets for $x_0$ vertices. Let $\cC$ be any precedence-closed sequence with $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$. Its selected sets form a precedence-closed family meeting the same coverage target, so the cardinality soundness proof gives $\spr{\cC}>T$. Consider $\pref{\cC}{T}$, and let $X$ be the vertices for which all $\lambda$ representative sets have appeared in this prefix. Then
+    In the null case, put $T=\lambda\cdot x_0\in\mathbb{Z}$, the number of representative sets for $x_0$ vertices. Let $\cC$ be any precedence-closed sequence with $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$. Its selected sets form a precedence-closed family meeting the same coverage target, so the preceding null-case lower bound gives $\spr{\cC}>T$. Consider $\pref{\cC}{T}$, the first $T$ sets in $\cC$, and let $X$ be the vertices for which all $\lambda$ representative sets have appeared among these sets. Then
     \[
         \lambda \cdot \spr{X}\leq T=\lambda \cdot x_0,
         \qquad\text{so}\qquad \spr{X}\leq x_0.
     \]
-    Precedence closure implies that every witness in the prefix is supported on $X$. Since the representative sets are empty, Claim~\ref{claim:PDS-no-coverage} gives $\spr{\cov\br{\pref{\cC}{T}}}\leq f\cdot n/(2\cdot\kappa)$. Hence
+    Precedence closure implies that every witness $E_K$ among the first $T$ sets has $K\subseteq X$. Since the representative sets are empty, Claim~\ref{claim:PDS-no-coverage} gives $\spr{\cov\br{\pref{\cC}{T}}}\leq f\cdot n/(2\cdot\kappa)$. Hence
     \[
         \spr{\cU\setminus\cov\br{\pref{\cC}{T}}}
         \geq n-\frac{f\cdot n}{2\cdot\kappa}
@@ -303,13 +405,13 @@ We use the following concentration bounds.
         \coverageTime\br{\cC,\cU}\geq\frac{n}{2} \cdot T
         =\frac{n \cdot \lambda \cdot x_0}{2}.
     \]
-    Comparing this with the planted upper bound $3\cdot n^2$ gives a latency gap
+    The ratio between this null-case lower bound on total coverage time and the planted upper bound $3\cdot n^2$ is
     \[
         \Omega\br{\frac{\lambda \cdot x_0}{n}}
         =\Omega\br{\frac{x_0}{k}}
         =\Omega(N^g).
     \]
-    The instance dimensions and exponent $g$ are the same as in Theorem~\ref{thm:PCSC-PDS-clique-hardness}, so its parameter choice gives both claimed latency gaps. After the same coverage feasibility precheck, declare the null case if the algorithm returns $\cC$ with $\coverageTime\br{\cC,\cU}\geq n\cdot T/2$, and the planted case otherwise. The planted case is recognized with probability at least $1/2-o(1)$ and the null case with probability $1-o(1)$, giving success probability at least $3/4-o(1)$ under equal priors and contradicting Conjecture~\ref{problem:PDS}.
+    The bounds on $n,m$ and the exponent comparison from Theorem~\ref{thm:PCSC-PDS-clique-hardness} apply unchanged. Its final distinguishing argument applies with the null case declared when $\coverageTime\br{\cC,\cU}\geq n\cdot T/2$; for a randomized algorithm, retain the sequence with the smallest total coverage time among outputs that respect precedence and meet the coverage target. This gives the same contradiction to Conjecture~\ref{problem:PDS}.
 \end{proof}
 
 For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in $n$ and $(r-1)/(4\cdot r)=1/4-1/(4\cdot r)$ in $m$. Thus $r=3$ gives exponents $1/3$ and $1/6$, and as $r\to\infty$ through fixed constants the two exponents converge to $1/2$ and $1/4$.
@@ -317,7 +419,7 @@ For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in
     Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed $f\in(0,1]$, and fixed $\kappa\geq1$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation with target fraction $f$.
 \end{corollary}
 \begin{proof}
-    Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with exponent loss $\epsilon/2$ and the given $f,\kappa$. The resulting hardness exponents satisfy
+    Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with their parameter $\epsilon$ set to $\epsilon/2$ and with the given $f,\kappa$. The resulting hardness exponents satisfy
     \[
         \frac{r-1}{2\cdot r}-\frac\epsilon2
         =\frac12-\frac{1}{2\cdot r}-\frac\epsilon2\geq\frac12-\epsilon
@@ -467,7 +569,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
         \item Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} give NP-hard \textsc{Label Cover} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
-        \item The PCP theorem and parallel repetition \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition} give, after totalization, $s=2\beta_0^\tau$ and $h,Q\leq L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x\leq L^{\bigo(\tau)}$,
+        \item The PCP theorem and parallel repetition \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition} give, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
             =\bigo\br{(\log L)^{(b+1)(1-\epsilon)}}
@@ -573,7 +675,7 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
         H_S=\{h_u^i:u\in\cU\setminus S,\ i\in\{0,1\}\},
         \qquad t_S=\bigl(\{\{h_u^i\}:u\in S,\ i\in\{0,1\}\}\cup\{H_S\}\bigr)\setminus\{\emptyset\}.
     \]
-    Impose $t_S\preceq t_T$ exactly when $S\preceq T$.
+    Impose $t_S\preceq t_T$ when $S\preceq T$.
 
     A decision tree can be normalized by pruning unreachable branches, deleting later occurrences of a test on a path, and stopping as soon as the hypothesis is identified. These operations do not increase its cost. Each test has at most one nonsingleton reply, so the internal nodes of a normalized tree $D$ form a single path. Let $\cC$ be the sequence of corresponding sets. It is precedence-closed and covers every $u\in\cU$, since $h_u^0$ and $h_u^1$ are indistinguishable until a set containing $u$ is tested. Moreover, $\COSTW\br{D}=\spr{\cC}$.
 
