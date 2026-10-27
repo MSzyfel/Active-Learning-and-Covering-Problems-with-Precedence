@@ -556,7 +556,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     For every fixed target fraction $f\in(0,1]$ and each $x\in\{n,m\}$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a deterministic polynomial-time bicriteria approximation with the following guarantees under the indicated assumptions:
     \begin{enumerate}
         \item\label{item:label-cover-polylog} $\br{\bigo\br{(\log x)^K},\bigo\br{(\log x)^J}}$ for any constants $K,J\geq0$, unless $\text{P}=\text{NP}$.
-        \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size. In particular, ETH rules out these guarantees.
+        \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size.
         \item\label{item:label-cover-polynomial} Assuming the \textsc{Projection Games Conjecture}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
     \end{enumerate}
     All three bounds hold even when the precedence DAG has height two and every set has size at most one.
@@ -708,7 +708,7 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
     \begin{enumerate}
         \item Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, neither $\ProblemPCWCDT$ nor $\ProblemPCACDT$ admits a polynomial-time $\bigo\br{n^{1/2-\epsilon}}$- or $\bigo\br{m^{1/4-\epsilon}}$-approximation.
         \item For every $x\in\{n,m\}$ and fixed $K>0$, neither problem admits a polynomial-time $\bigo\br{(\log x)^K}$-approximation unless $\text{P}=\text{NP}$.
-        \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input. In particular, ETH rules out these approximation factors.
+        \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input.
         \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
         \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\text{ZTIME}\br{n^{\text{polylog}(n)}}$.
     \end{enumerate}
