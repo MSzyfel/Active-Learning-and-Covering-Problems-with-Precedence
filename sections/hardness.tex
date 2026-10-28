@@ -531,7 +531,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     \]
     Such a sequence must cover all $g$ groups to meet the target. After scaling by $L\cdot g$, its coverage-time objective and $\spr{\sigma}$ differ by at most a factor of $1+1/L$. By Theorem~\ref{thm:PCSC-outforest-hardness}, minimizing $\spr{\sigma}$ corresponds to minimizing the cost of the Steiner tree. The source instances have $\spr{V}=g^{\bigo(1)}$ and polynomially bounded integer edge lengths, so $n=(L+1)g=g^{\bigo(1)}$ and $\log n=\Theta(\log g)$. The source hardness therefore gives the claimed bound.
 \end{proof}
-The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by discretizing the weighted MGL reduction of Szyfelbein. \DD{[cytowanie]}
+The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by discretizing the weighted MGL reduction of Szyfelbein \cite{szyfelbein2026minsumsetcoverparallel}.
 
 \begin{theorem}\label{thm:PCMSSC-outforest-full-cover-hardness}
     For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
