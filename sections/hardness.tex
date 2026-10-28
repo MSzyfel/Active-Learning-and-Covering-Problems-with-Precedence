@@ -14,7 +14,7 @@ We use the following hardness assumption \cite{OnApproxTargetSetSelection}, also
     Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when each distribution is chosen with probability $1/2$:
     \begin{itemize}
         \item the \emph{null distribution} $G(N,N^{\alpha-1})$,
-        \item the \emph{planted distribution} obtained by choosing a uniform $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, and including edges independently with probability $k^{\beta-1}$ inside $\mathcal{P}$ and $N^{\alpha-1}$ elsewhere.
+        \item the \emph{planted distribution} obtained by uniformly choosing $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, \DDfix{and setting the edge probabilites to be $k^{\beta-1}$ if both endpoints belong to $\mathcal{P}$ and $N^{\alpha-1}$ otherwise.}
     \end{itemize}
 \end{conjecture}
 
