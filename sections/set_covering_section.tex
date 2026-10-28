@@ -137,7 +137,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u\leq2\cdot t_u$.
         The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives $\coverageTime\br{\pi_{l^*}^+,\cU}\leq2\cdot\coverageTime\br{\pi_{l^*},\cU}\leq864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}=\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}$.
     \end{proof}
-Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo(\beta^2\log^2 m)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size; all applications below use constant $\beta$.
+Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo(\beta^2\log^2 m)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size. All applications below use constant $\beta$.
 By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
@@ -146,12 +146,18 @@ By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the cov
 It should be noted that in all cases when we use Theorem~\ref{thm:BPCSC-to-PCMSSC} we will have $\beta=\bigo\br{1}$, thus yielding a $\br{\bigo\br{\alpha}, \bigo\br{1}}$-approximation algorithm for $\ProblemPCMSSC$.
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
+In \emph{budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c:\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$.
+
+\begin{theorem}[Khuller, Moss and Naor \cite{TheBudgetedMaximumCoverageProblem}]\label{thm:budgeted-maximum-coverage-source}
+    There is a polynomial-time algorithm for budgeted Maximum Coverage that respects the budget and covers at least a $(1-1/e)$-fraction of the maximum number of elements coverable within that budget.
+\end{theorem}
+
 \begin{theorem}\label{thm:BPCSC-inforest}
     \setlength{\emergencystretch}{2em}
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    In \emph{budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c:\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$. This problem admits a $\br{1,\frac{e}{e-1}}$-approximation \cite{TheBudgetedMaximumCoverageProblem}.
+    We reduce $\ProblemBPCSC$ to budgeted Maximum Coverage and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
 
     Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,b)$, set $\cX=\cU$ and $B=b$. For each $S\in\cS$, create an indexed set $z_S=\cov\br{\closure{S}}$ with cost $c(z_S)=\spr{\closure{S}}$.
     In an inforest, intersecting closures are nested: $\closure{S}\cap\closure{W}\neq\emptyset$ implies $S\preceq W$ or $W\preceq S$.
@@ -178,6 +184,10 @@ Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cov\br{\tau}} w(X)$.
 \end{problem}
+The following tree-metric guarantee follows from the algorithm and analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
+\begin{theorem}[Gupta, Nagarajan and Ravi \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}, Section~5.1]\label{thm:gso-tree-source}
+    For a $\ProblemGSO$ instance on a tree metric $(V,d)$ with budget $\budget$, a polynomial-time algorithm finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least one quarter of the maximum weight coverable by an $r$-tour of length at most $\budget$.
+\end{theorem}
 % \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
 % Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w: \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
 % $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
@@ -189,8 +199,7 @@ $\sum_{X \in \cov\br{\tau}} w(X)$.
     There exist polynomial-time bicriteria $\br{\bigo\br{\log m}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics.
-    On tree metrics, the algorithm of \cite[Section~5.1]{ApproxAlgsForOptDTsAndAdapTSPProblems} returns a tour of length at most $\bigo\br{\log\spr{V}}\cdot b$ whose covered weight is at least one quarter of the optimum under budget $b$. This is a $\br{\bigo\br{\log\spr{V}},4}$-approximation in our cost/coverage convention. Our tree has $\spr{V}=m+1$ vertices. For general metrics, the same algorithm incurs an additional $\bigo\br{\log\spr{V}}$ factor from embedding into a tree metric; this step is unnecessary for our instance.
+    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Our tree has $\spr{V}=m+1$ vertices.
     
     We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
 

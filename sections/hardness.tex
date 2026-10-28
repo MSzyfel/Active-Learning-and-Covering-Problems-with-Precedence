@@ -278,7 +278,7 @@ We use the following probability inequalities.
     since $\gamma<1$. Here the bound on $\Pr[m_j<p\cdot k/2]$ is Claim~\ref{claim:PDS-marked-size}. Independence between coverage events for different elements is not required. Thus $\cov\br{\cC_{\mathcal P}}=\cU$ with probability $1-o(1)$.
     \end{proof}
 
-    Combining Claims~\ref{claim:PDS-planted-size} and~\ref{claim:PDS-planted-coverage} by the union bound, the precedence-closed family $\cC_{\mathcal P}$ covers all universe elements and has $\spr{\cC_{\mathcal P}}\leq3\cdot n$ with probability at least $1/2-o(1)$. This bound is conditional on the planted case; Conjecture~\ref{problem:PDS} measures success when the null and planted distributions are each chosen with probability $1/2$.
+    Combining Claims~\ref{claim:PDS-planted-size} and~\ref{claim:PDS-planted-coverage} by the union bound, the precedence-closed family $\cC_{\mathcal P}$ covers all universe elements and has $\spr{\cC_{\mathcal P}}\leq3\cdot n$ with probability at least $1/2-o(1)$. This bound is conditional on the planted case. Conjecture~\ref{problem:PDS} measures success when the null and planted distributions are each chosen with probability $1/2$.
 
     \par\noindent\textbf{Null case.}
     Apply Lemma~\ref{lem:PDS-clique-count} with $\zeta=\epsilon/8$. With high probability, simultaneously for every nonempty $X\subseteq[N]$,
@@ -411,7 +411,7 @@ We use the following probability inequalities.
         =\Omega\br{\frac{x_0}{k}}
         =\Omega(N^g).
     \]
-    The bounds on $n,m$ and the exponent comparison from Theorem~\ref{thm:PCSC-PDS-clique-hardness} apply unchanged. Its final distinguishing argument applies with the null case declared when $\coverageTime\br{\cC,\cU}\geq n\cdot T/2$; for a randomized algorithm, retain the sequence with the smallest total coverage time among outputs that respect precedence and meet the coverage target. This gives the same contradiction to Conjecture~\ref{problem:PDS}.
+    The bounds on $n,m$ and the exponent comparison from Theorem~\ref{thm:PCSC-PDS-clique-hardness} apply unchanged. Its final distinguishing argument applies with the null case declared when $\coverageTime\br{\cC,\cU}\geq n\cdot T/2$. For a randomized algorithm, retain the sequence with the smallest total coverage time among outputs that respect precedence and meet the coverage target. This gives the same contradiction to Conjecture~\ref{problem:PDS}.
 \end{proof}
 
 For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in $n$ and $(r-1)/(4\cdot r)=1/4-1/(4\cdot r)$ in $m$. Thus $r=3$ gives exponents $1/3$ and $1/6$, and as $r\to\infty$ through fixed constants the two exponents converge to $1/2$ and $1/4$.
@@ -442,6 +442,21 @@ and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a
 \end{itemize}
 We call the vertices in $A$ the \emph{left vertices} and the vertices in $B$ the \emph{right vertices}.
 We distinguish two types of projections. A \emph{total projection} has $D_e=\Sigma_A$ for every edge $e\in E$. A \emph{partial projection} allows $D_e\subsetneq\Sigma_A$ for some edges.
+
+The following source results provide the completeness and soundness gaps used in our reduction. In their statements, the size of a Label Cover instance is the size of its underlying graph, and the alphabet size is the larger of the two alphabet sizes.
+
+\begin{theorem}[Label Cover hardness \cite{AnalyticalApproachToParallelRepetition}]\label{thm:label-cover-source-hardness}
+    The following hold for \textsc{Label Cover} with perfect completeness:
+    \begin{enumerate}
+        \item\label{item:label-cover-source-polylog} For every constant $c_0>0$, it is NP-hard to distinguish instances of graph size $N_0$ and alphabet size at most $N_0$ with value $1$ from those with value at most $(\log N_0)^{-c_0}$ \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition}.
+        \item\label{item:label-cover-source-repetition} There are constants $a>1$ and $\beta_0\in(0,1)$ such that, for every integer $\tau\geq1$, a 3SAT instance of size $L$ can be transformed in time $L^{\bigo(\tau)}$ into a Label Cover instance of graph size $L^{\bigo(\tau)}$ and alphabet size at most $a^\tau$, with value $1$ if the 3SAT instance is satisfiable and value at most $\beta_0^\tau$ otherwise \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition}.
+    \end{enumerate}
+\end{theorem}
+
+The following consequence of the Projection Games Conjecture is stated in the form needed below. It follows by choosing an inverse-polynomial soundness parameter in the conjecture.
+\begin{conjecture}[Projection Games Conjecture, consequence of \cite{ProjectionGamesConjecture}]\label{conj:label-cover-source-pgc}
+    There is a constant $c>0$ and a polynomial-time reduction from 3SAT to \textsc{Label Cover} instances of graph size $N$ and alphabet size $N^{\bigo(1)}$ that maps satisfiable instances to instances of value $1$ and unsatisfiable instances to instances of value at most $N^{-c}$.
+\end{conjecture}
 
 Our reduction uses Label Cover instances with total projections.
 
@@ -568,44 +583,48 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \end{equation}
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
-        \item Dinur and Steurer \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition} give NP-hard \textsc{Label Cover} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
-        \item The PCP theorem and parallel repetition \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition} give, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
+        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives NP-hard \textsc{Label Cover} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item Part~\ref{item:label-cover-source-repetition} of Theorem~\ref{thm:label-cover-source-hardness} gives, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
             =\bigo\br{(\log L)^{(b+1)(1-\epsilon)}}
             =o(\tau),
         \]
         which implies~\eqref{eq:label-cover-gap-criterion}. The reduction and approximation algorithm run in time $L^{\bigo(\tau)}=2^{(\log L)^{\bigo(1)}}$, giving the stated containment.
-        \item The Projection Games Conjecture implies NP-hardness of total-projection Label Cover with soundness $s=N^{-c}$ and alphabet size $Q=N^{\bigo(1)}$ for some constant $c>0$ \cite[Conjecture~2.2]{ProjectionGamesConjecture}. Thus $x=N^{\bigo(1)}$. Choose a sufficiently small constant $\delta>0$ so that $x^{5\delta/2}=o(N^{c/2})$. This gives~\eqref{eq:label-cover-gap-criterion} for $\alpha,\kappa=\bigo(x^\delta)$.
+        \item Conjecture~\ref{conj:label-cover-source-pgc} gives Label Cover instances of graph size $N$ with soundness $N^{-c}$ and alphabet size $N^{\bigo(1)}$. After totalization, $s=2N^{-c}$ and $h,Q=N^{\bigo(1)}$, so $x=N^{\bigo(1)}$. Choose a sufficiently small constant $\delta>0$ so that $x^{5\delta/2}=o(N^{c/2})$. This gives~\eqref{eq:label-cover-gap-criterion} for $\alpha,\kappa=\bigo(x^\delta)$.
     \end{enumerate}
 \end{proof}
 
 \subsection{Outforest precedence constraints}
 \begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
-Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V$, and a family of groups $\cX\subseteq2^V$, find a subtree $T'$ containing $r$ and at least one vertex from each group, minimizing $\sum_{e\in E(T')}d(e)$.
+Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V$, and an indexed family of groups $\cX=(X_1,\ldots,X_g)$ with $X_j\subseteq V$ for each $j\in[g]$, find a subtree $T'$ containing $r$ and at least one vertex from each group, minimizing $\sum_{e\in E(T')}d(e)$.
 \end{problem}
 
+\begin{theorem}[Halperin and Krauthgamer \cite{PolylogarithmicInapproximability}, Theorem~1.1]\label{thm:source-GST-hardness}
+    For every $\epsilon>0$, \textsc{Group Steiner Tree} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+\end{theorem}
+
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
-    For every $\epsilon>0$, $\ProblemPCSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
-    \textsc{Group Steiner Tree} on trees with $g$ groups is hard to approximate within $\bigo\br{\log^{2-\epsilon}g}$ unless $\text{NP}\subseteq\text{ZTIME}\br{g^{\text{polylog}(g)}}$ \cite{PolylogarithmicInapproximability}. The hard instances in \cite[Section~3.3]{PolylogarithmicInapproximability} are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$.
+    We reduce from the hard instances of Theorem~\ref{thm:source-GST-hardness}. Those instances are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$ \cite[Section~3.3]{PolylogarithmicInapproximability}. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$, a property we use in the following min-sum reduction.
 
-    Let $(T=(V,E),d,r,\cX)$ be such an instance. Discard groups containing $r$, which are already met. Set $\cU=\cX$ and $f=1$. For each $v\neq r$, let $e_v$ be its parent edge and create a chain of $d(e_v)$ indexed \emph{representative sets}
+    Let $(T=(V,E),d,r,\cX)$ be such an instance. Its groups contain only leaves, so none contains $r$. Set $\cU=[g]$ and $f=1$. For each $v\neq r$, let $e_v$ be its parent edge and create a chain of $d(e_v)$ indexed \emph{representative sets}
     \[
         S_v^1\preceq\cdots\preceq S_v^{d(e_v)},\qquad
         S_v^i=\emptyset\ (i<d(e_v)),\qquad
-        S_v^{d(e_v)}=\{X\in\cX:v\in X\}.
+        S_v^{d(e_v)}=\{j\in[g]:v\in X_j\}.
     \]
     If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{d(e_u)}\preceq S_v^1$. Every set then has at most one immediate predecessor.
 
     In any precedence-closed cover, an incomplete representative chain can be deleted: it covers nothing and no selected descendant depends on it. After these deletions, the selected chains correspond to a rooted subtree meeting every group, and the cover cardinality equals the subtree's total edge length. Conversely, every such subtree gives a full cover of the same cost. Since the covering universe has $n=g$ elements, the claimed hardness follows.
 \end{proof}
 \begin{theorem}\label{thm:PCMSSC-outforest-hardness}
-    For every $\epsilon>0$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
-    Take a $\ProblemGST$ instance and consider the vertex-representative construction in the proof of Theorem~\ref{thm:PCSC-outforest-hardness}, with integer and polynomially bounded edge lengths. Let $g=\spr{\cX}\geq2$, put $L=\sum_{e\in E(T)}d\br{e}$, and introduce $D=[L\cdot g]$, disjoint from $\cX$. Set $\cU=\cX\cup D$ and $f=g/\spr{\cU}$. In addition to the vertex representatives, create a chain $S_1\preceq\cdots\preceq S_{L\cdot g+1}$, where the first $L\cdot g$ sets are empty and $S_{L\cdot g+1}=D$.
+    Take a $\ProblemGST$ instance from the hard family and consider the vertex-representative construction in the proof of Theorem~\ref{thm:PCSC-outforest-hardness}, with integer and polynomially bounded edge lengths. Let $g\geq2$ be its number of groups, put $L=\sum_{e\in E(T)}d\br{e}$, and introduce $D=\{g+1,\ldots,g+L\cdot g\}$, disjoint from $[g]$. Set $\cU=[g]\cup D$ and $f=g/\spr{\cU}$. In addition to the vertex representatives, create a chain $S_1\preceq\cdots\preceq S_{L\cdot g+1}$, where the first $L\cdot g$ sets are empty and $S_{L\cdot g+1}=D$.
 
     A proper prefix of the new chain covers no elements and can be deleted. Taking all vertex representatives gives a feasible sequence $\sigma$ with
     \[
@@ -622,7 +641,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     \[
         \coverageTime\br{\sigma,D}=L\cdot g\cdot\spr{\sigma},
         \qquad
-        0\leq\coverageTime\br{\sigma,\cX}\leq g\cdot\spr{\sigma}.
+        0\leq\coverageTime\br{\sigma,[g]}\leq g\cdot\spr{\sigma}.
     \]
     Adding these contributions gives
     \[
@@ -630,35 +649,63 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
         \leq\coverageTime\br{\sigma,\cU}
         \leq(L+1)\cdot g\cdot\spr{\sigma}.
     \]
-    Such a sequence must cover all $g$ groups to meet the target. After scaling by $L\cdot g$, its coverage-time objective and $\spr{\sigma}$ differ by at most a factor of $1+1/L$. By Theorem~\ref{thm:PCSC-outforest-hardness}, minimizing $\spr{\sigma}$ corresponds to minimizing the cost of the Steiner tree. The source instances have $\spr{V}=g^{\bigo(1)}$ and polynomially bounded integer edge lengths, so $n=(L+1)g=g^{\bigo(1)}$ and $\log n=\Theta(\log g)$. The source hardness therefore gives the claimed bound.
+    Such a sequence must cover all $g$ group indices to meet the target. Let $\OPT_{\mathrm{GST}}$ and $\OPT_{\mathrm{cover}}$ be the optima of the GST and constructed covering instances. A minimum-cost Steiner tree yields a representative-only sequence of length $\OPT_{\mathrm{GST}}$, so the upper bound above gives $\OPT_{\mathrm{cover}}\leq(L+1)g\cdot\OPT_{\mathrm{GST}}$. Given an $\alpha$-approximate covering sequence, first remove or replace the dummy chain as described above. The resulting sequence $\sigma$ has cost at most $\alpha\cdot\OPT_{\mathrm{cover}}$. Deleting incomplete representative chains gives a Steiner tree of cost at most $\spr{\sigma}$. The lower bound therefore gives
+    \[
+        \spr{\sigma}\leq\frac{\alpha\cdot\OPT_{\mathrm{cover}}}{Lg}
+        \leq\alpha\br{1+\frac1L}\OPT_{\mathrm{GST}}
+        \leq2\alpha\cdot\OPT_{\mathrm{GST}}.
+    \]
+    Unlike in the GST-to-PCSC reduction, the universe also contains $Lg$ dummy elements, so here $n=(L+1)g$. For the source instances, every scaled edge length is at most $\spr{V}$ and $\spr{V}=g^{\bigo(1)}$. Hence $L\leq\spr{V}^2=g^{\bigo(1)}$, which gives $n=g^{\bigo(1)}$ and $\log n=\Theta(\log g)$. The source hardness therefore gives the claimed bound.
 \end{proof}
-The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by discretizing the weighted MGL reduction of Szyfelbein. \DD{[cytowanie]}
+The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by representing the edges of a tree-metric MGL instance by chains of sets, as in the preceding GST reduction.
+
+\begin{problem}[\textsc{Minimum Group Latency} (MGL)] \label{problem:MGL}
+Given a finite metric space $(V,d)$, a root $r\in V$, and an indexed family of nonempty groups $X_1,\ldots,X_g\subseteq V$, find a route $P=(v_0,v_1,\ldots,v_\ell)$ with $v_0=r$ that visits at least one vertex of every group and minimizes its total latency $\lt\br{P}=\sum_{j=1}^{g}\lt\br{P,X_j}$, where the latency of group $X_j$ is
+\[
+    \lt\br{P,X_j}=\min_{\substack{0\leq i\leq\ell\\v_i\in X_j}}\sum_{h=1}^{i}d(v_{h-1},v_h).
+\]
+An empty sum is zero, and groups with the same members retain distinct indices.
+\end{problem}
+
+\begin{theorem}[Chakrabarty and Swamy \cite{ChakrabartySwamy2016FacilityLocationClientLatencies}, Theorem~2.5]\label{thm:source-MGL-hardness}
+    \setlength{\emergencystretch}{2em}
+    For every $\epsilon>0$, \textsc{Minimum Group Latency} on tree metrics with $g$ groups admits no polynomial-time $\bigo\br{\log^{1-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+\end{theorem}
 
 \begin{theorem}\label{thm:PCMSSC-outforest-full-cover-hardness}
-    For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
-    We reduce from \textsc{Minimum Group Latency} (MGL), which minimizes the sum, over all groups, \DDfix{of the distance from the root to the first vertex visited in that group}. On tree metrics with $g$ groups, MGL admits no polynomial-time $\bigo\br{\log^{1-\epsilon} g}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{N^{\text{polylog}(N)}}$ \cite[Theorem~2.5]{ChakrabartySwamy2016FacilityLocationClientLatencies}. We use the weighted covering reduction in the proof of \cite[Theorem~4.4]{szyfelbein2026minsumsetcoverparallel}.
+    We reduce from \textsc{Minimum Group Latency} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
 
-    \DD{uwaga: nie jest jasne skad sie te koszty biora i jak one sa zwiazane z kryterium MGL.}
-    Let $(T=(V,E),d,r,\cX)$ be an MGL instance. Remove groups containing $r$, since their latency is zero, and let $g$ be the number of remaining groups and $M=|V|-1$. For each $v\neq r$, create a \emph{weighted set} $S_v=\brc{X\in\cX:v\in X}$ with cost $c_v=d\br{\operatorname{parent}(v),v}$. If $u=\operatorname{parent}(v)\neq r$, impose $S_u\preceq S_v$, giving outforest precedence. The \emph{weighted coverage time} of a group is the sum of set costs through its first covering set. As in the cited reduction, an optimal MGL tour yields a full-cover weighted sequence $\sigma_0$ whose sum of weighted coverage times $C_0$ is at most $\OPT_{\mathrm{MGL}}$. Let $B^*$ be the largest set cost in this sequence. Every such edge lies on a root-to-first-hit path for some group, so $B^*\leq\OPT_{\mathrm{MGL}}$.
+    Let $(T=(V,E),d,r,\cX)$ be an MGL instance, where $d$ gives positive rational edge lengths. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
-    We convert the weighted sets to unit-cost sets without assuming polynomially bounded costs. For every guess $B$ among the input costs $c_v$, delete each set with $c_v>B$ and all its descendants. Skip the guess if the remaining sets do not cover every group. Set $\delta=B/(g\cdot M)$. Replace each remaining $S_v$ by a chain of
+    To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e):e\in E\}$. Delete every edge of length greater than $B$ and all vertices below it, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
     \[
-        q_v=\left\lceil\frac{c_v}{\delta}\right\rceil=\left\lceil\frac{g \cdot M \cdot c_v}{B}\right\rceil\leq g \cdot M
+        q_v=\left\lceil\frac{d(e_v)}{\delta}\right\rceil\leq g\cdot M
     \]
-    unit-cost sets, with the first $q_v-1$ copies empty and the last copy equal to $S_v$. Make the last copy of a parent precede the first copy of each child. This preserves outforest precedence and full coverage. Each guess creates at most $g\cdot M^2$ sets, so the construction is polynomial despite of costs' magnitudes.
+    indexed representative sets $S_v^1\preceq\cdots\preceq S_v^{q_v}$, where $S_v^i=\emptyset$ for $i<q_v$ and $S_v^{q_v}=\{j\in[g]:v\in X_j\}$. If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{q_u}\preceq S_v^1$. The precedence constraints form an outforest, and each guess creates at most $g\cdot M^2$ sets.
 
-    For the correct guess $B=B^*$, the sequence $\sigma_0$ survives pruning. Expanding its sets into their copy chains gives a feasible unit-cost sequence. Rounding each set cost up adds at most $\delta$ per set to a group's coverage time, and there are at most $M$ sets in any prefix. Hence, if $\OPT_1$ is the optimum for this unit-cost instance,
+    Let $P^*$ be an optimal MGL route, expanded into a walk on $T$ and stopped when all groups have been visited. Let $B^*$ be the maximum length of an edge traversed by this walk. Since the walk stops at the first visit to its last group, $B^*\leq\OPT_{\mathrm{MGL}}=\lt\br{P^*}$. For the guess $B=B^*$, every vertex visited by the walk survives pruning. List these vertices in order of first visit and append each vertex's entire representative chain in that order. The resulting sequence $\sigma$ is precedence-feasible and covers every group index. For each group $X_j$, the edges represented up to the first set covering $j$ have total length at most $\lt\br{P^*,X_j}$. Rounding the length of each such edge up to a multiple of $\delta$ adds less than $\delta$ per edge, and at most $M$ edges are represented. Therefore
     \[
-        \delta \cdot \OPT_1\leq C_0+g \cdot M \cdot \delta=C_0+B^*\leq 2 \cdot \OPT_{\mathrm{MGL}}.
+        \delta\cdot\coverageTime\br{j,\sigma}\leq\lt\br{P^*,X_j}+M\delta,
+        \qquad
+        \delta\cdot\OPT\br{\cI_{B^*}}\leq\lt\br{P^*}+gM\delta
+        =\OPT_{\mathrm{MGL}}+B^*\leq2\cdot\OPT_{\mathrm{MGL}},
     \]
+    where $\OPT\br{\cI_{B^*}}$ is the optimum covering cost for the instance constructed using $B=B^*$.
 
-    Conversely, compress any full-cover sequence of unit copies by ordering the original sets according to the positions of their last copies. This is a precedence-feasible weighted sequence. If a group is first covered at unit position $t$, all copies of every set through its first covering set occur by position $t$, and $c_v\leq\delta\cdot q_v$. Its weighted coverage time is therefore at most $\delta\cdot t$, so the total weighted cost is at most $\delta$ times the unit-sequence cost. Run an $\alpha$-approximation for every guess, compress each output, and select the cheapest resulting sequence. The correct guess gives a weighted sequence of cost at most $2\cdot\alpha\cdot\OPT_{\mathrm{MGL}}$. Applying the weighted-sequence-to-tour conversion in \cite{szyfelbein2026minsumsetcoverparallel} gives an $\bigo\br{\alpha}$-approximation for MGL. There are polynomially many guesses and $n=g$, so the claimed hardness follows.
+    Conversely, let $\pi$ be any precedence-feasible full-cover sequence for a guess. For each $k=0,1,\ldots$, take its prefix of length $\min\{2^k,\spr{\pi}\}$ and consider the vertices whose representative chains are complete in that prefix. These vertices and $r$ induce a rooted subtree. Its edge lengths sum to at most $\delta\cdot2^k$, because $d(e_v)\leq\delta q_v$ and the complete chains are disjoint. Traverse this subtree by a walk starting and ending at $r$, of length at most $2\delta\cdot2^k$. Concatenate these walks until the full sequence has been considered. If index $j$ is first covered at position $t=\coverageTime\br{j,\pi}$, the walk for $k=\lceil\log_2 t\rceil$ visits $X_j$. The resulting MGL route $P$ therefore satisfies
+    \[
+        \lt\br{P,X_j}\leq2\delta\sum_{k=0}^{\lceil\log_2 t\rceil}2^k<8\delta t,
+        \qquad
+        \lt\br{P}<8\delta\cdot\coverageTime\br{\pi,\cU}.
+    \]
+    Run an $\alpha$-approximation for every guess, convert each output to a route, and return the route of minimum latency. The correct guess yields a route of latency less than $16\alpha\cdot\OPT_{\mathrm{MGL}}$. Each covering instance has $n=g$ elements and at most $gM^2$ sets, and there are at most $M$ guesses. Thus the reduction runs in polynomial time in the MGL input size, and an $\bigo\br{\log^{1-\epsilon}n}$-approximation for $\ProblemPCMSSC$ would give an $\bigo\br{\log^{1-\epsilon}g}$-approximation for MGL. As $g$ is at most the original number of groups, this contradicts Theorem~\ref{thm:source-MGL-hardness} under the stated assumption.
 \end{proof}
 
 \begin{corollary}\label{cor:PCACDT-outforest-hardness}
-    For every $\epsilon>0$, $\ProblemPCACDT$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq \text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+    For every $\epsilon>0$, $\ProblemPCACDT$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{corollary}
 \begin{proof}
     The full-cover reduction in Theorem~\ref{thm:PCMSSC-to-PCACDT-hardness} preserves outforest precedence and transfers approximation ratios up to a constant factor. The result follows from Theorem~\ref{thm:PCMSSC-outforest-full-cover-hardness}.
@@ -710,7 +757,7 @@ The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$.
         \item For every $x\in\{n,m\}$ and fixed $K>0$, neither problem admits a polynomial-time $\bigo\br{(\log x)^K}$-approximation unless $\text{P}=\text{NP}$.
         \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input.
         \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
-        \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\text{ZTIME}\br{n^{\text{polylog}(n)}}$.
+        \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\mathrm{ZQP}$.
     \end{enumerate}
     The Label-Cover- and PGC-based bounds (items 2--4) concern deterministic algorithms and hold even when every test has at most three outcomes and the precedence DAG has height two.
 \end{corollary}
@@ -740,7 +787,7 @@ Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dens
 \end{proof}
 
 \begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
-    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} k}$-approximation unless $\text{NP}\subseteq\text{ZTIME}\br{k^{\text{polylog}(k)}}$.
+    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} k}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:PCSC-outforest-hardness}.
