@@ -67,3 +67,20 @@ decomposition that either finds cheap progress on many distinct blues in
 the high-overlap regime, or certifies sufficient sparsity for a
 higher-order counting/rounding bound. Existing triple counting handles a
 restricted sparse case; no such general decomposition has been proved.
+
+## Subsequent investigation
+
+`idea-sos-conditioning.md` develops a pair-pivot rounding guarantee with
+constant coverage loss. It would yield an `O(m^(2/7))` factor under an
+explicit overlap-moment promise, and gives an example showing that the
+promise cannot simply be forced by conditioning on a constant number of
+variables. This is a conditional direction, not a general approximation.
+
+`idea-triple-decomposition.md` gives a computable core-decomposition
+certificate whose value bounds the approximation factor, while leaving
+open whether every instance has a sufficiently small certificate.
+`idea-pivot-hybrid.md` and `idea-colored-caterpillar.md` identify
+obstructions to two proposed ways of achieving such a bound.
+`idea-alternate-oracles.md`, `idea-xi-structure.md`, and
+`idea-tree-direct.md` record further parameter-sensitive algorithms and
+limitations of generic oracle and direct-tree approaches.
