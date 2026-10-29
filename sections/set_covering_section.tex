@@ -343,7 +343,7 @@ Let $Q$ be the next activation or occurrence outcome, and let $\mathcal{O}$ be i
  =\sum_{o\in\mathcal{O}}\Pr[Q=o\mid\mathcal{E}]\mathbb{E}[\Phi\mid\mathcal{E}_o]
  \leq\max_{o\in\mathcal{O}}\mathbb{E}[\Phi\mid\mathcal{E}_o].
 \]
-Each conditional expectation in this maximum is computed using the preceding formulas. Fixing a maximizing outcome therefore does not decrease the conditional expectation. Repeating this for every group preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential}. After the final choice, the output and $\Phi$ are fixed, so their value of $\Phi$ is positive.
+Each conditional expectation in this maximum is computed using the preceding formulas. There are polynomially many groups, occurrences, and outcomes per occurrence, so the choices and calculations take polynomial time. Fixing a maximizing outcome therefore does not decrease the conditional expectation. Repeating this for every group preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential}. After the final choice, the output and $\Phi$ are fixed, so their value of $\Phi$ is positive.
 
 \end{proof}
 
