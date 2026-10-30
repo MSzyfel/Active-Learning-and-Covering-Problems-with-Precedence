@@ -8,7 +8,7 @@ We first give a bicriteria algorithm for \textsc{Partial Red-Blue Set Cover}, an
 Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 \begin{problem}[\textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$)] \label{problem:PRBSC}
-Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $k$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $k$ blue elements and minimizes $\spr{\cov\br{\cA',\cR}}$.
+Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $k$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $k$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cA',\cR}}$.
 \end{problem}
 
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
@@ -18,7 +18,7 @@ Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, 
 Our rounding builds on their red-pivot LP rounding and heavy/light cost analysis. They select a useful red pivot and size class and repeat a density-improvement step. We use one strengthened relaxation and round all pivot--size groups together. The pair constraints allow us to sum the heavy-set charges over all size scales, while the assignment-load constraints control the blue coverage of each group. For our bicriteria goal, this avoids their decomposition and repeated pivot and size-class selection, although the global relaxation and coverage analysis require additional arguments. Their Section~3 also uses conditional expectations, whereas our potential handles a fixed coverage target and red cost simultaneously.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
-For instances of $\ProblemPRBSC$ with $m\geq1$ sets and feasible target $k\geq1$, there is a deterministic polynomial-time algorithm covering at least $k/8$ blue elements at red cost at most $1400\cdot m^{1/3}$ times the optimum for target $k$.
+For instances of $\ProblemPRBSC$ with $m\geq1$ sets and feasible target $k\geq1$, there is a deterministic polynomial-time algorithm covering at least $k/8$ blue elements at a red cost at most $1400\cdot m^{1/3}$ times the optimum for target $k$.
 \end{theorem}
 \begin{proof}
 Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $k/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. Otherwise, try each integer guess $K\in[\spr{\cR}]$ for the optimum red cost.
