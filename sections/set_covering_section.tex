@@ -293,7 +293,9 @@ As in the coverage calculation, omitted zero-$y_r$ pivots contribute zero. Final
 \]
 \end{proof}
 
-We now combine coverage and cost into a single quantity whose value can be preserved while fixing the random choices. Define the \emph{potential}
+We now combine coverage and cost into a single quantity whose expectation can be preserved while fixing the random choices. We use $Y$ as a reward for blue coverage and subtract $k/8$, so that a positive value will guarantee $Y>k/8$. We also subtract a penalty proportional to the red cost $R$. To obtain an upper bound on $R$ from a positive value, we need to control how large the reward can be. For this purpose, we subtract a quadratic penalty in $W$. Since $W\geq Y$, this penalty bounds the reward minus the penalty from above.
+
+The coefficients are chosen so that the expected penalties leave enough of the expected reward. We have $\mathbb{E}[Y]>2\cdot k/5$, $\mathbb{E}[W^2]\leq8\cdot k^2$ and $\mathbb{E}[R]\leq7\cdot K\cdot T$. Multiplying $W^2$ by $1/(80\cdot k)$ and $R$ by $k/(70\cdot K\cdot T)$ makes the expectation of each penalty at most $k/10$. After also subtracting $k/8$, the expected value remains positive. These coefficients are convenient choices that leave room for all three subtractions. Define the \emph{potential}
 \begin{equation}\label{eq:rbsc-potential}
  \Phi=Y-\frac{W^2}{80\cdot k}-\frac{k\cdot R}{70\cdot K\cdot T}-\frac{k}{8}.
 \end{equation}
