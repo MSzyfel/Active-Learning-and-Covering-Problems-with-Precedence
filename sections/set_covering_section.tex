@@ -18,10 +18,10 @@ Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, 
 Our rounding builds on their red-pivot LP rounding and heavy/light cost analysis. They select a useful red pivot and size class and repeat a density-improvement step. We use one strengthened relaxation and round all pivot--size groups together. The pair constraints allow us to sum the heavy-set charges over all size scales, while the assignment-load constraints control the blue coverage of each group. For our bicriteria goal, this avoids their decomposition and repeated pivot and size-class selection, although the global relaxation and coverage analysis require additional arguments. Their Section~3 also uses conditional expectations, whereas our potential handles a fixed coverage target and red cost simultaneously.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
-For instances of $\ProblemPRBSC$ with $m\geq1$ sets and feasible target $k\geq1$, there is a deterministic polynomial-time algorithm covering at least $\cl{k/8}$ blue elements at red cost at most $1400\cdot\cl{m^{1/3}}$ times the optimum for target $k$.
+For instances of $\ProblemPRBSC$ with $m\geq1$ sets and feasible target $k\geq1$, there is a deterministic polynomial-time algorithm covering at least $k/8$ blue elements at red cost at most $1400\cdot m^{1/3}$ times the optimum for target $k$.
 \end{theorem}
 \begin{proof}
-Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $\cl{k/8}$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. Otherwise, try each integer guess $K\in[\spr{\cR}]$ for the optimum red cost. For each guess, discard all sets with $\spr{\cR_A}>K$. In the analysis of this guess, $\cA$ denotes the remaining family, while $m$ remains the original number of sets.
+Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $k/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. Otherwise, try each integer guess $K\in[\spr{\cR}]$ for the optimum red cost.
 
 We describe the variables of our relaxation through their intended values in an integral solution. For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicates whether $r$ is covered. For each set $A\in\cA$, the variable $x_A\in[0,1]$ indicates whether $A$ is selected. For each blue element $u\in\cB$, the variable $z_u\in[0,1]$ indicates whether $u$ is one of the $k$ covered blue elements chosen to meet the target. A selected set may cover additional blue elements with $z_u=0$.
 
@@ -39,9 +39,7 @@ For the current guess $K$, find a feasible solution to
  x_A&\leq y_{r,t} &&(A\in\cA,\ r,t\in \cR_A), \label{eq:rbsc-lp-pair}\\
  \sum_{t\in\cR}y_{r,t}&\leq K\cdot y_r &&(r\in\cR). \label{eq:rbsc-lp-pair-budget}
 \end{align}
-The first inequality in~\eqref{eq:rbsc-lp-budget} bounds the total red coverage by $K$, and the equality requires a total blue selection of $k$. Constraint~\eqref{eq:rbsc-lp-assign} assigns all of the chosen fraction of each blue element to sets containing it. Constraints~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set} bound the assignment of an individual blue element to a set by $x_A$ and the total assignment to the set by $k\cdot x_A$, respectively. Constraint~\eqref{eq:rbsc-lp-red} requires $y_r\geq x_A$ for every red element $r$ in a set $A$.
-
-For a fixed red element $r$, constraint~\eqref{eq:rbsc-lp-blue-load} bounds the total assignment of any one blue element to sets containing $r$ by $y_r$. Constraint~\eqref{eq:rbsc-lp-total-load} similarly bounds the total assignment of all blue elements to such sets by $k\cdot y_r$. Constraint~\eqref{eq:rbsc-lp-pair} requires $y_{r,t}$ to be at least the selection variable of any set containing both $r$ and $t$. Finally,~\eqref{eq:rbsc-lp-pair-budget} bounds the sum of these pair variables for a fixed $r$ by $K\cdot y_r$. In an integral solution, this sum is zero if $r$ is uncovered and is the total number of covered red elements otherwise.
+The assignment constraints limit the load on each set and red element. In particular, they prevent the same blue element from contributing too much within a group and bound the total number of marks expected in an active group. The pair constraints give a budget for jointly covered red elements. This will let us charge heavy occurrences across all scales. The following claim verifies the relaxation.
 
 \begin{claim}\label{claim:rbsc-lp-validity}
 The above system is a polynomial-size relaxation of the existence of a solution covering at least $k$ blue elements at red cost at most $K$.
@@ -53,29 +51,29 @@ The budget and assignment constraints hold by construction. Each assigned blue e
 \[
  \sum_{t\in\cR}y_{r,t}=y_r\cdot\sum_{t\in\cR}y_t\leq K\cdot y_r,
 \]
-which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. Every set in an optimum solution has at most $\OPT$ red elements, so the solution survives the discarding step for its correct guess $K=\OPT$. Thus this guess gives a feasible relaxation.
+which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. In particular, the guess $K=\OPT$ gives a feasible relaxation.
 \end{proof}
 
 Skip every guess with an infeasible relaxation. For a feasible guess, fix a feasible solution and put
 \[
- T=\cl{m^{1/3}},\qquad \cR_+=\brc{r\in\cR:y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
+ T=m^{1/3},\qquad \cR_+=\brc{r\in\cR:y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
 \]
-We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select every set with $\cR'_A=\emptyset$. These sets cover only red elements in $\cR_+$. If they cover at least $\cl{k/8}$ blue elements, retain them as the candidate for this guess. Otherwise, let $\cB'$ be the blue elements not covered by these sets. The number of initially covered blue elements is an integer smaller than $\cl{k/8}$ and hence is strictly smaller than $k/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select every set with $\cR'_A=\emptyset$. These sets cover only red elements in $\cR_+$. If they cover at least $k/8$ blue elements, retain them as the candidate for this guess. Otherwise, let $\cB'$ be the blue elements not covered by these sets. The number of initially covered blue elements is strictly smaller than $k/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =k-\sum_{u\in\cB\setminus\cB'}z_u
  \geq k-\spr{\cB\setminus\cB'}>7\cdot k/8.
 \end{equation}
 
-For every power of two $s=2^j\leq K$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cA_s$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cA_{r,s}$ by
+For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cA_s$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cA_{r,s}$ by
 \[
  \cA_s=\brc{A\in\cA:s\leq\spr{\cR'_A}<2\cdot s},
  \qquad
  \cA_{r,s}=\brc{A\in\cA_s:r\in \cR'_A}.
 \]
-Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. These groups form an indexed family, so distinct indices may have the same group. For $A\in\cA_{r,s}$, we call $A$ in group $\cA_{r,s}$ an \emph{occurrence} of $A$. Thus, a set belonging to several groups has a separate occurrence for each group index.
+Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. This multiplicity will compensate for the factor $1/s$ in the activation probability.
 
-For each group $\cA_{r,s}$, let $E_{r,s}$ be the event that the group is activated, with probability $y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its trial succeeds, with probability $x_A/y_r$. The activation and trial events are mutually independent. An occurrence of $A$ is selected if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Let $\cF_{r,s}\subseteq\cA_{r,s}$ be the random family of sets whose occurrences in group $\cA_{r,s}$ are selected. The output consists of the initially selected sets and every original set with at least one selected occurrence.
+For each pivot $r$ and scale $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is activated, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its trial succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is selected if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Let $\cF_{r,s}\subseteq\cA_{r,s}$ be the random family of sets whose occurrences in group $\cA_{r,s}$ are selected. The output consists of the initially selected sets and every original set with at least one selected occurrence.
 
 Define the random sets $\cR_{r,s}$ and $\cR_0$, and the random variable $R$, by
 \[
@@ -89,7 +87,7 @@ The output's actual red cost is at most $R$, because its covered red elements ou
 The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
 \end{claim}
 \begin{proof}
-Put $\theta=K/T$. For each group $\cA_{r,s}$, partition its occurrences into the \emph{heavy} and \emph{light} families
+Put $\theta=K/T$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cA_{r,s}$, partition its occurrences into the \emph{heavy} and \emph{light} families
 \[
  \cA^h_{r,s}=\brc{A\in\cA_{r,s}:x_A/y_r\geq\theta/s},
  \qquad \cA^\ell_{r,s}=\cA_{r,s}\setminus\cA^h_{r,s}.
@@ -118,7 +116,7 @@ where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, 
  \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot s_0}=\frac{2\cdot y_r}{s_0}
  \leq\frac{2\cdot y_{r,t}}{\theta}.
 \]
-The same bound holds when $\cS_{r,t}$ is empty, since $y_{r,t}\geq0$. Every residual red element reached through a heavy occurrence is counted by $F_{r,t}$ for at least one pivot $r$. Thus the union bound gives $\Pr[t\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,t}]$ for each $t\in\cR$. By linearity of expectation,
+The same bound holds when $\cS_{r,t}$ is empty, since $y_{r,t}\geq0$. If $t\in\cR_h$, then some selected heavy occurrence containing $t$ belongs to a group $\cA_{r,s}$, so $F_{r,t}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[t\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,t}]$ for each $t\in\cR$. By linearity of expectation,
 \[
  \mathbb{E}[R_h]
  =\sum_{t\in\cR}\Pr[t\in\cR_h]
@@ -127,8 +125,6 @@ The same bound holds when $\cS_{r,t}$ is empty, since $y_{r,t}\geq0$. Every resi
  \leq\frac{2\cdot K}{\theta}\cdot\sum_{r\in\cR}y_r
  \leq\frac{2\cdot K^2}{\theta}.
 \]
-We have summed over the scales for a fixed pair before summing over pairs. Thus this bound contains no factor for the number of scales.
-
 For each $A\in\cA^\ell_{r,s}$, independence of the activation and trial events and the definition of light occurrences give
 \[
  \Pr[E_{r,s}\cap J_{r,s,A}]
@@ -144,65 +140,35 @@ By linearity of expectation, the above probability bound and $y_r<1/T$,
  \leq\frac{\theta}{T}\cdot\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}^2}{s^2}
  \leq\frac{4\cdot\theta\cdot m}{T}.
 \]
-The first inequality counts red elements with multiplicity. The third counts, for each $A\in\cA_s$, at most one occurrence for each of its $\spr{\cR'_A}$ residual red elements. The last inequality uses $\spr{\cR'_A}/s<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m\leq T^3$ gives
+The first inequality counts red elements with multiplicity. The third counts, for each $A\in\cA_s$, at most one occurrence for each of its $\spr{\cR'_A}$ residual red elements. The last inequality uses $\spr{\cR'_A}/s<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
 \begin{equation}\label{eq:rbsc-cost-expectation}
  \mathbb{E}[R]
  \leq K\cdot T+\frac{2\cdot K^2}{\theta}+\frac{4\cdot\theta\cdot m}{T}
  =3\cdot K\cdot T+\frac{4\cdot K\cdot m}{T^2}
- \leq7\cdot K\cdot T.
+ =7\cdot K\cdot T.
 \end{equation}
 \end{proof}
 
-To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. A selected occurrence can cover many blue elements, but we mark a controlled subset of them. We choose the marking probabilities using the LP assignments, so that the expected number of distinct marked elements is a constant fraction of $k$. We also ensure that each occurrence receives at most $k$ marks. Together with the LP constraints, this bound lets us control the second moment of the total number of marks, counted with multiplicity.
-
-For derandomization, we reward the number of distinct marked elements and penalize both the red cost and the square of the total number of marks. Every marked element is covered, so the reward measures blue coverage. The total number of marks is at least the number of distinct marked elements, so the quadratic penalty bounds the reward minus this penalty from above. This allows a positive value of the resulting potential to guarantee both enough blue coverage and a bounded red cost. We will give each occurrence a distribution over polynomially many possible marked subsets, allowing us to fix the random choices by conditional expectations.
-
-For each $A$ with $x_A>0$, we need a random subset $\cD_A\subseteq \cB_A\cap\cB'$, called a \emph{certificate}, whose distribution is determined by the LP solution and is independent of the rounding outcomes, such that
-\begin{equation}\label{eq:rbsc-certificate-marginals}
- \spr{\cD_A}\leq k,
- \qquad
- \Pr[u\in \cD_A]=\frac{a_{u,A}}{x_A}\quad(u\in \cB_A\cap\cB').
-\end{equation}
-
-\begin{claim}\label{claim:rbsc-certificates}
-The distribution in~\eqref{eq:rbsc-certificate-marginals} can be constructed with polynomially many outcomes.
-\end{claim}
-\begin{proof}
-List $\cB_A\cap\cB'$ as $u_1,\ldots,u_d$, put $p_i=a_{u_i,A}/x_A$, and let $c_0=0$ and $c_i=\sum_{j=1}^ip_j$. Constraints~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set} give $0\leq p_i\leq1$ and $c_d\leq k$. For a uniform offset $U\in[0,1)$, include $u_i$ in $\cD_A$ if the interval $[c_{i-1},c_i)$ contains $U+t$ for some integer $t$. An interval of length $p_i\leq1$ contains at most one such point and is hit with probability $p_i$. All these intervals partition $[0,c_d)$, which contains at most $\cl{c_d}\leq k$ points of the form $U+t$. Thus the marked subset satisfies~\eqref{eq:rbsc-certificate-marginals}.
-
-For a finite description, sort the distinct numbers in $\brc{0,1}\cup\brc{c_i-\lfloor c_i\rfloor:1\leq i\leq d}$ as $0=b_0<b_1<\cdots<b_q=1$. For a fixed $i$, the condition $c_{i-1}\leq U+t<c_i$ can change as $U$ varies only when $U+t$ crosses $c_{i-1}$ or $c_i$. Thus membership of $u_i$ in $\cD_A$ can change only at the fractional parts of $c_{i-1}$ and $c_i$. In particular, the marked subset is constant on each interval $(b_{j-1},b_j)$.
-
-For each $j\in[q]$, let $v_j=(b_{j-1}+b_j)/2$ and define
-\[
- \cD_j=\brc{u_i:\exists t\in\mathbb{Z},\ c_{i-1}\leq v_j+t<c_i}.
-\]
-Output $\cD_j$ with probability $b_j-b_{j-1}$. If several intervals give the same subset, add their probabilities. These probabilities sum to $\sum_{j=1}^q(b_j-b_{j-1})=1$. A uniform offset lies in $(b_{j-1},b_j)$ with probability $b_j-b_{j-1}$ and produces $\cD_j$. The finitely many breakpoints have probability zero, so the finite construction gives the same distribution as the offset construction. In particular, each $\cD_j$ has size at most $k$, and for every $i\in[d]$,
-\[
- \Pr[u_i\in\cD_A]=\sum_{j:u_i\in\cD_j}(b_j-b_{j-1})=p_i.
-\]
-Thus the finite distribution satisfies~\eqref{eq:rbsc-certificate-marginals}. There are at most $d+1$ intervals. If $d=0$ or all $p_i=0$, the only outcome is the empty subset.
-\end{proof}
-
-For each occurrence of $A$ with $x_A>0$ in group $\cA_{r,s}$, draw a certificate from the distribution of $\cD_A$ independently of all activations, trials, and other certificate draws. Let $\cD_{r,s,A}$ be this certificate if $J_{r,s,A}$ occurs and the empty set otherwise. For $x_A=0$, put $\cD_{r,s,A}=\emptyset$. The random set of elements marked by selected occurrences in group $\cA_{r,s}$ is $\cB_{r,s}=\bigcup_{A\in\cF_{r,s}}\cD_{r,s,A}$. Define $\widehat{\cB}=\bigcup_{r,s}\cB_{r,s}$ and $Y=\spr{\widehat{\cB}}$. A selected occurrence with an empty certificate still covers its red elements and must be distinguished from an unselected occurrence.
+To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $A$ with $x_A>0$ in group $\cA_{r,s}$, independently mark each $u\in\cB_A\cap\cB'$ using a coin $Z_{r,s,A,u}$ with $\Pr[Z_{r,s,A,u}=1]=a_{u,A}/x_A$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_A=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,A}$. Let $\cD_{r,s,A}$ be the set of elements whose marking coins succeed if $J_{r,s,A}$ occurs and the empty set otherwise. The random set of elements marked by selected occurrences in group $\cA_{r,s}$ is $\cB_{r,s}=\bigcup_{A\in\cF_{r,s}}\cD_{r,s,A}$. Define $\widehat{\cB}=\bigcup_{r,s}\cB_{r,s}$ and $Y=\spr{\widehat{\cB}}$. In an active group, a successful trial with no marks still selects the occurrence and its red elements.
 
 \begin{claim}\label{claim:rbsc-blue-coverage}
 The expected number of distinct marked blue elements satisfies $\mathbb{E}[Y]>2\cdot k/5$.
 \end{claim}
 \begin{proof}
-Fix $u\in\cB'$. For an occurrence of $A$ in group $\cA_{r,s}$ with $u\in \cB_A$ and $x_A>0$, the probability that its trial succeeds and its certificate contains $u$ is
+Fix $u\in\cB'$. For an occurrence of $A$ in group $\cA_{r,s}$ with $u\in \cB_A$ and $x_A>0$, the probability that its trial succeeds and its marking coin for $u$ succeeds is
 \[
  \Pr[u\in \cD_{r,s,A}]=\frac{x_A}{y_r}\cdot\frac{a_{u,A}}{x_A}=\frac{a_{u,A}}{y_r}.
 \]
 When $x_A=0$, both this probability and $a_{u,A}$ are zero. The sum of these probabilities within the group is
 \[
  \lambda_{r,s,u}
- =\frac1{y_r}\cdot\sum_{\substack{A\in\cA_{r,s}:u\in \cB_A}}a_{u,A}
+ =\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}
  \leq1
 \]
 by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are independent. We use the inequality $1-x\leq e^{-x}$ and the concavity of $1-e^{-a\cdot x}$, which gives $1-e^{-a\cdot x}\geq(1-e^{-a})\cdot x$ for $a\geq0$ and $x\in[0,1]$. The group's conditional probability of marking $u$ is therefore at least
 \[
  \Pr[u\in\cB_{r,s}\mid E_{r,s}]
- =1-\prod_{\substack{A\in\cA_{r,s}:u\in \cB_A}}
+ =1-\prod_{A\in\cA_{r,s}:u\in \cB_A}
        \br{1-\frac{a_{u,A}}{y_r}}
  \geq1-e^{-\lambda_{r,s,u}}
  \geq(1-e^{-1})\cdot\lambda_{r,s,u}.
@@ -211,30 +177,27 @@ Since $\cB_{r,s}=\emptyset$ when the group is inactive, the preceding bound and 
 \[
  \Pr[u\in\cB_{r,s}]=\Pr[E_{r,s}]\cdot\Pr[u\in\cB_{r,s}\mid E_{r,s}]
  \geq\frac{y_r}{s}\cdot(1-e^{-1})\cdot\lambda_{r,s,u}
- =\frac{1-e^{-1}}{s}\cdot\sum_{\substack{A\in\cA_{r,s}:u\in \cB_A}}a_{u,A}.
+ =\frac{1-e^{-1}}{s}\cdot\sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}.
 \]
-Here the factor $y_r$ in the activation probability cancels with the denominator in $\lambda_{r,s,u}$. To count the terms in the sum over groups, fix $A\in\cA_s$ containing $u$. Each $r\in\cR'_A$ with $y_r>0$ gives a group $\cA_{r,s}$ containing $A$. If $y_r=0$, constraints~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red} give $a_{u,A}\leq x_A\leq y_r=0$, so this omitted term is zero. Therefore
-\[
- \sum_{\substack{r\in\cR'_A\\y_r>0}}\frac{a_{u,A}}s
- =\sum_{r\in\cR'_A}\frac{a_{u,A}}s
- =\frac{\spr{\cR'_A}}s\cdot a_{u,A}.
-\]
-Moreover, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$, since otherwise it was initially selected and would cover $u$. It therefore belongs to one scale $s$, and the definition of $\cA_s$ gives $\spr{\cR'_A}/s\geq1$. Using $a_{u,A}\geq0$ and summing the group bounds gives
+Let $M_u$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
 \begin{align*}
- \sum_{r,s}\Pr[u\in\cB_{r,s}]
- &\geq(1-e^{-1})\cdot\sum_{r,s}\frac1s\cdot
-       \sum_{\substack{A\in\cA_{r,s}:u\in \cB_A}}a_{u,A}
- =(1-e^{-1})\cdot\sum_s\sum_{\substack{A\in\cA_s:u\in \cB_A}}
-       \frac{\spr{\cR'_A}}s\cdot a_{u,A}\\
- &\geq(1-e^{-1})\cdot\sum_{A:u\in \cB_A}a_{u,A}
+ \mathbb{E}[M_u]&=\sum_{r,s}\Pr[u\in\cB_{r,s}]
+ \geq(1-e^{-1})\cdot\sum_{r,s}\frac1s\cdot
+       \sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}\\
+ &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s:u\in \cB_A}
+       \frac{a_{u,A}}s\cdot\sum_{r\in\cR'_A:y_r>0}1\\
+ &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s:u\in \cB_A}
+       \frac{\spr{\cR'_A}}s\cdot a_{u,A}
+ \geq(1-e^{-1})\cdot\sum_{A:u\in \cB_A}a_{u,A}
  =(1-e^{-1})\cdot z_u.
 \end{align*}
-The equality reorders the sum using the count above. The last inequality uses $\spr{\cR'_A}/s\geq1$ and the final equality follows from~\eqref{eq:rbsc-lp-assign}.
+For the second equality, fix a scale $s$ and a set $A\in\cA_s$ containing $u$. The term $a_{u,A}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}:u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A}\leq x_A\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, it was initially selected and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
 
 The rounding choices for distinct group indices are independent. Applying $1-x\leq e^{-x}$ across groups and then the above concavity bound for $z_u\in[0,1]$ yields
 \[
  \Pr[u\in\widehat{\cB}]
  =1-\prod_{r,s}\br{1-\Pr[u\in\cB_{r,s}]}
+ \geq1-e^{-\mathbb{E}[M_u]}
  \geq1-e^{-(1-e^{-1})\cdot z_u}
  \geq c\cdot z_u,
  \qquad c=1-e^{-(1-e^{-1})}.
@@ -256,22 +219,41 @@ For each group $\cA_{r,s}$, define
 Thus $W_{r,s}$ counts the marks in group $\cA_{r,s}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $Y\leq W$.
 
 \begin{claim}\label{claim:rbsc-second-moment}
-We have $\mathbb{E}[W]\leq2\cdot k$ and $\mathbb{E}[W^2]\leq8\cdot k^2$.
+We have $\mathbb{E}[W^2]\leq10\cdot k^2$.
 \end{claim}
 \begin{proof}
-Fix a group $\cA_{r,s}$. For each occurrence $A\in\cA_{r,s}$, let $X_A=\spr{\cD_{r,s,A}}$, so $L_{r,s}=\sum_{A\in\cA_{r,s}}X_A$. These variables are defined before activation. The $X_A$ are independent, satisfy $0\leq X_A\leq k$, and have
+Fix a group $\cA_{r,s}$. For each occurrence $A\in\cA_{r,s}$, let $X_A=\spr{\cD_{r,s,A}}$, so $L_{r,s}=\sum_{A\in\cA_{r,s}}X_A$. These variables are defined before activation and are independent across occurrences. By linearity of expectation and the marking probabilities calculated above,
 \[
- \mathbb{E}[X_A]=\frac1{y_r}\cdot\sum_{u\in \cB_A\cap\cB'}a_{u,A}.
+ \mathbb{E}[X_A]=\sum_{u\in\cB_A\cap\cB'}\Pr[u\in\cD_{r,s,A}]
+ =\frac1{y_r}\cdot\sum_{u\in \cB_A\cap\cB'}a_{u,A}.
 \]
-Writing $\mu=\mathbb{E}[L_{r,s}]$, constraint~\eqref{eq:rbsc-lp-total-load} gives $\mu\leq k$. Since $X_A^2\leq k\cdot X_A$, independence gives
+For the second moment, put $p_{u,A}=\Pr[Z_{r,s,A,u}=1]$ and $d_A=\sum_{u\in\cB_A\cap\cB'}p_{u,A}$. Let $N_A=\sum_{u\in\cB_A\cap\cB'}Z_{r,s,A,u}$. By~\eqref{eq:rbsc-lp-set}, $d_A\leq k$. The marking coins are independent Bernoulli variables, so
 \[
+ \mathbb{E}[N_A]=d_A,\qquad
+ \operatorname{Var}(N_A)=\sum_{u\in\cB_A\cap\cB'}p_{u,A}\cdot(1-p_{u,A}).
+\]
+Moreover, $X_A=\boldsymbol{1}_{J_{r,s,A}}\cdot N_A$ and the trial is independent of $N_A$, so $\mathbb{E}[X_A]=(x_A/y_r)\cdot d_A$. Using $\mathbb{E}[N_A^2]=\mathbb{E}[N_A]^2+\operatorname{Var}(N_A)$ gives
+\[
+ \mathbb{E}[X_A^2]=\frac{x_A}{y_r}\cdot\br{d_A^2+\sum_{u\in\cB_A\cap\cB'}p_{u,A}\cdot(1-p_{u,A})}
+ \leq\frac{x_A}{y_r}\cdot(d_A^2+d_A)
+ \leq(k+1)\cdot\mathbb{E}[X_A].
+\]
+Writing $\mu=\mathbb{E}[L_{r,s}]$, the first-moment calculation and $r\in\cR_A$ for every $A\in\cA_{r,s}$ give
+\[
+ \mu=\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}}\sum_{u\in\cB_A\cap\cB'}a_{u,A}
+ \leq\frac1{y_r}\cdot\sum_{A:r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq k,
+\]
+where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,s}^2$ and using independence across distinct occurrences gives
+\begin{align*}
  \mathbb{E}[L_{r,s}^2]
- =\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{\substack{A,A'\in\cA_{r,s}\\A\ne A'}}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]
- \leq k\cdot\mu+\mu^2\leq2\cdot k\cdot\mu.
-\]
+ &=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{A,A'\in\cA_{r,s}:A\ne A'}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]\\
+ &\leq(k+1)\cdot\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]+\br{\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]}^2
+ =(k+1)\cdot\mu+\mu^2\leq(2k+1)\cdot\mu.
+\end{align*}
+The first inequality uses the bound on $\mathbb{E}[X_A^2]$ and adds the nonnegative terms with $A=A'$ to the cross terms. The last inequality uses $\mu\leq k$.
 The variable $L_{r,s}$ is independent of activation. Multiplying the last bound by $y_r/s$ therefore gives
 \begin{equation}\label{eq:rbsc-group-second-moment}
- \mathbb{E}[W_{r,s}^2]\leq2\cdot k\cdot\mathbb{E}[W_{r,s}].
+ \mathbb{E}[W_{r,s}^2]\leq(2k+1)\cdot\mathbb{E}[W_{r,s}].
 \end{equation}
 Moreover, summing the expected number of marks over the groups yields
 \[
@@ -288,26 +270,24 @@ As in the coverage calculation, omitted zero-$y_r$ pivots contribute zero. Final
  \mathbb{E}[W^2]
  =\sum_{r,s}\mathbb{E}[W_{r,s}^2]
    +\sum_{r,s}\sum_{\substack{r',s'\\(r',s')\ne(r,s)}}\mathbb{E}[W_{r,s}]\cdot\mathbb{E}[W_{r',s'}]
- \leq2\cdot k\cdot\mathbb{E}[W]+\br{\mathbb{E}[W]}^2
- \leq8\cdot k^2.
+ \leq(2k+1)\cdot\mathbb{E}[W]+\br{\mathbb{E}[W]}^2
+ \leq8\cdot k^2+2\cdot k\leq10\cdot k^2.
 \]
 \end{proof}
 
-We now combine coverage and cost into a single quantity whose expectation can be preserved while fixing the random choices. We use $Y$ as a reward for blue coverage and subtract $k/8$, so that a positive value will guarantee $Y>k/8$. We also subtract a penalty proportional to the red cost $R$. To obtain an upper bound on $R$ from a positive value, we need to control how large the reward can be. For this purpose, we subtract a quadratic penalty in $W$. Since $W\geq Y$, this penalty bounds the reward minus the penalty from above.
-
-The coefficients are chosen so that the expected penalties leave enough of the expected reward. We have $\mathbb{E}[Y]>2\cdot k/5$, $\mathbb{E}[W^2]\leq8\cdot k^2$ and $\mathbb{E}[R]\leq7\cdot K\cdot T$. Multiplying $W^2$ by $1/(80\cdot k)$ and $R$ by $k/(70\cdot K\cdot T)$ makes the expectation of each penalty at most $k/10$. After also subtracting $k/8$, the expected value remains positive. These coefficients are convenient choices that leave room for all three subtractions. Define the \emph{potential}
+We use a \emph{potential}, a score assigned to each outcome of the rounding, to find one outcome with both sufficient coverage and small red cost. We start with the number $Y$ of marked blue elements and subtract the coverage target $k/8$ and a penalty for the red cost bound $R$. A positive score then guarantees the desired coverage, but a large value of $Y$ could still offset a large red cost. To prevent this, we also subtract a quadratic penalty in $W$. Since $W\geq Y$, this limits how much the coverage reward can offset the red cost, while the bound on $\mathbb{E}[W^2]$ keeps the expected penalty small. We choose the coefficients so that the expected score remains positive, and later use conditional expectations to find an outcome with positive score deterministically. Define
 \begin{equation}\label{eq:rbsc-potential}
  \Phi=Y-\frac{W^2}{80\cdot k}-\frac{k\cdot R}{70\cdot K\cdot T}-\frac{k}{8}.
 \end{equation}
 \begin{claim}\label{claim:rbsc-positive-potential}
-We have $\mathbb{E}[\Phi]>3\cdot k/40$. Every outcome with $\Phi>0$ covers at least $\cl{k/8}$ blue elements and has red cost smaller than $1400\cdot K\cdot T$.
+We have $\mathbb{E}[\Phi]>0$. Every outcome with $\Phi>0$ covers at least $k/8$ blue elements and has red cost smaller than $1400\cdot K\cdot T$.
 \end{claim}
 \begin{proof}
 Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim:rbsc-second-moment} give
 \[
  \mathbb{E}[\Phi]
- >\frac{2\cdot k}{5}-\frac{8\cdot k^2}{80\cdot k}-\frac{k\cdot7\cdot K\cdot T}{70\cdot K\cdot T}-\frac{k}{8}
- =\frac{3\cdot k}{40}.
+ >\frac{2\cdot k}{5}-\frac{10\cdot k^2}{80\cdot k}-\frac{k\cdot7\cdot K\cdot T}{70\cdot K\cdot T}-\frac{k}{8}
+ =\frac{k}{20}>0.
 \]
 If $\Phi>0$, all three subtracted terms are nonnegative, so $Y>k/8$. Each of these $Y$ marked elements is covered by the output. Furthermore, $W\geq Y$ implies
 \[
@@ -324,75 +304,62 @@ It follows that $R<1400\cdot K\cdot T$, and the actual red cost is at most $R$.
 An outcome with $\Phi>0$ can be found deterministically in polynomial time.
 \end{claim}
 \begin{proof}
-Use the finite distributions from Claim~\ref{claim:rbsc-certificates}. The trial and certificate outcome of an occurrence of $A$ in group $\cA_{r,s}$ is either a failed trial, with probability $1-x_A/y_r$, or a successful trial with certificate $\cD$ in the support of $\cD_A$, with probability $(x_A/y_r)\cdot\Pr[\cD_A=\cD]$. If $x_A=0$, the trial fails with probability one. A successful trial with an empty certificate is distinct from a failed trial, since activation makes the former a selected occurrence that can contribute red elements to the cost. These occurrence outcomes and group activations are mutually independent.
+For the analysis, regard all activation, trial, and marking coins as drawn in advance. The deterministic algorithm fixes their values rather than sampling them. Process the groups in a fixed order, first fixing their activation, and then, for an active group, fixing each occurrence's trial and, if it succeeds, its marking coins. At each step choose a possible value maximizing the conditional expectation of $\Phi$.
 
-Process the groups in any fixed order. For each group, first fix whether it activates. If it activates, fix its occurrence outcomes one at a time. Otherwise, move to the next group. At each step choose a possible outcome maximizing the conditional expectation of $\Phi$, as calculated below.
+Fix a history of exposed coins, and let $\mathcal{E}$ be the event that they take their recorded values. We only expose values of positive conditional probability. Since $\mathcal{E}$ is an intersection of individual coin outcomes, all unfixed coins remain independent. The conditional probability that a coin succeeds is its original probability if it is unfixed, and $0$ or $1$ otherwise. In particular, the original marking probability is $a_{u,A}/x_A$ when $x_A>0$ and zero when $x_A=0$.
 
-Fix a realized history of the choices made so far, and let $\mathcal{E}$ be the event that each coordinate exposed in this history takes its recorded value. The initial event is the whole sample space, and we only fix outcomes of positive conditional probability. The occurrence outcomes are drawn in advance and ignored if their group is inactive. As $\mathcal{E}$ is an intersection of individual coordinate events, conditioning on it leaves all unfixed activations and occurrence outcomes independent. For each group $\cA_{r,s}$, let $q_{r,s}=\Pr[E_{r,s}\mid\mathcal{E}]$. This is its original activation probability if the activation has not been fixed, and its fixed value $0$ or $1$ otherwise. Fix a group $\cA_{r,s}$. For each of its occurrences $A$, use its original outcome distribution if it is unfixed and a point mass at its fixed outcome otherwise. For $u\in\cB'$ and $t\in\cR\setminus \cR_+$, put
+For $u\in\cB'$ and $t\in\cR\setminus\cR_+$, independence within each group conditional on $\mathcal{E}$ gives
 \[
- \begin{aligned}
- p_{A,u}&=\Pr[u\in \cD_{r,s,A}\mid\mathcal{E}],&
- d_{A,t}&=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\boldsymbol{1}_{\{t\in \cR'_A\}},\\
- \mu_A&=\mathbb{E}[\spr{\cD_{r,s,A}}\mid\mathcal{E}],&
- \nu_A&=\mathbb{E}[\spr{\cD_{r,s,A}}^2\mid\mathcal{E}].
- \end{aligned}
+ \Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]
+ =\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]
+ \quad\text{for }u\in\cB_A\cap\cB',
 \]
-These quantities depend on the current group, although its index is suppressed. Here $p_{A,u}=0$ if $u\notin \cB_A$. If an occurrence is fixed to a successful trial with an empty certificate, $p_{A,u}=0$ for every $u$, while $d_{A,t}=1$ for every $t\in\cR'_A$. If it is fixed to a failed trial, $d_{A,t}=0$, so only the successful trial can contribute these red elements when the group activates. For an inactive group all these quantities are immaterial because $q_{r,s}=0$. The symbol $\boldsymbol{1}_{\{t\in \cR'_A\}}$ is $1$ when $t\in \cR'_A$ and $0$ otherwise. Each displayed quantity is obtained by summing over the occurrence's polynomially many outcomes.
-
-Conditional on $\mathcal{E}$, group $\cA_{r,s}$ fails to mark $u$ if it is inactive, or if it is active and none of its occurrences marks $u$. The analogous alternatives apply when the group fails to cover a residual red element $t$. Independence of occurrence choices within the group gives
+and the probabilities that the group misses a blue or red element are
 \[
  \begin{aligned}
  \Pr[u\notin\cB_{r,s}\mid\mathcal{E}]
- &=1-q_{r,s}+q_{r,s}\cdot\prod_{A\in\cA_{r,s}}(1-p_{A,u}),\\
+ &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}:u\in\cB_A}\br{1-\Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]},\\
  \Pr[t\notin\cR_{r,s}\mid\mathcal{E}]
- &=1-q_{r,s}+q_{r,s}\cdot\prod_{A\in\cA_{r,s}}(1-d_{A,t}).
+ &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}:t\in\cR'_A}\br{1-\Pr[J_{r,s,A}\mid\mathcal{E}]}.
  \end{aligned}
 \]
 Independence of distinct groups and linearity of expectation then give
 \begin{equation}\label{eq:rbsc-conditional-coverage-cost}
  \begin{aligned}
  \mathbb{E}[Y\mid\mathcal{E}]
- &=\sum_{u\in\cB'}\br{1-\prod_{r,s}\br{1-q_{r,s}+q_{r,s}\cdot\prod_{A\in\cA_{r,s}}(1-p_{A,u})}},\\
+ &=\sum_{u\in\cB'}\br{1-\prod_{r,s}\Pr[u\notin\cB_{r,s}\mid\mathcal{E}]},\\
  \mathbb{E}[R\mid\mathcal{E}]
- &=\spr{\cR_+}+\sum_{t\in\cR\setminus \cR_+}\br{1-\prod_{r,s}\br{1-q_{r,s}+q_{r,s}\cdot\prod_{A\in\cA_{r,s}}(1-d_{A,t})}}.
+ &=\spr{\cR_+}+\sum_{t\in\cR\setminus \cR_+}\br{1-\prod_{r,s}\Pr[t\notin\cR_{r,s}\mid\mathcal{E}]}.
  \end{aligned}
 \end{equation}
-For the second moment, put
-\[
- m_{r,s}=\sum_{A\in\cA_{r,s}}\mu_A,
- \qquad
- v_{r,s}=\sum_{A\in\cA_{r,s}}(\nu_A-\mu_A^2).
-\]
-By independence of the occurrence outcomes, these are the mean and variance of $L_{r,s}$ conditional on $\mathcal{E}$. Since $L_{r,s}$ and the activation remain independent under this conditioning and $W_{r,s}=\boldsymbol{1}_{E_{r,s}}\cdot L_{r,s}$, we obtain
-\[
- \mathbb{E}[W_{r,s}\mid\mathcal{E}]=q_{r,s}\cdot m_{r,s},
- \qquad
- \mathbb{E}[W_{r,s}^2\mid\mathcal{E}]=q_{r,s}\cdot(m_{r,s}^2+v_{r,s}).
-\]
-The group totals remain independent under $\mathcal{E}$, including the currently processed group. Therefore
+For the second moment, fix a group $\cA_{r,s}$ and use the variables $N_A$ and $X_A$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
+\begin{align*}
+ \mathbb{E}[N_A\mid\mathcal{E}]&=\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}],\\
+ \mathbb{E}[X_A\mid\mathcal{E}]&=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\mathbb{E}[N_A\mid\mathcal{E}],\\
+ \mathbb{E}[X_A^2\mid\mathcal{E}]&=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_A\mid\mathcal{E}]^2+\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]}}.
+\end{align*}
+The variables $X_A$ remain independent across occurrences, and $L_{r,s}$ remains independent of activation. Thus
+\begin{align*}
+ \mathbb{E}[L_{r,s}\mid\mathcal{E}]&=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A\mid\mathcal{E}],\\
+ \mathbb{E}[L_{r,s}^2\mid\mathcal{E}]&=\mathbb{E}[L_{r,s}\mid\mathcal{E}]^2+\sum_{A\in\cA_{r,s}}\br{\mathbb{E}[X_A^2\mid\mathcal{E}]-\mathbb{E}[X_A\mid\mathcal{E}]^2},\\
+ \mathbb{E}[W_{r,s}\mid\mathcal{E}]&=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}\mid\mathcal{E}],\\
+ \mathbb{E}[W_{r,s}^2\mid\mathcal{E}]&=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}^2\mid\mathcal{E}].
+\end{align*}
+The group totals remain independent under $\mathcal{E}$. Therefore
 \begin{equation}\label{eq:rbsc-conditional-second-moment}
  \mathbb{E}[W^2\mid\mathcal{E}]
- =\br{\sum_{r,s}q_{r,s}\cdot m_{r,s}}^2
-  +\sum_{r,s}\br{q_{r,s}\cdot(m_{r,s}^2+v_{r,s})-(q_{r,s}\cdot m_{r,s})^2}.
+ =\br{\sum_{r,s}\mathbb{E}[W_{r,s}\mid\mathcal{E}]}^2
+  +\sum_{r,s}\br{\mathbb{E}[W_{r,s}^2\mid\mathcal{E}]-\mathbb{E}[W_{r,s}\mid\mathcal{E}]^2}.
 \end{equation}
-Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$. The same formulas compute the conditional expectation for each possible next outcome by temporarily fixing that choice.
-
-Let $Q$ be the next activation or occurrence outcome, and let $\mathcal{O}$ be its outcomes with positive probability conditional on $\mathcal{E}$. For each $o\in\mathcal{O}$, write $\mathcal{E}_o=\mathcal{E}\cap\{Q=o\}$. By the law of total expectation,
-\[
- \mathbb{E}[\Phi\mid\mathcal{E}]
- =\sum_{o\in\mathcal{O}}\Pr[Q=o\mid\mathcal{E}]\cdot\mathbb{E}[\Phi\mid\mathcal{E}_o]
- \leq\max_{o\in\mathcal{O}}\mathbb{E}[\Phi\mid\mathcal{E}_o].
-\]
-Each conditional expectation in this maximum is computed using the preceding formulas. There are polynomially many groups, occurrences, and outcomes per occurrence, so the choices and calculations take polynomial time. Fixing a maximizing outcome therefore does not decrease the conditional expectation. Repeating this for every group preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential}. After the final choice, only occurrence outcomes in inactive groups may remain unfixed. They cannot affect the output or $\Phi$, so the resulting value of $\Phi$ is positive.
-
+Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. A polynomial-bit rational LP solution suffices, and comparisons involving $T=m^{1/3}$ use exact arithmetic in a fixed-degree algebraic extension. The same formulas compute the conditional expectation for each possible value of the next coin. By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time. The unexposed coins in inactive groups or failed trials cannot affect $\Phi$, so the resulting value is positive.
 \end{proof}
 
-For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $\cl{k/8}$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold. There are at most $\spr{\cR}$ guesses, proving the theorem. The case $k=0$, if allowed, is handled by returning the empty family.
+For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $k/8$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold. There are at most $\spr{\cR}$ guesses, proving the theorem. The case $k=0$, if allowed, is handled by returning the empty family.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
 \begin{proposition}\label{pro:partial-red-blue}
-    Instances of $\ProblemPRBSC$ with $m$ sets and $n\geq2$ blue elements admit a deterministic polynomial-time $\alpha_{m,n}$-approximation algorithm, where
+    Instances of $\ProblemPRBSC$ with $m$ sets and $n\geq2$ blue elements admit a deterministic polynomial-time $\alpha_{m,n}$-approximation algorithm, where $\alpha_{m,n}$ is a known bound satisfying
     \[
     \alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log n}.
     \]
@@ -421,9 +388,9 @@ For $\ProblemBPCSC$, run the algorithm from Proposition~\ref{pro:partial-red-blu
 There are deterministic polynomial-time $\br{\bigo\br{m^{1/3}},8}$-approximation algorithms for $\ProblemPCSC$ and $\ProblemBPCSC$.
 \end{corollary}
 \begin{proof}
-For $\ProblemPCSC$, apply Theorem~\ref{thm:partial-red-blue-bicriteria} to the reduction above with $k=\cl{f\cdot n}$. The resulting family has size at most $1400\cl{m^{1/3}}$ times the optimum and covers at least $\cl{k/8}\geq f\cdot n/8$ elements.
+For $\ProblemPCSC$, apply Theorem~\ref{thm:partial-red-blue-bicriteria} to the reduction above with $k=\cl{f\cdot n}$. The resulting family has size at most $1400\cdot m^{1/3}$ times the optimum and covers at least $k/8\geq f\cdot n/8$ elements.
 
-For $\ProblemBPCSC$, try all integer blue targets as in Theorem~\ref{thm:PCSC-BPCSC-RBSC}, retaining candidates of cost at most $1400\cl{m^{1/3}}\budget$. Also include the empty family and return the retained candidate of largest coverage. If the optimum budgeted coverage is $t^*>0$, the red-blue instance with target $t^*$ has optimum red cost at most $\budget$. Theorem~\ref{thm:partial-red-blue-bicriteria} therefore supplies a retained candidate covering at least $\cl{t^*/8}\geq t^*/8$ elements. If $t^*=0$, the empty family suffices. All calls and choices are deterministic.
+For $\ProblemBPCSC$, try all integer blue targets as in Theorem~\ref{thm:PCSC-BPCSC-RBSC}, retaining candidates of cost at most $1400\cdot m^{1/3}\cdot\budget$. Also include the empty family and return the retained candidate of largest coverage. If the optimum budgeted coverage is $t^*>0$, the red-blue instance with target $t^*$ has optimum red cost at most $\budget$. Theorem~\ref{thm:partial-red-blue-bicriteria} therefore supplies a retained candidate covering at least $t^*/8$ elements. If $t^*=0$, the empty family suffices. All calls and choices are deterministic.
 \end{proof}
 
 \begin{corollary}\label{cor:bicriteria-decision-trees}
