@@ -2,8 +2,7 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-Now, in order to obtain non-trivial approximation guarantees for all relevant covering tasks, we show how to reduce them to the well-known \textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$) problem. In particular, we show how to reduce the \textsc{Budgeted Precedence Constrained Set Cover} (which we introduce below) to $\ProblemPRBSC$. This can be then leveraged to approximate both $\ProblemPCSC$ (trivially) and $\ProblemPCMSSC$ (non-trivially). Although approximation algorithms for the $\ProblemPRBSC$ are already known in the literature, we show a new algorithm, with improved approximation ratio.
-For the special inforest- and outforest-cases, reductions to budgeted \textsc{Maximum Coverage} and \textsc{Group Steiner Orienteering}, respectively, yield stronger guarantees for $\ProblemPCSC$ and $\ProblemPCMSSC$. The two aforementioned tasks are as follows.
+Now, in order to obtain non-trivial approximation guarantees for all relevant covering tasks, we show how to reduce them to the well-known \textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$) problem. In particular, we show how to reduce the \textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$), which we introduce below to $\ProblemPRBSC$. This can be then leveraged to approximate both $\ProblemPCSC$ (trivially) and $\ProblemPCMSSC$ (non-trivially). Although approximation algorithms for the $\ProblemPRBSC$ are already known in the literature, we show a new algorithm, with an improved approximation ratio. The two aforementioned tasks are as follows.
 
 \begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
@@ -12,11 +11,14 @@ Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedenc
 Given disjoint sets $\cR$ of red elements and $\cB$ of blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $k$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $k$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cA',\cR}}$.
 \end{problem}
 
+For the special inforest- and outforest-cases, reductions of $\ProblemBPCSC$ to the \textsc{Maximum Coverage} and \textsc{Group Steiner Orienteering}, respectively, yield stronger guarantees for $\ProblemPCSC$ and $\ProblemPCMSSC$. 
+
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
 \label{subsection:PRBSC-bicriteria}
-Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, and $k$ the target number to cover. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian give a $\widetilde{\bigo}\br{m^{1/3}}$-approximation for $\ProblemPRBSC$ that covers at least $k$ blue elements~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. Here $\widetilde{\bigo}$ suppresses polylogarithmic factors. We first show that allowing a constant loss in blue coverage removes these factors from the red cost. Our deterministic algorithm covers at least one eighth of the target at cost $\bigo\br{m^{1/3}}$ times the optimum for target $k$. For $n\geq2$, repetition then meets the target at cost $\bigo\br{m^{1/3}\cdot\log n}$ times the optimum, still beating the previous state-of-the-art approach.
-
-Our rounding builds on their red-pivot LP rounding and heavy/light cost analysis. They select a useful red pivot and size class and repeat a density-improvement step. We use one strengthened relaxation and round all pivot--size groups together. The pair constraints allow us to sum the heavy-set charges over all size scales, while the assignment-load constraints control the blue coverage of each group. For our bicriteria goal, this avoids their decomposition and repeated pivot and size-class selection, although the global relaxation and coverage analysis require additional arguments. Their Section~3 also uses conditional expectations, whereas our potential handles a fixed coverage target and red cost simultaneously.
+Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, and $k$ the target number to cover. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian give a $\widetilde{\bigo}\br{m^{1/3}}$-approximation for $\ProblemPRBSC$~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. Here $\widetilde{\bigo}$ suppresses polylogarithmic factors. We first show that allowing a constant loss in blue coverage improves this to a pure $\bigo\br{m^{1/3}}$ guarantee.
+%  Our deterministic algorithm covers at least one eighth of the target at cost $\bigo\br{m^{1/3}}$ times the optimum for target $k$. 
+Note, that by repetition we can easily get a true $\bigo\br{m^{1/3}\cdot\log n}$-approximation still beating their approach.
+Our algorithm builds on their red-pivot LP rounding, however we use a strengthened relaxation with additional constraints and use a different and more involved analysis, including a non-trivial derandomization step (although our randomized rounding is conceptually simpler). In the original algorithm, the sets are partitioned according to the number of red elements they contain and a density-improvement step is repeated logarithmically many times. We inherit this bucketing idea, however to avoid the iterative step we round all these size groups together. In order to bound the cost of our solution we distinguish \emph{heavy} and \emph{light} covering sets, according to the solution of the LP. Additional pair constraints allow us to estimate the expected heavy-set charges over all size scales, while the contribution of light sets can be bounded easily. In order to show that our algorithm covers a significant fraction of the required blue elements, we distinguish a special random subset of covered blue elements called \emph{marks}. Their randomized choice allows us to lower bound their expected number, but imprtantly, at the same time upper bound its second moment. This comes handy in the derandomization step where we design a carefully defined random variable we call \emph{potential}, whose positive value guarantees achieving both covering goals simultaneously. This potential takes into account both the random variable denoting the size of the red coverage as well as the number of marks covered. Using the conditional expectation method, we show how to maintain its positivity throughout the entire derandomization step which allows us to arrive with a deterministic solution of good quality in polynomial time.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
 For instances of $\ProblemPRBSC$ with $m\geq1$ sets and feasible target $k\geq1$, there is a deterministic polynomial-time algorithm covering at least $k/8$ blue elements at a red cost at most $1400\cdot m^{1/3}$ times the optimum for target $k$.
@@ -301,6 +303,8 @@ If $\Phi>0$, all three subtracted terms are nonnegative, so $Y>k/8$. Each of the
 It follows that $R<1400\cdot K\cdot T$, and the actual red cost is at most $R$.
 \end{proof}
 
+The following claim is a straightforwards (although quite involved) usage of the conditional expectation method.
+
 \begin{claim}\label{claim:rbsc-conditional-expectations}
 An outcome with $\Phi>0$ can be found deterministically in polynomial time.
 \end{claim}
@@ -352,22 +356,19 @@ The group totals remain independent under $\mathcal{E}$. Therefore
  =\br{\sum_{r,s}\mathbb{E}[W_{r,s}\mid\mathcal{E}]}^2
   +\sum_{r,s}\br{\mathbb{E}[W_{r,s}^2\mid\mathcal{E}]-\mathbb{E}[W_{r,s}\mid\mathcal{E}]^2}.
 \end{equation}
-Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. A polynomial-bit rational LP solution suffices, and comparisons involving $T=m^{1/3}$ use exact arithmetic in a fixed-degree algebraic extension. The same formulas compute the conditional expectation for each possible value of the next coin. By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time. The unexposed coins in inactive groups or failed trials cannot affect $\Phi$, so the resulting value is positive.
+Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. The same formulas compute the conditional expectation for each possible value of the next coin. By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
-For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $k/8$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold. There are at most $\spr{\cR}$ guesses, proving the theorem. The case $k=0$, if allowed, is handled by returning the empty family.
+For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $k/8$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
 \begin{proposition}\label{pro:partial-red-blue}
-    Instances of $\ProblemPRBSC$ with $m$ sets and $n\geq2$ blue elements admit a deterministic polynomial-time $\alpha_{m,n}$-approximation algorithm, where $\alpha_{m,n}$ is a known bound satisfying
-    \[
-    \alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log n}.
-    \]
-    For $n\leq1$, the problem can be solved optimally, so we take $\alpha_{m,n}=1$.
+    There is a deterministic polynomial-time $\alpha_{m,n}$-approximation algorithm for $\ProblemPRBSC$, where $
+    \alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log n}.$
 \end{proposition}
 
-\subsection{$\ProblemPCSC$ and $\ProblemBPCSC$ via Partial Red-Blue Set Cover}
+\subsection{\texorpdfstring{$\ProblemPCSC$ and $\ProblemBPCSC$}{PCSC and B-PCSC} via Partial Red-Blue Set Cover}
 \label{subsection:PCSC}\label{subsection:BPCSC}
 We use the same exact reduction for both covering variants.
 Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T:T\in S^{+}}\cup\brc{b_u:u\in\cov\br{S^{+}}}$.
@@ -395,7 +396,7 @@ For $\ProblemBPCSC$, try all integer blue targets as in Theorem~\ref{thm:PCSC-BP
 \end{proof}
 
 \begin{corollary}\label{cor:bicriteria-decision-trees}
-There are deterministic polynomial-time $\bigo\br{m^{1/3}\log n}$-approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ under general precedence constraints.
+There are polynomial-time $\bigo\br{m^{1/3}\log n}$-approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ under general precedence constraints.
 \end{corollary}
 \begin{proof}
 For $\ProblemPCWCDT$, combine Corollary~\ref{cor:PCSC-BPCSC-bicriteria} with Theorem~\ref{thm:PCSC-to-PCWCDT}. For $\ProblemPCACDT$, combine the budgeted guarantee in Corollary~\ref{cor:PCSC-BPCSC-bicriteria} with Theorems~\ref{thm:BPCSC-to-PCMSSC} and~\ref{thm:PCMSSC-to-PCACDT}. In both cases the coverage-loss factor is the constant $8$, and every step of the covering-to-tree reductions is deterministic.
@@ -408,9 +409,10 @@ Trying all integer budgets $\budget\in[m]$ includes the optimal budget $\budget^
 \end{corollary}
 
 
-\subsection{$\ProblemPCMSSC$ via $\ProblemBPCSC$} \label{subsection:PCMSSC}
-We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. Note that, however, this intuition is not exact and is never used directly neither in the procedure nor its analysis.
+\subsection{\texorpdfstring{$\ProblemPCMSSC$ via $\ProblemBPCSC$}{PCMSSC via B-PCSC}} \label{subsection:PCMSSC}
+We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition is not exact and is not used directly in the procedure or its analysis.
 
+An empty universe is handled by returning the empty sequence. In the remainder, assume the instance is feasible and $\cU\ne\emptyset$; since $f>0$, every feasible solution then contains at least one set.
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta-1}{3\cdot\beta-2}$, so $1<a\leq 2$.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
 Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, where $\cCopt$ is an optimal solution to $\ProblemPCMSSC$.
@@ -500,7 +502,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u\leq2\cdot t_u$.
         The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives $\coverageTime\br{\pi_{l^*}^+,\cU}\leq2\cdot\coverageTime\br{\pi_{l^*},\cU}\leq864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}=\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}$.
     \end{proof}
-Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo(\beta^2\log^2 m)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size. All applications below use constant $\beta$.
+Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo((1+\beta\log(m+1))^2)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size. All applications below use constant $\beta$.
 By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     \setlength{\emergencystretch}{2em}

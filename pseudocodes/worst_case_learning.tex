@@ -18,14 +18,14 @@
     \For{$i=1$ \KwTo $\spr{\cC}$}{
         \ForEach{$H'\in t_i\br{\cH_i}$ with $1\leq\spr{H'}\leq\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$}{
             $D_{H'}\gets$ \ProcDecisionTree$(H',\cT,\preceq,\blackBox)$\;
-            Attach $D_{H'}$ as a child of $t_i$ in $D$.\;
+            Attach $D_{H'}$ as a child of $t_i$ in $D$, labeling the edge by the reply $H\in t_i$ with $H\cap\cH_i=H'$.\;
         }
         \If{there is no $H'\in t_i\br{\cH_i}$ with $\spr{H'}>\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$}{
             \Return $D$\;
         }
         $\cH_{i+1}\gets\argmax_{H'\in t_i\br{\cH_i}}\brc{\spr{H'}}$\;
         $t_{i+1}\gets$ the test associated with the $(i+1)$-th set in $\cC$.\;
-        Attach $t_{i+1}$ as a child of $t_i$ in $D$.\;
+        Attach $t_{i+1}$ as a child of $t_i$ in $D$, labeling the edge by the reply $H\in t_i$ with $H\cap\cH_i=\cH_{i+1}$.\;
     }
     \Return $D$\;
 }
