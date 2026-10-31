@@ -53,12 +53,7 @@ Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation 
 \end{problem}
 
 \paraTitle{Additional notation for decision trees.}
-Suppose that a decision tree strategy $D$ performed some tests $T\subseteq\cT$.
-The set $\cH_T(D)\subseteq\cH$ consists of all hypotheses $h$ such that for each test $t\in T$ the reply is a set $X\in t$ such that $h\in X$.
-Note that $\cH_T(D)$ does not depend on the order of performing these tests.
-Likewise, if $v$ is any node of a decision tree $D$ then $\cH_v(D)=\cH_T(D)$, where $T=\tests{D}{v}\setminus\{v\}$.
-We usually write $\cH_T$ when $D$ is clear from the context.
-For any node $v$ of $D$, $D_v$ is the subtree of $D$ that consists of $v$ and all its descendants.
+For a node $v$ of a decision tree $D$, let $\cH_v(D)$ be the set of hypotheses consistent with the replies on the path from the root to $v$: it is the intersection of $\cH$ with the reply labels on that path. In particular, $\cH_{r(D)}(D)=\cH$. We write $\cH_v$ when $D$ is clear from the context.
 
 \paraTitle{Set covering problems.}
 Set families are indexed, so distinct members may have identical contents.

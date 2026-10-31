@@ -1,7 +1,7 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
 
 
-In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea of these reductions is to use the solution of the appropriate covering problem in order to find a precedence-closed sequence of tests, such that performing all of them, guarantees that the size of each response is significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$ for the constant coverage-loss factors used in our applications, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$. In what follows we make these ideas precise.
+In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea is to use a solution of the appropriate covering problem to find a precedence-closed sequence of tests whose execution makes every remaining hypothesis set significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$ for the constant coverage-loss factors used in our applications, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$. In what follows we make these ideas precise.
 
 We consider feasible instances, so some test distinguishes each pair of hypotheses. Singleton instances require no tests. All sepcover constructions below concern instances with at least two hypotheses. We will require some additional notation.
 %For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$.
@@ -20,7 +20,7 @@ We will use the following immediate monotonicity properties.
 The following definition gives a basic tool for analysis of our algorithms.
 \begin{definition}[Sepcover]
   Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$.
-  Let $v$ be a node that is closest to the root and has the property that after removal of $\tests{D}{v}$ from $D$, each subtree has at most $\spr{\cH}/2$ leaves.
+  Let $v$ be a test node that is closest to the root and has the property that after removal of the vertices on the root-to-$v$ path from $D$, each remaining subtree has at most $\spr{\cH}/2$ leaves.
   Then the sequence $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcoverD{D}$.
   If $D$ is optimal for the decision-tree objective under consideration, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
 \end{definition}
@@ -63,7 +63,7 @@ If $\cC$ is returned as a family by an approximation algorithm for $\ProblemPCSC
 We iteratively build a decision tree $D$ by appending tests associated with consecutive sets from $\cC$.
 During each such iteration, we look at all possible replies to the appended test and for each sufficiently small reply $\cH'$ ($\spr{\cH'} \leq \frac{5\cdot\beta-1}{5\cdot\beta}\cdot \spr{\cH}$), we recursively call \ProcDecisionTree on the subinstance induced by $\cH'$. If there exists a large reply $\cH'$ ($\spr{\cH'} > \frac{5\cdot\beta-1}{5\cdot\beta}\cdot \spr{\cH}$), then we continue appending tests from $\cC$ as a reply associated with $\cH'$. Note that since $\frac{5\cdot\beta-1}{5\cdot\beta}>\frac{1}{2}$ for any $\beta \geq 1$, there is at most one such reply.
 % We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
-Every hypothesis covered by $\cC$ leaves the current path by its covering test. Since $\spr{\cov\br{\cC}}\geq\spr{\cU_{\xi}}/(4\cdot\beta)\geq\spr{\cH}/(5\cdot\beta)$, no reply after the last test exceeds the recursion threshold, so the procedure returns within the loop. Recursive calls may repeat an earlier test. Its reply is already determined, so these repetitions can be deleted afterward without increasing cost or violating precedence.
+Every hypothesis covered by $\cC$ leaves the current path by its covering test, unless the path has already ended. Since $\spr{\cov\br{\cC}}\geq\spr{\cU_{\xi}}/(4\cdot\beta)\geq\spr{\cH}/(5\cdot\beta)$, no reply after the last test exceeds the recursion threshold, so the procedure returns within the loop. Recursive calls may repeat an earlier test. Its reply is already determined, so these repetitions can be deleted afterward without increasing cost or violating precedence. The immediate recursive calls partition the current hypotheses into at least two nonempty subsets, and each path segment contains at most $m$ tests. Thus there are $\bigo(n)$ calls and the explicit tree has $\bigo(n(m+1))$ nodes.
 \input{pseudocodes/worst_case_learning.tex}
 
 
@@ -92,7 +92,7 @@ We have the following immediate corollary of the definition of sepcover.
     Thus $H\subseteq\xi(t_i)$, proving the claim. At $t_\ell$, all replies leave the path, so some prefix must reach the target. This prefix is precedence-closed and has at most $\spr{S}$ sets, proving the lemma.
 \end{proof}
 
-For a sequence $S$ of tests along a path from the root of $D$, denote this path by $D_S$, with $\COSTW\br{D_S}=\spr{S}$. For the cover $\cC$ returned by $\blackBox$, we write $D_{\cC}$ for the path built during the current call to Algorithm~\ref{alg:worstDecisionTree}. Its tests form a prefix of $\xi^{-1}(\cC)$.
+For a sequence $S$ of tests along a specified path from the root of $D$, denote its path of test nodes by $D_S$, with $\COSTW\br{D_S}=\spr{S}$. For the cover $\cC$ returned by $\blackBox$, we write $D_{\cC}$ for the path built during the current call to Algorithm~\ref{alg:worstDecisionTree}. Its tests form a prefix of $\xi^{-1}(\cC)$.
 The following observation is due to Lemmas \ref{lemma:subspace_opt} and \ref{lemma:cover_sep_worst_case}:
     \begin{observation} \label{obs:DS}
         Consider $D_{\cC}$ computed in Algorithm~\ref{alg:worstDecisionTree}, that uses a $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$ as the $\blackBox$ subroutine.
@@ -131,7 +131,7 @@ Theorem~\ref{thm:PCSC-to-PCWCDT} and the covering algorithms in Section~\ref{sec
     \begin{itemize}
         \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
         \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item Deterministic $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
+        \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
     \end{itemize}
 \end{corollary}
 
@@ -144,10 +144,10 @@ We begin with a counting identity.
 \begin{observation} \label{obs:dec-tree-averaging}
     If $D$ is a decision tree for $\ProblemPCACDT$, then $\COSTA\br{D}=\sum_{v\in X}\spr{\cH_v}$, where $X$ is the set of all non-leaf vertices of $D$.
 \end{observation}
-For a subtree $D'$ of $D$ with the same root, define $\COSTA\br{D'}=\sum_{v\in V(D')\cap\inner{D}}\spr{\cH_v(D)}$, where $\inner{D}$ is the set of test nodes of $D$. In particular, the last test of a path is counted even though it is a leaf of the path.
+For a subgraph $D'$ of $D$, define $\COSTA\br{D'}=\sum_{v\in V(D')\cap\inner{D}}\spr{\cH_v(D)}$, where $\inner{D}$ is the set of test nodes of $D$. In particular, the last test of a path is counted even though it is a leaf of the path.
 Observation~\ref{obs:dec-tree-averaging} allows us to decompose the cost criterion as follows.
 \begin{observation} \label{obs:WCdecomposition}
-    Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any node $v$ of $D$.
+    Let $D$ be any decision tree for an instance of $\ProblemPCACDT$ and let $S=\tests{D}{v}$ for any test node $v$ of $D$, with $D_S$ denoting the path to that node.
     Then,
     \[
     \COSTA\br{D} = \COSTA\br{D_{S}} + \sum_{D'\in D\setminus V\br{D_{S}}} \COSTA\br{D'}.
@@ -272,6 +272,6 @@ Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
     \begin{itemize}
         \item $\bigo\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
         \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item Deterministic $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
+        \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
     \end{itemize}
 \end{corollary}
