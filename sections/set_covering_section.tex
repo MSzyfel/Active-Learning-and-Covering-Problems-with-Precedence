@@ -329,34 +329,40 @@ and the probabilities that the group misses a blue or red element are
  \end{aligned}
 \]
 Independence of distinct groups and linearity of expectation then give
+\begingroup\small
 \begin{equation}\label{eq:rbsc-conditional-coverage-cost}
- \begin{aligned}
  \mathbb{E}[Y\mid\mathcal{E}]
- &=\sum_{u\in\cB'}\br{1-\prod_{r,s}\Pr[u\notin\cB_{r,s}\mid\mathcal{E}]},\\
+ =\sum_{u\in\cB'}\br{1-\prod_{r,s}\Pr[u\notin\cB_{r,s}\mid\mathcal{E}]},\quad
  \mathbb{E}[R\mid\mathcal{E}]
- &=\spr{\cR_+}+\sum_{t\in\cR\setminus \cR_+}\br{1-\prod_{r,s}\Pr[t\notin\cR_{r,s}\mid\mathcal{E}]}.
- \end{aligned}
+ =\spr{\cR_+}+\sum_{t\in\cR\setminus \cR_+}\br{1-\prod_{r,s}\Pr[t\notin\cR_{r,s}\mid\mathcal{E}]}.
 \end{equation}
+\endgroup
 For the second moment, fix a group $\cA_{r,s}$ and use the variables $N_A$ and $X_A$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
-\begin{align*}
- \mathbb{E}[N_A\mid\mathcal{E}]&=\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}],\\
- \mathbb{E}[X_A\mid\mathcal{E}]&=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\mathbb{E}[N_A\mid\mathcal{E}],\\
- \mathbb{E}[X_A^2\mid\mathcal{E}]&=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_A\mid\mathcal{E}]^2+\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]}}.
-\end{align*}
+\[
+ \begin{gathered}
+ \mathbb{E}[N_A\mid\mathcal{E}]=\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}],\qquad
+ \mathbb{E}[X_A\mid\mathcal{E}]=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\mathbb{E}[N_A\mid\mathcal{E}],\\
+ \mathbb{E}[X_A^2\mid\mathcal{E}]=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_A\mid\mathcal{E}]^2+\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]}}.
+ \end{gathered}
+\]
 The variables $X_A$ remain independent across occurrences, and $L_{r,s}$ remains independent of activation. Thus
-\begin{align*}
- \mathbb{E}[L_{r,s}\mid\mathcal{E}]&=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A\mid\mathcal{E}],\\
- \mathbb{E}[L_{r,s}^2\mid\mathcal{E}]&=\mathbb{E}[L_{r,s}\mid\mathcal{E}]^2+\sum_{A\in\cA_{r,s}}\br{\mathbb{E}[X_A^2\mid\mathcal{E}]-\mathbb{E}[X_A\mid\mathcal{E}]^2},\\
- \mathbb{E}[W_{r,s}\mid\mathcal{E}]&=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}\mid\mathcal{E}],\\
- \mathbb{E}[W_{r,s}^2\mid\mathcal{E}]&=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}^2\mid\mathcal{E}].
-\end{align*}
+\[
+ \begin{gathered}
+ \mathbb{E}[L_{r,s}\mid\mathcal{E}]=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A\mid\mathcal{E}],\qquad
+ \mathbb{E}[L_{r,s}^2\mid\mathcal{E}]=\mathbb{E}[L_{r,s}\mid\mathcal{E}]^2+\sum_{A\in\cA_{r,s}}\br{\mathbb{E}[X_A^2\mid\mathcal{E}]-\mathbb{E}[X_A\mid\mathcal{E}]^2},\\
+ \mathbb{E}[W_{r,s}\mid\mathcal{E}]=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}\mid\mathcal{E}],\qquad
+ \mathbb{E}[W_{r,s}^2\mid\mathcal{E}]=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}^2\mid\mathcal{E}].
+ \end{gathered}
+\]
 The group totals remain independent under $\mathcal{E}$. Therefore
 \begin{equation}\label{eq:rbsc-conditional-second-moment}
  \mathbb{E}[W^2\mid\mathcal{E}]
  =\br{\sum_{r,s}\mathbb{E}[W_{r,s}\mid\mathcal{E}]}^2
   +\sum_{r,s}\br{\mathbb{E}[W_{r,s}^2\mid\mathcal{E}]-\mathbb{E}[W_{r,s}\mid\mathcal{E}]^2}.
 \end{equation}
-Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. The same formulas compute the conditional expectation for each possible value of the next coin. By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
+Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. 
+% The same formulas compute the conditional expectation for each possible value of the next coin. 
+By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
 For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $k/8$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold.
