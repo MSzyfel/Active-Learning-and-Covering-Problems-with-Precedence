@@ -129,7 +129,7 @@ Theorem~\ref{thm:PCSC-to-PCWCDT} and the covering algorithms in Section~\ref{sec
 \begin{corollary}\label{cor:PCWCDT-special-cases}
     There exist polynomial-time algorithms for $\ProblemPCWCDT$ with the following guarantees:
     \begin{itemize}
-        \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}, and Corollary~\ref{cor:BPCSC-to-PCSC}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:BPCSC-inforest}.
         \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
         \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
     \end{itemize}
@@ -262,7 +262,8 @@ The following is analogous to Observation~\ref{obs:DS} however requires a more c
     &=2\cdot\alpha\cdot\OPT\br{\cI}+a\cdot\log n\cdot\OPT\br{\cI}-2\cdot\alpha\cdot\OPT\br{\cI}
     =a\cdot\log n\cdot\OPT\br{\cI}.
 \end{align*}
-The equality uses Observation~\ref{obs:WCdecomposition}. The first inequality uses the induction hypothesis and Observation~\ref{obs:DS-average}. For the second inequality, use Observation~\ref{obs:sepcoverAC}, $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\rho\cdot n$, and Lemma~\ref{lemma:subinstances_avg}, since the hypothesis sets of the recursive calls are disjoint. Finally, $a\cdot\log\rho=-2\cdot\alpha$, proving~\eqref{eq:D-average}.
+The equality uses Observation~\ref{obs:WCdecomposition}. The first inequality uses the induction hypothesis and Observation~\ref{obs:DS-average}. For the second one, use Observation~\ref{obs:sepcoverAC}, $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\rho\cdot n$, and Lemma~\ref{lemma:subinstances_avg}, since the hypothesis sets of the recursive calls are disjoint. 
+% Finally, $a\cdot\log\rho=-2\cdot\alpha$, proving~\eqref{eq:D-average}.
 \end{proof}
 
 Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
@@ -272,6 +273,6 @@ Thus, by Theorem \ref{thm:PCMSSC-to-PCACDT} we obtain the following corollary:
     \begin{itemize}
         \item $\bigo\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
         \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
-        \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:bicriteria-decision-trees}.
+        \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:PCACDT-general}.
     \end{itemize}
 \end{corollary}
