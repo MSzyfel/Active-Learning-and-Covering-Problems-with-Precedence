@@ -5,7 +5,7 @@
 We obtain approximation guarantees for our covering tasks using the \textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$) problem. We first give an algorithm for $\ProblemPRBSC$ and reduce $\ProblemPCSC$ to it. We then introduce a budgeted variant, obtain an approximation for it using $\ProblemPCSC$, and use it to approximate $\ProblemPCMSSC$. Although approximation algorithms for $\ProblemPRBSC$ are already known, we give an algorithm with an improved approximation ratio.
 
 \begin{problem}[\textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$)] \label{problem:PRBSC}
-Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cA',\cR}}$.
+Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cS$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cS'\subseteq\cS$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cS',\cR}}$.
 \end{problem}
 
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
@@ -15,30 +15,30 @@ Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, 
 Our algorithm builds on their LP-rounding approach, however we use a stronger LP relaxation. Moreover, our is more involved, including a non-trivial derandomization step. In the original algorithm, the sets are partitioned according to the number of red elements they contain and a step finding a collection with a favorable ratio of red cost to blue coverage is repeated until the target is met. We inherit this bucketing idea, however we round all these size groups together. In order to bound the cost of our solution we distinguish \emph{heavy} and \emph{light} covering sets according to the LP solution. Additional constraints for pairs of red elements allow us to bound the expected red cost of heavy sets across all sizes, while light sets have sufficiently small selection probabilities that we can bound their total cost by counting them with multiplicity. In order to show that our algorithm covers a significant fraction of the blue elements, we use random marks to identify some of the covered blue elements. Their randomized choice allows us to lower bound the expected number of distinct marked elements and, at the same time, upper bound this value's second moment. This comes in handy during the derandomization step where we design a carefully defined random variable we call \emph{potential}, whose non-negative value is maintained throughout the rounding using the method of conditional expectations, yielding a quality deterministic solution in polynomial time.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
-There is a deterministic polynomial-time algorithm for $\ProblemPRBSC$ that outputs a subfamily $\cA'\subseteq\cA$ satisfying $\spr{\cov\br{\cA',\cB}}\geq t/8$ and $\spr{\cov\br{\cA',\cR}}\leq920\cdot m^{1/3}\cdot\OPT$, where $\OPT$ is the optimum red cost for target $t$.
+There is a deterministic polynomial-time algorithm for $\ProblemPRBSC$ that outputs a subfamily $\cS'\subseteq\cS$ satisfying $\spr{\cov\br{\cS',\cB}}\geq t/8$ and $\spr{\cov\br{\cS',\cR}}\leq920\cdot m^{1/3}\cdot\OPT$, where $\OPT$ is the optimum red cost for target $t$.
 \end{theorem}
 \begin{proof}
-Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. 
-% First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $t/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. 
+Write $\cR_S=S\cap\cR$ and $\cB_S=S\cap\cB$ for each $S\in\cS$.
+% First select all sets $S$ with $\cR_S=\emptyset$, that is, all sets containing no red elements. If they cover at least $t/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero.
 In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost $\OPT$ (this can be done in $O\br{\log\br{\spr{\cR}}}$ tries). Assume that we have a correct guess. In our LP there will be the following variables:
 \begin{enumerate}
     \item For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicating whether $r$ is covered.
-    \item For each set $A\in\cA$, the variable $x_A\in[0,1]$ indicating whether $A$ is selected.
+    \item For each set $S\in\cS$, the variable $x_S\in[0,1]$ indicating whether $S$ is selected.
     \item For each blue element $u\in\cB$, the variable $z_u\in[0,1]$ indicating whether $u$ is one of the $t$ \emph{chosen} covered blue elements. An optimal integral solution may cover additional blue elements.
-    \item For each $A\in\cA$ and $u\in\cB_A$, the variable $a_{u,A}\in[0,1]$ indicating the part of $z_u$ assigned to the set $A$. In an integral solution each chosen $u$  is assigned to one selected set containing it. 
+    \item For each $S\in\cS$ and $u\in\cB_S$, the variable $a_{u,S}\in[0,1]$ indicating the part of $z_u$ assigned to the set $S$. In an integral solution each chosen $u$  is assigned to one selected set containing it.
     \item For each ordered pair $r,q\in\cR$, the variable $y_{r,q}\in[0,1]$ with intended integral value is $y_r\cdot y_q$. Note, that we will not impose this nonlinear equality, but use linear inequalities that it satisfies.
 \end{enumerate}
 
 For the current guess $K$, the LP is as follows
 \begin{align}
  \sum_{r\in\cR}y_r&\leq K, \quad\quad \sum_{u\in\cB}z_u=t, && \label{eq:rbsc-lp-budget}\\
- \sum_{A\in\cA\colon u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
- a_{u,A}&\leq x_A &&(A\in\cA,\ u\in \cB_A), \label{eq:rbsc-lp-marginal}\\
- \sum_{u\in \cB_A}a_{u,A}&\leq t\cdot x_A &&(A\in\cA), \label{eq:rbsc-lp-set}\\
- x_A&\leq y_r &&(A\in\cA,\ r\in \cR_A), \label{eq:rbsc-lp-red}\\
- \sum_{A\in\cA\colon r\in \cR_A,\,u\in \cB_A}a_{u,A}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
- \sum_{A\in\cA\colon r\in \cR_A}\sum_{u\in \cB_A}a_{u,A}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
- x_A&\leq y_{r,q} &&(A\in\cA,\ r,q\in \cR_A), \label{eq:rbsc-lp-pair}\\
+ \sum_{S\in\cS\colon u\in \cB_S}a_{u,S}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
+ a_{u,S}&\leq x_S &&(S\in\cS,\ u\in \cB_S), \label{eq:rbsc-lp-marginal}\\
+ \sum_{u\in \cB_S}a_{u,S}&\leq t\cdot x_S &&(S\in\cS), \label{eq:rbsc-lp-set}\\
+ x_S&\leq y_r &&(S\in\cS,\ r\in \cR_S), \label{eq:rbsc-lp-red}\\
+ \sum_{S\in\cS\colon r\in \cR_S,\,u\in \cB_S}a_{u,S}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
+ \sum_{S\in\cS\colon r\in \cR_S}\sum_{u\in \cB_S}a_{u,S}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
+ x_S&\leq y_{r,q} &&(S\in\cS,\ r,q\in \cR_S), \label{eq:rbsc-lp-pair}\\
  \sum_{q\in\cR}y_{r,q}&\leq K\cdot y_r &&(r\in\cR). \label{eq:rbsc-lp-pair-budget}
 \end{align}
 % The assignment constraints limit the load on each set and red element. In particular, they prevent the same blue element from contributing too much within a group and bound the total number of marks expected in an active group. The pair constraints give a budget for jointly covered red elements. This will let us charge heavy occurrences across all scales.
@@ -48,14 +48,14 @@ For the current guess $K$, the LP is as follows
 For the correct guess $K=\OPT$, the above system is a polynomial-size relaxation of $\ProblemPRBSC$ with red-cost bound $\OPT$.
 \end{claim}
 \begin{proof}
-Let $\cA^*\subseteq\cA$ be an optimal solution, with $\spr{\cov\br{\cA^*,\cB}}\geq t$ and $\spr{\cov\br{\cA^*,\cR}}=\OPT=K$. Choose $\cB^*\subseteq\cov\br{\cA^*,\cB}$ with $\spr{\cB^*}=t$ and, for each $u\in\cB^*$, choose a set $A_u\in\cA^*$ containing $u$. Define
+Let $\cS^*\subseteq\cS$ be an optimal solution, with $\spr{\cov\br{\cS^*,\cB}}\geq t$ and $\spr{\cov\br{\cS^*,\cR}}=\OPT=K$. Choose $\cB^*\subseteq\cov\br{\cS^*,\cB}$ with $\spr{\cB^*}=t$ and, for each $u\in\cB^*$, choose a set $S_u\in\cS^*$ containing $u$. Define
 \[
- x_A=\boldsymbol{1}_{A\in\cA^*},\qquad
- y_r=\boldsymbol{1}_{r\in\cov\br{\cA^*,\cR}},\qquad
+ x_S=\boldsymbol{1}_{S\in\cS^*},\qquad
+ y_r=\boldsymbol{1}_{r\in\cov\br{\cS^*,\cR}},\qquad
  z_u=\boldsymbol{1}_{u\in\cB^*},\qquad
  y_{r,q}=y_r\cdot y_q.
 \]
-For the assignment variables, set $a_{u,A_u}=1$ for each $u\in\cB^*$ and set all other $a_{u,A}$ to zero.
+For the assignment variables, set $a_{u,S_u}=1$ for each $u\in\cB^*$ and set all other $a_{u,S}$ to zero.
 
 The budget and assignment constraints hold by construction. Each assigned blue element belongs to a selected set, and at most $t$ blue elements are assigned to any set, proving~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set}. \DDfix{Each selected set does not contain red elements that are not covered,} proving~\eqref{eq:rbsc-lp-red} and~\eqref{eq:rbsc-lp-pair}. If $y_r=0$, no selected set contains $r$, so both assignment sums in~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load} involving $r$ vanish. If $y_r=1$, a fixed blue element is assigned at most once, and there are $t$ assignments in total. This proves~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load}. Moreover,
 \[
@@ -66,68 +66,68 @@ which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constr
 
 For the smallest feasible guess $K\leq \OPT$ fix a feasible solution and put
 \[
- T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+, \textup{ for }A\in\cA.
+ T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_S=\cR_S\setminus \cR_+, \textup{ for }S\in\cS.
 \]
-We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cA_0=\brc{A\in\cA\colon \cR'_A=\emptyset}$. Its red coverage satisfies $\cov\br{\cA_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cA_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cA_0,\cB}}\geq t/8$, retain $\cA_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cA_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cA_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_S$ the \emph{residual red part} of $S$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cS_0=\brc{S\in\cS\colon \cR'_S=\emptyset}$. Its red coverage satisfies $\cov\br{\cS_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cS_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cS_0,\cB}}\geq t/8$, retain $\cS_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cS_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cS_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
  \geq t-\spr{\cB\setminus\cB'}>\frac{7}{8}\cdot t.
 \end{equation}
 
-For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cA_s$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cA_{r,s}$ by
+For every power of two $d=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cS_d$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cS_{r,d}$ by
 \[
- \cA_s=\brc{A\in\cA\colon s\leq\spr{\cR'_A}<2\cdot s},
+ \cS_d=\brc{S\in\cS\colon d\leq\spr{\cR'_S}<2\cdot d},
  \qquad
- \cA_{r,s}=\brc{A\in\cA_s\colon r\in \cR'_A}.
+ \cS_{r,d}=\brc{S\in\cS_d\colon r\in \cR'_S}.
 \]
-Each set with a nonempty residual red part belongs to exactly one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. 
-% This multiplicity will compensate for the factor $1/s$ in the activation probability.
+Each set with a nonempty residual red part belongs to exactly one $\cS_d$. We call $r$ the \emph{pivot} of $\cS_{r,d}$. A set $S\in\cS_d$ belongs to the group $\cS_{r,d}$ for each residual red element $r\in\cR'_S$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $S$. A set at scale $d$ has at least $d$ residual red elements and hence, unless its LP value is zero, at least $d$ occurrences.
+% This multiplicity will compensate for the factor $1/d$ in the activation probability.
 
-For each $r$ and $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is \emph{activated}, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is \emph{selected} if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Note, that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Define the random families $\cF_{r,s}$ and $\cA'$, sets $\cR_{r,s}$ and $\cR_0$, and the variable $R$ by
+For each $r$ and $d$, let $E_{r,d}$ be the event that group $\cS_{r,d}$ is \emph{activated}, with $\Pr[E_{r,d}]=y_r/d$. For each $S\in\cS_{r,d}$, let $J_{r,d,S}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,d,S}]=x_S/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $S$ is \emph{selected} if and only if both $E_{r,d}$ and $J_{r,d,S}$ occur, so selection events in the same group share the activation event. Note, that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $d\geq1$. Define the random families $\cF_{r,d}$ and $\cS'$, sets $\cR_{r,d}$ and $\cR_0$, and the variable $R$ by
 \[
  \begin{gathered}
- \cF_{r,s}=\brc{A\in\cA_{r,s}\colon E_{r,s}\text{ and }J_{r,s,A}\text{ occur}},
- \qquad \cA'=\cA_0\cup\bigcup_{r,s}\cF_{r,s},\\
- \cR_{r,s}=\bigcup_{A\in\cF_{r,s}}\cR'_A,
- \qquad \cR_0=\bigcup_{r,s}\cR_{r,s},
+ \cF_{r,d}=\brc{S\in\cS_{r,d}\colon E_{r,d}\text{ and }J_{r,d,S}\text{ occur}},
+ \qquad \cS'=\cS_0\cup\bigcup_{r,d}\cF_{r,d},\\
+ \cR_{r,d}=\bigcup_{S\in\cF_{r,d}}\cR'_S,
+ \qquad \cR_0=\bigcup_{r,d}\cR_{r,d},
  \qquad R=\spr{\cR_+}+\spr{\cR_0}.
  \end{gathered}
 \]
-The output satisfies $\cov\br{\cA',\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cA',\cR}}\leq R$.
+The output satisfies $\cov\br{\cS',\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cS',\cR}}\leq R$.
 
 \begin{claim}\label{claim:rbsc-red-cost}
 The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
 \end{claim}
 \begin{proof}
-Put $\theta=K/T$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cA_{r,s}$, partition its occurrences into the \emph{heavy} and \emph{light} families
+Put $\theta=K/T$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cS_{r,d}$, partition its occurrences into the \emph{heavy} and \emph{light} families
 \[
- \cA^h_{r,s}=\brc{A\in\cA_{r,s}\colon x_A/y_r\geq\theta/s},
- \qquad \cA^\ell_{r,s}=\cA_{r,s}\setminus\cA^h_{r,s}.
+ \cS^h_{r,d}=\brc{S\in\cS_{r,d}\colon x_S/y_r\geq\theta/d},
+ \qquad \cS^\ell_{r,d}=\cS_{r,d}\setminus\cS^h_{r,d}.
 \]
 The same set may be heavy in one group and light in another. Define the random sets of residual red elements reached by selected heavy and light occurrences by
 \[
- \cR_h=\bigcup_{r,s}\bigcup_{A\in\cF_{r,s}\cap\cA^h_{r,s}}\cR'_A,
+ \cR_h=\bigcup_{r,d}\bigcup_{S\in\cF_{r,d}\cap\cS^h_{r,d}}\cR'_S,
  \qquad
- \cR_\ell=\bigcup_{r,s}\bigcup_{A\in\cF_{r,s}\cap\cA^\ell_{r,s}}\cR'_A.
+ \cR_\ell=\bigcup_{r,d}\bigcup_{S\in\cF_{r,d}\cap\cS^\ell_{r,d}}\cR'_S.
 \]
 Define $R_h=\spr{\cR_h}$ and $R_\ell=\spr{\cR_\ell}$. Since every selected occurrence is either heavy or light, $R\leq\spr{\cR_+}+R_h+R_\ell$. We bound the expectations of these two variables separately.
 
-Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\cS_{r,q}=\brc{s\colon \exists A\in\cA^h_{r,s}\colon q\in\cR'_A}$ and the event
+Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\mathcal{I}_{r,q}=\brc{d\colon \exists S\in\cS^h_{r,d}\colon q\in\cR'_S}$ and the event
 \[
- F_{r,q}=\bigcup_{s\in\cS_{r,q}}\ \bigcup_{A\in\cA^h_{r,s}\colon q\in\cR'_A}\br{E_{r,s}\cap J_{r,s,A}}.
+ F_{r,q}=\bigcup_{d\in\mathcal{I}_{r,q}}\ \bigcup_{S\in\cS^h_{r,d}\colon q\in\cR'_S}\br{E_{r,d}\cap J_{r,d,S}}.
 \]
-Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cA_{r,s}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\cS_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $s\in\cS_{r,q}$, a corresponding heavy occurrence satisfies
+Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cS_{r,d}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\mathcal{I}_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $d\in\mathcal{I}_{r,q}$, a corresponding heavy occurrence satisfies
 \[
- y_{r,q}\geq x_A\geq\frac{\theta\cdot y_r}{s},
+ y_{r,q}\geq x_S\geq\frac{\theta\cdot y_r}{d},
 \]
-where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $s\geq\theta\cdot y_r/y_{r,q}$. Let $s_0$ be the smallest scale in $\cS_{r,q}$. All scales are powers of two, so every scale in $\cS_{r,q}$ is of the form $2^j\cdot s_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{s\in\cS_{r,q}}E_{r,s}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
+where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $d\geq\theta\cdot y_r/y_{r,q}$. Let $d_0$ be the smallest scale in $\mathcal{I}_{r,q}$. All scales are powers of two, so every scale in $\mathcal{I}_{r,q}$ is of the form $2^j\cdot d_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{d\in\mathcal{I}_{r,q}}E_{r,d}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
 \[
- \Pr[F_{r,q}]\leq\sum_{s\in\cS_{r,q}}\frac{y_r}{s}
- \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot s_0}=\frac{2\cdot y_r}{s_0}
+ \Pr[F_{r,q}]\leq\sum_{d\in\mathcal{I}_{r,q}}\frac{y_r}{d}
+ \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot d_0}=\frac{2\cdot y_r}{d_0}
  \leq\frac{2\cdot y_{r,q}}{\theta}.
 \]
-The same bound holds when $\cS_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cA_{r,s}$, so $F_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
+The same bound holds when $\mathcal{I}_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cS_{r,d}$, so $F_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
 \[
  \mathbb{E}[R_h]
  =\sum_{q\in\cR}\Pr[q\in\cR_h]
@@ -137,22 +137,22 @@ The same bound holds when $\cS_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\c
  \leq\frac{2\cdot K^2}{\theta}.
 \]
 
-Now, for each $A\in\cA^\ell_{r,s}$, independence of the activation and trial events give
+Now, for each $S\in\cS^\ell_{r,d}$, independence of the activation and trial events give
 \[
- \Pr[E_{r,s}\cap J_{r,s,A}]
- =\Pr[E_{r,s}]\cdot\Pr[J_{r,s,A}]
- =\frac{y_r}{s}\cdot\frac{x_A}{y_r}
- =\frac{x_A}{s}<\frac{\theta\cdot y_r}{s^2}.
+ \Pr[E_{r,d}\cap J_{r,d,S}]
+ =\Pr[E_{r,d}]\cdot\Pr[J_{r,d,S}]
+ =\frac{y_r}{d}\cdot\frac{x_S}{y_r}
+ =\frac{x_S}{d}<\frac{\theta\cdot y_r}{d^2}.
 \]
 By linearity of expectation, the above probability bound and $y_r<1/T$,
 \[
  \mathbb{E}[R_\ell]
- \leq\sum_{r,s}\sum_{A\in\cA^\ell_{r,s}}\spr{\cR'_A}\cdot\Pr[E_{r,s}\cap J_{r,s,A}]
- \leq\frac{\theta}{T}\cdot\sum_{r,s}\sum_{A\in\cA^\ell_{r,s}}\frac{\spr{\cR'_A}}{s^2}
- \leq\frac{\theta}{T}\cdot\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}^2}{s^2}
+ \leq\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\spr{\cR'_S}\cdot\Pr[E_{r,d}\cap J_{r,d,S}]
+ \leq\frac{\theta}{T}\cdot\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\frac{\spr{\cR'_S}}{d^2}
+ \leq\frac{\theta}{T}\cdot\sum_d\sum_{S\in\cS_d}\frac{\spr{\cR'_S}^2}{d^2}
  \leq\frac{4\cdot\theta\cdot m}{T}.
 \]
-Here, the third inequality counts, for each $A\in\cA_s$, at most one occurrence for each of its $\spr{\cR'_A}$ residual red elements. The last inequality uses $\spr{\cR'_A}/s<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
+Here, the third inequality counts, for each $S\in\cS_d$, at most one occurrence for each of its $\spr{\cR'_S}$ residual red elements. The last inequality uses $\spr{\cR'_S}/d<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
 \begin{equation}\label{eq:rbsc-cost-expectation}
  \mathbb{E}[R]
  \leq K\cdot T+\frac{2\cdot K^2}{\theta}+\frac{4\cdot\theta\cdot m}{T}
@@ -161,56 +161,56 @@ Here, the third inequality counts, for each $A\in\cA_s$, at most one occurrence 
 \end{equation}
 \end{proof}
 
-To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $A$ with $x_A>0$ in group $\cA_{r,s}$, independently mark each $u\in\cB_A\cap\cB'$ using a coin $Z_{r,s,A,u}$ with $\Pr[Z_{r,s,A,u}=1]=a_{u,A}/x_A$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_A=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,A}$. Define $\cD_{r,s,A}=\brc{u\in\cB_A\cap\cB'\colon J_{r,s,A}\text{ occurs and }Z_{r,s,A,u}=1}$. Let $\cB_{r,s}=\bigcup_{A\in\cF_{r,s}}\cD_{r,s,A}$ be the set of elements marked by selected occurrences in group $\cA_{r,s}$ and $\widehat{\cB}=\bigcup_{r,s}\cB_{r,s}$ with $Y=\spr{\widehat{\cB}}$. 
+To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $S$ with $x_S>0$ in group $\cS_{r,d}$, independently mark each $u\in\cB_S\cap\cB'$ using a coin $Z_{r,d,S,u}$ with $\Pr[Z_{r,d,S,u}=1]=a_{u,S}/x_S$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_S=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,S}$. Define $\cD_{r,d,S}=\brc{u\in\cB_S\cap\cB'\colon J_{r,d,S}\text{ occurs and }Z_{r,d,S,u}=1}$. Let $\cB_{r,d}=\bigcup_{S\in\cF_{r,d}}\cD_{r,d,S}$ be the set of elements marked by selected occurrences in group $\cS_{r,d}$ and $\widehat{\cB}=\bigcup_{r,d}\cB_{r,d}$ with $Y=\spr{\widehat{\cB}}$.
 % In an active group, a successful trial with no marks still selects the occurrence and its red elements.
 
 \begin{claim}\label{claim:rbsc-blue-coverage}
 The expected number of distinct marked blue elements satisfies $\mathbb{E}[Y]>2\cdot t/5$.
 \end{claim}
 \begin{proof}
-Fix $u\in\cB'$. For an occurrence of $A$ in group $\cA_{r,s}$ with $u\in \cB_A$ and $x_A>0$, the probability that its trial succeeds and its marking coin for $u$ succeeds is
+Fix $u\in\cB'$. For an occurrence of $S$ in group $\cS_{r,d}$ with $u\in \cB_S$ and $x_S>0$, the probability that its trial succeeds and its marking coin for $u$ succeeds is
 \[
- \Pr[u\in \cD_{r,s,A}]=\frac{x_A}{y_r}\cdot\frac{a_{u,A}}{x_A}=\frac{a_{u,A}}{y_r}.
+ \Pr[u\in \cD_{r,d,S}]=\frac{x_S}{y_r}\cdot\frac{a_{u,S}}{x_S}=\frac{a_{u,S}}{y_r}.
 \]
-When $x_A=0$, $\Pr[u\in \cD_{r,s,A}]=a_{u,A}=0$. The sum of these probabilities within $\cA_{r,s}$ is
+When $x_S=0$, $\Pr[u\in \cD_{r,d,S}]=a_{u,S}=0$. The sum of these probabilities within $\cS_{r,d}$ is
 \[
- \lambda_{r,s,u}
- =\sum_{A\in\cA_{r,s}\colon u\in\cB_A}\Pr[u\in\cD_{r,s,A}]
- =\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}
+ \lambda_{r,d,u}
+ =\sum_{S\in\cS_{r,d}\colon u\in\cB_S}\Pr[u\in\cD_{r,d,S}]
+ =\frac1{y_r}\cdot\sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}
  \leq1
 \]
 by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are independent. We use the inequality $1-x\leq e^{-x}$ and the concavity of $1-e^{-a\cdot x}$, which gives $1-e^{-a\cdot x}\geq(1-e^{-a})\cdot x$ for $a\geq0$ and $x\in[0,1]$. The group's conditional probability of marking $u$ is therefore at least
 \[
- \Pr[u\in\cB_{r,s}\mid E_{r,s}]
- =1-\prod_{A\in\cA_{r,s}\colon u\in \cB_A}
-       \br{1-\frac{a_{u,A}}{y_r}}
- \geq1-e^{-\lambda_{r,s,u}}
- \geq(1-e^{-1})\cdot\lambda_{r,s,u}.
+ \Pr[u\in\cB_{r,d}\mid E_{r,d}]
+ =1-\prod_{S\in\cS_{r,d}\colon u\in \cB_S}
+       \br{1-\frac{a_{u,S}}{y_r}}
+ \geq1-e^{-\lambda_{r,d,u}}
+ \geq(1-e^{-1})\cdot\lambda_{r,d,u}.
 \]
-Since $\cB_{r,s}=\emptyset$ when the group is inactive, the preceding bound and the definition of $\lambda_{r,s,u}$ give
+Since $\cB_{r,d}=\emptyset$ when the group is inactive, the preceding bound and the definition of $\lambda_{r,d,u}$ give
 \[
- \Pr[u\in\cB_{r,s}]=\Pr[E_{r,s}]\cdot\Pr[u\in\cB_{r,s}\mid E_{r,s}]
- \geq\frac{y_r}{s}\cdot(1-e^{-1})\cdot\lambda_{r,s,u}
- =\frac{1-e^{-1}}{s}\cdot\sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}.
+ \Pr[u\in\cB_{r,d}]=\Pr[E_{r,d}]\cdot\Pr[u\in\cB_{r,d}\mid E_{r,d}]
+ \geq\frac{y_r}{d}\cdot(1-e^{-1})\cdot\lambda_{r,d,u}
+ =\frac{1-e^{-1}}{d}\cdot\sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}.
 \]
-Let $M_u=\sum_{r,s}\boldsymbol{1}_{u\in\cB_{r,s}}$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
+Let $M_u=\sum_{r,d}\boldsymbol{1}_{u\in\cB_{r,d}}$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
 \begin{align*}
- \mathbb{E}[M_u]&=\sum_{r,s}\Pr[u\in\cB_{r,s}]
- \geq(1-e^{-1})\cdot\sum_{r,s}\frac1s\cdot
-       \sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}\\
- &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s\colon u\in \cB_A}
-       \frac{a_{u,A}}s\cdot\sum_{r\in\cR'_A\colon y_r>0}1\\
- &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s\colon u\in \cB_A}
-       \frac{\spr{\cR'_A}}s\cdot a_{u,A}
- \geq(1-e^{-1})\cdot\sum_{A\in\cA\colon u\in \cB_A}a_{u,A}
+ \mathbb{E}[M_u]&=\sum_{r,d}\Pr[u\in\cB_{r,d}]
+ \geq(1-e^{-1})\cdot\sum_{r,d}\frac1d\cdot
+       \sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}\\
+ &=(1-e^{-1})\cdot\sum_d\sum_{S\in\cS_d\colon u\in \cB_S}
+       \frac{a_{u,S}}d\cdot\sum_{r\in\cR'_S\colon y_r>0}1\\
+ &=(1-e^{-1})\cdot\sum_d\sum_{S\in\cS_d\colon u\in \cB_S}
+       \frac{\spr{\cR'_S}}d\cdot a_{u,S}
+ \geq(1-e^{-1})\cdot\sum_{S\in\cS\colon u\in \cB_S}a_{u,S}
  =(1-e^{-1})\cdot z_u.
 \end{align*}
-For the second equality, fix a scale $s$ and a set $A_u\in\cA_s$ containing $u$. The term $a_{u,A_u}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}\colon u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A_u}\leq x_{A_u}\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, $A\in\cA_0$ and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
+For the second equality, fix a scale $d$ and a set $S\in\cS_d$ containing $u$. The term $a_{u,S}$ appears in $\sum_r\sum_{S'\in\cS_{r,d}\colon u\in\cB_{S'}}a_{u,S'}$ once for each $r\in\cR'_S$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_S$, then $a_{u,S}\leq x_S\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $S$ containing $u\in\cB'$ has nonempty $\cR'_S$. Otherwise, $S\in\cS_0$ and would cover $u$. Such a set belongs to exactly one scale $d$, where $\spr{\cR'_S}/d\geq1$. Since $a_{u,S}\geq0$, replacing this factor by $1$ gives the lower bound.
 
 The rounding choices for distinct group indices are independent. Applying $1-x\leq e^{-x}$ across groups and then the above concavity bound for $z_u\in[0,1]$ yields
 \[
  \Pr[u\in\widehat{\cB}]
- =1-\prod_{r,s}\br{1-\Pr[u\in\cB_{r,s}]}
+ =1-\prod_{r,d}\br{1-\Pr[u\in\cB_{r,d}]}
  \geq1-e^{-\mathbb{E}[M_u]}
  \geq1-e^{-(1-e^{-1})\cdot z_u}
  \geq c\cdot z_u,
@@ -224,71 +224,71 @@ Since $c>23/50$, summing over $\cB'$ and using~\eqref{eq:rbsc-residual-mass} giv
 \]
 \end{proof}
 
-For each group $\cA_{r,s}$, define
+For each group $\cS_{r,d}$, define
 \[
- L_{r,s}=\sum_{A\in\cA_{r,s}}\spr{\cD_{r,s,A}},
- \qquad W_{r,s}=\boldsymbol{1}_{E_{r,s}}\cdot L_{r,s},
- \qquad W=\sum_{r,s}W_{r,s}.
+ L_{r,d}=\sum_{S\in\cS_{r,d}}\spr{\cD_{r,d,S}},
+ \qquad W_{r,d}=\boldsymbol{1}_{E_{r,d}}\cdot L_{r,d},
+ \qquad W=\sum_{r,d}W_{r,d}.
 \]
-Thus $W_{r,s}$ counts the marks in group $\cA_{r,s}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $Y\leq W$.
+Thus $W_{r,d}$ counts the marks in group $\cS_{r,d}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $Y\leq W$.
 
 \begin{claim}\label{claim:rbsc-second-moment}
 We have $\mathbb{E}[W^2]\leq10\cdot t^2$.
 \end{claim}
 \begin{proof}
-Fix a group $\cA_{r,s}$. For each occurrence $A\in\cA_{r,s}$, let $X_A=\spr{\cD_{r,s,A}}$, so $L_{r,s}=\sum_{A\in\cA_{r,s}}X_A$. These variables are defined before activation and are independent across occurrences. By linearity of expectation and the marking probabilities calculated above,
+Fix a group $\cS_{r,d}$. For each occurrence $S\in\cS_{r,d}$, let $X_S=\spr{\cD_{r,d,S}}$, so $L_{r,d}=\sum_{S\in\cS_{r,d}}X_S$. These variables are defined before activation and are independent across occurrences. By linearity of expectation and the marking probabilities calculated above,
 \[
- \mathbb{E}[X_A]=\sum_{u\in\cB_A\cap\cB'}\Pr[u\in\cD_{r,s,A}]
- =\frac1{y_r}\cdot\sum_{u\in \cB_A\cap\cB'}a_{u,A}.
+ \mathbb{E}[X_S]=\sum_{u\in\cB_S\cap\cB'}\Pr[u\in\cD_{r,d,S}]
+ =\frac1{y_r}\cdot\sum_{u\in \cB_S\cap\cB'}a_{u,S}.
 \]
-For the second moment, put $p_{u,A}=\Pr[Z_{r,s,A,u}=1]$ and $d_A=\sum_{u\in\cB_A\cap\cB'}p_{u,A}$. Let $N_A=\sum_{u\in\cB_A\cap\cB'}Z_{r,s,A,u}$. By~\eqref{eq:rbsc-lp-set}, $d_A\leq t$. The marking coins are independent Bernoulli variables, so
+For the second moment, put $p_{u,S}=\Pr[Z_{r,d,S,u}=1]$ and $\mu_S=\sum_{u\in\cB_S\cap\cB'}p_{u,S}$. Let $N_S=\sum_{u\in\cB_S\cap\cB'}Z_{r,d,S,u}$. By~\eqref{eq:rbsc-lp-set}, $\mu_S\leq t$. The marking coins are independent Bernoulli variables, so
 \[
- \mathbb{E}[N_A]=d_A,\qquad
- \operatorname{Var}(N_A)=\sum_{u\in\cB_A\cap\cB'}p_{u,A}\cdot(1-p_{u,A}).
+ \mathbb{E}[N_S]=\mu_S,\qquad
+ \operatorname{Var}(N_S)=\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S}).
 \]
-Moreover, $X_A=\boldsymbol{1}_{J_{r,s,A}}\cdot N_A$ and the trial is independent of $N_A$, so $\mathbb{E}[X_A]=(x_A/y_r)\cdot d_A$. Using $\mathbb{E}[N_A^2]=\mathbb{E}[N_A]^2+\operatorname{Var}(N_A)$ gives
+Moreover, $X_S=\boldsymbol{1}_{J_{r,d,S}}\cdot N_S$ and the trial is independent of $N_S$, so $\mathbb{E}[X_S]=(x_S/y_r)\cdot \mu_S$. Using $\mathbb{E}[N_S^2]=\mathbb{E}[N_S]^2+\operatorname{Var}(N_S)$ gives
 \[
- \mathbb{E}[X_A^2]=\frac{x_A}{y_r}\cdot\br{d_A^2+\sum_{u\in\cB_A\cap\cB'}p_{u,A}\cdot(1-p_{u,A})}
- \leq\frac{x_A}{y_r}\cdot(d_A^2+d_A)
- \leq(t+1)\cdot\mathbb{E}[X_A].
+ \mathbb{E}[X_S^2]=\frac{x_S}{y_r}\cdot\br{\mu_S^2+\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S})}
+ \leq\frac{x_S}{y_r}\cdot(\mu_S^2+\mu_S)
+ \leq(t+1)\cdot\mathbb{E}[X_S].
 \]
-The first-moment calculation and $r\in\cR_A$ for every $A\in\cA_{r,s}$ give
+The first-moment calculation and $r\in\cR_S$ for every $S\in\cS_{r,d}$ give
 \[
- \mathbb{E}[L_{r,s}]=\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}}\sum_{u\in\cB_A\cap\cB'}a_{u,A}
- \leq\frac1{y_r}\cdot\sum_{A\in\cA\colon r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq t,
+ \mathbb{E}[L_{r,d}]=\frac1{y_r}\cdot\sum_{S\in\cS_{r,d}}\sum_{u\in\cB_S\cap\cB'}a_{u,S}
+ \leq\frac1{y_r}\cdot\sum_{S\in\cS\colon r\in\cR_S}\sum_{u\in\cB_S}a_{u,S}\leq t,
 \]
-where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,s}^2$ and using independence across distinct occurrences gives
+where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,d}^2$ and using independence across distinct occurrences gives
 \begin{align*}
- \mathbb{E}[L_{r,s}^2]
- &=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{A,A'\in\cA_{r,s}\colon A\ne A'}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]\\
- &\leq(t+1)\cdot\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]+\br{\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]}^2
- =(t+1)\cdot\mathbb{E}[L_{r,s}]+\mathbb{E}[L_{r,s}]^2\leq(2t+1)\cdot\mathbb{E}[L_{r,s}].
+ \mathbb{E}[L_{r,d}^2]
+ &=\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S^2]+\sum_{S,S'\in\cS_{r,d}\colon S\ne S'}\mathbb{E}[X_S]\cdot\mathbb{E}[X_{S'}]\\
+ &\leq(t+1)\cdot\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S]+\br{\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S]}^2
+ =(t+1)\cdot\mathbb{E}[L_{r,d}]+\mathbb{E}[L_{r,d}]^2\leq(2t+1)\cdot\mathbb{E}[L_{r,d}].
 \end{align*}
-The first inequality uses the bound on $\mathbb{E}[X_A^2]$ and adds the nonnegative terms with $A=A'$ to the cross terms. The last inequality uses $\mathbb{E}[L_{r,s}]\leq t$.
-The variable $L_{r,s}$ is independent of activation. Multiplying the last bound by $y_r/s$ therefore gives
+The first inequality uses the bound on $\mathbb{E}[X_S^2]$ and adds the nonnegative terms with $S=S'$ to the cross terms. The last inequality uses $\mathbb{E}[L_{r,d}]\leq t$.
+The variable $L_{r,d}$ is independent of activation. Multiplying the last bound by $y_r/d$ therefore gives
 \begin{equation}\label{eq:rbsc-group-second-moment}
- \mathbb{E}[W_{r,s}^2]\leq(2t+1)\cdot\mathbb{E}[W_{r,s}].
+ \mathbb{E}[W_{r,d}^2]\leq(2t+1)\cdot\mathbb{E}[W_{r,d}].
 \end{equation}
-Moreover, by linearity of expectation, independence of $E_{r,s}$ and $L_{r,s}$, and the first-moment calculation above,
+Moreover, by linearity of expectation, independence of $E_{r,d}$ and $L_{r,d}$, and the first-moment calculation above,
 \begingroup\small
 \begin{align*}
  \mathbb{E}[W]
- &=\sum_{r,s}\Pr[E_{r,s}]\cdot\mathbb{E}[L_{r,s}]
- =\sum_{r,s}\frac1s\cdot\sum_{A\in\cA_{r,s}}
-       \sum_{u\in\cB_A\cap\cB'}a_{u,A}
- =\sum_s\sum_{A\in\cA_s}\frac1s\cdot
-       \br{\sum_{r\in\cR'_A\colon y_r>0}1}\cdot\sum_{u\in\cB_A\cap\cB'}a_{u,A}\\
- &=\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}}s\cdot
-       \sum_{u\in\cB_A\cap\cB'}a_{u,A}
- \leq2\cdot\sum_{u\in\cB'}\sum_{A\in\cA\colon u\in\cB_A}a_{u,A}
+ &=\sum_{r,d}\Pr[E_{r,d}]\cdot\mathbb{E}[L_{r,d}]
+ =\sum_{r,d}\frac1d\cdot\sum_{S\in\cS_{r,d}}
+       \sum_{u\in\cB_S\cap\cB'}a_{u,S}
+ =\sum_d\sum_{S\in\cS_d}\frac1d\cdot
+       \br{\sum_{r\in\cR'_S\colon y_r>0}1}\cdot\sum_{u\in\cB_S\cap\cB'}a_{u,S}\\
+ &=\sum_d\sum_{S\in\cS_d}\frac{\spr{\cR'_S}}d\cdot
+       \sum_{u\in\cB_S\cap\cB'}a_{u,S}
+ \leq2\cdot\sum_{u\in\cB'}\sum_{S\in\cS\colon u\in\cB_S}a_{u,S}
  =2\cdot\sum_{u\in\cB'}z_u\leq2\cdot t.
 \end{align*}
 \endgroup
-To justify the fourth equality, fix $A\in\cA_s$. If $y_r>0$ for every $r\in\cR'_A$, then the number of terms in the preceding sum over $r$ is $\spr{\cR'_A}$. Otherwise, some $r\in\cR'_A$ has $y_r=0$, and~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red} imply $0\leq a_{u,A}\leq x_A\leq y_r=0$ for every $u\in\cB_A$. The assignment sum for $A$ therefore vanishes, so both terms are zero. The first inequality uses $\spr{\cR'_A}/s<2$ and extends the sum to all sets using nonnegativity of the assignment variables. The fifth equality follows from~\eqref{eq:rbsc-lp-assign}, and the second inequality follows from~\eqref{eq:rbsc-lp-budget} and $z_u\geq0$. Finally, independence of the rounding choices for distinct group indices and~\eqref{eq:rbsc-group-second-moment} imply
+To justify the fourth equality, fix $S\in\cS_d$. If $y_r>0$ for every $r\in\cR'_S$, then the number of terms in the preceding sum over $r$ is $\spr{\cR'_S}$. Otherwise, some $r\in\cR'_S$ has $y_r=0$, and~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red} imply $0\leq a_{u,S}\leq x_S\leq y_r=0$ for every $u\in\cB_S$. The assignment sum for $S$ therefore vanishes, so both terms are zero. The first inequality uses $\spr{\cR'_S}/d<2$ and extends the sum to all sets using nonnegativity of the assignment variables. The fifth equality follows from~\eqref{eq:rbsc-lp-assign}, and the second inequality follows from~\eqref{eq:rbsc-lp-budget} and $z_u\geq0$. Finally, independence of the rounding choices for distinct group indices and~\eqref{eq:rbsc-group-second-moment} imply
 \[
  \mathbb{E}[W^2]
- =\sum_{r,s}\mathbb{E}[W_{r,s}^2]
-   +\sum_{r,s}\sum_{\substack{r',s'\\(r',s')\ne(r,s)}}\mathbb{E}[W_{r,s}]\cdot\mathbb{E}[W_{r',s'}]
+ =\sum_{r,d}\mathbb{E}[W_{r,d}^2]
+   +\sum_{r,d}\sum_{\substack{r',d'\\(r',d')\ne(r,d)}}\mathbb{E}[W_{r,d}]\cdot\mathbb{E}[W_{r',d'}]
  \leq(2t+1)\cdot\mathbb{E}[W]+\br{\mathbb{E}[W]}^2
  \leq8\cdot t^2+2\cdot t\leq10\cdot t^2.
 \]
@@ -301,11 +301,11 @@ To find an outcome with both sufficient coverage and small red cost, we define a
 \end{equation}
 to be an affine combination of the random variables $Y$, $W^2$, and $R$. The term involving $Y$ rewards blue coverage, while the term involving $R$ penalizes red cost. Without the quadratic penalty, a large coverage reward could offset an arbitrarily large red cost. Since $W\geq Y$, the quadratic penalty grows faster than the coverage reward and prevents this from happening. At the same time, our bound on the second moment of $W$ ensures that the penalty is small enough on average to keep the expected potential nonnegative. An outcome with nonnegative potential then guarantees both sufficient coverage and a small red cost.
 \begin{claim}\label{claim:rbsc-positive-potential}
-We have $\mathbb{E}[\Phi]\geq0$. Every output $\cA'$ obtained from an outcome with $\Phi\geq0$ satisfies
+We have $\mathbb{E}[\Phi]\geq0$. Every output $\cS'$ obtained from an outcome with $\Phi\geq0$ satisfies
 \[
- \spr{\cov\br{\cA',\cB}}\geq t/8
+ \spr{\cov\br{\cS',\cB}}\geq t/8
  \qquad\text{and}\qquad
- \spr{\cov\br{\cA',\cR}}<920\cdot K\cdot T.
+ \spr{\cov\br{\cS',\cR}}<920\cdot K\cdot T.
 \]
 In particular, for the correct guess $K=\OPT$, the red cost is smaller than $920\cdot\OPT\cdot T$.
 \end{claim}
@@ -316,7 +316,7 @@ Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim
  >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot T}{360\cdot K\cdot T}-\frac{t}{8}
  =0.
 \]
-If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cA',\cB}$, we have $\spr{\cov\br{\cA',\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
+If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cS',\cB}$, we have $\spr{\cov\br{\cS',\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
 \[
  \frac{7\cdot t\cdot R}{360\cdot K\cdot T}
  \leq Y-\frac{W^2}{72\cdot t}-\frac{t}{8}
@@ -324,7 +324,7 @@ If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Sinc
  =18\cdot t-\frac{(Y-36\cdot t)^2}{72\cdot t}-\frac{t}{8}
  \leq\frac{143\cdot t}{8}.
 \]
-It follows that $\spr{\cov\br{\cA',\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
+It follows that $\spr{\cov\br{\cS',\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
 \end{proof}
 
 Using the method of conditional expectations applied to the potential $\Phi$ in a relatively straightforward manner, allows us to derandomize our procedure as follows.
@@ -336,58 +336,58 @@ An outcome with $\Phi\geq0$ can be found deterministically in polynomial time.
 In order to obtain a deterministic algorithm, instead of drawing the coins randomly, we process the groups in an arbitrary order, first fixing their activation, and then, for an active group, fixing each occurrence's trial and, if it succeeds, its marking coins. At each step we choose a possible value maximizing the conditional expectation of $\Phi$.
 Fix a history of exposed coins, and let $\mathcal{E}$ be the event that they take their recorded values. Since $\mathcal{E}$ is an intersection of individual coin outcomes, all unfixed coins remain independent. The conditional probability that a coin succeeds is its original probability if it is unfixed, and $0$ or $1$ otherwise.
 
-For $A\in\cA_{r,s}$ and $u\in\cB_A\cap\cB'$, independence conditional on $\mathcal{E}$ gives
+For $S\in\cS_{r,d}$ and $u\in\cB_S\cap\cB'$, independence conditional on $\mathcal{E}$ gives
 \[
- \Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]
- =\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}].
+ \Pr[u\in\cD_{r,d,S}\mid\mathcal{E}]
+ =\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}].
 \]
 For $u\in\cB'$ and $q\in\cR\setminus\cR_+$, the probabilities that the group misses a blue or red element are
 \[
  \begin{aligned}
- \Pr[u\notin\cB_{r,s}\mid\mathcal{E}]
- &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}\colon u\in\cB_A}\br{1-\Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]},\\
- \Pr[q\notin\cR_{r,s}\mid\mathcal{E}]
- &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}\colon q\in\cR'_A}\br{1-\Pr[J_{r,s,A}\mid\mathcal{E}]}.
+ \Pr[u\notin\cB_{r,d}\mid\mathcal{E}]
+ &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon u\in\cB_S}\br{1-\Pr[u\in\cD_{r,d,S}\mid\mathcal{E}]},\\
+ \Pr[q\notin\cR_{r,d}\mid\mathcal{E}]
+ &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon q\in\cR'_S}\br{1-\Pr[J_{r,d,S}\mid\mathcal{E}]}.
  \end{aligned}
 \]
 Independence of distinct groups and linearity of expectation then give
 \begingroup\small
 \begin{equation}\label{eq:rbsc-conditional-coverage-cost}
  \mathbb{E}[Y\mid\mathcal{E}]
- =\sum_{u\in\cB'}\br{1-\prod_{r,s}\Pr[u\notin\cB_{r,s}\mid\mathcal{E}]},\quad
+ =\sum_{u\in\cB'}\br{1-\prod_{r,d}\Pr[u\notin\cB_{r,d}\mid\mathcal{E}]},\quad
  \mathbb{E}[R\mid\mathcal{E}]
- =\spr{\cR_+}+\sum_{q\in\cR\setminus \cR_+}\br{1-\prod_{r,s}\Pr[q\notin\cR_{r,s}\mid\mathcal{E}]}.
+ =\spr{\cR_+}+\sum_{q\in\cR\setminus \cR_+}\br{1-\prod_{r,d}\Pr[q\notin\cR_{r,d}\mid\mathcal{E}]}.
 \end{equation}
 \endgroup
-For the second moment, fix a group $\cA_{r,s}$ and use the variables $N_A$ and $X_A$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
+For the second moment, fix a group $\cS_{r,d}$ and use the variables $N_S$ and $X_S$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
 \[
  \begin{gathered}
- \mathbb{E}[N_A\mid\mathcal{E}]=\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}],\qquad
- \mathbb{E}[X_A\mid\mathcal{E}]=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\mathbb{E}[N_A\mid\mathcal{E}],\\
- \mathbb{E}[X_A^2\mid\mathcal{E}]=\Pr[J_{r,s,A}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_A\mid\mathcal{E}]^2+\sum_{u\in\cB_A\cap\cB'}\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,s,A,u}=1\mid\mathcal{E}]}}.
+ \mathbb{E}[N_S\mid\mathcal{E}]=\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}],\qquad
+ \mathbb{E}[X_S\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\mathbb{E}[N_S\mid\mathcal{E}],\\
+ \mathbb{E}[X_S^2\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_S\mid\mathcal{E}]^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]}}.
  \end{gathered}
 \]
-The variables $X_A$ remain independent across occurrences, and $L_{r,s}$ remains independent of activation. Thus
+The variables $X_S$ remain independent across occurrences, and $L_{r,d}$ remains independent of activation. Thus
 \[
  \begin{gathered}
- \mathbb{E}[L_{r,s}\mid\mathcal{E}]=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A\mid\mathcal{E}],\qquad
- \mathbb{E}[L_{r,s}^2\mid\mathcal{E}]=\mathbb{E}[L_{r,s}\mid\mathcal{E}]^2+\sum_{A\in\cA_{r,s}}\br{\mathbb{E}[X_A^2\mid\mathcal{E}]-\mathbb{E}[X_A\mid\mathcal{E}]^2},\\
- \mathbb{E}[W_{r,s}\mid\mathcal{E}]=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}\mid\mathcal{E}],\qquad
- \mathbb{E}[W_{r,s}^2\mid\mathcal{E}]=\Pr[E_{r,s}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,s}^2\mid\mathcal{E}].
+ \mathbb{E}[L_{r,d}\mid\mathcal{E}]=\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S\mid\mathcal{E}],\qquad
+ \mathbb{E}[L_{r,d}^2\mid\mathcal{E}]=\mathbb{E}[L_{r,d}\mid\mathcal{E}]^2+\sum_{S\in\cS_{r,d}}\br{\mathbb{E}[X_S^2\mid\mathcal{E}]-\mathbb{E}[X_S\mid\mathcal{E}]^2},\\
+ \mathbb{E}[W_{r,d}\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,d}\mid\mathcal{E}],\qquad
+ \mathbb{E}[W_{r,d}^2\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,d}^2\mid\mathcal{E}].
  \end{gathered}
 \]
-Conditional on $\mathcal{E}$, the unfixed coins remain independent, and each $W_{r,s}$ depends only on coins belonging to its own group. Hence the variables $W_{r,s}$ are conditionally independent, and
+Conditional on $\mathcal{E}$, the unfixed coins remain independent, and each $W_{r,d}$ depends only on coins belonging to its own group. Hence the variables $W_{r,d}$ are conditionally independent, and
 \begin{equation}\label{eq:rbsc-conditional-second-moment}
  \mathbb{E}[W^2\mid\mathcal{E}]
- =\br{\sum_{r,s}\mathbb{E}[W_{r,s}\mid\mathcal{E}]}^2
-  +\sum_{r,s}\br{\mathbb{E}[W_{r,s}^2\mid\mathcal{E}]-\mathbb{E}[W_{r,s}\mid\mathcal{E}]^2}.
+ =\br{\sum_{r,d}\mathbb{E}[W_{r,d}\mid\mathcal{E}]}^2
+  +\sum_{r,d}\br{\mathbb{E}[W_{r,d}^2\mid\mathcal{E}]-\mathbb{E}[W_{r,d}\mid\mathcal{E}]^2}.
 \end{equation}
-Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time. 
-% The same formulas compute the conditional expectation for each possible value of the next coin. 
+Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-conditional-second-moment} into~\eqref{eq:rbsc-potential} computes $\mathbb{E}[\Phi\mid\mathcal{E}]$ in polynomial time.
+% The same formulas compute the conditional expectation for each possible value of the next coin.
 By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the nonnegative initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
-For the smallest feasible guess $K$, return $\cA'=\cA_0$ if $\spr{\cov\br{\cA_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cA'$ with nonnegative potential. In both cases, $\spr{\cov\br{\cA',\cB}}\geq t/8$ and $\spr{\cov\br{\cA',\cR}}\leq920\cdot K\cdot T$. Since $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT$. Therefore, $\spr{\cov\br{\cA',\cR}}\leq920\cdot\OPT\cdot T = \bigo\br{m^{1/3}}\cdot \OPT$ as promised.
+For the smallest feasible guess $K$, return $\cS'=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cS'$ with nonnegative potential. In both cases, $\spr{\cov\br{\cS',\cB}}\geq t/8$ and $\spr{\cov\br{\cS',\cR}}\leq920\cdot K\cdot T$. Since $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT$. Therefore, $\spr{\cov\br{\cS',\cR}}\leq920\cdot\OPT\cdot T = \bigo\br{m^{1/3}}\cdot \OPT$ as promised.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
@@ -431,14 +431,14 @@ If there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\
 \end{theorem}
 \begin{proof}
 For each integer $t\in[\spr{\cov\br{\cS,\cU}}]$, run the $\ProblemPCSC$ algorithm with target fraction $f=t/n$. Among the resulting families of size at most $\alpha\cdot\budget$ and the empty family, return one with maximum coverage.
-Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt,\cU}}$. If $t^*=0$, the empty family suffices. Otherwise, $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
+Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt,\cU}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
 \end{proof}
 
 We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition is not exact and is not used directly in the procedure or its analysis.
 
-Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta-1}{3\cdot\beta-2}$, so $1<a\leq 2$.
+Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta+1}{3\cdot\beta-1}$, so $1<a\leq 2$.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
-Let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$, where $\cCopt$ is an optimal solution to $\ProblemPCMSSC$.
+For an optimal solution $\cCopt$ to $\ProblemPCMSSC$ with $\spr{\cCopt}>0$, let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$.
 So, $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
 We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
 \input{pseudocodes/f_PCMSSC.tex}
@@ -489,17 +489,14 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
             \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}} \leq
             \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
         \end{align*}
-        Rearranging and substituting $a=(3\cdot\beta-1)/(3\cdot\beta-2)$ gives
+        Rearranging and substituting $a=(3\cdot\beta+1)/(3\cdot\beta-1)$ gives
         \begin{align*}
             \frac{Q}{\alpha\cdot\coverageTime\br{\cCopt,\cU}}
             &\leq \frac{2\cdot a^4}{(a-1)^2\cdot\br{1-\frac{(\beta-1)\cdot a}{\beta}}}
-            =\frac{2\cdot\br{\frac{3\cdot\beta-1}{3\cdot\beta-2}}^4}{\br{\frac{3\cdot\beta-1}{3\cdot\beta-2}-1}^2\cdot\br{1-\frac{(\beta-1)\cdot(3\cdot\beta-1)}{\beta\cdot(3\cdot\beta-2)}}} \\
-            &\leq \frac{2\cdot(3\cdot\beta-1)^2\cdot a^4}{1-\frac{(\beta-1)\cdot a}{\beta}}
-            \leq\frac{2\cdot(3\cdot\beta-1)^2\cdot a^4}{1-\frac{\beta-2/3}{\beta}}
-            =3\cdot\beta\cdot(3\cdot\beta-1)^2\cdot a^4
-            \leq432\cdot\beta^3.
+            =\frac{\beta\cdot(3\cdot\beta+1)^4}{2\cdot(\beta+1)\cdot(3\cdot\beta-1)}
+            =\bigo\br{\beta^3}.
         \end{align*}
-        Here $(a-1)^{-2}=(3\cdot\beta-2)^2\leq(3\cdot\beta-1)^2$, and $1-(\beta-1)\cdot a/\beta=(2\cdot\beta-1)/(\beta\cdot(3\cdot\beta-2))\geq2/(3\cdot\beta)$ for $\beta\geq1$. The final inequality uses $a\leq2$ and $3\cdot\beta-1\leq3\cdot\beta$.
+        Here $a-1=2/(3\cdot\beta-1)$ and $1-(\beta-1)\cdot a/\beta=(\beta+1)/(\beta\cdot(3\cdot\beta-1))$.
         The lemma follows.
     \end{proof}
 
@@ -522,11 +519,17 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         \coverageTime\br{\pi_{l^*},\cU}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}.
         \]
         Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its coverage time in $\pi_{l^*}^+$ is also $t_u$.
-        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u\leq2\cdot t_u$.
-        The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives $\coverageTime\br{\pi_{l^*}^+,\cU}\leq2\cdot\coverageTime\br{\pi_{l^*},\cU}\leq864\cdot\alpha\cdot\beta^3\cdot\coverageTime\br{\cCopt,\cU}=\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}$.
+        For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u$.
+        The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives
+        \[
+        \coverageTime\br{\pi_{l^*}^+,\cU}
+        \leq\br{1+\frac{1}{\beta}}\cdot\coverageTime\br{\pi_{l^*},\cU}
+        \leq\frac{\alpha\cdot(3\cdot\beta+1)^4}{2\cdot(3\cdot\beta-1)}\cdot\coverageTime\br{\cCopt,\cU}
+        =\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}.
+        \]
     \end{proof}
 Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo((1+\beta\log(m+1))^2)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size. All applications below use constant $\beta$.
-By Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
+By the full-prefix case above and Lemma~\ref{lem:combined-coverage-cost}, the candidate for $l^*$ meets the coverage requirement and has the stated latency bound. Since Algorithm~\ref{alg:fPCMSSC} returns the minimum-latency candidate meeting that coverage requirement, the following theorem follows.
 \begin{theorem}\label{thm:BPCSC-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
     If there exists a polynomial-time bicriteria $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$, with $\beta$ polynomially bounded in the input size, then there exists a polynomial-time bicriteria $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation algorithm for $\ProblemPCMSSC$.
@@ -541,10 +544,10 @@ Combine the budgeted guarantee in Theorem~\ref{thm:PCSC-to-BPCSC} with Theorems~
 \end{proof}
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
-In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c\colon\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$.
+In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a family $\cS$ of subsets of $\cU$, each with a cost $c(S)\geq0$, and a budget $\budget>0$. The goal is to maximize $\spr{\cov\br{\cS',\cU}}$ over subfamilies $\cS'\subseteq\cS$ with $\sum_{S\in\cS'}c(S)\leq\budget$.
 
 \begin{theorem}[Khuller, Moss and Naor \cite{TheBudgetedMaximumCoverageProblem}]\label{thm:budgeted-maximum-coverage-source}
-    There is a polynomial-time algorithm for budgeted Maximum Coverage that respects the budget and covers at least a $(1-1/e)$-fraction of the maximum number of elements coverable within that budget.
+    There is a polynomial-time algorithm for \textsc{Budgeted Maximum Coverage} that respects the budget and covers at least a $(1-1/e)$-fraction of the maximum number of elements coverable within that budget.
 \end{theorem}
 
 \begin{theorem}\label{thm:BPCSC-inforest}
@@ -552,27 +555,171 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cX$, a
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    We reduce $\ProblemBPCSC$ to budgeted Maximum Coverage and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
+    We reduce $\ProblemBPCSC$ to \textsc{Budgeted Maximum Coverage} and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
 
-    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, set $\cX=\cU$ and $B=\budget$. For each $S\in\cS$, create a set $z_S=\cov\br{\closure{S}}$ with cost $c(z_S)=\spr{\closure{S}}$, and let $\cA=(z_S)_{S\in\cS}$ be the indexed family of these sets.
-    For any selected family $\cA'\subseteq\cA$, define $\cC_{\cA'}=\bigcup_{S\in\cS\colon z_S\in\cA'}\closure{S}$. This family is precedence-closed and satisfies
+    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textsc{Budgeted Maximum Coverage} instance with universe $\cU$ and budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
+    For any selected family $\cA\subseteq\cS'$, define $\cC=\bigcup_{C_S\in\cA}\closure{S}$. This family is precedence-closed and satisfies
     \[
-        \cov\br{\cC_{\cA'},\cU}=\cov\br{\cA'}
+        \cov\br{\cC,\cU}=\cov\br{\cA}
         \qquad\text{and}\qquad
-        \spr{\cC_{\cA'}}\leq\sum_{z_S\in\cA'}c(z_S).
+        \spr{\cC}\leq\sum_{T\in\cA}c(T).
     \]
-    In an inforest, intersecting closures are nested: for $S,W\in\cS$, if $\closure{S}\cap\closure{W}\neq\emptyset$, then $S\preceq W$ or $W\preceq S$. Thus, every precedence-closed family $\cC\subseteq\cS$ is the disjoint union of the closures of its maximal members. Selecting the corresponding sets $z_S$ preserves both cost and coverage. The maximum coverage attainable within budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
+    In an inforest, intersecting closures are nested: for $S,W\in\cS$, if $\closure{S}\cap\closure{W}\neq\emptyset$, then $S\preceq W$ or $W\preceq S$. For any precedence-closed family $\cC\subseteq\cS$, let $\mathcal{M}$ be the family of its $\preceq$-maximal members and put $\cA_{\cC}=\brc{C_S\colon S\in\mathcal{M}}$. Then
+    \[
+        \cC=\biguplus_{S\in\mathcal{M}}\closure{S}
+        \qquad\text{and}\qquad
+        \cov\br{\cA_{\cC}}=\cov\br{\cC,\cU}.
+    \]
+    By the definition of the costs,
+    \[
+        \sum_{T\in\cA_{\cC}}c(T)
+        =\sum_{S\in\mathcal{M}}\spr{\closure{S}}=\spr{\cC}.
+    \]
+    The maximum coverage attainable within budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
 
-For $\ProblemPCSC$, return the empty family if $\cU=\emptyset$. Otherwise, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. The budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
+For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements among the outputs and the empty family. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
 \end{proof}
 
-The preceding algorithm also gives a guarantee for $\ProblemPCMSSC$.
+The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using Algorithm~\ref{alg:inforest-fPCMSSC}. The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
+
+In the algorithm and its analysis, we identify a sequence with its family of sets when using set operations.
+\input{pseudocodes/inforest_f_PCMSSC.tex}
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
-    There exists a polynomial-time bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3, \frac{e}{e-1}}\approx\br{3420.7, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
+    There exists a polynomial-time bicriteria $\br{4,\frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{proof}
-Apply the $\ProblemBPCSC$ algorithm from Theorem~\ref{thm:BPCSC-inforest} with $\alpha=1$ and $\beta=e/(e-1)$ in Algorithm~\ref{alg:fPCMSSC}. The explicit bounds in the proofs of Lemmas~\ref{lem:pi-spread-cost} and~\ref{lem:combined-coverage-cost} give the stated cost ratio, and Lemma~\ref{lem:combined-coverage-cost} gives the coverage guarantee.
+Each sequence constructed by Algorithm~\ref{alg:inforest-fPCMSSC} respects the precedence constraints: initially $\pi$ is empty, and for each selected $S\in\cS$, the family $\pi\cup D_S=\pi\cup\closure{S}$, where $D_S=\closure{S}\setminus\pi$, is precedence-closed whenever $\pi$ is, while $D_S$ is appended in topological order.
+
+Let $\cCopt$ be an optimal solution with $\spr{\cCopt}>0$ and no repeated sets; deleting repeated sets preserves precedence and coverage and does not increase coverage time. Put $B^*=\spr{\cCopt}$. We analyze the guess $B=B^*$ and let $\ell$ be the number of iterations of its while loop. For each $i\in[\ell]$, let $\pi_i$ be the sequence at the start of iteration $i$ and put
+\[
+    r_i=n-\spr{\cov\br{\pi_i,\cU}},\qquad
+    \delta_i=\spr{\cov\br{\cCopt,\cU}}-\spr{\cov\br{\pi_i,\cU}}.
+\]
+Let $\pi_{\ell+1}$ be the sequence after the loop. Fix $i\in[\ell]$. Since $\spr{\cov\br{\cCopt,\cU}}\geq f\cdot n$, we have
+\[
+    \delta_i>\spr{\cov\br{\cCopt,\cU}}-\br{1-1/e}\cdot f\cdot n\geq\spr{\cov\br{\cCopt,\cU}}/e>0.
+\]
+For each $S\in\cS$, let $D_S=\closure{S}\setminus\pi_i$, $c_S=\spr{D_S}$ and $g_S=\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}$. As in the algorithm, let $\cA=\brc{S\in\cS\colon 1\leq c_S\leq B^*,\ g_S>0}$. For $j\in[B^*]$, let $\mathcal{M}_j$ be the family of $\preceq$-maximal members of $\pref{\cCopt}{j}$. The inforest property gives
+\[
+    \pref{\cCopt}{j}=\biguplus_{S\in\mathcal{M}_j}\closure{S},\qquad
+    \sum_{S\in\mathcal{M}_j}c_S
+    \leq\sum_{S\in\mathcal{M}_j}\spr{\closure{S}}
+    =\spr{\pref{\cCopt}{j}}=j.
+\]
+\begin{claim}\label{claim:inforest-pcmssc-coverage}
+In iteration $i$, the family $\cA$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1},\cU}}\geq(1-1/e)\cdot f\cdot n$.
+\end{claim}
+\begin{proof}
+For $j=B^*$, we have
+\begin{align*}
+    \sum_{S\in\mathcal{M}_{B^*}}g_S
+    &=\sum_{S\in\mathcal{M}_{B^*}}\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}
+    \geq\spr{\bigcup_{S\in\mathcal{M}_{B^*}}\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}\\
+    &=\spr{\cov\br{\cCopt,\cU}\setminus\cov\br{\pi_i,\cU}}\geq\delta_i>0.
+\end{align*}
+Since $c_S\leq B^*$ for each $S\in\mathcal{M}_{B^*}$ and $g_S>0$ requires $c_S\geq1$, this implies $\cA\neq\emptyset$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1},\cU}}\geq(1-1/e)\cdot f\cdot n$.
+\end{proof}
+
+For each $i\in[\ell]$, put $c_i=c_{S_B}$ and $g_i=g_{S_B}$, where $S_B$, $c_{S_B}$ and $g_{S_B}$ are taken from iteration $i$, and set $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
+\[
+    \rho_i=\frac{g_i}{c_i}=\max_{S\in\cA}\frac{g_S}{c_S}.
+\]
+
+For $j\in\brc{0,\ldots,B^*}$, let $r^*(j)=n-\spr{\cov\br{\pref{\cCopt}{j},\cU}}$ be the number of elements not covered by the first $j$ sets of $\cCopt$, where $\pref{\cCopt}{0}$ is empty.
+\begin{claim}\label{claim:inforest-pcmssc-density}
+We have $\rho_i\geq\delta_i/B^*$. If $r_i>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $\rho_i\geq r_i^2/\br{2\cdot\coverageTime\br{\cCopt,\cU}}$.
+\end{claim}
+\begin{proof}
+Since uncovered elements have coverage time $B^*$, the definition of coverage time gives
+\[
+    \coverageTime\br{\cCopt,\cU}=\sum_{j=0}^{B^*-1}r^*(j).
+\]
+For each $j\in[B^*]$ and $S\in\mathcal{M}_j$ with $g_S>0$, we have $S\in\cA$ and hence $g_S\leq\rho_i\cdot c_S$. The same inequality holds when $g_S=0$. Thus,
+\begin{align*}
+    r_i-r^*(j)&=\spr{\cov\br{\pref{\cCopt}{j},\cU}}-\spr{\cov\br{\pi_i,\cU}}
+    \leq\spr{\cov\br{\pref{\cCopt}{j},\cU}\setminus\cov\br{\pi_i,\cU}}\\
+    &=\spr{\bigcup_{S\in\mathcal{M}_j}\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}
+    \leq\sum_{S\in\mathcal{M}_j}g_S
+    \leq\rho_i\cdot\sum_{S\in\mathcal{M}_j}c_S\leq\rho_i\cdot j.
+\end{align*}
+Consequently, since $r^*(0)=n\geq r_i$,
+\[
+    r^*(j)\geq\max\brc{0,r_i-\rho_i\cdot j},\qquad
+    \rho_i\geq\frac{\delta_i}{B^*}.
+\]
+The last inequality uses $j=B^*$ and $r^*(B^*)=r_i-\delta_i$.
+Suppose that $r_i>2\cdot \coverageTime\br{\cCopt,\cU}/B^*$. If $\rho_i<r_i/B^*$, then
+\[
+    \coverageTime\br{\cCopt,\cU}\geq\sum_{j=0}^{B^*-1}\br{r_i-\rho_i\cdot j}
+    =r_i\cdot B^*-\frac{\rho_i\cdot B^*\cdot(B^*-1)}{2}
+    \geq\frac{r_i\cdot(B^*+1)}{2}>\frac{r_i\cdot B^*}{2}>\coverageTime\br{\cCopt,\cU},
+\]
+a contradiction. Hence $r_i/\rho_i\leq B^*$. Put $h=\cl{r_i/\rho_i}$, so $1\leq h\leq B^*$ and $0\leq h-r_i/\rho_i<1$. Summing over the first $h$ terms gives
+\[
+    \coverageTime\br{\cCopt,\cU}\geq\sum_{j=0}^{h-1}\br{r_i-\rho_i\cdot j}
+    =h\cdot r_i-\frac{\rho_i\cdot h\cdot(h-1)}{2}
+    =\frac{r_i^2}{2\cdot\rho_i}+\frac{\rho_i}{2}\cdot\br{h-\br{h-\frac{r_i}{\rho_i}}^2}
+    \geq\frac{r_i^2}{2\cdot\rho_i}.
+\]
+The last inequality uses $h-(h-r_i/\rho_i)^2\geq h-1\geq0$. Therefore $\rho_i\geq\frac{r_i^2}{2\cdot\coverageTime\br{\cCopt,\cU}}$.
+\end{proof}
+
+\begin{claim}\label{claim:inforest-pcmssc-cost}
+We have $\coverageTime\br{\pi_{\ell+1},\cU}<4\cdot\coverageTime\br{\cCopt,\cU}$.
+\end{claim}
+\begin{proof}
+Each element uncovered before iteration $i$ contributes at most $c_i$ to its coverage time during that iteration, and hence
+\[
+    \coverageTime\br{\pi_{\ell+1},\cU}\leq\sum_{i=1}^{\ell} c_i\cdot r_i.
+\]
+Since $i\in[\ell]$ was arbitrary, Claim~\ref{claim:inforest-pcmssc-density} and $r_i-\delta_i=n-\spr{\cov\br{\cCopt,\cU}}\geq0$ give, for every $i\in[\ell]$:
+\begin{enumerate}
+    \item If $r_i>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then
+    \[
+        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{r_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{\delta_i}.
+    \]
+    \item If $r_i\leq2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then
+    \[
+        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq\frac{B^*\cdot g_i\cdot r_i}{\delta_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{\delta_i}.
+    \]
+\end{enumerate}
+For $i\in[\ell]$ with $i<\ell$, we have $\delta_{i+1}=\delta_i-g_i>0$ and hence
+\[
+    \frac{g_i}{\delta_i}=\sum_{j=\delta_{i+1}+1}^{\delta_i}\frac{1}{\delta_i}
+    \leq\sum_{j=\delta_{i+1}+1}^{\delta_i}\frac{1}{j}
+    \leq\sum_{j=\delta_{i+1}+1}^{\delta_i}\ln\br{\frac{j}{j-1}}
+    =\ln\br{\frac{\delta_i}{\delta_{i+1}}}.
+\]
+The second inequality uses $1/j\leq\ln\br{j/(j-1)}$ for $j\geq2$, which follows from $\ln x\leq x-1$ with $x=(j-1)/j$.
+Since $\delta_1=\spr{\cov\br{\cCopt,\cU}}$ and $\delta_{\ell}>\delta_1/e$, summing and telescoping yields
+\begin{align*}
+    \sum_{i=1}^{\ell-1}c_i\cdot r_i&\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\sum_{i=1}^{\ell-1}\frac{g_i}{\delta_i}
+    \leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\sum_{i=1}^{\ell-1}\ln\br{\frac{\delta_i}{\delta_{i+1}}}\\
+    &=2\cdot\coverageTime\br{\cCopt,\cU}\cdot\ln\br{\frac{\delta_1}{\delta_{\ell}}}<2\cdot\coverageTime\br{\cCopt,\cU}.
+\end{align*}
+For the final iteration, Claim~\ref{claim:inforest-pcmssc-density} gives the following two cases:
+\begin{enumerate}
+    \item If $r_{\ell}>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $g_{\ell}\leq r_{\ell}$ gives
+    \[
+        c_{\ell}\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_{\ell}}{r_{\ell}}\leq2\cdot\coverageTime\br{\cCopt,\cU}.
+    \]
+    \item If $r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $c_{\ell}\leq B^*$ gives
+    \[
+        c_{\ell}\cdot r_{\ell}\leq B^*\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}.
+    \]
+\end{enumerate}
+Combining the bounds for the first $\ell-1$ iterations and the final iteration proves the claim.
+\end{proof}
+
+Let $\pi'$ be the sequence returned by the algorithm. By Claims~\ref{claim:inforest-pcmssc-coverage} and~\ref{claim:inforest-pcmssc-cost},
+\[
+    \coverageTime\br{\pi',\cU}
+    \leq\coverageTime\br{\pi_{\ell+1},\cU}<4\cdot\coverageTime\br{\cCopt,\cU},\qquad
+    \spr{\cov\br{\pi',\cU}}\geq(1-1/e)\cdot f\cdot n.
+\]
+
+Each iteration that does not terminate the loop appends at least one new set. There are polynomially many guesses and at most $m$ such iterations per guess. Thus the algorithm runs in polynomial time and returns a candidate with the stated guarantees.
 \end{proof}
 
 \medskip
@@ -581,21 +728,21 @@ Let $(V,d)$ denote a symmetric metric with distance function $d\colon V \times V
 An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
 Let $\cX$ be a family of \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
 Let $w\colon \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
-Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{covered} by $\tau$ is $\cov\br{\tau}=\brc{X\in\cX\colon X\cap V(\tau)\neq\emptyset}$.
-% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
+Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{covered} by $\tau$ is $\cX_\tau=\brc{X\in\cX\colon X\cap V(\tau)\neq\emptyset}$.
+% For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cX_\tau$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
-$\sum_{X \in \cov\br{\tau}} w(X)$.
+$\sum_{X \in \cX_\tau} w(X)$.
 \end{problem}
 The following tree-metric guarantee follows from the algorithm and analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
 \begin{theorem}[Gupta, Nagarajan and Ravi \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}, Section~5.1]\label{thm:gso-tree-source}
     For a $\ProblemGSO$ instance on a tree metric $(V,d)$ with budget $\budget$, a polynomial-time algorithm finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least one quarter of the maximum weight coverable by an $r$-tour of length at most $\budget$.
 \end{theorem}
 % \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
-% Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cov\br{\tau}} \geq h$ and that minimizes
+% Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cX_\tau} \geq h$ and that minimizes
 % $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
-% %$$c(\tau) = \sum_{X \in \cov\br{\tau}} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cov\br{\tau}} w(X) \cdot \spr{\tau}.$$
+% %$$c(\tau) = \sum_{X \in \cX_\tau} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cX_\tau} w(X) \cdot \spr{\tau}.$$
 % \end{problem}
 
 \begin{theorem}\label{thm:BPCSC-outforest}
@@ -603,19 +750,25 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
     There exist polynomial-time bicriteria $\br{\bigo\br{\log m}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Let $(\cU,\cS,\preceq,\budget)$ be a $\ProblemBPCSC$ instance. Instances with $m\leq1$ can be solved directly, so assume $m\geq2$.
+    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Let $(\cU,\cS,\preceq,\budget)$ be a $\ProblemBPCSC$ instance.
     
     Create a rooted tree with vertex set $V=\brc{r}\cup\brc{v_S\colon S\in\cS}$, where $r$ is a dummy root. For every minimal $S\in\cS$, connect $r$ to $v_S$ by an edge of length~$1/2$. For every nonminimal $W\in\cS$, let $S\in\cS$ be its unique immediate predecessor, and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits the representatives of all strict predecessors of $W$. For each $u\in\cU$, let $X_u=\brc{v_S\colon S\in\cS,\ u\in S}$. Set the GSO budget to $\budget$ and define its groups and their weights by
     \[
         \cX=\brc{X_u\colon u\in\cU,\ X_u\neq\emptyset},
         \qquad w(X)=\spr{\brc{u\in\cU\colon X_u=X}}\quad(X\in\cX).
     \]
+    Here $\cX$ contains each distinct nonempty set $X_u$ once.
 
-    Expand each edge of an $r$-tour in the tree metric along its tree path. The resulting walk $\tau$ has the same length and covers every group covered by the original tour. Let $\cC_\tau=\brc{S\in\cS\colon v_S\in V(\tau)}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
+    Expand each edge of an $r$-tour in the tree metric along its tree path. The resulting walk $\tau$ has the same length and covers every group covered by the original tour. Let $\cC_\tau=\brc{S\in\cS\colon v_S\in V(\tau)}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. Moreover,
+    \[
+        \sum_{X\in\cX_\tau}w(X)
+        =\spr{\brc{u\in\cU\colon X_u\cap V(\tau)\neq\emptyset}}
+        =\spr{\cov\br{\cC_\tau,\cU}}.
+    \]
 
     Conversely, for any precedence-closed family $\cC\subseteq\cS$, the union of the root-to-$v_S$ paths for $S\in\cC$ has $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Thus the reduction preserves the optimum coverage for each budget. Since $\spr{V}=m+1$, Theorem~\ref{thm:gso-tree-source} gives the $\ProblemBPCSC$ guarantee.
 
-    For $\ProblemPCSC$, return the empty family if $\cU=\emptyset$. Otherwise, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $f\cdot n/4$ elements. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. The budget $\spr{\cCopt}$ yields such a family of size $\bigo\br{\log m}\cdot\spr{\cCopt}$. The $\ProblemPCMSSC$ guarantee follows from Theorem~\ref{thm:BPCSC-to-PCMSSC}.
+    For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $f\cdot n/4$ elements among the outputs and the empty family. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size $\bigo\br{\log m}\cdot\spr{\cCopt}$. The $\ProblemPCMSSC$ guarantee follows from Theorem~\ref{thm:BPCSC-to-PCMSSC}.
 \end{proof}
 
 
