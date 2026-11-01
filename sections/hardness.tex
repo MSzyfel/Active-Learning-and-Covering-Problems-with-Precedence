@@ -766,28 +766,28 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 \end{proof}
 
 \subsection{Consequences for Partial Red-Blue Set Cover}
-The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and coverage, mapping a $\ProblemPCSC$ instance with $m$ sets and $n$ items to a $\ProblemPRBSC$ instance with $m$ red-blue sets, $m$ red elements, and $k=n$ blue elements.
+The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and coverage, mapping a $\ProblemPCSC$ instance with $m$ sets and $n$ items to a $\ProblemPRBSC$ instance with $m$ red-blue sets, $k=m$ red elements, and $n$ blue elements.
 For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
 
 \begingroup\setlength{\emergencystretch}{1em}
-Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 k}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 k$ loss on the restricted instances produced by our closure reduction.\par\endgroup
+Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 n}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 n$ loss on the restricted instances produced by our closure reduction.\par\endgroup
 
 \begin{corollary}[PDS hardness for Partial Red-Blue Set Cover]\label{cor:PRBSC-PDS-hardness}
-    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed target fraction $f\in(0,1]$, and fixed coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\bigo\br{k^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot k}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed target fraction $f\in(0,1]$, and fixed coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot n}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Corollary~\ref{cor:PDS-limiting-hardness}.
 \end{proof}
 
 \begin{corollary}[Label-Cover hardness for RBSC]\label{cor:PRBSC-label-cover-hardness}\label{cor:PRBSC-PGC-hardness}
-    For every fixed $f\in(0,1]$, the three bicriteria inapproximability bounds in Theorem~\ref{thm:label-cover-hardness} hold for $\ProblemPRBSC$ with target $\cl{f\cdot k}$, with $n$ replaced by $k$ and under the same assumptions, on instances in the image of Theorem~\ref{thm:PCSC-RBSC}.
+    For every fixed $f\in(0,1]$, the three bicriteria inapproximability bounds in Theorem~\ref{thm:label-cover-hardness} hold for $\ProblemPRBSC$ with target $\cl{f\cdot n}$, under the same assumptions, on instances in the image of Theorem~\ref{thm:PCSC-RBSC}.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:label-cover-hardness}.
 \end{proof}
 
 \begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
-    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} k}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:PCSC-outforest-hardness}.
