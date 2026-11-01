@@ -22,16 +22,21 @@ Our algorithm builds on their rounding approach, however we use an LP relaxation
 Using the method of conditional expectations, we show how to maintain its positive conditional expectation throughout the derandomization step which allows us to arrive with a deterministic solution of good quality in polynomial time.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
-There is a deterministic polynomial-time algorithm for $\ProblemPRBSC$ covering at least $t/8$ blue elements at a red cost at most $1400\cdot m^{1/3}$ times the optimum for target $t$.
+There is a deterministic polynomial-time algorithm for $\ProblemPRBSC$ that outputs a subfamily $\cA'\subseteq\cA$ satisfying $\spr{\cov\br{\cA',\cB}}\geq t/8$ and $\spr{\cov\br{\cA',\cR}}\leq1400\cdot m^{1/3}\cdot\OPT$, where $\OPT$ is the optimum red cost for target $t$.
 \end{theorem}
 \begin{proof}
-Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $t/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. Otherwise, try each integer guess $K\in[\spr{\cR}]$ for the optimum red cost.
+Write $\cR_A=A\cap\cR$ and $\cB_A=A\cap\cB$ for each $A\in\cA$. 
+% First select all sets $A$ with $\cR_A=\emptyset$, that is, all sets containing no red elements. If they cover at least $t/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero. 
+In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost $\OPT$ (thic can be done in $O\br{\log\br{\spr{\cR}}}$ tries). Assume that we have a correct guess. In our LP there will be the following variables:
+\begin{enumerate}
+    \item For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicating whether $r$ is covered.
+    \item For each set $A\in\cA$, the variable $x_A\in[0,1]$ indicating whether $A$ is selected.
+    \item For each blue element $u\in\cB$, the variable $z_u\in[0,1]$ indicating whether $u$ is one of the $t$ covered blue elements chosen to meet the target. An optimal integral solution may cover additional blue elements, while having $z_u=0$.
+    \item For each blue element $u\in\cB_A$, the nonnegative variable $a_{u,A}\in[0,1]$ indicating that the part of $z_u$ assigned to the set $A$. In an integral solution each chosen blue element is assigned to one selected set containing it. 
+    \item For each ordered pair $r,q\in\cR$, the nonnegative variable $y_{r,q}$ representing the joint coverage of the two red elements. Its intended integral value is $y_r\cdot y_q$. Note, that we will not impose this nonlinear equality, but use linear inequalities that it satisfies.
+\end{enumerate}
 
-We describe the variables of our relaxation through their intended values in an integral solution. For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicates whether $r$ is covered. For each set $A\in\cA$, the variable $x_A\in[0,1]$ indicates whether $A$ is selected. For each blue element $u\in\cB$, the variable $z_u\in[0,1]$ indicates whether $u$ is one of the $t$ covered blue elements chosen to meet the target. A selected set may cover additional blue elements with $z_u=0$.
-
-For each incidence $u\in \cB_A$, the nonnegative variable $a_{u,A}$ indicates that the chosen blue element $u$ is assigned to the selected set $A$. Each chosen blue element is assigned to one selected set containing it. In a fractional solution, $a_{u,A}$ is the part of $z_u$ assigned to $A$. Finally, for each ordered pair $r,q\in\cR$, the nonnegative variable $y_{r,q}$ represents the joint coverage of the two red elements. Its intended integral value is $y_r\cdot y_q$. We do not impose this nonlinear equality, but use linear inequalities that it satisfies.
-
-For the current guess $K$, find a feasible solution to
+For the current guess $K$, the LP is as follows
 \begin{align}
  \sum_{r\in\cR}y_r&\leq K, \quad\quad \sum_{u\in\cB}z_u=t, && \label{eq:rbsc-lp-budget}\\
  \sum_{A:u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
@@ -43,26 +48,27 @@ For the current guess $K$, find a feasible solution to
  x_A&\leq y_{r,q} &&(A\in\cA,\ r,q\in \cR_A), \label{eq:rbsc-lp-pair}\\
  \sum_{q\in\cR}y_{r,q}&\leq K\cdot y_r &&(r\in\cR). \label{eq:rbsc-lp-pair-budget}
 \end{align}
-The assignment constraints limit the load on each set and red element. In particular, they prevent the same blue element from contributing too much within a group and bound the total number of marks expected in an active group. The pair constraints give a budget for jointly covered red elements. This will let us charge heavy occurrences across all scales. The following claim verifies the relaxation.
+% The assignment constraints limit the load on each set and red element. In particular, they prevent the same blue element from contributing too much within a group and bound the total number of marks expected in an active group. The pair constraints give a budget for jointly covered red elements. This will let us charge heavy occurrences across all scales.
+%  The following claim verifies the relaxation.
 
 \begin{claim}\label{claim:rbsc-lp-validity}
-The above system is a polynomial-size relaxation of the existence of a solution covering at least $t$ blue elements at red cost at most $K$.
+For the correct guess $K=\OPT$, the above system is a polynomial-size relaxation of $\ProblemPRBSC$ with red-cost bound $\OPT$.
 \end{claim}
 \begin{proof}
-Let $\cA^*\subseteq\cA$ be such a solution. Choose $t$ blue elements covered by $\cA^*$ and assign each of them to one set of $\cA^*$ containing it. Set $x_A=1$ for $A\in\cA^*$, set $y_r=1$ for red elements covered by $\cA^*$, and set $z_u=1$ for the chosen blue elements. Set $a_{u,A}=1$ precisely for the chosen assignments and set all other variables of these four types to zero. Finally, set $y_{r,q}=y_r\cdot y_q$.
+Let $\cA^*\subseteq\cA$ be an optimal solution, with $\spr{\cov\br{\cA^*,\cB}}\geq t$ and $\spr{\cov\br{\cA^*,\cR}}=\OPT=K$. Set $x_A=1$ for $A\in\cA^*$ and set $y_r=1$ for red elements covered by $\cA^*$. Moreover, pick $t$ blue elements covered by $\cA^*$ and assign each such $u$ to one set $A_u\cA^*$ containing it. Set $z_u=1$ for the chosen blue elements and $a_{u,A_u}=1$. Finally, set $y_{r,q}=y_r\cdot y_q$.
 
 The budget and assignment constraints hold by construction. Each assigned blue element belongs to a selected set, and at most $t$ blue elements are assigned to any set, proving~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set}. A selected set contains only covered red elements, proving~\eqref{eq:rbsc-lp-red} and~\eqref{eq:rbsc-lp-pair}. If $y_r=0$, no selected set contains $r$, so both assignment sums involving $r$ vanish. If $y_r=1$, a fixed blue element is assigned at most once, and there are $t$ assignments in total. This proves~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load}. Moreover,
 \[
- \sum_{q\in\cR}y_{r,q}=y_r\cdot\sum_{q\in\cR}y_q\leq K\cdot y_r,
+ \sum_{q\in\cR}y_{r,q}=y_r\cdot\sum_{q\in\cR}y_q=\OPT\cdot y_r=K\cdot y_r,
 \]
 which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. In particular, the guess $K=\OPT$ gives a feasible relaxation.
 \end{proof}
 
-Skip every guess with an infeasible relaxation. For a feasible guess, fix a feasible solution and put
+For the smallest feasible guess fix a feasible solution and put
 \[
  T=m^{1/3},\qquad \cR_+=\brc{r\in\cR:y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
 \]
-We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select every set with $\cR'_A=\emptyset$. These sets cover only red elements in $\cR_+$. If they cover at least $t/8$ blue elements, retain them as the candidate for this guess. Otherwise, let $\cB'$ be the blue elements not covered by these sets. The number of initially covered blue elements is strictly smaller than $t/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cA_0=\brc{A\in\cA:\cR'_A=\emptyset}$. Its red coverage satisfies $\cov\br{\cA_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cA_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cA_0,\cB}}\geq t/8$, retain $\cA_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cA_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cA_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
@@ -77,7 +83,7 @@ For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which
 \]
 Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. This multiplicity will compensate for the factor $1/s$ in the activation probability.
 
-For each pivot $r$ and scale $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is activated, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its trial succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is selected if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Let $\cF_{r,s}\subseteq\cA_{r,s}$ be the random family of sets whose occurrences in group $\cA_{r,s}$ are selected. The output consists of the initially selected sets and every original set with at least one selected occurrence.
+For each pivot $r$ and scale $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is activated, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its trial succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is selected if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Let $\cF_{r,s}\subseteq\cA_{r,s}$ be the random family of sets whose occurrences in group $\cA_{r,s}$ are selected. Let $\cA'$ be the output, consisting of the initially selected sets and every original set with at least one selected occurrence.
 
 Define the random sets $\cR_{r,s}$ and $\cR_0$, and the random variable $R$, by
 \[
@@ -85,7 +91,7 @@ Define the random sets $\cR_{r,s}$ and $\cR_0$, and the random variable $R$, by
  \qquad \cR_0=\bigcup_{r,s}\cR_{r,s},
  \qquad R=\spr{\cR_+}+\spr{\cR_0}.
 \]
-The output's actual red cost is at most $R$, because its covered red elements outside $\cR_0$ all belong to $\cR_+$.
+The output satisfies $\cov\br{\cA',\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cA',\cR}}\leq R$.
 
 \begin{claim}\label{claim:rbsc-red-cost}
 The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
@@ -284,7 +290,13 @@ We use a \emph{potential}, a score assigned to each outcome of the rounding, to 
  \Phi=Y-\frac{W^2}{80\cdot t}-\frac{t\cdot R}{70\cdot K\cdot T}-\frac{t}{8}.
 \end{equation}
 \begin{claim}\label{claim:rbsc-positive-potential}
-We have $\mathbb{E}[\Phi]>0$. Every outcome with $\Phi>0$ covers at least $t/8$ blue elements and has red cost smaller than $1400\cdot K\cdot T$.
+We have $\mathbb{E}[\Phi]>0$. Every output $\cA'$ obtained from an outcome with $\Phi>0$ satisfies
+\[
+ \spr{\cov\br{\cA',\cB}}\geq t/8
+ \qquad\text{and}\qquad
+ \spr{\cov\br{\cA',\cR}}<1400\cdot K\cdot T.
+\]
+In particular, for the correct guess $K=\OPT$, the red cost is smaller than $1400\cdot\OPT\cdot T$.
 \end{claim}
 \begin{proof}
 Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim:rbsc-second-moment} give
@@ -293,7 +305,7 @@ Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim
  >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{80\cdot t}-\frac{t\cdot7\cdot K\cdot T}{70\cdot K\cdot T}-\frac{t}{8}
  =\frac{t}{20}>0.
 \]
-If $\Phi>0$, all three subtracted terms are nonnegative, so $Y>t/8$. Each of these $Y$ marked elements is covered by the output. Furthermore, $W\geq Y$ implies
+If $\Phi>0$, all three subtracted terms are nonnegative, so $Y>t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cA',\cB}$, we have $\spr{\cov\br{\cA',\cB}}\geq Y>t/8$. Furthermore, $W\geq Y$ implies
 \[
  \frac{t\cdot R}{70\cdot K\cdot T}
  <Y-\frac{W^2}{80\cdot t}-\frac{t}{8}
@@ -301,7 +313,7 @@ If $\Phi>0$, all three subtracted terms are nonnegative, so $Y>t/8$. Each of the
  =20\cdot t-\frac{(Y-40\cdot t)^2}{80\cdot t}
  \leq20\cdot t.
 \]
-It follows that $R<1400\cdot K\cdot T$, and the actual red cost is at most $R$.
+It follows that $\spr{\cov\br{\cA',\cR}}\leq R<1400\cdot K\cdot T$.
 \end{proof}
 
 The following claim is a straightforwards (although quite involved) usage of the conditional expectation method.
@@ -366,7 +378,7 @@ Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-condit
 By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the positive initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
-For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate of minimum actual red cost. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate covers at least $t/8$ blue elements and costs at most $1400\cdot K\cdot T$. Every retained candidate meets the same coverage threshold.
+For each feasible guess, retain the initially selected family if it already meets the coverage threshold, or use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a candidate. Return a candidate $\cA'$ of minimum red cost $\spr{\cov\br{\cA',\cR}}$. The correct guess $K=\OPT$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, and its candidate has red cost at most $1400\cdot\OPT\cdot T$. Every retained candidate meets the coverage threshold, so $\spr{\cov\br{\cA',\cB}}\geq t/8$. Therefore, $\spr{\cov\br{\cA',\cR}}\leq1400\cdot\OPT\cdot T$.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
@@ -397,7 +409,7 @@ For $\ProblemBPCSC$, run the algorithm from Proposition~\ref{pro:partial-red-blu
 There are deterministic polynomial-time $\br{\bigo\br{m^{1/3}},8}$-approximation algorithms for $\ProblemPCSC$ and $\ProblemBPCSC$.
 \end{corollary}
 \begin{proof}
-For $\ProblemPCSC$, apply Theorem~\ref{thm:partial-red-blue-bicriteria} to the reduction above with $t=\cl{f\cdot n}$. The resulting family has size at most $1400\cdot m^{1/3}$ times the optimum and covers at least $t/8\geq f\cdot n/8$ elements.
+For $\ProblemPCSC$, apply Theorem~\ref{thm:partial-red-blue-bicriteria} to the reduction above with $t=\cl{f\cdot n}$. The resulting family has size at most $1400\cdot m^{1/3}\cdot \OPT$ and covers at least $t/8\geq f\cdot n/8$ elements.
 
 For $\ProblemBPCSC$, try all integer blue targets as in Theorem~\ref{thm:PCSC-BPCSC-RBSC}, retaining candidates of cost at most $1400\cdot m^{1/3}\cdot\budget$. Also include the empty family and return the retained candidate of largest coverage. If the optimum budgeted coverage is $t^*>0$, the red-blue instance with target $t^*$ has optimum red cost at most $\budget$. Theorem~\ref{thm:partial-red-blue-bicriteria} therefore supplies a retained candidate covering at least $t^*/8$ elements. If $t^*=0$, the empty family suffices. All calls and choices are deterministic.
 \end{proof}
