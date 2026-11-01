@@ -11,7 +11,7 @@ Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedenc
 Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cA$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cA'\subseteq\cA$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cA',\cR}}$.
 \end{problem}
 
-For the special inforest- and outforest-cases, reductions of $\ProblemBPCSC$ to the \textsc{Maximum Coverage} and \textsc{Group Steiner Orienteering}, respectively, yield stronger guarantees for $\ProblemPCSC$ and $\ProblemPCMSSC$. 
+For the special inforest- and outforest-cases, reductions of $\ProblemBPCSC$ to the \textsc{Maximum Coverage} and \textsc{Group Steiner Orienteering}, respectively, yield stronger guarantees for $\ProblemPCSC$ and $\ProblemPCMSSC$.
 
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
 \label{subsection:PRBSC-bicriteria}
@@ -64,7 +64,7 @@ Let $\cA^*\subseteq\cA$ be an optimal solution, with $\spr{\cov\br{\cA^*,\cB}}\g
 \]
 For the assignment variables, set $a_{u,A_u}=1$ for each $u\in\cB^*$ and set all other $a_{u,A}$ to zero.
 
-The budget and assignment constraints hold by construction. Each assigned blue element belongs to a selected set, and at most $t$ blue elements are assigned to any set, proving~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set}. A selected set contains only covered red elements, proving~\eqref{eq:rbsc-lp-red} and~\eqref{eq:rbsc-lp-pair}. If $y_r=0$, no selected set contains $r$, so both assignment sums involving $r$ vanish. If $y_r=1$, a fixed blue element is assigned at most once, and there are $t$ assignments in total. This proves~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load}. Moreover,
+The budget and assignment constraints hold by construction. Each assigned blue element belongs to a selected set, and at most $t$ blue elements are assigned to any set, proving~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set}. \DDfix{Each selected set does not contain red elements that are not covered,} proving~\eqref{eq:rbsc-lp-red} and~\eqref{eq:rbsc-lp-pair}. If $y_r=0$, no selected set contains $r$, so both assignment sums in~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load} involving $r$ vanish. If $y_r=1$, a fixed blue element is assigned at most once, and there are $t$ assignments in total. This proves~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load}. Moreover,
 \[
  \sum_{q\in\cR}y_{r,q}=y_r\cdot\sum_{q\in\cR}y_q=\OPT\cdot y_r=K\cdot y_r,
 \]
@@ -73,13 +73,13 @@ which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constr
 
 For the smallest feasible guess $K\leq \OPT$ fix a feasible solution and put
 \[
- T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
+ T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+, \textup{ for }A\in\cA.
 \]
 We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cA_0=\brc{A\in\cA\colon \cR'_A=\emptyset}$. Its red coverage satisfies $\cov\br{\cA_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cA_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cA_0,\cB}}\geq t/8$, retain $\cA_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cA_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cA_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
- \geq t-\spr{\cB\setminus\cB'}>7\cdot t/8.
+ \geq t-\spr{\cB\setminus\cB'}>\frac{7}{8}\cdot t.
 \end{equation}
 
 For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cA_s$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cA_{r,s}$ by
@@ -88,7 +88,7 @@ For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which
  \qquad
  \cA_{r,s}=\brc{A\in\cA_s\colon r\in \cR'_A}.
 \]
-Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. 
+Each set with a nonempty residual red part belongs to exactly one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. 
 % This multiplicity will compensate for the factor $1/s$ in the activation probability.
 
 For each $r$ and $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is \emph{activated}, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is \emph{selected} if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Note, that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Define the random families $\cF_{r,s}$ and $\cA'$, sets $\cR_{r,s}$ and $\cR_0$, and the variable $R$ by
