@@ -39,12 +39,12 @@ In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost
 For the current guess $K$, the LP is as follows
 \begin{align}
  \sum_{r\in\cR}y_r&\leq K, \quad\quad \sum_{u\in\cB}z_u=t, && \label{eq:rbsc-lp-budget}\\
- \sum_{A:u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
+ \sum_{A\colon u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
  a_{u,A}&\leq x_A &&(A\in\cA,\ u\in \cB_A), \label{eq:rbsc-lp-marginal}\\
  \sum_{u\in \cB_A}a_{u,A}&\leq t\cdot x_A &&(A\in\cA), \label{eq:rbsc-lp-set}\\
  x_A&\leq y_r &&(A\in\cA,\ r\in \cR_A), \label{eq:rbsc-lp-red}\\
- \sum_{A:r\in \cR_A,\,u\in \cB_A}a_{u,A}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
- \sum_{A:r\in \cR_A}\sum_{u\in \cB_A}a_{u,A}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
+ \sum_{A\colon r\in \cR_A,\,u\in \cB_A}a_{u,A}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
+ \sum_{A\colon r\in \cR_A}\sum_{u\in \cB_A}a_{u,A}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
  x_A&\leq y_{r,q} &&(A\in\cA,\ r,q\in \cR_A), \label{eq:rbsc-lp-pair}\\
  \sum_{q\in\cR}y_{r,q}&\leq K\cdot y_r &&(r\in\cR). \label{eq:rbsc-lp-pair-budget}
 \end{align}
@@ -71,11 +71,11 @@ The budget and assignment constraints hold by construction. Each assigned blue e
 which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. In particular, the guess $K=\OPT$ gives a feasible relaxation.
 \end{proof}
 
-For the smallest feasible guess fix a feasible solution and put
+For the smallest feasible guess $K\leq \OPT$ fix a feasible solution and put
 \[
- T=m^{1/3},\qquad \cR_+=\brc{r\in\cR:y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
+ T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_A=\cR_A\setminus \cR_+.
 \]
-We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cA_0=\brc{A\in\cA:\cR'_A=\emptyset}$. Its red coverage satisfies $\cov\br{\cA_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cA_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cA_0,\cB}}\geq t/8$, retain $\cA_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cA_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cA_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cA_0=\brc{A\in\cA\colon \cR'_A=\emptyset}$. Its red coverage satisfies $\cov\br{\cA_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cA_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cA_0,\cB}}\geq t/8$, retain $\cA_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cA_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cA_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
@@ -84,9 +84,9 @@ We call $\cR'_A$ the \emph{residual red part} of $A$. By~\eqref{eq:rbsc-lp-budge
 
 For every power of two $s=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which we call a \emph{scale}, define $\cA_s$ and, for each $r\in\cR\setminus \cR_+$ with $y_r>0$, the \emph{group} $\cA_{r,s}$ by
 \[
- \cA_s=\brc{A\in\cA:s\leq\spr{\cR'_A}<2\cdot s},
+ \cA_s=\brc{A\in\cA\colon s\leq\spr{\cR'_A}<2\cdot s},
  \qquad
- \cA_{r,s}=\brc{A\in\cA_s:r\in \cR'_A}.
+ \cA_{r,s}=\brc{A\in\cA_s\colon r\in \cR'_A}.
 \]
 Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ the \emph{pivot} of $\cA_{r,s}$. A set $A\in\cA_s$ belongs to the group $\cA_{r,s}$ for each residual red element $r\in\cR'_A$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $A$. A set at scale $s$ has at least $s$ residual red elements and hence, unless its LP value is zero, at least $s$ occurrences. 
 % This multiplicity will compensate for the factor $1/s$ in the activation probability.
@@ -94,7 +94,7 @@ Each set with a nonempty residual red part belongs to one $\cA_s$. We call $r$ t
 For each $r$ and $s$, let $E_{r,s}$ be the event that group $\cA_{r,s}$ is \emph{activated}, with $\Pr[E_{r,s}]=y_r/s$. For each $A\in\cA_{r,s}$, let $J_{r,s,A}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,s,A}]=x_A/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $A$ is \emph{selected} if and only if both $E_{r,s}$ and $J_{r,s,A}$ occur, so selection events in the same group share the activation event. Note, that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $s\geq1$. Define the random families $\cF_{r,s}$ and $\cA'$, sets $\cR_{r,s}$ and $\cR_0$, and the variable $R$ by
 \[
  \begin{gathered}
- \cF_{r,s}=\brc{A\in\cA_{r,s}:E_{r,s}\text{ and }J_{r,s,A}\text{ occur}},
+ \cF_{r,s}=\brc{A\in\cA_{r,s}\colon E_{r,s}\text{ and }J_{r,s,A}\text{ occur}},
  \qquad \cA'=\cA_0\cup\bigcup_{r,s}\cF_{r,s},\\
  \cR_{r,s}=\bigcup_{A\in\cF_{r,s}}\cR'_A,
  \qquad \cR_0=\bigcup_{r,s}\cR_{r,s},
@@ -109,7 +109,7 @@ The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
 \begin{proof}
 Put $\theta=K/T$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cA_{r,s}$, partition its occurrences into the \emph{heavy} and \emph{light} families
 \[
- \cA^h_{r,s}=\brc{A\in\cA_{r,s}:x_A/y_r\geq\theta/s},
+ \cA^h_{r,s}=\brc{A\in\cA_{r,s}\colon x_A/y_r\geq\theta/s},
  \qquad \cA^\ell_{r,s}=\cA_{r,s}\setminus\cA^h_{r,s}.
 \]
 The same set may be heavy in one group and light in another. Define the random sets of residual red elements reached by selected heavy and light occurrences by
@@ -120,7 +120,7 @@ The same set may be heavy in one group and light in another. Define the random s
 \]
 Define $R_h=\spr{\cR_h}$ and $R_\ell=\spr{\cR_\ell}$. Since every selected occurrence is either heavy or light, $R\leq\spr{\cR_+}+R_h+R_\ell$. We bound the expectations of these two variables separately.
 
-Fix residual red elements $r,q$ with $y_r>0$, and let $F_{r,q}$ be the event that a selected heavy occurrence in some group $\cA_{r,s}$ contains $q$. For all other ordered red pairs, let $F_{r,q}$ be the empty event. Define $\cS_{r,q}=\brc{s:\text{there exists }A\in\cA^h_{r,s}\text{ with }q\in\cR'_A}$. A selected occurrence requires its group to be active, and hence
+Fix residual red elements $r,q$ with $y_r>0$, and let $F_{r,q}$ be the event that a selected heavy occurrence in some group $\cA_{r,s}$ contains $q$. For all other ordered red pairs, let $F_{r,q}$ be the empty event. Define $\cS_{r,q}=\brc{s\colon \text{there exists }A\in\cA^h_{r,s}\text{ with }q\in\cR'_A}$. A selected occurrence requires its group to be active, and hence
 \[
  F_{r,q}\subseteq\bigcup_{s\in\cS_{r,q}}E_{r,s},
  \qquad
@@ -182,13 +182,13 @@ Fix $u\in\cB'$. For an occurrence of $A$ in group $\cA_{r,s}$ with $u\in \cB_A$ 
 When $x_A=0$, both this probability and $a_{u,A}$ are zero. The sum of these probabilities within the group is
 \[
  \lambda_{r,s,u}
- =\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}
+ =\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}
  \leq1
 \]
 by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are independent. We use the inequality $1-x\leq e^{-x}$ and the concavity of $1-e^{-a\cdot x}$, which gives $1-e^{-a\cdot x}\geq(1-e^{-a})\cdot x$ for $a\geq0$ and $x\in[0,1]$. The group's conditional probability of marking $u$ is therefore at least
 \[
  \Pr[u\in\cB_{r,s}\mid E_{r,s}]
- =1-\prod_{A\in\cA_{r,s}:u\in \cB_A}
+ =1-\prod_{A\in\cA_{r,s}\colon u\in \cB_A}
        \br{1-\frac{a_{u,A}}{y_r}}
  \geq1-e^{-\lambda_{r,s,u}}
  \geq(1-e^{-1})\cdot\lambda_{r,s,u}.
@@ -197,21 +197,21 @@ Since $\cB_{r,s}=\emptyset$ when the group is inactive, the preceding bound and 
 \[
  \Pr[u\in\cB_{r,s}]=\Pr[E_{r,s}]\cdot\Pr[u\in\cB_{r,s}\mid E_{r,s}]
  \geq\frac{y_r}{s}\cdot(1-e^{-1})\cdot\lambda_{r,s,u}
- =\frac{1-e^{-1}}{s}\cdot\sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}.
+ =\frac{1-e^{-1}}{s}\cdot\sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}.
 \]
 Let $M_u=\sum_{r,s}\boldsymbol{1}_{u\in\cB_{r,s}}$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
 \begin{align*}
  \mathbb{E}[M_u]&=\sum_{r,s}\Pr[u\in\cB_{r,s}]
  \geq(1-e^{-1})\cdot\sum_{r,s}\frac1s\cdot
-       \sum_{A\in\cA_{r,s}:u\in \cB_A}a_{u,A}\\
- &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s:u\in \cB_A}
-       \frac{a_{u,A}}s\cdot\sum_{r\in\cR'_A:y_r>0}1\\
- &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s:u\in \cB_A}
+       \sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}\\
+ &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s\colon u\in \cB_A}
+       \frac{a_{u,A}}s\cdot\sum_{r\in\cR'_A\colon y_r>0}1\\
+ &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s\colon u\in \cB_A}
        \frac{\spr{\cR'_A}}s\cdot a_{u,A}
- \geq(1-e^{-1})\cdot\sum_{A:u\in \cB_A}a_{u,A}
+ \geq(1-e^{-1})\cdot\sum_{A\colon u\in \cB_A}a_{u,A}
  =(1-e^{-1})\cdot z_u.
 \end{align*}
-For the second equality, fix a scale $s$ and a set $A\in\cA_s$ containing $u$. The term $a_{u,A}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}:u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A}\leq x_A\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, it was initially selected and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
+For the second equality, fix a scale $s$ and a set $A\in\cA_s$ containing $u$. The term $a_{u,A}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}\colon u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A}\leq x_A\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, it was initially selected and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
 
 The rounding choices for distinct group indices are independent. Applying $1-x\leq e^{-x}$ across groups and then the above concavity bound for $z_u\in[0,1]$ yields
 \[
@@ -261,12 +261,12 @@ Moreover, $X_A=\boldsymbol{1}_{J_{r,s,A}}\cdot N_A$ and the trial is independent
 Writing $\mu=\mathbb{E}[L_{r,s}]$, the first-moment calculation and $r\in\cR_A$ for every $A\in\cA_{r,s}$ give
 \[
  \mu=\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}}\sum_{u\in\cB_A\cap\cB'}a_{u,A}
- \leq\frac1{y_r}\cdot\sum_{A:r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq t,
+ \leq\frac1{y_r}\cdot\sum_{A\colon r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq t,
 \]
 where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,s}^2$ and using independence across distinct occurrences gives
 \begin{align*}
  \mathbb{E}[L_{r,s}^2]
- &=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{A,A'\in\cA_{r,s}:A\ne A'}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]\\
+ &=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{A,A'\in\cA_{r,s}\colon A\ne A'}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]\\
  &\leq(t+1)\cdot\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]+\br{\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]}^2
  =(t+1)\cdot\mu+\mu^2\leq(2t+1)\cdot\mu.
 \end{align*}
@@ -347,9 +347,9 @@ and the probabilities that the group misses a blue or red element are
 \[
  \begin{aligned}
  \Pr[u\notin\cB_{r,s}\mid\mathcal{E}]
- &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}:u\in\cB_A}\br{1-\Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]},\\
+ &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}\colon u\in\cB_A}\br{1-\Pr[u\in\cD_{r,s,A}\mid\mathcal{E}]},\\
  \Pr[q\notin\cR_{r,s}\mid\mathcal{E}]
- &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}:q\in\cR'_A}\br{1-\Pr[J_{r,s,A}\mid\mathcal{E}]}.
+ &=1-\Pr[E_{r,s}\mid\mathcal{E}]+\Pr[E_{r,s}\mid\mathcal{E}]\cdot\prod_{A\in\cA_{r,s}\colon q\in\cR'_A}\br{1-\Pr[J_{r,s,A}\mid\mathcal{E}]}.
  \end{aligned}
 \]
 Independence of distinct groups and linearity of expectation then give
@@ -401,9 +401,9 @@ Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many tim
 \subsection{\texorpdfstring{$\ProblemPCSC$ and $\ProblemBPCSC$}{PCSC and B-PCSC} via Partial Red-Blue Set Cover}
 \label{subsection:PCSC}\label{subsection:BPCSC}
 We use the same exact reduction for both covering variants.
-Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T:T\in S^{+}}\cup\brc{b_u:u\in\cov\br{S^{+}}}$.
+Given a set cover instance $(\cU,\cS,\preceq)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T\colon T\in S^{+}}\cup\brc{b_u\colon u\in\cov\br{S^{+}}}$.
 The instance has one available set $A_S$ for each original set $S$. Writing $m_{\mathrm{SC}}$ and $n_{\mathrm{SC}}$ for the original numbers of sets and items, the red-blue instance has $m=m_{\mathrm{SC}}$ sets, $k=m_{\mathrm{SC}}$ red elements, and $n=n_{\mathrm{SC}}$ blue elements. In the rest of this subsection, $m$ and $n$ refer to the original set-cover instance. For any selected subfamily indexed by $\mathcal{J}\subseteq\cS$, define a precedence-closed family $\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}S^{+}$.
-The red elements covered by the selected red-blue sets form $\brc{r_T:T\in\cC_{\mathcal{J}}}$, and the blue elements covered form $\brc{b_u:u\in\cov\br{\cC_{\mathcal{J}}}}$.
+The red elements covered by the selected red-blue sets form $\brc{r_T\colon T\in\cC_{\mathcal{J}}}$, and the blue elements covered form $\brc{b_u\colon u\in\cov\br{\cC_{\mathcal{J}}}}$.
 Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$, respectively.
 Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$, and no others: each $S^{+}\subseteq\cC$, and every $S\in\cC$ belongs to $S^{+}$. Hence, the reduction preserves cost and coverage in both directions.
 

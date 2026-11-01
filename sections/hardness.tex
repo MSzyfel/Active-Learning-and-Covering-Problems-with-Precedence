@@ -44,7 +44,7 @@ We use the following probability inequalities.
 \begin{proof}
     Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$. We will bound the expected value of $Z_e^s$ for the clique count $Z_e$ defined below. Fix a pair of vertices $e\in\binom{[N]}{2}$, and define
     \[
-        \mathcal{K}_e=\left\{K\in\binom{[N]}{r}:e\subseteq K\right\}.
+        \mathcal{K}_e=\left\{K\in\binom{[N]}{r}\colon e\subseteq K\right\}.
     \]
     For each $K\in\mathcal K_e$, define
     \[
@@ -139,8 +139,8 @@ We use the following probability inequalities.
     The universe is $\cU=[n]$, with target fraction $f$. Given the input graph $G$ on $[N]$, create the \emph{representative sets} $V_{v,i}=\emptyset$ for every $v\in[N]$ and $i\in[\lambda]$. For each $v\in[N]$, form an \emph{auxiliary set} $\cU_v\subseteq\cU$ by including each $j\in[n]$ independently with probability $p$. Make these choices independently for all pairs $(v,j)$ and independently of $G$.
     For every $K\in\binom{[N]}{r}$, define $E_K=\bigcap_{v\in K}\cU_v$. If $K$ is a clique of $G$, include $E_K$ as a selectable \emph{witness set}. The family of selectable sets is
     \[
-        \cS=\{V_{v,i}:v\in[N],\ i\in[\lambda]\}
-        \cup\{E_K:K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
+        \cS=\{V_{v,i}\colon v\in[N],\ i\in[\lambda]\}
+        \cup\{E_K\colon K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
     \]
     with distinct indices even when two sets have identical contents. The sets $\cU_v$ are used only to define the witness sets and are not themselves selectable. For every $r$-clique $K$ of $G$, impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. Thus selecting $E_K$ requires selecting all $\lambda$ representatives of every vertex in $K$. All precedence arcs go from representative sets to witness sets, so a directed path has at most one edge and the precedence DAG has height two.
 
@@ -151,8 +151,8 @@ We use the following probability inequalities.
     Define the family of representatives and witnesses for the planted vertices by
     \[
         \cC_{\mathcal P}
-        =\{V_{v,i}:v\in\mathcal P,\ i\in[\lambda]\}
-        \cup\{E_K:K\in\textstyle\binom{\mathcal P}{r},\ K\text{ is a clique of }G\}.
+        =\{V_{v,i}\colon v\in\mathcal P,\ i\in[\lambda]\}
+        \cup\{E_K\colon K\in\textstyle\binom{\mathcal P}{r},\ K\text{ is a clique of }G\}.
     \]
     \begin{claim}[Size of the planted family]\label{claim:PDS-planted-size}
         For sufficiently large $N$, $\Pr[\spr{\cC_{\mathcal P}}\leq3\cdot n]\geq1/2$.
@@ -166,7 +166,7 @@ We use the following probability inequalities.
         Since $k=o(n)$, we have $\lambda\cdot k\leq2\cdot n$ for sufficiently large $N$. Thus $\spr{\cC_{\mathcal P}}=\lambda\cdot k+F_G(\mathcal P)\leq3\cdot n$ with probability at least $1/2$.
     \end{proof}
 
-    For each $j\in[n]$, a vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $\mathcal M_j=\{v\in\mathcal P:j\in\cU_v\}$ be the random set of marked vertices, and let $m_j=\spr{\mathcal M_j}$ be its size.
+    For each $j\in[n]$, a vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $\mathcal M_j=\{v\in\mathcal P\colon j\in\cU_v\}$ be the random set of marked vertices, and let $m_j=\spr{\mathcal M_j}$ be its size.
     \begin{claim}[Number of marked vertices]\label{claim:PDS-marked-size}
         For each fixed $j\in[n]$ and sufficiently large $N$,
         \[
@@ -217,7 +217,7 @@ We use the following probability inequalities.
 
     For $2\leq a\leq r-1$, define
     \[
-        Q_{S,a}=\spr{\left\{(K,L)\in\binom{S}{r}\times\binom{S}{r}:\spr{K\cap L}=a\right\}}.
+        Q_{S,a}=\spr{\left\{(K,L)\in\binom{S}{r}\times\binom{S}{r}\colon \spr{K\cap L}=a\right\}}.
     \]
     We count these pairs by choosing $K$, then the $a$ vertices of $L$ inside $K$, and then its $r-a$ vertices outside $K$. This gives
     \begin{align*}
@@ -252,7 +252,7 @@ We use the following probability inequalities.
         With probability $1-o(1)$, $\cov\br{\cC_{\mathcal P}}=\cU$.
     \end{claim}
     \begin{proof}
-    Fix $j\in[n]$ and set $\ell=\lceil\log_2 N\rceil$. We will apply Claim~\ref{claim:PDS-subset-clique} to $\ell$ subsets of $\mathcal M_j=\{v\in\mathcal P:j\in\cU_v\}$, each of size $z$, with no vertex belonging to two subsets. To verify that enough marked vertices are available, note that
+    Fix $j\in[n]$ and set $\ell=\lceil\log_2 N\rceil$. We will apply Claim~\ref{claim:PDS-subset-clique} to $\ell$ subsets of $\mathcal M_j=\{v\in\mathcal P\colon j\in\cU_v\}$, each of size $z$, with no vertex belonging to two subsets. To verify that enough marked vertices are available, note that
     \[
         \ell\cdot z=\bigo_r\br{k^{(1-\beta)\cdot(r-1)/2}\cdot\log N}=o(p\cdot k).
     \]
@@ -301,7 +301,7 @@ We use the following probability inequalities.
     \]
     Set $x_0=\lfloor n\cdot N^{-\epsilon/4}\rfloor$, the threshold on the number of graph vertices in the following coverage bound.
     \begin{claim}\label{claim:PDS-no-coverage}
-        For $X\subseteq[N]$, let $\cC_X=\{E_K:K\in\binom{X}{r},\ K\text{ is a clique of }G\}$ be the family of witness sets indexed by $r$-cliques contained in $X$. With high probability in the null case, every $X$ with $\spr{X}\leq x_0$ satisfies $\spr{\cov\br{\cC_X}}\leq f\cdot n/(2\cdot\kappa)$.
+        For $X\subseteq[N]$, let $\cC_X=\{E_K\colon K\in\binom{X}{r},\ K\text{ is a clique of }G\}$ be the family of witness sets indexed by $r$-cliques contained in $X$. With high probability in the null case, every $X$ with $\spr{X}\leq x_0$ satisfies $\spr{\cov\br{\cC_X}}\leq f\cdot n/(2\cdot\kappa)$.
     \end{claim}
     \begin{proof}
         Since $n=\bigo(N^{r/(r+1)})$, we have $n^{r-1}/N^{r\cdot\alpha}=\bigo_r(1)$. Thus, for $0<x=\spr{X}\leq x_0\leq n$, the clique-count bound gives $F_G(X)=\bigo_r(N^{\epsilon/8}\cdot x\cdot\log N)$. Using $\spr{\cov\br{\cC_X}}\leq\sum_{E_K\in\cC_X}\spr{E_K}$, we obtain
@@ -433,7 +433,7 @@ For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in
 A \textsc{Label Cover} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e:D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
 \[
     \operatorname{val}_{\mathcal L}(a,b)
-    =\frac{\spr{\{e=uv\in E:a_u\in D_e,\ \pi_e(a_u)=b_v\}}}{\spr{E}},
+    =\frac{\spr{\{e=uv\in E\colon a_u\in D_e,\ \pi_e(a_u)=b_v\}}}{\spr{E}},
 \]
 and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a\in\Sigma_A^A,\ b\in\Sigma_B^B}\operatorname{val}_{\mathcal L}(a,b)$. For a given \emph{soundness parameter} $s\in(0,1)$, the \textsc{Label Cover} problem asks to distinguish between the following two cases:
 \begin{itemize}
@@ -468,7 +468,7 @@ Our reduction uses Label Cover instances with total projections.
     \end{itemize}
 \end{lemma}
 \begin{proof}
-    Remove isolated vertices and put $r_0=\lceil1/s\rceil$. Keep the left alphabet unchanged and replace each constraint $e=uv\in E$ by $r_0$ distinct copies $e_j=uv$, for $j\in[r_0]$. For each pair $(e,j)$, introduce a \emph{private right label} $\bot_{e,j}$, distinct from all original labels and from all other new labels, and set $\Sigma_B'=\Sigma_B\cup\{\bot_{e,j}:e\in E,\ 1\leq j\leq r_0\}$. Here $e$ denotes the identity of a constraint, so parallel constraints receive distinct labels. Define the \emph{total projection} of $e_j$ by
+    Remove isolated vertices and put $r_0=\lceil1/s\rceil$. Keep the left alphabet unchanged and replace each constraint $e=uv\in E$ by $r_0$ distinct copies $e_j=uv$, for $j\in[r_0]$. For each pair $(e,j)$, introduce a \emph{private right label} $\bot_{e,j}$, distinct from all original labels and from all other new labels, and set $\Sigma_B'=\Sigma_B\cup\{\bot_{e,j}\colon e\in E,\ 1\leq j\leq r_0\}$. Here $e$ denotes the identity of a constraint, so parallel constraints receive distinct labels. Define the \emph{total projection} of $e_j$ by
     \[
         \pi'_{e_j}(a)=
         \begin{cases}
@@ -530,11 +530,11 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \[
         \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq\spr{\cC}.
     \]
-    Put $R=\spr{\cC}/h$, $B_0=2R/\theta$, and let $H=\{v\in A\cup B:\spr{L_v}>B_0\}$ be the set of \emph{heavy vertices}. Then
+    Put $R=\spr{\cC}/h$, $B_0=2R/\theta$, and let $H=\{v\in A\cup B\colon \spr{L_v}>B_0\}$ be the set of \emph{heavy vertices}. Then
     \[
         \sum_{v\in H}d_v\leq\frac{\spr{\cC}}{B_0}=\frac{\theta h}{2}.
     \]
-    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside of $H$, $F=\{e=uv\in\cov\br{\cC,\cU}:u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
+    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside of $H$, $F=\{e=uv\in\cov\br{\cC,\cU}\colon u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
 
     Choose a random labeling $(a,b)$ by independently selecting at each vertex $v$ a uniform label from $L_v$ if $L_v\neq\emptyset$, and a fixed arbitrary label otherwise. For each $e=uv\in F$, a selected witness supplies a label $\ell\in L_u$ with $\pi_e(\ell)\in L_v$. Both lists are nonempty and have size at most $B_0$, so
     \[
@@ -614,7 +614,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     \[
         S_v^1\preceq\cdots\preceq S_v^{d(e_v)},\qquad
         S_v^i=\emptyset\ (i<d(e_v)),\qquad
-        S_v^{d(e_v)}=\{j\in[g]:v\in X_j\}.
+        S_v^{d(e_v)}=\{j\in[g]\colon v\in X_j\}.
     \]
     If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{d(e_u)}\preceq S_v^1$. Every set then has at most one immediate predecessor.
 
@@ -680,11 +680,11 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 
     Let $(T=(V,E),d,r,\cX)$ be an MGL instance, where $d$ gives positive rational edge lengths. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
-    To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e):e\in E\}$. Delete every edge of length greater than $B$ and all vertices below it, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
+    To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e)\colon e\in E\}$. Delete every edge of length greater than $B$ and all vertices below it, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
     \[
         q_v=\left\lceil\frac{d(e_v)}{\delta}\right\rceil\leq g\cdot M
     \]
-    indexed representative sets $S_v^1\preceq\cdots\preceq S_v^{q_v}$, where $S_v^i=\emptyset$ for $i<q_v$ and $S_v^{q_v}=\{j\in[g]:v\in X_j\}$. If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{q_u}\preceq S_v^1$. The precedence constraints form an outforest, and each guess creates at most $g\cdot M^2$ sets.
+    indexed representative sets $S_v^1\preceq\cdots\preceq S_v^{q_v}$, where $S_v^i=\emptyset$ for $i<q_v$ and $S_v^{q_v}=\{j\in[g]\colon v\in X_j\}$. If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{q_u}\preceq S_v^1$. The precedence constraints form an outforest, and each guess creates at most $g\cdot M^2$ sets.
 
     Let $P^*$ be an optimal MGL route, expanded into a walk on $T$ and stopped when all groups have been visited. Let $B^*$ be the maximum length of an edge traversed by this walk. Since the walk stops at the first visit to its last group, $B^*\leq\OPT_{\mathrm{MGL}}=\lt\br{P^*}$. For the guess $B=B^*$, every vertex visited by the walk survives pruning. List these vertices in order of first visit and append each vertex's entire representative chain in that order. The resulting sequence $\sigma$ is precedence-feasible and covers every group index. For each group $X_j$, the edges represented up to the first set covering $j$ have total length at most $\lt\br{P^*,X_j}$. Rounding the length of each such edge up to a multiple of $\delta$ adds less than $\delta$ per edge, and at most $M$ edges are represented. Therefore
     \[
@@ -720,8 +720,8 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     % \DD{tutaj chyba należałoby powiedzieć która hipoteza jest targetem w których sytuacjach?} 
     For each $S\in\cS$, create one indexed test whose replies are
     \[
-        H_S=\{h_u^i:u\in\cU\setminus S,\ i\in\{0,1\}\},
-        \qquad t_S=\bigl(\{\{h_u^i\}:u\in S,\ i\in\{0,1\}\}\cup\{H_S\}\bigr)\setminus\{\emptyset\}.
+        H_S=\{h_u^i\colon u\in\cU\setminus S,\ i\in\{0,1\}\},
+        \qquad t_S=\bigl(\{\{h_u^i\}\colon u\in S,\ i\in\{0,1\}\}\cup\{H_S\}\bigr)\setminus\{\emptyset\}.
     \]
     Impose $t_S\preceq t_T$ when $S\preceq T$.
 
