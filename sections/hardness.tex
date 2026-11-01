@@ -3,7 +3,7 @@
 \subsection{Hardness from Planted Dense Subgraph}
 We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out the approximation factors of $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$.
 \DD{ten papier tylko wyklucza $1/12$ (?)}
-The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
+The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textup{\textsc{Planted Dense Subgraph Conjecture}} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
 Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors \DDfix{of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ both for $\ProblemPCSC$ and $\ProblemPCMSSC$.} Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
 Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
@@ -12,7 +12,7 @@ Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need 
 Let $G\br{N,p}$ denote the Erd\H{o}s-R\'enyi random graph with vertices $1,\ldots,N$, in which each pair of distinct vertices is joined by an edge independently with probability $p$. Write $E(G)$ for the edge set of $G$. An \emph{$r$-clique} is a set of $r$ vertices with every pair joined by an edge. For a vertex set $X$, let $G[X]$ be the graph consisting of the vertices in $X$ and all edges of $G$ between them, and let $\binom{X}{r}$ denote the family of all $r$-element subsets of $X$. We use the \emph{log-density parameter} $\alpha$ to specify the distribution $G(N,N^{\alpha-1})$, whose expected vertex degree is $\Theta(N^\alpha)$.
 Unless stated otherwise, limits in this subsection are taken as $N\to\infty$, with $r$ fixed. We write $\log$ for the natural logarithm and \emph{with high probability} for probability $1-o(1)$. A subscript on $\bigo$ indicates which fixed parameters its implicit constant may depend on.
 We use the following hardness assumption \cite{OnApproxTargetSetSelection}, also used in \cite{PCMSSC}.
-\begin{conjecture}[\textsc{Planted Dense Subgraph} conjecture (PDS)] \label{problem:PDS}
+\begin{conjecture}[\textup{\textsc{Planted Dense Subgraph}} conjecture (PDS)] \label{problem:PDS}
     Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when each distribution is chosen with probability $1/2$:
     \begin{itemize}
         \item the \emph{null distribution} $G(N,N^{\alpha-1})$,
@@ -437,12 +437,12 @@ For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in
 \end{proof}
 
 \subsection{Hardness from Label Cover}
-A \textsc{Label Cover} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e:D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
+A \textup{\textsc{Label Cover}} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e:D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
 \[
     \operatorname{val}_{\mathcal L}(a,b)
     =\frac{\spr{\{e=uv\in E\colon a_u\in D_e,\ \pi_e(a_u)=b_v\}}}{\spr{E}},
 \]
-and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a\in\Sigma_A^A,\ b\in\Sigma_B^B}\operatorname{val}_{\mathcal L}(a,b)$. For a given \emph{soundness parameter} $s\in(0,1)$, the \textsc{Label Cover} problem asks to distinguish between the following two cases:
+and the \emph{value of the instance} is $\operatorname{val}(\mathcal L) =\max_{a\in\Sigma_A^A,\ b\in\Sigma_B^B}\operatorname{val}_{\mathcal L}(a,b)$. For a given \emph{soundness parameter} $s\in(0,1)$, the \textup{\textsc{Label Cover}} problem asks to distinguish between the following two cases:
 \begin{itemize}
     \item \textbf{YES case:} $\operatorname{val}(\mathcal L)=1$.
     \item \textbf{NO case:} $\operatorname{val}(\mathcal L)\leq s$.
@@ -453,7 +453,7 @@ We distinguish two types of projections. A \emph{total projection} has $D_e=\Sig
 The following source results provide the completeness and soundness gaps used in our reduction. In their statements, the size of a Label Cover instance is the size of its underlying graph, and the alphabet size is the larger of the two alphabet sizes.
 
 \begin{theorem}[Label Cover hardness \cite{AnalyticalApproachToParallelRepetition}]\label{thm:label-cover-source-hardness}
-    The following hold for \textsc{Label Cover} with perfect completeness:
+    The following hold for \textup{\textsc{Label Cover}} with perfect completeness:
     \begin{enumerate}
         \item\label{item:label-cover-source-polylog} For every constant $c_0>0$, it is NP-hard to distinguish instances of graph size $N_0$ and alphabet size at most $N_0$ with value $1$ from those with value at most $(\log N_0)^{-c_0}$ \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition}.
         \item\label{item:label-cover-source-repetition} There are constants $a>1$ and $\beta_0\in(0,1)$ such that, for every integer $\tau\geq1$, a 3SAT instance of size $L$ can be transformed in time $L^{\bigo(\tau)}$ into a Label Cover instance of graph size $L^{\bigo(\tau)}$ and alphabet size at most $a^\tau$, with value $1$ if the 3SAT instance is satisfiable and value at most $\beta_0^\tau$ otherwise \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition}.
@@ -462,13 +462,13 @@ The following source results provide the completeness and soundness gaps used in
 
 The following consequence of the Projection Games Conjecture is stated in the form needed below. It follows by choosing an inverse-polynomial soundness parameter in the conjecture.
 \begin{conjecture}[Projection Games Conjecture, consequence of \cite{ProjectionGamesConjecture}]\label{conj:label-cover-source-pgc}
-    There is a constant $c>0$ and a polynomial-time reduction from 3SAT to \textsc{Label Cover} instances of graph size $N$ and alphabet size $N^{\bigo(1)}$ that maps satisfiable instances to instances of value $1$ and unsatisfiable instances to instances of value at most $N^{-c}$.
+    There is a constant $c>0$ and a polynomial-time reduction from 3SAT to \textup{\textsc{Label Cover}} instances of graph size $N$ and alphabet size $N^{\bigo(1)}$ that maps satisfiable instances to instances of value $1$ and unsatisfiable instances to instances of value at most $N^{-c}$.
 \end{conjecture}
 
 Our reduction uses Label Cover instances with total projections.
 
 \begin{lemma}[Totalizing Label Cover]\label{lem:label-cover-totalization}
-    For every $s\in(0,1)$, a \textsc{Label Cover} instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
+    For every $s\in(0,1)$, a \textup{\textsc{Label Cover}} instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
     \begin{itemize}
         \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, then $\operatorname{val}(\mathcal L')=1$.
         \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then $\operatorname{val}(\mathcal L')\leq2s$.
@@ -504,7 +504,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 \subsubsection{The construction}
 
 \begin{lemma}\label{lem:label-cover-covering-gap}
-    There is an absolute constant $c_*>0$ such that, for every $s\in(0,1)$ and every total-projection \textsc{Label Cover} instance $\mathcal L$ with $h\geq1$ constraints, a deterministic reduction constructs a universe $\cU$, $\spr{\cU}=n$, and a family $(\cS,\preceq)$, $\spr{\cS}=m$, with
+    There is an absolute constant $c_*>0$ such that, for every $s\in(0,1)$ and every total-projection \textup{\textsc{Label Cover}} instance $\mathcal L$ with $h\geq1$ constraints, a deterministic reduction constructs a universe $\cU$, $\spr{\cU}=n$, and a family $(\cS,\preceq)$, $\spr{\cS}=m$, with
     \[
         n=h,\qquad m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}.
     \]
@@ -579,18 +579,18 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \begin{enumerate}
         \item\label{item:label-cover-polylog} $\br{\bigo\br{(\log x)^K},\bigo\br{(\log x)^J}}$ for any constants $K,J\geq0$, unless $\text{P}=\text{NP}$.
         \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size.
-        \item\label{item:label-cover-polynomial} Assuming the \textsc{Projection Games Conjecture}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
+        \item\label{item:label-cover-polynomial} Assuming the \textup{\textsc{Projection Games Conjecture}}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
     \end{enumerate}
     All three bounds hold even when the precedence DAG has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
-    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textsc{Label Cover} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The \DDfix{set cover instances have} $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
+    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The \DDfix{set cover instances have} $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
     \begin{equation}\label{eq:label-cover-gap-criterion}
         \alpha\cdot\kappa^{3/2}=o(s^{-1/2}).
     \end{equation}
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
-        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives NP-hard \textsc{Label Cover} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives NP-hard \textup{\textsc{Label Cover}} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
         \item Part~\ref{item:label-cover-source-repetition} of Theorem~\ref{thm:label-cover-source-hardness} gives, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
@@ -603,12 +603,12 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 \end{proof}
 
 \subsection{Outforest precedence constraints}
-\begin{problem}[\textsc{Group Steiner Tree} (GST)] \label{problem:GST}
+\begin{problem}[\textup{\textsc{Group Steiner Tree}} ($\ProblemGST$)] \label{problem:GST}
 Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V$, and an indexed family of groups $\cX=(X_1,\ldots,X_g)$ with $X_j\subseteq V$ for each $j\in[g]$, find a subtree $T'$ containing $r$ and at least one vertex from each group, minimizing $\sum_{e\in E(T')}d(e)$.
 \end{problem}
 
 \begin{theorem}[Halperin and Krauthgamer \cite{PolylogarithmicInapproximability}, Theorem~1.1]\label{thm:source-GST-hardness}
-    For every $\epsilon>0$, \textsc{Group Steiner Tree} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, \textup{\textsc{Group Steiner Tree}} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
@@ -656,7 +656,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
         \leq\coverageTime\br{\sigma,\cU}
         \leq(L+1)\cdot g\cdot\spr{\sigma}.
     \]
-    Such a sequence must cover all $g$ group indices to meet the target. Let $\OPT_{\mathrm{GST}}$ and $\OPT_{\mathrm{cover}}$ be the optima of the GST and constructed covering instances. A minimum-cost Steiner tree yields a representative-only sequence of length $\OPT_{\mathrm{GST}}$, so the upper bound above gives $\OPT_{\mathrm{cover}}\leq(L+1)g\cdot\OPT_{\mathrm{GST}}$. Given an $\alpha$-approximate covering sequence, first remove or replace the dummy chain as described above. The resulting sequence $\sigma$ has cost at most $\alpha\cdot\OPT_{\mathrm{cover}}$. Deleting incomplete representative chains gives a Steiner tree of cost at most $\spr{\sigma}$. The lower bound therefore gives
+    Such a sequence must cover all $g$ group indices to meet the target. Let $\OPT_{\mathrm{GST}}$ and $\OPT_{\mathrm{cover}}$ be the optima for the $\ProblemGST$ and constructed covering instances. A minimum-cost Steiner tree yields a representative-only sequence of length $\OPT_{\mathrm{GST}}$, so the upper bound above gives $\OPT_{\mathrm{cover}}\leq(L+1)g\cdot\OPT_{\mathrm{GST}}$. Given an $\alpha$-approximate covering sequence, first remove or replace the dummy chain as described above. The resulting sequence $\sigma$ has cost at most $\alpha\cdot\OPT_{\mathrm{cover}}$. Deleting incomplete representative chains gives a Steiner tree of cost at most $\spr{\sigma}$. The lower bound therefore gives
     \[
         \spr{\sigma}\leq\frac{\alpha\cdot\OPT_{\mathrm{cover}}}{Lg}
         \leq\alpha\br{1+\frac1L}\OPT_{\mathrm{GST}}
@@ -664,9 +664,9 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
     \]
     Unlike in the GST-to-PCSC reduction, the universe also contains $Lg$ dummy elements, so here $n=(L+1)g$. For the source instances, every scaled edge length is at most $\spr{V}$ and $\spr{V}=g^{\bigo(1)}$. Hence $L\leq\spr{V}^2=g^{\bigo(1)}$, which gives $n=g^{\bigo(1)}$ and $\log n=\Theta(\log g)$. The source hardness therefore gives the claimed bound.
 \end{proof}
-The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by representing the edges of a tree-metric MGL instance by chains of sets, as in the preceding GST reduction.
+The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by representing the edges of a tree-metric MGL instance by chains of sets, as in the preceding $\ProblemGST$ reduction.
 
-\begin{problem}[\textsc{Minimum Group Latency} (MGL)] \label{problem:MGL}
+\begin{problem}[\textup{\textsc{Minimum Group Latency}} (MGL)] \label{problem:MGL}
 Given a finite metric space $(V,d)$, a root $r\in V$, and an indexed family of nonempty groups $X_1,\ldots,X_g\subseteq V$, find a route $P=(v_0,v_1,\ldots,v_\ell)$ with $v_0=r$ that visits at least one vertex of every group and minimizes its total latency $\lt\br{P}=\sum_{j=1}^{g}\lt\br{P,X_j}$, where the latency of group $X_j$ is
 \[
     \lt\br{P,X_j}=\min_{\substack{0\leq i\leq\ell\\v_i\in X_j}}\sum_{h=1}^{i}d(v_{h-1},v_h).
@@ -676,14 +676,14 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 
 \begin{theorem}[Chakrabarty and Swamy \cite{ChakrabartySwamy2016FacilityLocationClientLatencies}, Theorem~2.5]\label{thm:source-MGL-hardness}
     \setlength{\emergencystretch}{2em}
-    For every $\epsilon>0$, \textsc{Minimum Group Latency} on tree metrics with $g$ groups admits no polynomial-time $\bigo\br{\log^{1-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, \textup{\textsc{Minimum Group Latency}} on tree metrics with $g$ groups admits no polynomial-time $\bigo\br{\log^{1-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 
 \begin{theorem}\label{thm:PCMSSC-outforest-full-cover-hardness}
     For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
-    We reduce from \textsc{Minimum Group Latency} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
+    We reduce from \textup{\textsc{Minimum Group Latency}} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
 
     Let $(T=(V,E),d,r,\cX)$ be an MGL instance, where $d$ gives positive rational edge lengths. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
