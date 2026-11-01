@@ -4,7 +4,7 @@
 We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out the approximation factors of $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$.
 \DD{ten papier tylko wyklucza $1/12$ (?)}
 The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
-Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors \DDfix{of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ for $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively.} Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
+Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors \DDfix{of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ both for $\ProblemPCSC$ and $\ProblemPCMSSC$.} Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
 Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
 
@@ -125,11 +125,11 @@ We use the following probability inequalities.
 
 \begin{theorem}\label{thm:PCSC-PDS-clique-hardness}
     \setlength{\emergencystretch}{1em}
-    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCSC$ with target fraction $f$, even when the precedence DAG has height two.
+    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation algorithm for $\ProblemPCSC$ with target fraction $f$, even when the precedence DAG has height two.
 \end{theorem}
 \begin{proof}
     \par\noindent\textbf{Parameters and construction.}
-    It suffices to consider $0<\epsilon<(r-1)/(4\cdot r)$, since larger values weaken both claims. Let $N$ be the number of vertices in the input graph. The fixed integer $r$ is the number of vertices in each clique used by the reduction, and $R=\binom{r}{2}$ is its number of edges. Set
+    It suffices to consider $0<\epsilon<(r-1)/(4\cdot r)$, since larger values weaken both claims. Let $N$ be the number of vertices of the input graph. The fixed integer $r$ is the number of vertices in each clique used by the reduction, and $R=\binom{r}{2}$ is its number of edges. Set
     \[
         \alpha=\frac{r-1}{r+1},\qquad \beta=\alpha-\frac{\epsilon}{2\cdot R},
         \qquad k=\lfloor\sqrt{N}\rfloor.
@@ -143,7 +143,7 @@ We use the following probability inequalities.
     The universe size $n$ is of the same order as the expected number of $r$-cliques contained in $\mathcal P$, and $\gamma$ is its exponent in $N$. We will create $\lambda$ empty selectable sets for each graph vertex and one selectable set for each $r$-clique. The choice $\lambda=\lceil n/k\rceil$ makes the number $\lambda\cdot k=\Theta(n)$ of empty sets for the vertices in $\mathcal P$ comparable to the expected number of cliques contained in $\mathcal P$. The probability $p$ will determine the contents of the sets below. Our choice of $\epsilon$ gives $1/2<\gamma<1$, hence $k=o(n)$ and $p=o(1)$.
 
     The universe is $\cU=[n]$, with target fraction $f$. Given the input graph $G$ on $[N]$, create the \emph{representative sets} $V_{v,i}=\emptyset$ for every $v\in[N]$ and $i\in[\lambda]$. For each $v\in[N]$, form an \emph{auxiliary set} $\cU_v\subseteq\cU$ by including each $j\in[n]$ independently with probability $p$. Make these choices independently for all pairs $(v,j)$ and independently of $G$.
-    For every $K\in\binom{[N]}{r}$, define $E_K=\bigcap_{v\in K}\cU_v$. If $K$ is a clique of $G$, include $E_K$ as a selectable \emph{witness set}. The family of selectable sets is
+    For every $K\in\binom{[N]}{r}$, define $E_K=\bigcap_{v\in K}\cU_v$. If $K$ is a clique of $G$, include $E_K$ as a selectable \emph{witness set}. The family of selectable sets is then
     \[
         \cS=\{V_{v,i}\colon v\in[N],\ i\in[\lambda]\}
         \cup\{E_K\colon K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
@@ -160,7 +160,7 @@ We use the following probability inequalities.
         =\{V_{v,i}\colon v\in\mathcal P,\ i\in[\lambda]\}
         \cup\{E_K\colon K\in\textstyle\binom{\mathcal P}{r},\ K\text{ is a clique of }G\}.
     \]
-    \begin{claim}[Size of the planted family]\label{claim:PDS-planted-size}
+    \begin{claim}[The size of the planted family]\label{claim:PDS-planted-size}
         For sufficiently large $N$, $\Pr[\spr{\cC_{\mathcal P}}\leq3\cdot n]\geq1/2$.
     \end{claim}
     \begin{proof}
@@ -173,7 +173,7 @@ We use the following probability inequalities.
     \end{proof}
 
     For each $j\in[n]$, a vertex $v\in\mathcal P$ is \emph{marked} for $j$ if $j\in\cU_v$. Let $\mathcal M_j=\{v\in\mathcal P\colon j\in\cU_v\}$ be the random set of marked vertices, and let $m_j=\spr{\mathcal M_j}$ be its size.
-    \begin{claim}[Number of marked vertices]\label{claim:PDS-marked-size}
+    \begin{claim}[The number of marked vertices]\label{claim:PDS-marked-size}
         For each fixed $j\in[n]$ and sufficiently large $N$,
         \[
             \Pr[m_j<p\cdot k/2]\leq N^{-1}.
@@ -375,7 +375,8 @@ We use the following probability inequalities.
         m^{(r-1)/(4\cdot r)-\epsilon}=o(N^g).
     \]
 
-    If the approximation algorithm is randomized with a fixed positive success probability, run it independently $\lceil\log_2 N\rceil$ times and retain the output with the fewest sets among those that respect precedence and cover at least $f\cdot n/\kappa$ elements. The probability that every repetition fails to achieve the approximation guarantee is $o(1)$. If no output meets the precedence and coverage requirements, declare the null case.
+    \DDfix{Given an approximation algorithm that is randomized with} a fixed positive success probability, run it independently $\lceil\log_2 N\rceil$ times and retain the output with the fewest sets among those that respect precedence and cover at least $f\cdot n/\kappa$ elements.
+    The probability that every repetition fails to achieve the approximation guarantee \DDfix{in the planted case} is $o(1)$. If no output meets the precedence and coverage requirements, declare the null case.
     We now describe an algorithm deciding whether the input graph comes from the null or planted distribution. First check whether $\cov\br{\cS}=\cU$, using the constructed set family $\cS$. If not, declare the null case. The planted coverage bound shows that this happens with probability $o(1)$ in the planted case. Otherwise run the assumed bicriteria algorithm with cost approximation factor $a$, using the repetitions just described if needed, and let $\cC$ be its output. In the planted case $\spr{\cC}\leq3\cdot a\cdot n$ with probability at least $1/2-o(1)$, while in the null case $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$ implies $\spr{\cC}>\lambda\cdot x_0$ with probability $1-o(1)$. The exponent inequalities above imply $a=o(\lambda\cdot x_0/n)$ for either stated $n$- or $m$-based approximation. Thus, for sufficiently large $N$, declaring the null case when $\spr{\cC}>\lambda\cdot x_0$ and the planted case otherwise recognizes the null case with probability $1-o(1)$ and the planted case with probability at least $1/2-o(1)$. Since each distribution is chosen with probability $1/2$, the overall success probability is at least
     \[
         \frac12\cdot\br{1-o(1)}+\frac12\cdot\br{\frac12-o(1)}
@@ -422,7 +423,7 @@ We use the following probability inequalities.
 
 For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in $n$ and $(r-1)/(4\cdot r)=1/4-1/(4\cdot r)$ in $m$. Thus $r=3$ gives exponents $1/3$ and $1/6$, and as $r\to\infty$ through fixed constants the two exponents converge to $1/2$ and $1/4$.
 \begin{corollary}\label{cor:PDS-limiting-hardness}
-    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed $f\in(0,1]$, and fixed $\kappa\geq1$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation with target fraction $f$.
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed $f\in(0,1]$, and fixed $\kappa\geq1$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation with the target fraction $f$.
 \end{corollary}
 \begin{proof}
     Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with their parameter $\epsilon$ set to $\epsilon/2$ and with the given $f,\kappa$. The resulting hardness exponents satisfy
@@ -431,7 +432,7 @@ For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in
         =\frac12-\frac{1}{2\cdot r}-\frac\epsilon2\geq\frac12-\epsilon
         \quad\text{and}\quad
         \frac{r-1}{4\cdot r}-\frac\epsilon2
-        =\frac14-\frac{1}{4\cdot r}-\frac\epsilon2\geq\frac14-\epsilon.
+        =\frac14-\frac{1}{4\cdot r}-\frac\epsilon2\geq\frac14-\epsilon.\qedhere
     \]
 \end{proof}
 
