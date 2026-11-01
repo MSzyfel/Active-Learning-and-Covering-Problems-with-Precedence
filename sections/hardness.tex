@@ -1,8 +1,10 @@
 \section{Hardness} \label{sec:hardness}
 
 \subsection{Hardness from Planted Dense Subgraph}
-We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out approximation factors $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$. The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
-Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$. Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving factors $\bigo\br{n^{1/4-\epsilon}}$ and $\bigo\br{m^{1/8-\epsilon}}$-inapproximability even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
+We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out the approximation factors of $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$.
+\DD{ten papier tylko wyklucza $1/12$ (?)}
+The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textsc{Planted Dense Subgraph Conjecture} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
+Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors \DDfix{of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ for $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively.} Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
 Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
 
@@ -35,21 +37,24 @@ We use the following probability inequalities.
 \end{theorem}
 
 \begin{lemma}\label{lem:PDS-clique-count}
-    Fix an integer $r\geq2$, a constant $\zeta>0$, and set $\alpha=(r-1)/(r+1)$. For a graph $G$ on $[N]$ and $X\subseteq[N]$, let $F_G(X)$ be the number of $r$-cliques contained in $X$. If $G\sim G(N,N^{\alpha-1})$, then with probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
+    Fix an integer $r\geq2$, a constant $\zeta>0$, and set $\alpha=(r-1)/(r+1)$. For a graph $G$ with vertex set $[N]$ and $X\subseteq[N]$, let $F_G(X)$ be the number of $r$-cliques contained in $X$. If $G\sim G(N,N^{\alpha-1})$, then with probability $1-o(1)$, simultaneously for every nonempty $X\subseteq[N]$,
     \[
         F_G(X)\leq C_r \cdot N^\zeta \cdot \br{\br{\frac{\spr{X}}{N^\alpha}}^r+\spr{X} \cdot \log N},
     \]
     where $C_r$ depends only on $r$.
 \end{lemma}
 \begin{proof}
-    Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$. We will bound the expected value of $Z_e^s$ for the clique count $Z_e$ defined below. Fix a pair of vertices $e\in\binom{[N]}{2}$, and define
+    Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$.
+    We will first bound the expected value of $Z_e^s$ for the clique count $Z_e$ defined below.
+    \DDfix{In other words, we upper bound the number of $r$-cliques containing a given edge $e$.}
+    Fix a pair of vertices $e\in\binom{[N]}{2}$, and define
     \[
         \mathcal{K}_e=\left\{K\in\binom{[N]}{r}\colon e\subseteq K\right\}.
     \]
     For each $K\in\mathcal K_e$, define
     \[
         I_K=\begin{cases}
-            1,&\text{if every pair of vertices in }K\text{ is an edge of }G,\\
+            1,&\text{if every pair of vertices in }K\text{ is adjacent in }G,\\
             0,&\text{otherwise},
         \end{cases}
         \qquad Z_e=\sum_{K\in\mathcal K_e}I_K.
@@ -83,8 +88,9 @@ We use the following probability inequalities.
         &\leq\sum_{e\in\binom{[N]}{2}}\frac{\mathbb{E}[Z_e^s]}{N^{s\cdot\zeta}}\\
         &\leq C_{r,\zeta} \cdot N^{2-s\cdot\zeta}\leq\frac{C_{r,\zeta}}{N}=o(1).
     \end{align*}
+    \DDfix{This concludes the bound on the number of $r$-cliques that may share the same edge.}
 
-    Next let $B_G(X)$ be the independence number of the auxiliary graph whose vertices are the $r$-cliques of $G[X]$, with two distinct vertices adjacent if and only if the corresponding cliques share an edge of $G$. Thus $B_G(X)$ is the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$, meaning that no two selected cliques share an edge. Write $x=\spr{X}$. For every positive integer $t$, counting possible collections of $t$ such cliques and using independence of their disjoint edge sets gives
+    Next \DDfix{we bound the number of edge-disjoint cliques in an arbitrarily selected subgraph $G[X]$. To that end,} let $B_G(X)$ be the independence number of the auxiliary graph whose vertices are the $r$-cliques of $G[X]$, with two distinct vertices adjacent if and only if the corresponding cliques share an edge of $G$. Thus $B_G(X)$ is the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$. Write $x=\spr{X}$. For every positive integer $t$, counting possible collections of $t$ such cliques and using independence of their disjoint edge sets gives
     \[
         \Pr[B_G(X)\geq t]
         \leq\binom{\binom{x}{r}}{t} \cdot N^{-r\cdot\alpha\cdot t}
@@ -102,7 +108,7 @@ We use the following probability inequalities.
     \end{align*}
     There are at most $N^x$ choices for $X$ of size $x$. Therefore
     \[
-        \Pr[\exists X\neq\emptyset:B_G(X)\geq t_{\spr{X}}]
+        \Pr[\exists X\neq\emptyset:B_G(X)\geq t_{x}]
         \leq\sum_{x=1}^N N^x\cdot N^{-2\cdot x}
         \leq\sum_{x=1}^{\infty}N^{-x}
         =\frac{1}{N-1}=o(1).
