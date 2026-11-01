@@ -32,19 +32,19 @@ In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost
     \item For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicating whether $r$ is covered.
     \item For each set $A\in\cA$, the variable $x_A\in[0,1]$ indicating whether $A$ is selected.
     \item For each blue element $u\in\cB$, the variable $z_u\in[0,1]$ indicating whether $u$ is one of the $t$ covered blue elements chosen to meet the target. An optimal integral solution may cover additional blue elements, while having $z_u=0$.
-    \item For each blue element $u\in\cB_A$, the nonnegative variable $a_{u,A}\in[0,1]$ indicating that the part of $z_u$ assigned to the set $A$. In an integral solution each chosen blue element is assigned to one selected set containing it. 
+    \item For each $A\in\cA$ and blue element $u\in\cB_A$, the nonnegative variable $a_{u,A}\in[0,1]$ indicating that the part of $z_u$ assigned to the set $A$. In an integral solution each chosen blue element is assigned to one selected set containing it. 
     \item For each ordered pair $r,q\in\cR$, the nonnegative variable $y_{r,q}$ representing the joint coverage of the two red elements. Its intended integral value is $y_r\cdot y_q$. Note, that we will not impose this nonlinear equality, but use linear inequalities that it satisfies.
 \end{enumerate}
 
 For the current guess $K$, the LP is as follows
 \begin{align}
  \sum_{r\in\cR}y_r&\leq K, \quad\quad \sum_{u\in\cB}z_u=t, && \label{eq:rbsc-lp-budget}\\
- \sum_{A\colon u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
+ \sum_{A\in\cA\colon u\in \cB_A}a_{u,A}&=z_u &&(u\in\cB), \label{eq:rbsc-lp-assign}\\
  a_{u,A}&\leq x_A &&(A\in\cA,\ u\in \cB_A), \label{eq:rbsc-lp-marginal}\\
  \sum_{u\in \cB_A}a_{u,A}&\leq t\cdot x_A &&(A\in\cA), \label{eq:rbsc-lp-set}\\
  x_A&\leq y_r &&(A\in\cA,\ r\in \cR_A), \label{eq:rbsc-lp-red}\\
- \sum_{A\colon r\in \cR_A,\,u\in \cB_A}a_{u,A}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
- \sum_{A\colon r\in \cR_A}\sum_{u\in \cB_A}a_{u,A}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
+ \sum_{A\in\cA\colon r\in \cR_A,\,u\in \cB_A}a_{u,A}&\leq y_r &&(r\in\cR,\ u\in\cB), \label{eq:rbsc-lp-blue-load}\\
+ \sum_{A\in\cA\colon r\in \cR_A}\sum_{u\in \cB_A}a_{u,A}&\leq t\cdot y_r &&(r\in\cR), \label{eq:rbsc-lp-total-load}\\
  x_A&\leq y_{r,q} &&(A\in\cA,\ r,q\in \cR_A), \label{eq:rbsc-lp-pair}\\
  \sum_{q\in\cR}y_{r,q}&\leq K\cdot y_r &&(r\in\cR). \label{eq:rbsc-lp-pair-budget}
 \end{align}
@@ -120,17 +120,15 @@ The same set may be heavy in one group and light in another. Define the random s
 \]
 Define $R_h=\spr{\cR_h}$ and $R_\ell=\spr{\cR_\ell}$. Since every selected occurrence is either heavy or light, $R\leq\spr{\cR_+}+R_h+R_\ell$. We bound the expectations of these two variables separately.
 
-Fix residual red elements $r,q$ with $y_r>0$, and let $F_{r,q}$ be the event that a selected heavy occurrence in some group $\cA_{r,s}$ contains $q$. For all other ordered red pairs, let $F_{r,q}$ be the empty event. Define $\cS_{r,q}=\brc{s\colon \text{there exists }A\in\cA^h_{r,s}\text{ with }q\in\cR'_A}$. A selected occurrence requires its group to be active, and hence
+Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\cS_{r,q}=\brc{s\colon \exists A\in\cA^h_{r,s}\colon q\in\cR'_A}$ and the event
 \[
- F_{r,q}\subseteq\bigcup_{s\in\cS_{r,q}}E_{r,s},
- \qquad
- \Pr[F_{r,q}]\leq\sum_{s\in\cS_{r,q}}\frac{y_r}{s},
+ F_{r,q}=\bigcup_{s\in\cS_{r,q}}\ \bigcup_{A\in\cA^h_{r,s}\colon q\in\cR'_A}\br{E_{r,s}\cap J_{r,s,A}}.
 \]
-where the probability bound is the union bound. If $\cS_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $s\in\cS_{r,q}$, a corresponding heavy occurrence satisfies
+Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cA_{r,s}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\cS_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $s\in\cS_{r,q}$, a corresponding heavy occurrence satisfies
 \[
  y_{r,q}\geq x_A\geq\frac{\theta\cdot y_r}{s},
 \]
-where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $s\geq\theta\cdot y_r/y_{r,q}$. Let $s_0$ be the smallest scale in $\cS_{r,q}$. All scales are powers of two, so every scale in $\cS_{r,q}$ is of the form $2^j\cdot s_0$ for some integer $j\geq0$. Using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
+where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $s\geq\theta\cdot y_r/y_{r,q}$. Let $s_0$ be the smallest scale in $\cS_{r,q}$. All scales are powers of two, so every scale in $\cS_{r,q}$ is of the form $2^j\cdot s_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{s\in\cS_{r,q}}E_{r,s}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
 \[
  \Pr[F_{r,q}]\leq\sum_{s\in\cS_{r,q}}\frac{y_r}{s}
  \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot s_0}=\frac{2\cdot y_r}{s_0}
@@ -145,7 +143,8 @@ The same bound holds when $\cS_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\c
  \leq\frac{2\cdot K}{\theta}\cdot\sum_{r\in\cR}y_r
  \leq\frac{2\cdot K^2}{\theta}.
 \]
-For each $A\in\cA^\ell_{r,s}$, independence of the activation and trial events and the definition of light occurrences give
+
+Now, for each $A\in\cA^\ell_{r,s}$, independence of the activation and trial events give
 \[
  \Pr[E_{r,s}\cap J_{r,s,A}]
  =\Pr[E_{r,s}]\cdot\Pr[J_{r,s,A}]
@@ -160,7 +159,7 @@ By linearity of expectation, the above probability bound and $y_r<1/T$,
  \leq\frac{\theta}{T}\cdot\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}^2}{s^2}
  \leq\frac{4\cdot\theta\cdot m}{T}.
 \]
-The first inequality counts red elements with multiplicity. The third counts, for each $A\in\cA_s$, at most one occurrence for each of its $\spr{\cR'_A}$ residual red elements. The last inequality uses $\spr{\cR'_A}/s<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
+Here, the third inequality counts, for each $A\in\cA_s$, at most one occurrence for each of its $\spr{\cR'_A}$ residual red elements. The last inequality uses $\spr{\cR'_A}/s<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
 \begin{equation}\label{eq:rbsc-cost-expectation}
  \mathbb{E}[R]
  \leq K\cdot T+\frac{2\cdot K^2}{\theta}+\frac{4\cdot\theta\cdot m}{T}
@@ -169,7 +168,8 @@ The first inequality counts red elements with multiplicity. The third counts, fo
 \end{equation}
 \end{proof}
 
-To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $A$ with $x_A>0$ in group $\cA_{r,s}$, independently mark each $u\in\cB_A\cap\cB'$ using a coin $Z_{r,s,A,u}$ with $\Pr[Z_{r,s,A,u}=1]=a_{u,A}/x_A$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_A=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,A}$. Let $\cD_{r,s,A}$ be the set of elements whose marking coins succeed if $J_{r,s,A}$ occurs and the empty set otherwise. The random set of elements marked by selected occurrences in group $\cA_{r,s}$ is $\cB_{r,s}=\bigcup_{A\in\cF_{r,s}}\cD_{r,s,A}$. Define $\widehat{\cB}=\bigcup_{r,s}\cB_{r,s}$ and $Y=\spr{\widehat{\cB}}$. In an active group, a successful trial with no marks still selects the occurrence and its red elements.
+To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $A$ with $x_A>0$ in group $\cA_{r,s}$, independently mark each $u\in\cB_A\cap\cB'$ using a coin $Z_{r,s,A,u}$ with $\Pr[Z_{r,s,A,u}=1]=a_{u,A}/x_A$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_A=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,A}$. Define $\cD_{r,s,A}=\brc{u\in\cB_A\cap\cB'\colon J_{r,s,A}\text{ occurs and }Z_{r,s,A,u}=1}$. Let $\cB_{r,s}=\bigcup_{A\in\cF_{r,s}}\cD_{r,s,A}$ be the set of elements marked by selected occurrences in group $\cA_{r,s}$ and $\widehat{\cB}=\bigcup_{r,s}\cB_{r,s}$ with $Y=\spr{\widehat{\cB}}$. 
+% In an active group, a successful trial with no marks still selects the occurrence and its red elements.
 
 \begin{claim}\label{claim:rbsc-blue-coverage}
 The expected number of distinct marked blue elements satisfies $\mathbb{E}[Y]>2\cdot t/5$.
@@ -179,9 +179,10 @@ Fix $u\in\cB'$. For an occurrence of $A$ in group $\cA_{r,s}$ with $u\in \cB_A$ 
 \[
  \Pr[u\in \cD_{r,s,A}]=\frac{x_A}{y_r}\cdot\frac{a_{u,A}}{x_A}=\frac{a_{u,A}}{y_r}.
 \]
-When $x_A=0$, both this probability and $a_{u,A}$ are zero. The sum of these probabilities within the group is
+When $x_A=0$, $\Pr[u\in \cD_{r,s,A}]=a_{u,A}=0$. The sum of these probabilities within $\cA_{r,s}$ is
 \[
  \lambda_{r,s,u}
+ =\sum_{A\in\cA_{r,s}\colon u\in\cB_A}\Pr[u\in\cD_{r,s,A}]
  =\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}\colon u\in \cB_A}a_{u,A}
  \leq1
 \]
@@ -208,10 +209,10 @@ Let $M_u=\sum_{r,s}\boldsymbol{1}_{u\in\cB_{r,s}}$ be the number of groups that 
        \frac{a_{u,A}}s\cdot\sum_{r\in\cR'_A\colon y_r>0}1\\
  &=(1-e^{-1})\cdot\sum_s\sum_{A\in\cA_s\colon u\in \cB_A}
        \frac{\spr{\cR'_A}}s\cdot a_{u,A}
- \geq(1-e^{-1})\cdot\sum_{A\colon u\in \cB_A}a_{u,A}
+ \geq(1-e^{-1})\cdot\sum_{A\in\cA\colon u\in \cB_A}a_{u,A}
  =(1-e^{-1})\cdot z_u.
 \end{align*}
-For the second equality, fix a scale $s$ and a set $A\in\cA_s$ containing $u$. The term $a_{u,A}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}\colon u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A}\leq x_A\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, it was initially selected and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
+For the second equality, fix a scale $s$ and a set $A_u\in\cA_s$ containing $u$. The term $a_{u,A_u}$ appears in $\sum_r\sum_{A'\in\cA_{r,s}\colon u\in\cB_{A'}}a_{u,A'}$ once for each $r\in\cR'_A$ with $y_r>0$. If $y_r=0$ for some $r\in\cR'_A$, then $a_{u,A_u}\leq x_{A_u}\leq y_r=0$ by~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red}, so these pivots can also be counted. For the last inequality, every set $A$ containing $u\in\cB'$ has nonempty $\cR'_A$. Otherwise, it was initially selected and would cover $u$. Such a set belongs to exactly one scale $s$, where $\spr{\cR'_A}/s\geq1$. Since $a_{u,A}\geq0$, replacing this factor by $1$ gives the lower bound.
 
 The rounding choices for distinct group indices are independent. Applying $1-x\leq e^{-x}$ across groups and then the above concavity bound for $z_u\in[0,1]$ yields
 \[
@@ -258,34 +259,39 @@ Moreover, $X_A=\boldsymbol{1}_{J_{r,s,A}}\cdot N_A$ and the trial is independent
  \leq\frac{x_A}{y_r}\cdot(d_A^2+d_A)
  \leq(t+1)\cdot\mathbb{E}[X_A].
 \]
-Writing $\mu=\mathbb{E}[L_{r,s}]$, the first-moment calculation and $r\in\cR_A$ for every $A\in\cA_{r,s}$ give
+The first-moment calculation and $r\in\cR_A$ for every $A\in\cA_{r,s}$ give
 \[
- \mu=\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}}\sum_{u\in\cB_A\cap\cB'}a_{u,A}
- \leq\frac1{y_r}\cdot\sum_{A\colon r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq t,
+ \mathbb{E}[L_{r,s}]=\frac1{y_r}\cdot\sum_{A\in\cA_{r,s}}\sum_{u\in\cB_A\cap\cB'}a_{u,A}
+ \leq\frac1{y_r}\cdot\sum_{A\in\cA\colon r\in\cR_A}\sum_{u\in\cB_A}a_{u,A}\leq t,
 \]
 where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,s}^2$ and using independence across distinct occurrences gives
 \begin{align*}
  \mathbb{E}[L_{r,s}^2]
  &=\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A^2]+\sum_{A,A'\in\cA_{r,s}\colon A\ne A'}\mathbb{E}[X_A]\cdot\mathbb{E}[X_{A'}]\\
  &\leq(t+1)\cdot\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]+\br{\sum_{A\in\cA_{r,s}}\mathbb{E}[X_A]}^2
- =(t+1)\cdot\mu+\mu^2\leq(2t+1)\cdot\mu.
+ =(t+1)\cdot\mathbb{E}[L_{r,s}]+\mathbb{E}[L_{r,s}]^2\leq(2t+1)\cdot\mathbb{E}[L_{r,s}].
 \end{align*}
-The first inequality uses the bound on $\mathbb{E}[X_A^2]$ and adds the nonnegative terms with $A=A'$ to the cross terms. The last inequality uses $\mu\leq t$.
+The first inequality uses the bound on $\mathbb{E}[X_A^2]$ and adds the nonnegative terms with $A=A'$ to the cross terms. The last inequality uses $\mathbb{E}[L_{r,s}]\leq t$.
 The variable $L_{r,s}$ is independent of activation. Multiplying the last bound by $y_r/s$ therefore gives
 \begin{equation}\label{eq:rbsc-group-second-moment}
  \mathbb{E}[W_{r,s}^2]\leq(2t+1)\cdot\mathbb{E}[W_{r,s}].
 \end{equation}
-Moreover, summing the expected number of marks over the groups yields
-\[
+Moreover, by linearity of expectation, independence of $E_{r,s}$ and $L_{r,s}$, and the first-moment calculation above,
+\begingroup\small
+\begin{align*}
  \mathbb{E}[W]
- =\sum_{r,s}\frac1s\sum_{A\in\cA_{r,s}}
-       \sum_{u\in \cB_A\cap\cB'}a_{u,A}
- =\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}}s\cdot
-       \sum_{u\in \cB_A\cap\cB'}a_{u,A}
- \leq2\cdot\sum_{u\in\cB'}\sum_{A\ni u}a_{u,A}
+ &=\sum_{r,s}\Pr[E_{r,s}]\cdot\mathbb{E}[L_{r,s}]
+ =\sum_{r,s}\frac1s\cdot\sum_{A\in\cA_{r,s}}
+       \sum_{u\in\cB_A\cap\cB'}a_{u,A}
+ =\sum_s\sum_{A\in\cA_s}\frac1s\cdot
+       \br{\sum_{r\in\cR'_A\colon y_r>0}1}\cdot\sum_{u\in\cB_A\cap\cB'}a_{u,A}\\
+ &=\sum_s\sum_{A\in\cA_s}\frac{\spr{\cR'_A}}s\cdot
+       \sum_{u\in\cB_A\cap\cB'}a_{u,A}
+ \leq2\cdot\sum_{u\in\cB'}\sum_{A\in\cA\colon u\in\cB_A}a_{u,A}
  =2\cdot\sum_{u\in\cB'}z_u\leq2\cdot t.
-\]
-As in the coverage calculation, omitted zero-$y_r$ pivots contribute zero. Finally, independence of the rounding choices for distinct group indices and~\eqref{eq:rbsc-group-second-moment} imply
+\end{align*}
+\endgroup
+To justify the fourth equality, fix $A\in\cA_s$. If $y_r>0$ for every $r\in\cR'_A$, then the number of terms in the preceding sum over $r$ is $\spr{\cR'_A}$. Otherwise, some $r\in\cR'_A$ has $y_r=0$, and~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-red} imply $0\leq a_{u,A}\leq x_A\leq y_r=0$ for every $u\in\cB_A$. The assignment sum for $A$ therefore vanishes, so both terms are zero. The first inequality uses $\spr{\cR'_A}/s<2$ and extends the sum to all sets using nonnegativity of the assignment variables. The fifth equality follows from~\eqref{eq:rbsc-lp-assign}, and the second inequality follows from~\eqref{eq:rbsc-lp-budget} and $z_u\geq0$. Finally, independence of the rounding choices for distinct group indices and~\eqref{eq:rbsc-group-second-moment} imply
 \[
  \mathbb{E}[W^2]
  =\sum_{r,s}\mathbb{E}[W_{r,s}^2]
@@ -293,6 +299,7 @@ As in the coverage calculation, omitted zero-$y_r$ pivots contribute zero. Final
  \leq(2t+1)\cdot\mathbb{E}[W]+\br{\mathbb{E}[W]}^2
  \leq8\cdot t^2+2\cdot t\leq10\cdot t^2.
 \]
+which gives the proof of the claim.
 \end{proof}
 
 To find an outcome with both sufficient coverage and small red cost, we define a \emph{potential}
