@@ -541,7 +541,7 @@ Combine the budgeted guarantee in Theorem~\ref{thm:PCSC-to-BPCSC} with Theorems~
 \end{proof}
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
-In \emph{budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c\colon\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$.
+In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cX$, an indexed family $\cA$ of subsets of $\cX$, costs $c\colon\cA\to\mathbb{R}_{\geq0}$ and a budget $B>0$. The goal is to maximize $\spr{\cov\br{\cA'}}$ over $\cA'\subseteq\cA$ with $\sum_{A\in\cA'}c(A)\leq B$.
 
 \begin{theorem}[Khuller, Moss and Naor \cite{TheBudgetedMaximumCoverageProblem}]\label{thm:budgeted-maximum-coverage-source}
     There is a polynomial-time algorithm for budgeted Maximum Coverage that respects the budget and covers at least a $(1-1/e)$-fraction of the maximum number of elements coverable within that budget.
@@ -554,19 +554,26 @@ In \emph{budgeted Maximum Coverage}, the input consists of a universe $\cX$, an 
 \begin{proof}
     We reduce $\ProblemBPCSC$ to budgeted Maximum Coverage and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
 
-    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,b)$, set $\cX=\cU$ and $B=b$. For each $S\in\cS$, create an indexed set $z_S=\cov\br{\closure{S}}$ with cost $c(z_S)=\spr{\closure{S}}$.
-    In an inforest, intersecting closures are nested: $\closure{S}\cap\closure{W}\neq\emptyset$ implies $S\preceq W$ or $W\preceq S$.
-    Thus, from any selected family of the $z_S$, we can discard sets whose closures are contained in another selected closure without changing coverage or increasing cost. The remaining closures are disjoint, so their union is precedence-closed and has the same size and coverage as the cost and coverage of the retained family.
-    Conversely, every precedence-closed family $\cC$ is the disjoint union of the closures of its maximal members. Selecting the corresponding $z_S$ therefore preserves both cost and coverage, which gives the budgeted approximation.
+    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, set $\cX=\cU$ and $B=\budget$. For each $S\in\cS$, create a set $z_S=\cov\br{\closure{S}}$ with cost $c(z_S)=\spr{\closure{S}}$, and let $\cA=(z_S)_{S\in\cS}$ be the indexed family of these sets.
+    For any selected family $\cA'\subseteq\cA$, define $\cC_{\cA'}=\bigcup_{S\in\cS\colon z_S\in\cA'}\closure{S}$. This family is precedence-closed and satisfies
+    \[
+        \cov\br{\cC_{\cA'},\cU}=\cov\br{\cA'}
+        \qquad\text{and}\qquad
+        \spr{\cC_{\cA'}}\leq\sum_{z_S\in\cA'}c(z_S).
+    \]
+    In an inforest, intersecting closures are nested: for $S,W\in\cS$, if $\closure{S}\cap\closure{W}\neq\emptyset$, then $S\preceq W$ or $W\preceq S$. Thus, every precedence-closed family $\cC\subseteq\cS$ is the disjoint union of the closures of its maximal members. Selecting the corresponding sets $z_S$ preserves both cost and coverage. The maximum coverage attainable within budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
 
-For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements. The budget equal to the size of an optimal $\ProblemPCSC$ solution yields such a family of size at most that optimum. 
+For $\ProblemPCSC$, return the empty family if $\cU=\emptyset$. Otherwise, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. The budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
 \end{proof}
 
-Via a careful examination of Theorem~\ref{thm:BPCSC-to-PCMSSC}, we obtain the following result for $\ProblemPCMSSC$
+The preceding algorithm also gives a guarantee for $\ProblemPCMSSC$.
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
-    There exists a bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3+1, \frac{e}{e-1}}\approx\br{3421.7, \frac{e}{e-1}}$-approximation polynomial-time algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
+    There exists a polynomial-time bicriteria $\br{864\cdot\br{\frac{e}{e-1}}^3, \frac{e}{e-1}}\approx\br{3420.7, \frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
+\begin{proof}
+Apply the $\ProblemBPCSC$ algorithm from Theorem~\ref{thm:BPCSC-inforest} with $\alpha=1$ and $\beta=e/(e-1)$ in Algorithm~\ref{alg:fPCMSSC}. The explicit bounds in the proofs of Lemmas~\ref{lem:pi-spread-cost} and~\ref{lem:combined-coverage-cost} give the stated cost ratio, and Lemma~\ref{lem:combined-coverage-cost} gives the coverage guarantee.
+\end{proof}
 
 \medskip
 \paraTitle{Steiner problems.}
@@ -574,7 +581,7 @@ Let $(V,d)$ denote a symmetric metric with distance function $d\colon V \times V
 An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
 Let $\cX$ be a family of \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
 Let $w\colon \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
-Let $\cov\br{\tau} \subseteq \cX$ denote the set of all groups \emph{covered} by tour $\tau$, that is, $\cov\br{\tau} = \brc{X \in \cX\colon X \cap \tau \neq \emptyset}$, where we slightly abuse notation and write $X \cap \tau$ for the intersection of $X$ with the set of vertices visited by $\tau$.
+Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{covered} by $\tau$ is $\cov\br{\tau}=\brc{X\in\cX\colon X\cap V(\tau)\neq\emptyset}$.
 % For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cov\br{\tau}$, we set $t_\tau(X) = \spr{\tau}$.
 
 \begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
@@ -596,13 +603,19 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
     There exist polynomial-time bicriteria $\br{\bigo\br{\log m}, 4}$-approximation algorithms for $\ProblemBPCSC$,  $\ProblemPCSC$ and $\ProblemPCMSSC$ when the precedence constraints form an outforest.
 \end{theorem}
 \begin{proof}
-    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Our tree has $\spr{V}=m+1$ vertices.
+    We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Let $(\cU,\cS,\preceq,\budget)$ be a $\ProblemBPCSC$ instance. Instances with $m\leq1$ can be solved directly, so assume $m\geq2$.
     
-    We create a rooted tree as follows. Introduce a dummy root node $r$. For every minimal element $S$ of the outforest, connect $r$ to its representative $v_S$ by an edge of length~$1/2$. For every nonminimal element $W$, let $S$ be its unique immediate predecessor (parent), and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits all strict predecessors of $W$ before $v_W$. For each element $u\in\cU$, let $X_u=\brc{v_S \mid u\in S}$. For every distinct nonempty set $X$ among the $X_u$, include a GSO group $X$ with weight $w(X)=\spr{\brc{u\in\cU\mid X_u=X}}$.
+    Create a rooted tree with vertex set $V=\brc{r}\cup\brc{v_S\colon S\in\cS}$, where $r$ is a dummy root. For every minimal $S\in\cS$, connect $r$ to $v_S$ by an edge of length~$1/2$. For every nonminimal $W\in\cS$, let $S\in\cS$ be its unique immediate predecessor, and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits the representatives of all strict predecessors of $W$. For each $u\in\cU$, let $X_u=\brc{v_S\colon S\in\cS,\ u\in S}$. Set the GSO budget to $\budget$ and define its groups and their weights by
+    \[
+        \cX=\brc{X_u\colon u\in\cU,\ X_u\neq\emptyset},
+        \qquad w(X)=\spr{\brc{u\in\cU\colon X_u=X}}\quad(X\in\cX).
+    \]
 
-    Expand each edge of an $r$-tour $\tau$ in the tree metric along its tree path, preserving its length and all groups it covers. For the resulting walk, let $\cC_\tau=\brc{S\in\cS\mid v_S\text{ is visited by }\tau}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
+    Expand each edge of an $r$-tour in the tree metric along its tree path. The resulting walk $\tau$ has the same length and covers every group covered by the original tour. Let $\cC_\tau=\brc{S\in\cS\colon v_S\in V(\tau)}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. The total weight of groups covered by $\tau$ equals $\spr{\cov\br{\cC_\tau,\cU}}$.
 
-    Conversely, for any precedence-closed family $\cC$, the union of the root-to-$v_S$ paths for $S\in\cC$ has $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Thus the reduction preserves the optimum coverage for each budget, giving the $\ProblemBPCSC$ guarantee. For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $f\cdot n/4$ elements. The budget equal to the size of an optimal $\ProblemPCSC$ solution yields such a family of size $\bigo\br{\log m}$ times the optimum. If $\cU=\emptyset$, return the empty family. The $\ProblemPCMSSC$ guarantee follows from Theorem~\ref{thm:BPCSC-to-PCMSSC}.
+    Conversely, for any precedence-closed family $\cC\subseteq\cS$, the union of the root-to-$v_S$ paths for $S\in\cC$ has $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Thus the reduction preserves the optimum coverage for each budget. Since $\spr{V}=m+1$, Theorem~\ref{thm:gso-tree-source} gives the $\ProblemBPCSC$ guarantee.
+
+    For $\ProblemPCSC$, return the empty family if $\cU=\emptyset$. Otherwise, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $f\cdot n/4$ elements. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. The budget $\spr{\cCopt}$ yields such a family of size $\bigo\br{\log m}\cdot\spr{\cCopt}$. The $\ProblemPCMSSC$ guarantee follows from Theorem~\ref{thm:BPCSC-to-PCMSSC}.
 \end{proof}
 
 
