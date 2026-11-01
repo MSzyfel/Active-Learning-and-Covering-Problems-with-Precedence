@@ -14,8 +14,7 @@
 \node[problem, below=0.9cm of pcmssc] (pcacdt) {$\hyperref[problem:PCACDT]{\ProblemPCACDT}$};
 
 \draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCSC]{Sec.~\ref*{subsection:PCSC}}} (pcsc);
-\draw[arrow] (rbsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:BPCSC]{Sec.~\ref*{subsection:BPCSC}}} (bpcsc);
-\draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[cor:BPCSC-to-PCSC]{Cor.~\ref*{cor:BPCSC-to-PCSC}}} (pcsc);
+\draw[arrow] (pcsc) -- node[edgelabel, pos=0.5] {\hyperref[thm:PCSC-to-BPCSC]{Thm.~\ref*{thm:PCSC-to-BPCSC}}} (bpcsc);
 \draw[arrow] (bpcsc) -- node[edgelabel, pos=0.5] {\hyperref[subsection:PCMSSC]{Sec.~\ref*{subsection:PCMSSC}}} (pcmssc);
 \draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (bpcsc);
 \draw[arrow] (gso) -- node[edgelabel, pos=0.5] {\hyperref[subsection:SpecialCases]{Sec.~\ref*{subsection:SpecialCases}}} (pcmssc);

@@ -108,7 +108,7 @@ We use the following probability inequalities.
     \end{align*}
     There are at most $N^x$ choices for $X$ of size $x$. Therefore
     \[
-        \Pr[\exists X\neq\emptyset:B_G(X)\geq t_{x}]
+        \Pr[\exists X\neq\emptyset\colon B_G(X)\geq t_{x}]
         \leq\sum_{x=1}^N N^x\cdot N^{-2\cdot x}
         \leq\sum_{x=1}^{\infty}N^{-x}
         =\frac{1}{N-1}=o(1).
@@ -436,7 +436,7 @@ For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in
 \end{proof}
 
 \subsection{Hardness from Label Cover}
-A \textsc{Label Cover} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e:D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
+A \textsc{Label Cover} instance $\mathcal L$ consists of a bipartite multigraph $G=(A,B,E)$ with $E\neq\emptyset$, nonempty \emph{alphabets} $\Sigma_A,\Sigma_B$, and a \emph{projection} $\pi_e\colon D_e\to\Sigma_B$ for every edge $e\in E$, where $D_e\subseteq\Sigma_A$. A \emph{labeling} $(a,b)\in\Sigma_A^A\times\Sigma_B^B$ assigns a symbol $a_u\in\Sigma_A$ to each $u\in A$ and $b_v\in\Sigma_B$ to each $v\in B$. It \emph{satisfies} a constraint $e=uv\in E$ whenever $a_u\in D_e$ and $\pi_e(a_u)=b_v$. Parallel edges are distinct constraints. The \emph{value of the labeling} $(a,b)$ is
 \[
     \operatorname{val}_{\mathcal L}(a,b)
     =\frac{\spr{\{e=uv\in E\colon a_u\in D_e,\ \pi_e(a_u)=b_v\}}}{\spr{E}},
