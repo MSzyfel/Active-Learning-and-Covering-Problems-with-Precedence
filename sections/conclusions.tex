@@ -2,7 +2,7 @@
 
 We have provided a series of approximation algorithms for decision tree and set covering problems subject to precedence constraints, as well as a number of inapproximability results. Our main contribution is a series of reductions that enable us to systematically relate the two types of problems independently of the specific structure of the precedence constraints. As an immediate corollary, we obtain $\tilde{\bigo}\br{m^{1/3}}$-approximation algorithms for both types of problems, as well as case-specific polylogarithmic approximations for both inforest and outforest precedence constraints. These two classes are natural to study, since trees are among the most prevalent structures encountered in various practical algorithmic applications.
 
-Prior to this work, almost no non-trivial approximation algorithms were known for either of these problems, even for the simplest of our variants. One possible explanation is that achieving our results required developing an elaborate and systematic reduction framework and using non-greedy procedures. This is especially evident in the LP-based procedure for $\ProblemPRBSC$, our main subproblem, as well as in the geometrically growing budget algorithm for $\ProblemPCMSSC$ via $\ProblemBPCSC$. This raises the question of whether an algorithm that always picks a test (with its closure) maximizing some kind of information gain also achieves a good approximation ratio for either $\ProblemPCWCDT$ or $\ProblemPCACDT$. At the end of this section, we give such a greedy algorithm and analyze its approximation guarantee for both problems.
+Prior to this work, almost no non-trivial approximation algorithms were known for either of these problems, even for the simplest of our variants. One possible explanation is that achieving our results required developing an elaborate and systematic reduction framework and using non-greedy procedures. This is especially evident in the LP-based procedure for $\ProblemPRBSC$, our main subproblem, as well as in the geometrically growing budget algorithm for $\ProblemPCMSSC$ via $\ProblemBPCSC$. This raises the question of whether an algorithm that always picks a test (with its closure) maximizing some kind of information gain also achieves a good approximation ratio for either $\ProblemPCWCDT$ or $\ProblemPCACDT$. As an additional contribution, at the end of this section, we give such a greedy algorithm with approximation ratio $O\br{\sqrt{m\log n}}$ for both criterions. The remaining question is whether a bound closer to our main guarantees can be established for simple algorithms.
 
 We have complemented our algorithmic results with a series of conditional lower bounds, providing inapproximability results for most of our variants, including those with outforest and general precedence constraints. We find it particularly surprising that approximating the decision tree problem generalizes the task of planted dense subgraph detection in a random graph. This result, although quite unexpected, extends the extensive line of work on the connection between average-case complexity and inapproximability of problems (for more on such connections, see \cite{Feige2002RelationsBetweenAverageCaseComplexityAndApproximationComplexity}).
 Interestingly, the same result could be obtained using a stronger \textsc{Hypergraph Planted Dense Subgraph} conjecture. In particular, our clique enumeration reduction essentially treats every such $r$-clique as a hyperedge. This raises the question of whether a similar idea could be used to show that PDS implies HPDS. The main obstacle is that the set of $r$-cliques in a random Erd\H{o}s--R\'enyi graph is not an Erd\H{o}s--R\'enyi hypergraph, but has a different distribution. However, it would be interesting to check whether the existing HPDS-based reductions can be adapted to use PDS as a source together with the clique enumeration step.
@@ -17,11 +17,11 @@ Another direction for future research is to enrich \textup{\textsc{Optimal Decis
 
 We now consider the greedy approach mentioned above. Unlike the algorithms of Section~\ref{sec:AL}, it directly selects a test and its predecessors according to their information gain. The same rule works for both $\ProblemPCWCDT$ and $\ProblemPCACDT$.
 
-Consider a stage at which the set of hypotheses consistent with the replies received so far is $\cH'\subseteq\cH$ and the set of tests already performed is $P\subseteq\cT$. For a family $S\subseteq\cT$, let $\Pi_{\cH'}(S)$ be the combined test whose replies are the subsets of hypotheses in $\cH'$ that give the same replies to the tests in $S$. Define its gain as
+The algorithm proceeds in \emph{stages}. At the beginning of a stage, let $\cH'\subseteq\cH$ be the set of hypotheses consistent with the replies received so far and let $P\subseteq\cT$ be the set of tests already performed. For a family $S\subseteq\cT$, let $\Pi_{\cH'}(S)$ be the combined test whose replies are the subsets of hypotheses in $\cH'$ that give the same replies to the tests in $S$. Define its gain as
 \[
     g_{\cH'}(S)=1-\frac{1}{\spr{\cH'}}\cdot\max_{H\in\Pi_{\cH'}(S)}\spr{H}.
 \]
-For each $t\in\cT\setminus P$, put $C_t=\closure{t}\setminus P$. The algorithm selects a test $t$ maximizing $g_{\cH'}(C_t)/\spr{C_t}$ and performs the tests in $C_t$ in a topological order. It repeats this procedure after the entire closure has been performed, or stops immediately if the target is identified earlier.
+For each $t\in\cT\setminus P$, put $C_t=\closure{t}\setminus P$. In a stage, the algorithm selects a test $t$ maximizing $g_{\cH'}(C_t)/\spr{C_t}$ and performs the tests in $C_t$ in a topological order. The stage ends after all tests in $C_t$ have been performed, unless the target is identified first. The algorithm stops as soon as the target is identified and otherwise begins a new stage. Every stage performs at least one previously unperformed test, so there are at most $m$ stages on each root-to-leaf path.
 
 \begin{theorem}\label{thm:greedy-general}
 The above algorithm is a polynomial-time $\bigo\br{\sqrt{m\cdot\log n}}$-approximation for both $\ProblemPCWCDT$ and $\ProblemPCACDT$ under general precedence constraints.
@@ -119,25 +119,27 @@ Combining this bound with \eqref{eq:greedy-density} gives
     \cdot g_{\cH'}(C).
 \end{equation}
 
-Fix $\tau>0$ and index the stages of the greedy algorithm by $i\in[m]$. Write $C_i$ for the selected closure, $g_i$ for its gain and $n_i$ for the number of remaining hypotheses at the beginning of stage $i$. Let $\mathcal{F}_i$ be the information available at this point, including $C_i$, the tests performed and their replies.
-If the algorithm terminates before stage $i$, retain the final history and set $C_i=\emptyset$, $g_i=0$ and $n_i=1$. Put $n_{m+1}=1$. These definitions are valid because every stage performs at least one test, no test is repeated, and performing all $m$ tests identifies the target.
+Put $\tau=\sqrt{m/(8\cdot\ln n)}$ and index the stages along each path in order. To use a common range of indices for all paths, let $i\in[m]$. If stage $i$ is reached, write $C_i$ for the selected closure, $g_i$ for its gain and $n_i$ for the number of remaining hypotheses at the beginning of the stage. Let $\mathcal{F}_i$ be the information available at this point, including $C_i$, the tests performed and their replies. If the algorithm terminates before stage $i$, retain the final history for $\mathcal{F}_i$ and set $C_i=\emptyset$, $g_i=0$ and $n_i=1$. Put $n_{m+1}=1$.
 
-For each $i\in[m]$, let $B_i$ be the event that stage $i$ is the first reached stage for which
+For each $i\in[m]$, let $B_{i,\tau}$ be the event that stage $i$ is the first reached stage for which
 \begin{equation}\label{eq:greedy-threshold}
     \mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]>\tau.
 \end{equation}
-The events $B_1,\ldots,B_m$ are disjoint and are determined by the corresponding histories. Consequently,
-\[
-    \tau\cdot\sum_{i=1}^{m}\Pr\br{B_i}
+Let $B_{\tau}=\bigcup_{i=1}^{m}B_{i,\tau}$ be the event that a reached stage satisfies \eqref{eq:greedy-threshold}. The events $B_{1,\tau},\ldots,B_{m,\tau}$ are disjoint and each $B_{i,\tau}$ is determined by $\mathcal{F}_i$. Using conditional expectation, we obtain
+\begin{align*}
+    \tau\cdot\Pr\br{B_{\tau}}
+    &=\tau\cdot\sum_{i=1}^{m}\Pr\br{B_{i,\tau}}
     \leq\sum_{i=1}^{m}\mathbb{E}\left[
         \mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]
-        \cdot\mathbf{1}_{B_i}\right]
-    =\sum_{i=1}^{m}\mathbb{E}\left[\COST\br{D^*,\target}\cdot\mathbf{1}_{B_i}\right]
-    \leq\frac{\COSTA\br{D^*}}{n}.
-\]
-Thus the probability of reaching a stage satisfying \eqref{eq:greedy-threshold} is at most $\COSTA\br{D^*}/(n\cdot\tau)$. Since at most $m$ tests remain at the first such stage, the expected cost from that stage onwards is at most $m\cdot\COSTA\br{D^*}/(n\cdot\tau)$.
+        \cdot\mathbf{1}_{B_{i,\tau}}\right]\\
+    &=\sum_{i=1}^{m}\mathbb{E}\left[\COST\br{D^*,\target}\cdot\mathbf{1}_{B_{i,\tau}}\right]
+    =\mathbb{E}\left[\COST\br{D^*,\target}\cdot\mathbf{1}_{B_{\tau}}\right]
+    \leq\mathbb{E}\left[\COST\br{D^*,\target}\right]
+    =\frac{\COSTA\br{D^*}}{n}.
+\end{align*}
+Thus $\Pr\br{B_{\tau}}\leq\COSTA\br{D^*}/(n\cdot\tau)$. Since at most $m$ tests remain at the first such stage, the expected number of tests performed from that stage onwards, taking this number to be zero if $B_{\tau}$ does not occur, is at most $m\cdot\Pr\br{B_{\tau}}\leq m\cdot\COSTA\br{D^*}/(n\cdot\tau)$.
 
-For each $i\in[m]$, let $I_i$ be the indicator of the event that stage $i$ is reached and $\mathbb{E}[\COST\br{D^*,\target}\mid\mathcal{F}_j]\leq\tau$ for every $j\in[i]$. The variables $I_i$ and $g_i$ are determined by $\mathcal{F}_i$. The bound on $\spr{\cH''}$ also gives
+For each $i\in[m]$, let $I_{i,\tau}$ be the indicator of the event that stage $i$ is reached and $\mathbb{E}[\COST\br{D^*,\target}\mid\mathcal{F}_j]\leq\tau$ for every $j\in[i]$. The variables $I_{i,\tau}$ and $g_i$ are determined by $\mathcal{F}_i$. The bound on $\spr{\cH''}$ also gives
 \begin{equation}\label{eq:greedy-potential}
     g_{\cH'}(C)
     \leq 1-\frac{\spr{\cH''}}{\spr{\cH'}}
@@ -145,35 +147,35 @@ For each $i\in[m]$, let $I_i$ be the indicator of the event that stage $i$ is re
 \end{equation}
 The last inequality follows from $\ln x\leq x-1$ applied to $x=\spr{\cH''}/\spr{\cH'}$. Hence, on every path,
 \[
-    \sum_{i=1}^{m}I_i\cdot g_i
+    \sum_{i=1}^{m}I_{i,\tau}\cdot g_i
     \leq\sum_{i=1}^{m}g_i
     \leq\sum_{i=1}^{m}\ln\frac{n_i}{n_{i+1}}
     =\ln n.
 \]
-By \eqref{eq:greedy-average-density} and the definition of $I_i$, for each $i\in[m]$ we have
+By \eqref{eq:greedy-average-density} and the definition of $I_{i,\tau}$, for each $i\in[m]$ we have
 \[
-    I_i\cdot\spr{C_i}
-    \leq 8\cdot I_i\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]^2\cdot g_i
-    \leq 8\cdot\tau\cdot I_i\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i.
+    I_{i,\tau}\cdot\spr{C_i}
+    \leq 8\cdot I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]^2\cdot g_i
+    \leq 8\cdot\tau\cdot I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i.
 \]
 Using conditional expectation, the expected cost before the first stage satisfying \eqref{eq:greedy-threshold} is therefore at most
 \begin{align*}
-    \mathbb{E}\left[\sum_{i=1}^{m}I_i\cdot\spr{C_i}\right]
-    &\leq 8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_i\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i\right]
-    =8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_i\cdot\COST\br{D^*,\target}\cdot g_i\right]\\
-    &=8\cdot\tau\cdot\mathbb{E}\left[\COST\br{D^*,\target}\cdot\sum_{i=1}^{m}I_i\cdot g_i\right]
+    \mathbb{E}\left[\sum_{i=1}^{m}I_{i,\tau}\cdot\spr{C_i}\right]
+    &\leq 8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i\right]
+    =8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_{i,\tau}\cdot\COST\br{D^*,\target}\cdot g_i\right]\\
+    &=8\cdot\tau\cdot\mathbb{E}\left[\COST\br{D^*,\target}\cdot\sum_{i=1}^{m}I_{i,\tau}\cdot g_i\right]
     \leq 8\cdot\tau\cdot\frac{\COSTA\br{D^*}}{n}\cdot\ln n.
 \end{align*}
-Combining both parts, the expected cost of identifying the target in $D$ satisfies
-\[
-    \mathbb{E}\left[\COST\br{D,\target}\right]
-    =\frac{\COSTA\br{D}}{n}
-    \leq\br{8\cdot\tau\cdot\ln n+\frac{m}{\tau}}\cdot\frac{\COSTA\br{D^*}}{n}.
-\]
-With $\tau=\sqrt{m/(8\cdot\ln n)}$, we obtain
-\[
-    8\cdot\tau\cdot\ln n+\frac{m}{\tau}=2\cdot\sqrt{8\cdot m\cdot\ln n}
-    =\bigo\br{\sqrt{m\cdot\log n}}.
-\]
+The stages counted by $I_{i,\tau}$ precede the first stage satisfying \eqref{eq:greedy-threshold}, and any remaining tests are performed only if $B_{\tau}$ occurs. Combining the bounds for both parts gives
+\begin{align*}
+    \frac{\COSTA\br{D}}{n}
+    &=\mathbb{E}\left[\COST\br{D,\target}\right]
+    \leq\mathbb{E}\left[\sum_{i=1}^{m}I_{i,\tau}\cdot\spr{C_i}\right]
+    +m\cdot\Pr\br{B_{\tau}}
+    \leq 8\cdot\tau\cdot\ln n\cdot\frac{\COSTA\br{D^*}}{n}
+    \\&+\frac{m\cdot\COSTA\br{D^*}}{n\cdot\tau}
+    =\br{8\cdot\tau\cdot\ln n+\frac{m}{\tau}}\cdot\frac{\COSTA\br{D^*}}{n}
+    =2\cdot\sqrt{8\cdot m\cdot\ln n}\cdot\frac{\COSTA\br{D^*}}{n}.
+\end{align*}
 Multiplying by $n$ proves the approximation guarantee for $\ProblemPCACDT$.
 \end{proof}
