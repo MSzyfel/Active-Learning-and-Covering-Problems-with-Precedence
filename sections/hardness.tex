@@ -606,6 +606,8 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V$, and an indexed family of groups $\cX=(X_1,\ldots,X_g)$ with $X_j\subseteq V$ for each $j\in[g]$, find a subtree $T'$ containing $r$ and at least one vertex from each group, minimizing $\sum_{e\in E(T')}d(e)$.
 \end{problem}
 
+Let $\mathrm{ZQP}=\bigcup_{c\geq1}\mathrm{ZTIME}(2^{(\log s)^c})$ denote zero-error randomized quasipolynomial time, where $s$ is the input length of the language being decided.
+
 \begin{theorem}[Halperin and Krauthgamer \cite{PolylogarithmicInapproximability}, Theorem~1.1]\label{thm:source-GST-hardness}
     For every $\epsilon>0$, \textup{\textsc{Group Steiner Tree}} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}

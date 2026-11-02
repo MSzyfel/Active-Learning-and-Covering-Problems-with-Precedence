@@ -1,11 +1,11 @@
 \begin{table}[ht!]
-\caption{Inapproximability results. The outforest $\ProblemPCSC$ bound also holds for every fixed rational $f\in(0,1]$. The outforest $\ProblemPCMSSC$ bound for fixed $f<1$ also holds when $f$ is part of the input. In the PDS row, $\kappa\geq1$ and $\epsilon>0$ are fixed. The PGC bounds hold for some constant \mbox{$\delta>0$}.}
+\caption{Inapproximability results. The PGC bounds hold for some constant \mbox{$\delta>0$}.}
 \label{tab:hardness}
 \centering
 {\footnotesize
 \setlength{\tabcolsep}{1.5pt}
 \newlength{\hardnesssettingwidth}
-\settowidth{\hardnesssettingwidth}{\mbox{outforest, variable $f<1$}}
+\settowidth{\hardnesssettingwidth}{\mbox{PGC and $\text{P}\ne\text{NP}$}}
 \addtolength{\hardnesssettingwidth}{0.5pt}
 \begin{tabular}{p{\hardnesssettingwidth}C{\dimexpr0.2688\linewidth-0.28\hardnesssettingwidth\relax}C{\dimexpr0.2688\linewidth-0.28\hardnesssettingwidth\relax}C{\dimexpr0.2112\linewidth-0.22\hardnesssettingwidth\relax}C{\dimexpr0.2112\linewidth-0.22\hardnesssettingwidth\relax}}
 \toprule
@@ -18,7 +18,7 @@
 \cdashline{2-5}
 \addlinespace[2pt]
 
-\shortstack[l]{outforest, \mbox{$f=1$}\\\mbox{$\text{NP}\not\subseteq\mathrm{ZQP}$}} &
+\shortstack[l]{outforest\\\mbox{$\text{NP}\not\subseteq\mathrm{ZQP}$}} &
 \shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCSC-outforest-hardness}} &
 \shortstack[c]{\mbox{$\bigo\br{\log^{1-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-full-cover-hardness}} &
 \shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Cor.~\ref{cor:decision-tree-inapproximability}} &
@@ -27,15 +27,8 @@
 \addlinespace[2pt]
 \cdashline{2-5}
 \addlinespace[2pt]
-\shortstack[l]{outforest, fixed \mbox{$f<1$}\\\mbox{$\text{NP}\not\subseteq\mathrm{ZQP}$}} & &
-\shortstack[c]{\mbox{$\bigo\br{\log^{2-\epsilon}n}$}\\Thm.~\ref{thm:PCMSSC-outforest-hardness}} & & \\
-
-\addlinespace[2pt]
-\cdashline{2-5}
-\addlinespace[2pt]
-
 \multirow[c]{2}{\linewidth}{\shortstack[l]{general DAGs\\PDS}} &
-\multicolumn{2}{c}{\mbox{$(\bigo(n^{1/2-\epsilon}),\kappa),\; (\bigo(m^{1/4-\epsilon}),\kappa)$}} &
+\multicolumn{2}{c}{\mbox{$(\bigo(n^{1/2-\epsilon}),\bigo\br{1}),\; (\bigo(m^{1/4-\epsilon}),\bigo\br{1})$}} &
 \multicolumn{2}{c}{\mbox{$\bigo(n^{1/2-\epsilon}),\; \bigo(m^{1/4-\epsilon})$}} \\
 & \multicolumn{2}{c}{Cor.~\ref{cor:PDS-limiting-hardness}} &
 \multicolumn{2}{c}{Cor.~\ref{cor:decision-tree-inapproximability}} \\
