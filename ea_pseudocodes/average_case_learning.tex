@@ -5,7 +5,7 @@
 \caption{The $\bigo(\beta\cdot\log n)$-approximation algorithm for the PCACDT}
 \label{ea:alg:averageDecisionTree}
 \SetKwProg{Proc}{procedure}{}{}
-\Proc{\textsc{AverageDecisionTree}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
+\Proc{\textup{\textsc{AverageDecisionTree}}$(\mathcal{H}, \mathcal{T}, \mathcal{F})$}{
 
 \If{$\spr{\mathcal{H}} = 1$}{
     \Return the trivial decision tree with a single leaf corresponding to the only hypothesis in $\mathcal{H}$.
@@ -19,7 +19,7 @@ $S \gets$ Run the $\beta$-approximation algorithm for PCMSSC on instance $(\math
 $D \gets D_S \gets $ decision tree which consists of sequence of tests $S$.
 
 \ForEach{$\mathcal{H}' \in \mathcal{H} - S$}{
-$D' \gets$ \textsc{AverageDecisionTree}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
+$D' \gets$ \textup{\textsc{AverageDecisionTree}}$(\mathcal{H}', \mathcal{T} -  S, \mathcal{F} -  S)$.
 
 Attach $D'$ to the leaf of $D$ corresponding to $\mathcal{H}'$.
 }

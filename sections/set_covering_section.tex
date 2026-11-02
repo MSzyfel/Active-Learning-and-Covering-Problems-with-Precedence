@@ -545,10 +545,10 @@ Combine the budgeted guarantee in Theorem~\ref{thm:PCSC-to-BPCSC} with Theorems~
 \end{proof}
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
-In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a family $\cS$ of subsets of $\cU$, each with a cost $c(S)\geq0$, and a budget $\budget>0$. The goal is to maximize $\spr{\cov\br{\cS'}}$ over subfamilies $\cS'\subseteq\cS$ with $\sum_{S\in\cS'}c(S)\leq\budget$.
+In \textup{\textsc{Budgeted Maximum Coverage}}, the input consists of a universe $\cU$, a family $\cS$ of subsets of $\cU$, each with a cost $c(S)\geq0$, and a budget $\budget>0$. The goal is to maximize $\spr{\cov\br{\cS'}}$ over subfamilies $\cS'\subseteq\cS$ with $\sum_{S\in\cS'}c(S)\leq\budget$.
 
 \begin{theorem}[Khuller, Moss and Naor \cite{TheBudgetedMaximumCoverageProblem}]\label{thm:budgeted-maximum-coverage-source}
-    There exists a polynomial-time $(1-1/e)$-approximation algorithm for \textsc{Budgeted Maximum Coverage}.
+    There exists a polynomial-time $(1-1/e)$-approximation algorithm for \textup{\textsc{Budgeted Maximum Coverage}}.
 \end{theorem}
 
 \begin{theorem}\label{thm:BPCSC-inforest}
@@ -556,9 +556,9 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
     There exist polynomial-time bicriteria $\br{1, \frac{e}{e-1}}$-approximation algorithms for $\ProblemBPCSC$ and $\ProblemPCSC$ when the precedence constraints form an inforest.
 \end{theorem}
 \begin{proof}
-    We reduce $\ProblemBPCSC$ to \textsc{Budgeted Maximum Coverage} and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
+    We reduce $\ProblemBPCSC$ to \textup{\textsc{Budgeted Maximum Coverage}} and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
 
-    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textsc{Budgeted Maximum Coverage} instance with universe $\cU$ and the budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
+    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textup{\textsc{Budgeted Maximum Coverage}} instance with universe $\cU$ and the budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
     For any selected family $\cA\subseteq\cS'$, define $\cC=\bigcup_{C_S\in\cA}\closure{S}$. This family is precedence-closed and satisfies
     \[
         \cov\br{\cC}=\cov\br{\cA}
@@ -582,7 +582,7 @@ For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ 
 %  Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
 \end{proof}
 
-The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure (cf. Algorithm~\ref{alg:inforest-fPCMSSC}). The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
+The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure (cf. Algorithm~\ref{alg:inforest-fPCMSSC}). The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textup{\textsc{Min-Sum Set Cover}}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
 
 In the algorithm and its analysis, we identify a sequence with its family of sets when using set operations.
 \input{pseudocodes/inforest_f_PCMSSC.tex}
