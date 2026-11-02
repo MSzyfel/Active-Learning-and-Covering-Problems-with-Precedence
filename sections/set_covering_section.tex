@@ -609,7 +609,7 @@ For each $S\in\cS$, let $D_{i,S}=\closure{S}\setminus\pi_i$, $c_{i,S}=\spr{D_{i,
     =\spr{\pref{\cCopt}{j}}=j.
 \]
 \begin{claim}\label{claim:inforest-pcmssc-coverage}
-In iteration $i$, the family $\cA_i$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
+In any iteration $i$, $\cA_i\neq\emptyset$. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{claim}
 \begin{proof}
 For $j=B^*$, we have
@@ -622,7 +622,7 @@ For $j=B^*$, we have
 Thus, there exists $S\in\mathcal{M}_{B^*}$ with $g_{i,S}>0$. For this set, $D_{i,S}\neq\emptyset$ and hence $1\leq c_{i,S}\leq B^*$, so $S\in\cA_i$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{proof}
 
-For each $i\in[\ell]$, let $S_i$ be the set selected in iteration $i$, and put $c_i=c_{i,S_i}$, $g_i=g_{i,S_i}$ and $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
+For each $i\in[\ell]$, let $S_i$ be the set selected in iteration $i$, and denote for brevity $c_i=c_{i,S_i}$, $g_i=g_{i,S_i}$ and $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
 \[
     \rho_i=\frac{g_i}{c_i}=\max_{S\in\cA_i}\frac{g_{i,S}}{c_{i,S}}.
 \]
@@ -743,9 +743,10 @@ Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{
 Given a metric space $(V, d)$, a root vertex $r \in V$, a set of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\operatorname{len}\br{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cX_\tau} w(X)$.
 \end{problem}
-The following tree-metric guarantee follows from the algorithm and analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
+The following tree-metric guarantee follows from the algorithm and its analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
 \begin{theorem}[Gupta, Nagarajan and Ravi \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}, Section~5.1]\label{thm:gso-tree-source}
-    For a $\ProblemGSO$ instance on a tree metric $(V,d)$ with budget $\budget$, a polynomial-time algorithm finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least one quarter of the maximum weight coverable by an $r$-tour of length at most $\budget$.
+    Consider a $\ProblemGSO$ instance on a tree metric $(V,d)$ with a budget $\budget$.
+    There exists a polynomial-time algorithm that finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least $\frac{1}{4}\OPT_{\mathrm{GSO}}$, where $\OPT_{\mathrm{GSO}}$ denotes the maximum total weight of groups coverable by an $r$-tour of length at most $\budget$.
 \end{theorem}
 % \begin{problem}[\textup{\textsc{Partial Latency Group Steiner Tree}} (LPGST)] \label{problem:LPGST}
 % Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cX_\tau} \geq h$ and that minimizes
@@ -759,7 +760,7 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
 \end{theorem}
 \begin{proof}
     We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Let $(\cU,\cS,\preceq,\budget)$ be a $\ProblemBPCSC$ instance.
-    Create a rooted tree with vertex set $V=\brc{r}\cup\brc{v_S\colon S\in\cS}$, where $r$ is a dummy root. For every minimal $S\in\cS$, connect $r$ to $v_S$ by an edge of length~$1/2$. For every nonminimal $W\in\cS$, let $S\in\cS$ be its unique immediate predecessor, and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits the representatives of all strict predecessors of $W$. For each $u\in\cU$, let $X_u=\brc{v_S\colon S\in\cS,\ u\in S}$. Set the GSO budget to $\budget$ and define its groups and their weights by
+    Create a rooted tree with vertex set $V=\brc{r}\cup\brc{v_S\colon S\in\cS}$, where $r$ is a dummy root. For every minimal $S\in\cS$, connect $r$ to $v_S$ by an edge of length~$1/2$. For every nonminimal $W\in\cS$, let $S\in\cS$ be its unique immediate predecessor, and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits the representatives of all predecessors of $W$. For each $u\in\cU$, let $X_u=\brc{v_S\colon S\in\cS,\ u\in S}$. Set the GSO budget to $\budget$ and define its groups and their weights by
     \[
         \cX=\brc{X_u\colon u\in\cU,\ X_u\neq\emptyset},
         \qquad w(X)=\spr{\brc{u\in\cU\colon X_u=X}}\quad(X\in\cX).

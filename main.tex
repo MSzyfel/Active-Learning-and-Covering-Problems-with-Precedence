@@ -73,13 +73,17 @@ Gdańsk University of Technology, 80-233 Gdańsk, Poland\\
 
 \begin{document}
 
+\hypersetup{pageanchor=false}
 \maketitle
+\thispagestyle{empty}
 
 \input{sections/abstract}
 
 \noindent\textbf{Keywords:} Optimal decision trees, Set Cover, Precedence Constraints, Approximation Algorithms
 
 \newpage
+\setcounter{page}{1}
+\hypersetup{pageanchor=true}
 \input{sections/introduction}
 \input{sections/preliminaries}
 \input{sections/approximating_learning}
