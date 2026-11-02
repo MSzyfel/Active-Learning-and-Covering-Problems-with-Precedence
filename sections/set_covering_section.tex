@@ -435,7 +435,7 @@ For each integer $t\in[\spr{\cov\br{\cS}}]$, run the $\ProblemPCSC$ algorithm wi
 Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
 \end{proof}
 
-We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textup{\textsc{Minimum Latency TSP}}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textup{\textsc{Adaptive TSP}}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition is not exact and is not used directly in the procedure or its analysis.
+We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving \textup{\textsc{Minimum Latency TSP}}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textup{\textsc{Adaptive TSP}}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is to treat appending sets to a covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition, however, is not exact and is not used directly in the procedure or its analysis.
 
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta+1}{3\cdot\beta-1}$, so $1<a\leq 2$.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
@@ -558,7 +558,7 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
 \begin{proof}
     We reduce $\ProblemBPCSC$ to \textsc{Budgeted Maximum Coverage} and apply Theorem~\ref{thm:budgeted-maximum-coverage-source}.
 
-    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textsc{Budgeted Maximum Coverage} instance with universe $\cU$ and budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
+    Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textsc{Budgeted Maximum Coverage} instance with universe $\cU$ and the budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
     For any selected family $\cA\subseteq\cS'$, define $\cC=\bigcup_{C_S\in\cA}\closure{S}$. This family is precedence-closed and satisfies
     \[
         \cov\br{\cC}=\cov\br{\cA}
@@ -576,22 +576,22 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
         \sum_{T\in\cA_{\cC}}c(T)
         =\sum_{S\in\mathcal{M}}\spr{\closure{S}}=\spr{\cC}.
     \]
-    The maximum coverage attainable within budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
+    The maximum coverage attainable within the budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
 
 For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements among the outputs and the empty family.
 %  Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
 \end{proof}
 
-The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure. The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
+The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure (cf. Algorithm~\ref{alg:inforest-fPCMSSC}). The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
 
 In the algorithm and its analysis, we identify a sequence with its family of sets when using set operations.
-%\input{pseudocodes/inforest_f_PCMSSC.tex}
+\input{pseudocodes/inforest_f_PCMSSC.tex}
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
     There exists a polynomial-time bicriteria $\br{4,\frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{proof}
-Consider sequences constructed by Algorithm~\ref{alg:inforest-fPCMSSC} as candidate solutions. Each of them respects the precedence constraints: initially $\pi$ is empty, and for each selected $S\in\cS$, the family $\pi\cup D_S=\pi\cup\closure{S}$, where $D_S=\closure{S}\setminus\pi$, is precedence-closed whenever $\pi$ is, while $D_S$ is appended in topological order.
+Consider sequences constructed by Algorithm~\ref{alg:inforest-fPCMSSC} as candidate solutions. Each of them respects the precedence constraints: initially $\pi$ is empty, and for each selected $S\in\cS$, the family $\pi\cup D_S=\pi\cup\closure{S}$, where $D_S=\closure{S}\setminus\pi$, is precedence-closed whenever $\pi$ is and the elements of $D_S$ are appended in a topological order.
 Let $\cCopt$ be an optimal solution and put $B^*=\spr{\cCopt}$. We analyze the guess $B=B^*$ and let $\ell$ be the number of iterations of its while loop. For each $i\in[\ell]$, let $\pi_i$ be the sequence at the start of iteration $i$ and put
 \[
     r_i=n-\spr{\cov\br{\pi_i}},\qquad
