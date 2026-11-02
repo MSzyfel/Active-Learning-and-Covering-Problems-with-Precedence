@@ -124,7 +124,7 @@ We use the following probability inequalities.
 
 \begin{theorem}\label{thm:PCSC-PDS-clique-hardness}
     \setlength{\emergencystretch}{1em}
-    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation algorithm for $\ProblemPCSC$ with target fraction $f$, even when the precedence DAG has height two.
+    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation algorithm for $\ProblemPCSC$ with target fraction $f$, even when the precedence POSET has height two.
 \end{theorem}
 \begin{proof}
     \par\noindent\textbf{Parameters and construction.}
@@ -147,7 +147,7 @@ We use the following probability inequalities.
         \cS=\{V_{v,i}\colon v\in[N],\ i\in[\lambda]\}
         \cup\{E_K\colon K\in\tbinom{[N]}{r},\ K\text{ is a clique of }G\},
     \]
-    with distinct indices even when two sets have identical contents. The sets $\cU_v$ are used only to define the witness sets and are not themselves selectable. For every $r$-clique $K$ of $G$, impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. Thus selecting $E_K$ requires selecting all $\lambda$ representatives of every vertex in $K$. All precedence arcs go from representative sets to witness sets, so a directed path has at most one edge and the precedence DAG has height two.
+    with distinct indices even when two sets have identical contents. The sets $\cU_v$ are used only to define the witness sets and are not themselves selectable. For every $r$-clique $K$ of $G$, impose $V_{v,i}\preceq E_K$ for every $v\in K$ and $i\in[\lambda]$. Thus selecting $E_K$ requires selecting all $\lambda$ representatives of every vertex in $K$. Every strict precedence relation goes from a representative set to a witness set, so every chain has at most two elements and the precedence POSET has height at most two.
 
     Our choice of $p$ gives $\mathbb E[\spr{E_K}]=n\cdot p^r=\log^{2\cdot r}N$ for each clique $K$. The null-case analysis bounds all witness sizes by twice this mean with high probability, so the clique-count bound limits how many elements can be covered by witnesses indexed by cliques in a small vertex set. The planted component, $G[\mathcal P]$, must supply a witness for every universe element. We prove this by finding cliques in disjoint subsets of $\mathcal P$ whose auxiliary sets all contain that element.
 
@@ -386,7 +386,7 @@ We use the following probability inequalities.
 
 \begin{theorem}\label{thm:PCMSSC-PDS-clique-hardness}
     \setlength{\emergencystretch}{1em}
-    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence DAG has height two.
+    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence POSET has height two.
 \end{theorem}
 \begin{proof}
     Use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, placing all representative sets of $\cC_{\mathcal P}$ before its witness sets gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
@@ -507,7 +507,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \[
         n=h,\qquad m=h\cdot\br{2\cdot\spr{\Sigma_A}+\spr{\Sigma_B}}.
     \]
-    The precedence DAG has height two and $\spr{S}\leq1$ for every $S\in\cS$. The following guarantees hold:
+    The precedence POSET has height two and $\spr{S}\leq1$ for every $S\in\cS$. The following guarantees hold:
     \begin{itemize}
         \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, there is a precedence-closed sequence $\cC$ such that
         \[
@@ -580,7 +580,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
         \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size.
         \item\label{item:label-cover-polynomial} Assuming the \textup{\textsc{Projection Games Conjecture}}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
     \end{enumerate}
-    All three bounds hold even when the precedence DAG has height two and every set has size at most one.
+    All three bounds hold even when the precedence POSET has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
     Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The \DDfix{set cover instances have} $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
@@ -770,10 +770,10 @@ An empty sum is zero, and groups with the same members retain distinct indices.
         \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
         \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\mathrm{ZQP}$.
     \end{enumerate}
-    The Label-Cover- and PGC-based bounds (items 2--4) concern deterministic algorithms and hold even when every test has at most three outcomes and the precedence DAG has height two.
+    The Label-Cover- and PGC-based bounds (items 2--4) concern deterministic algorithms and hold even when every test has at most three outcomes and the precedence POSET has height two.
 \end{corollary}
 \begin{proof}
-    Apply the covering-to-decision-tree reductions with $f=1$ to Corollary~\ref{cor:PDS-limiting-hardness} for item 1 and to the three parts of Theorem~\ref{thm:label-cover-hardness} for items 2--4. The reductions satisfy $n_{\rm DT}=2\cdot n_{\rm cov}$ and $m_{\rm DT}=m_{\rm cov}$, so both parameter-dependent bounds transfer. In items 2--4, the covering sets are empty or singletons, yielding tests with at most three outcomes, and the precedence DAG has height two. Item 5 follows from Theorem~\ref{thm:PCSC-outforest-hardness} via the full-cover reduction for $\ProblemPCWCDT$, and from Corollary~\ref{cor:PCACDT-outforest-hardness} for $\ProblemPCACDT$.
+    Apply the covering-to-decision-tree reductions with $f=1$ to Corollary~\ref{cor:PDS-limiting-hardness} for item 1 and to the three parts of Theorem~\ref{thm:label-cover-hardness} for items 2--4. The reductions satisfy $n_{\rm DT}=2\cdot n_{\rm cov}$ and $m_{\rm DT}=m_{\rm cov}$, so both parameter-dependent bounds transfer. In items 2--4, the covering sets are empty or singletons, yielding tests with at most three outcomes, and the precedence POSET has height two. Item 5 follows from Theorem~\ref{thm:PCSC-outforest-hardness} via the full-cover reduction for $\ProblemPCWCDT$, and from Corollary~\ref{cor:PCACDT-outforest-hardness} for $\ProblemPCACDT$.
 \end{proof}
 
 \subsection{Consequences for Partial Red-Blue Set Cover}
