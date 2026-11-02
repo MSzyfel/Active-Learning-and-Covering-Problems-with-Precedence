@@ -2,7 +2,7 @@
 
 We have provided a series of approximation algorithms for decision tree and set covering problems subject to precedence constraints, as well as a number of inapproximability results. Our main contribution is a series of reductions that enable us to systematically relate the two types of problems independently of the specific structure of the precedence constraints. As an immediate corollary, we obtain $\tilde{\bigo}\br{m^{1/3}}$-approximation algorithms for both types of problems, as well as case-specific polylogarithmic approximations for both inforest and outforest precedence constraints. These two classes are natural to study, since trees are among the most prevalent structures encountered in various practical algorithmic applications.
 
-Prior to this work, almost no non-trivial approximation algorithms were known for either of these problems, even for the simplest of our variants. One possible explanation is that achieving our results required developing an elaborate and systematic reduction framework and using non-greedy procedures. This is especially evident in the LP-based procedure for $\ProblemPRBSC$, our main subproblem, as well as in the geometrically growing budget algorithm for $\ProblemPCMSSC$ via $\ProblemBPCSC$. This raises the question of whether an algorithm that always picks a test (with its closure) maximizing some kind of information gain also achieves a good approximation ratio for either $\ProblemPCWCDT$ or $\ProblemPCACDT$.
+Prior to this work, almost no non-trivial approximation algorithms were known for either of these problems, even for the simplest of our variants. One possible explanation is that achieving our results required developing an elaborate and systematic reduction framework and using non-greedy procedures. This is especially evident in the LP-based procedure for $\ProblemPRBSC$, our main subproblem, as well as in the geometrically growing budget algorithm for $\ProblemPCMSSC$ via $\ProblemBPCSC$. This raises the question of whether an algorithm that always picks a test (with its closure) maximizing some kind of information gain also achieves a good approximation ratio for either $\ProblemPCWCDT$ or $\ProblemPCACDT$. As an additional contribution, at the end of this section, we give such a greedy algorithm with approximation ratio $O\br{\sqrt{m\log n}}$ for both criterions. The remaining question is whether a bound closer to our main guarantees can be established for simple algorithms.
 
 We have complemented our algorithmic results with a series of conditional lower bounds, providing inapproximability results for most of our variants, including those with outforest and general precedence constraints. We find it particularly surprising that approximating the decision tree problem generalizes the task of planted dense subgraph detection in a random graph. This result, although quite unexpected, extends the extensive line of work on the connection between average-case complexity and inapproximability of problems (for more on such connections, see \cite{Feige2002RelationsBetweenAverageCaseComplexityAndApproximationComplexity}).
 Interestingly, the same result could be obtained using a stronger \textsc{Hypergraph Planted Dense Subgraph} conjecture. In particular, our clique enumeration reduction essentially treats every such $r$-clique as a hyperedge. This raises the question of whether a similar idea could be used to show that PDS implies HPDS. The main obstacle is that the set of $r$-cliques in a random Erd\H{o}s--R\'enyi graph is not an Erd\H{o}s--R\'enyi hypergraph, but has a different distribution. However, it would be interesting to check whether the existing HPDS-based reductions can be adapted to use PDS as a source together with the clique enumeration step.
@@ -12,3 +12,170 @@ Although the PDS-based reduction is our most technical hardness contribution, we
 In this work, we have studied average-case decision tree construction under the assumption that the probability distribution over all possible hypotheses is uniform. Extending our results to non-uniform distributions would require new techniques, since our analysis relies heavily on the uniformity assumption. However, it is possible that some of the techniques we have developed can be adapted to handle non-uniform distributions as well. For example, our algorithms for covering problems should be easily adaptable to include non-uniform weights on the elements of the universe, which might be useful for encoding non-uniform distributions over the hypotheses. However, it is not clear whether we can adapt the reduction from $\ProblemPCACDT$ to $\ProblemPCMSSC$ to work in that setup as well. For uniform probabilities, Corollary~\ref{cor:PCACDT-outforest-hardness} establishes $\bigo(\log^{1-\epsilon} n)$-hardness with outforest precedence constraints. For non-uniform probabilities, we expect that a stronger $\bigo(\log^{2-\epsilon} n)$ bound could be obtained under the same complexity assumption by adapting the reduction in Theorem~\ref{thm:PCMSSC-outforest-hardness}. One possible approach is to create a low-probability hypothesis for each group and a high-probability hypothesis in place of the dummy elements, then replace sets with tests. This argument is only a sketch and remains to be established.
 
 Another direction for future research is to enrich \textup{\textsc{Optimal Decision Tree}} with more types of constraints borrowed from scheduling theory. For example, one may consider release dates on the tests or due dates on the elements. In such a setup, it is also possible to optimize different cost functions, such as maximum lateness or total tardiness. The same types of generalizations are also applicable to the set covering problems. To the best of our knowledge, no results of this nature are known for any of these problems.
+
+\subsection{A greedy algorithm for general precedence constraints}
+
+We now consider the greedy approach mentioned above. Unlike the algorithms of Section~\ref{sec:AL}, it directly selects a test and its predecessors according to their information gain. The same rule works for both $\ProblemPCWCDT$ and $\ProblemPCACDT$.
+
+The algorithm proceeds in \emph{stages}. At the beginning of a stage, let $\cH'\subseteq\cH$ be the set of hypotheses consistent with the replies received so far and let $P\subseteq\cT$ be the set of tests already performed. For a family $S\subseteq\cT$, let $\Pi_{\cH'}(S)$ be the combined test whose replies are the subsets of hypotheses in $\cH'$ that give the same replies to the tests in $S$. Define its gain as
+\[
+    g_{\cH'}(S)=1-\frac{1}{\spr{\cH'}}\cdot\max_{H\in\Pi_{\cH'}(S)}\spr{H}.
+\]
+For each $t\in\cT\setminus P$, put $C_t=\closure{t}\setminus P$. In a stage, the algorithm selects a test $t$ maximizing $g_{\cH'}(C_t)/\spr{C_t}$ and performs the tests in $C_t$ in a topological order. The stage ends after all tests in $C_t$ have been performed, unless the target is identified first. The algorithm stops as soon as the target is identified and otherwise begins a new stage. Every stage performs at least one previously unperformed test, so there are at most $m$ stages on each root-to-leaf path.
+
+\begin{theorem}\label{thm:greedy-general}
+The above algorithm is a polynomial-time $\bigo\br{\sqrt{m\cdot\log n}}$-approximation for both $\ProblemPCWCDT$ and $\ProblemPCACDT$ under general precedence constraints.
+\end{theorem}
+
+\begin{proof}
+Let $D$ be the decision tree constructed by the algorithm. At an arbitrary stage $(\cH',P)$, let $C$ be the closure selected by the algorithm.
+Let $\cH''$ be the hypotheses remaining after the stage. They are contained in a reply of $\Pi_{\cH'}(C)$, so $\spr{\cH''}\leq \br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$.
+The actual number of tests performed in the current stage is at most $\spr{C}$.
+
+For the worst-case bound, let $\cI$ be the input instance and let $D^*$ be an optimal decision tree for $\cI$. At a stage $(\cH',P)$, restrict $D^*$ to $\cH'$ by removing branches inconsistent with $\cH'$. Then contract the nodes corresponding to tests in $P$, whose replies are already known. The resulting tree is feasible for the restricted instance and has depth at most $\OPT\br{\cI}$: the predecessors of each remaining test are either in $P$ or occur earlier on its path. In this tree, repeatedly follow a child containing the largest number of hypotheses until reaching a singleton. Let $t_1,\ldots,t_\ell$ be the tests on the resulting path, where $\ell\leq\OPT\br{\cI}$, and let $L_i$ be the hypotheses reaching $t_i$. Put $L_{\ell+1}$ equal to the singleton reached at the end of the path. Since the path follows a largest reply of $t_i$ on $L_i$ and $C_{t_i}$ contains $t_i$, for each $i\in[\ell]$ we have
+\begin{align*}
+    \spr{L_{i+1}}
+    &=\max_{H\in\Pi_{\cH'}(\brc{t_i})}\spr{H\cap L_i}
+    \geq\spr{L_i}-\br{\spr{\cH'}-\max_{H\in\Pi_{\cH'}(\brc{t_i})}\spr{H}}\\
+    &=\spr{L_i}-\spr{\cH'}\cdot g_{\cH'}(\brc{t_i})
+    \geq\spr{L_i}-\spr{\cH'}\cdot g_{\cH'}(C_{t_i}).
+\end{align*}
+Rearranging gives
+\[
+    \spr{\cH'}\cdot g_{\cH'}(C_{t_i})
+    \geq\spr{L_i}-\spr{L_{i+1}}.
+\]
+Summing over the path gives
+\[
+    \spr{\cH'}\cdot\sum_{i=1}^{\ell}g_{\cH'}(C_{t_i})
+    \geq\sum_{i=1}^{\ell}\br{\spr{L_i}-\spr{L_{i+1}}}
+    =\spr{\cH'}-1.
+\]
+Every test in $C_{t_i}$ occurs on this path no later than $t_i$, so $\spr{C_{t_i}}\leq\ell$ and $\sum_{i=1}^{\ell}\spr{C_{t_i}}\leq\ell^2\leq\OPT\br{\cI}^2$. The greedy choice therefore satisfies
+\[
+    \frac{g_{\cH'}(C)}{\spr{C}}\geq
+    \frac{\sum_{i=1}^{\ell}g_{\cH'}(C_{t_i})}{\sum_{i=1}^{\ell}\spr{C_{t_i}}}
+    \geq\frac{\spr{\cH'}-1}{\spr{\cH'}\cdot\OPT\br{\cI}^2}.
+\]
+For $k\geq1$, let $h_k=\sum_{i=1}^{k}1/i$, and put $h_0=0$. Then
+\begin{align*}
+    \spr{C}
+    &\leq\OPT\br{\cI}^2\cdot\frac{\spr{\cH'}\cdot g_{\cH'}(C)}{\spr{\cH'}-1}
+    \leq\OPT\br{\cI}^2\cdot\frac{\spr{\cH'}-\spr{\cH''}}{\spr{\cH'}-1}\\
+    &\leq\OPT\br{\cI}^2\cdot\sum_{j=\spr{\cH''}}^{\spr{\cH'}-1}\frac1j
+    =\OPT\br{\cI}^2\cdot\br{h_{\spr{\cH'}-1}-h_{\spr{\cH''}-1}}.
+\end{align*}
+The second inequality uses $\spr{\cH''}\leq\br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$, and the third follows by bounding each summand below by $1/(\spr{\cH'}-1)$. Consider the stages on the path in $D$ identifying a hypothesis $h$. Let $C_1,\ldots,C_r$ be the selected closures and let $n_i$ be the number of remaining hypotheses at the beginning of stage $i$, with $n_1=n$ and $n_{r+1}=1$. The number of tests performed in stage $i$ is at most $\spr{C_i}$, so
+\begin{align*}
+    \COST\br{D,h}
+    &\leq\sum_{i=1}^{r}\spr{C_i}
+    \leq\OPT\br{\cI}^2\cdot\sum_{i=1}^{r}\br{h_{n_i-1}-h_{n_{i+1}-1}}
+    =\OPT\br{\cI}^2\cdot h_{n-1}.
+\end{align*}
+Since no test is repeated, the cost is also at most $m$. The approximation ratio is therefore at most
+\[
+    \min\brc{\frac{m}{\OPT\br{\cI}},\,\OPT\br{\cI}\cdot h_{n-1}}
+    \leq\sqrt{m\cdot h_{n-1}}
+    =\bigo\br{\sqrt{m\cdot\log n}}.
+\]
+
+For the average-case bound, it will be convenient to think of the hypothesis identification as a randomized process where the target hypothesis $\target$ is drawn uniformly from $\cH$.
+Let $D^*$ be an optimal decision tree for $\ProblemPCACDT$. Fix a stage history with remaining hypotheses $\cH'$ and completed tests $P$. Conditional on the tests performed and their replies, the target is uniformly distributed on $\cH'$. Restricting $D^*$ in the same way gives a decision tree $D'$ for the restricted instance.
+
+Write $S=\angl{t_1,\ldots,t_\ell}=\sepcoverD{D'}$ for its sepcover, as defined in Section~\ref{sec:AL}. We identify $S$ with the family of its tests when using set operations. By the definition of sepcover, each test node on this path is reached by more than $\spr{\cH'}/2$ hypotheses from $\cH'$, and every reply subtree remaining after removal of the path contains at most $\spr{\cH'}/2$ hypotheses. A reply of $\Pi_{\cH'}(S)$ is contained in one such subtree, determined by the first reply that leaves the path or by the reply to its last test. Thus every reply has size at most $\spr{\cH'}/2$, and $g_{\cH'}(S)\geq 1/2$.
+
+For any families $S_1,S_2\subseteq\cT$, the gain is subadditive: $g_{\cH'}(S_1\cup S_2)\leq g_{\cH'}(S_1)+g_{\cH'}(S_2)$. To see this, let $H_i$ be a largest reply of $\Pi_{\cH'}(S_i)$ for each $i\in[2]$. The intersection $H_1\cap H_2$ is contained in a reply of $\Pi_{\cH'}(S_1\cup S_2)$, and
+\[
+    \spr{H_1\cap H_2}\geq\spr{H_1}+\spr{H_2}-\spr{\cH'}
+    =\spr{\cH'}\cdot\br{1-g_{\cH'}(S_1)-g_{\cH'}(S_2)}.
+\]
+Hence the largest reply of $\Pi_{\cH'}(S_1\cup S_2)$ has at least this size, proving subadditivity. Since $P\cup S$ is precedence-closed, $C_{t_i}\subseteq S$ for each $i\in[\ell]$. These residual closures cover the tests in $S$ and each has size at most $\ell$. Therefore,
+\[
+    \sum_{i=1}^{\ell} g_{\cH'}(C_{t_i})\geq g_{\cH'}(S)\geq\frac12,
+    \qquad
+    \sum_{i=1}^{\ell}\spr{C_{t_i}}\leq\ell^2.
+\]
+The greedy choice satisfies
+\begin{equation}\label{eq:greedy-density}
+    \frac{g_{\cH'}(C)}{\spr{C}}
+    \geq\frac{\sum_{i=1}^{\ell}g_{\cH'}(C_{t_i})}{\sum_{i=1}^{\ell}\spr{C_{t_i}}}
+    \geq\frac{1}{2\cdot\ell^2}.
+\end{equation}
+
+Let $v_1,\ldots,v_\ell$ be the test nodes on the sepcover of $D'$. Restricting $D^*$ does not increase the cost for any hypothesis in $\cH'$, so Observation~\ref{obs:dec-tree-averaging} gives
+\begin{align*}
+    \mathbb{E}\left[\COST\br{D^*,\target}\mid\target\in\cH'\right]
+    &=\frac{1}{\spr{\cH'}}\cdot\sum_{h\in\cH'}\COST\br{D^*,h}
+    \geq\frac{1}{\spr{\cH'}}\cdot\COSTA\br{D'}
+    =\frac{1}{\spr{\cH'}}\cdot\sum_{v\in\inner{D'}}\spr{\cH_v(D')}\\
+    &\geq\frac{1}{\spr{\cH'}}\cdot\sum_{i=1}^{\ell}\spr{\cH_{v_i}(D')}
+    >\frac{\ell}{2}.
+\end{align*}
+The last inequality holds because each test node on the sepcover is reached by more than $\spr{\cH'}/2$ hypotheses from $\cH'$.
+Combining this bound with \eqref{eq:greedy-density} gives
+\begin{equation}\label{eq:greedy-average-density}
+    \spr{C}\leq 2\cdot\ell^2\cdot g_{\cH'}(C)
+    \leq 8\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\target\in\cH'\right]^2
+    \cdot g_{\cH'}(C).
+\end{equation}
+
+Put $\tau=\sqrt{m/(8\cdot\ln n)}$ and index the stages along each path in order. To use a common range of indices for all paths, let $i\in[m]$. If stage $i$ is reached, write $C_i$ for the selected closure, $g_i$ for its gain and $n_i$ for the number of remaining hypotheses at the beginning of the stage. Let $\mathcal{F}_i$ be the information available at this point, including $C_i$, the tests performed and their replies. If the algorithm terminates before stage $i$, retain the final history for $\mathcal{F}_i$ and set $C_i=\emptyset$, $g_i=0$ and $n_i=1$. Put $n_{m+1}=1$.
+
+For each $i\in[m]$, let $B_{i,\tau}$ be the event that stage $i$ is the first reached stage for which
+\begin{equation}\label{eq:greedy-threshold}
+    \mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]>\tau.
+\end{equation}
+Let $B_{\tau}=\bigcup_{i=1}^{m}B_{i,\tau}$ be the event that a reached stage satisfies \eqref{eq:greedy-threshold}. The events $B_{1,\tau},\ldots,B_{m,\tau}$ are disjoint and each $B_{i,\tau}$ is determined by $\mathcal{F}_i$. Using conditional expectation, we obtain
+\begin{align*}
+    \tau\cdot\Pr\br{B_{\tau}}
+    &=\tau\cdot\sum_{i=1}^{m}\Pr\br{B_{i,\tau}}
+    \leq\sum_{i=1}^{m}\mathbb{E}\left[
+        \mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]
+        \cdot\mathbf{1}_{B_{i,\tau}}\right]\\
+    &=\sum_{i=1}^{m}\mathbb{E}\left[\COST\br{D^*,\target}\cdot\mathbf{1}_{B_{i,\tau}}\right]
+    =\mathbb{E}\left[\COST\br{D^*,\target}\cdot\mathbf{1}_{B_{\tau}}\right]
+    \leq\mathbb{E}\left[\COST\br{D^*,\target}\right]
+    =\frac{\COSTA\br{D^*}}{n}.
+\end{align*}
+Thus $\Pr\br{B_{\tau}}\leq\COSTA\br{D^*}/(n\cdot\tau)$. Since at most $m$ tests remain at the first such stage, the expected number of tests performed from that stage onwards, taking this number to be zero if $B_{\tau}$ does not occur, is at most $m\cdot\Pr\br{B_{\tau}}\leq m\cdot\COSTA\br{D^*}/(n\cdot\tau)$.
+
+For each $i\in[m]$, let $I_{i,\tau}$ be the indicator of the event that stage $i$ is reached and $\mathbb{E}[\COST\br{D^*,\target}\mid\mathcal{F}_j]\leq\tau$ for every $j\in[i]$. The variables $I_{i,\tau}$ and $g_i$ are determined by $\mathcal{F}_i$. The bound on $\spr{\cH''}$ also gives
+\begin{equation}\label{eq:greedy-potential}
+    g_{\cH'}(C)
+    \leq 1-\frac{\spr{\cH''}}{\spr{\cH'}}
+    \leq \ln\frac{\spr{\cH'}}{\spr{\cH''}}.
+\end{equation}
+The last inequality follows from $\ln x\leq x-1$ applied to $x=\spr{\cH''}/\spr{\cH'}$. Hence, on every path,
+\[
+    \sum_{i=1}^{m}I_{i,\tau}\cdot g_i
+    \leq\sum_{i=1}^{m}g_i
+    \leq\sum_{i=1}^{m}\ln\frac{n_i}{n_{i+1}}
+    =\ln n.
+\]
+By \eqref{eq:greedy-average-density} and the definition of $I_{i,\tau}$, for each $i\in[m]$ we have
+\[
+    I_{i,\tau}\cdot\spr{C_i}
+    \leq 8\cdot I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]^2\cdot g_i
+    \leq 8\cdot\tau\cdot I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i.
+\]
+Using conditional expectation, the expected cost before the first stage satisfying \eqref{eq:greedy-threshold} is therefore at most
+\begin{align*}
+    \mathbb{E}\left[\sum_{i=1}^{m}I_{i,\tau}\cdot\spr{C_i}\right]
+    &\leq 8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_{i,\tau}\cdot\mathbb{E}\left[\COST\br{D^*,\target}\mid\mathcal{F}_i\right]\cdot g_i\right]
+    =8\cdot\tau\cdot\sum_{i=1}^{m}\mathbb{E}\left[I_{i,\tau}\cdot\COST\br{D^*,\target}\cdot g_i\right]\\
+    &=8\cdot\tau\cdot\mathbb{E}\left[\COST\br{D^*,\target}\cdot\sum_{i=1}^{m}I_{i,\tau}\cdot g_i\right]
+    \leq 8\cdot\tau\cdot\frac{\COSTA\br{D^*}}{n}\cdot\ln n.
+\end{align*}
+The stages counted by $I_{i,\tau}$ precede the first stage satisfying \eqref{eq:greedy-threshold}, and any remaining tests are performed only if $B_{\tau}$ occurs. Combining the bounds for both parts gives
+\begin{align*}
+    \frac{\COSTA\br{D}}{n}
+    &=\mathbb{E}\left[\COST\br{D,\target}\right]
+    \leq\mathbb{E}\left[\sum_{i=1}^{m}I_{i,\tau}\cdot\spr{C_i}\right]
+    +m\cdot\Pr\br{B_{\tau}}
+    \leq 8\cdot\tau\cdot\ln n\cdot\frac{\COSTA\br{D^*}}{n}
+    \\&+\frac{m\cdot\COSTA\br{D^*}}{n\cdot\tau}
+    =\br{8\cdot\tau\cdot\ln n+\frac{m}{\tau}}\cdot\frac{\COSTA\br{D^*}}{n}
+    =2\cdot\sqrt{8\cdot m\cdot\ln n}\cdot\frac{\COSTA\br{D^*}}{n}.
+\end{align*}
+Multiplying by $n$ proves the approximation guarantee for $\ProblemPCACDT$.
+\end{proof}
