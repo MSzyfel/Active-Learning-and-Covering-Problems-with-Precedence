@@ -600,55 +600,55 @@ Let $\pi_{\ell+1}$ be the sequence after the loop. Fix $i\in[\ell]$. Since $\spr
 \[
     \delta_i>\spr{\cov\br{\cCopt}}-\br{1-1/e}\cdot f\cdot n\geq\spr{\cov\br{\cCopt}}/e>0.
 \]
-For each $S\in\cS$, let $D_S=\closure{S}\setminus\pi_i$, $c_S=\spr{D_S}$ and $g_S=\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}$. As in the algorithm, let $\cA=\brc{S\in\cS\colon 1\leq c_S\leq B^*,\ g_S>0}$. For $j\in[B^*]$, let $\mathcal{M}_j$ be the family of $\preceq$-maximal members of $\pref{\cCopt}{j}$. The inforest property gives
+For each $S\in\cS$, let $D_{i,S}=\closure{S}\setminus\pi_i$, $c_{i,S}=\spr{D_{i,S}}$ and $g_{i,S}=\spr{\cov\br{D_{i,S},\cU\setminus\cov\br{\pi_i}}}$. As in the algorithm, let $\cA_i=\brc{S\in\cS\colon 1\leq c_{i,S}\leq B^*,\ g_{i,S}>0}$. For $j\in[B^*]$, let $\mathcal{M}_j$ be the family of $\preceq$-maximal members of $\pref{\cCopt}{j}$. The inforest property gives
 \[
     \pref{\cCopt}{j}=\biguplus_{S\in\mathcal{M}_j}\closure{S},\qquad
-    \sum_{S\in\mathcal{M}_j}c_S
+    \sum_{S\in\mathcal{M}_j}c_{i,S}
     \leq\sum_{S\in\mathcal{M}_j}\spr{\closure{S}}
     =\spr{\pref{\cCopt}{j}}=j.
 \]
 \begin{claim}\label{claim:inforest-pcmssc-coverage}
-In iteration $i$, the family $\cA$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
+In iteration $i$, the family $\cA_i$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{claim}
 \begin{proof}
 For $j=B^*$, we have
 \begin{align*}
-    \sum_{S\in\mathcal{M}_{B^*}}g_S
-    &=\sum_{S\in\mathcal{M}_{B^*}}\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}
-    \geq\spr{\bigcup_{S\in\mathcal{M}_{B^*}}\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}\\
+    \sum_{S\in\mathcal{M}_{B^*}}g_{i,S}
+    &=\sum_{S\in\mathcal{M}_{B^*}}\spr{\cov\br{D_{i,S},\cU\setminus\cov\br{\pi_i}}}
+    \geq\spr{\bigcup_{S\in\mathcal{M}_{B^*}}\cov\br{D_{i,S},\cU\setminus\cov\br{\pi_i}}}\\
     &=\spr{\cov\br{\cCopt}\setminus\cov\br{\pi_i}}\geq\delta_i>0.
 \end{align*}
-Since $c_S\leq B^*$ for each $S\in\mathcal{M}_{B^*}$ and $g_S>0$ requires $c_S\geq1$, this implies $\cA\neq\emptyset$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
+Thus, there exists $S\in\mathcal{M}_{B^*}$ with $g_{i,S}>0$. For this set, $D_{i,S}\neq\emptyset$ and hence $1\leq c_{i,S}\leq B^*$, so $S\in\cA_i$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{proof}
 
-For each $i\in[\ell]$, put $c_i=c_{S_B}$ and $g_i=g_{S_B}$, where $S_B$, $c_{S_B}$ and $g_{S_B}$ are taken from iteration $i$, and set $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
+For each $i\in[\ell]$, let $S_i$ be the set selected in iteration $i$, and put $c_i=c_{i,S_i}$, $g_i=g_{i,S_i}$ and $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
 \[
-    \rho_i=\frac{g_i}{c_i}=\max_{S\in\cA}\frac{g_S}{c_S}.
+    \rho_i=\frac{g_i}{c_i}=\max_{S\in\cA_i}\frac{g_{i,S}}{c_{i,S}}.
 \]
 
-For $j\in\brc{0,\ldots,B^*}$, let $r^*(j)=n-\spr{\cov\br{\pref{\cCopt}{j}}}$ be the number of elements not covered by the first $j$ sets of $\cCopt$, where $\pref{\cCopt}{0}$ is empty.
+For $j\in\brc{0,\ldots,B^*}$, let $r_j^*=n-\spr{\cov\br{\pref{\cCopt}{j}}}$ be the number of elements not covered by the first $j$ sets of $\cCopt$, where $\pref{\cCopt}{0}$ is empty.
 \begin{claim}\label{claim:inforest-pcmssc-density}
 We have $\rho_i\geq\delta_i/B^*$. If $r_i>2\cdot\coverageTime\br{\cCopt}/B^*$, then $\rho_i\geq r_i^2/\br{2\cdot\coverageTime\br{\cCopt}}$.
 \end{claim}
 \begin{proof}
 Since uncovered elements have coverage time $B^*$, the definition of coverage time gives
 \[
-    \coverageTime\br{\cCopt}=\sum_{j=0}^{B^*-1}r^*(j).
+    \coverageTime\br{\cCopt}=\sum_{j=0}^{B^*-1}r_j^*.
 \]
-For each $j\in[B^*]$ and $S\in\mathcal{M}_j$ with $g_S>0$, we have $S\in\cA$ and hence $g_S\leq\rho_i\cdot c_S$. The same inequality holds when $g_S=0$. Thus,
+For each $j\in[B^*]$ and $S\in\mathcal{M}_j$ with $g_{i,S}>0$, we have $S\in\cA_i$ and hence $g_{i,S}\leq\rho_i\cdot c_{i,S}$. The same inequality holds when $g_{i,S}=0$. Thus,
 \begin{align*}
-    r_i-r^*(j)&=\spr{\cov\br{\pref{\cCopt}{j}}}-\spr{\cov\br{\pi_i}}
+    r_i-r_j^*&=\spr{\cov\br{\pref{\cCopt}{j}}}-\spr{\cov\br{\pi_i}}
     \leq\spr{\cov\br{\pref{\cCopt}{j}}\setminus\cov\br{\pi_i}}\\
-    &=\spr{\bigcup_{S\in\mathcal{M}_j}\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}
-    \leq\sum_{S\in\mathcal{M}_j}g_S
-    \leq\rho_i\cdot\sum_{S\in\mathcal{M}_j}c_S\leq\rho_i\cdot j.
+    &=\spr{\bigcup_{S\in\mathcal{M}_j}\cov\br{D_{i,S},\cU\setminus\cov\br{\pi_i}}}
+    \leq\sum_{S\in\mathcal{M}_j}g_{i,S}
+    \leq\rho_i\cdot\sum_{S\in\mathcal{M}_j}c_{i,S}\leq\rho_i\cdot j.
 \end{align*}
-Consequently, since $r^*(0)=n\geq r_i$,
+Consequently, since $r_0^*=n\geq r_i$,
 \[
-    r^*(j)\geq\max\brc{0,r_i-\rho_i\cdot j},\qquad
+    r_j^*\geq\max\brc{0,r_i-\rho_i\cdot j},\qquad
     \rho_i\geq\frac{\delta_i}{B^*}.
 \]
-The last inequality uses $j=B^*$ and $r^*(B^*)=r_i-\delta_i$.
+The last inequality uses $j=B^*$ and $r_{B^*}^*=r_i-\delta_i$.
 Suppose that $r_i>2\cdot \coverageTime\br{\cCopt}/B^*$. If $\rho_i<r_i/B^*$, then
 \[
     \coverageTime\br{\cCopt}\geq\sum_{j=0}^{B^*-1}\br{r_i-\rho_i\cdot j}
@@ -656,12 +656,14 @@ Suppose that $r_i>2\cdot \coverageTime\br{\cCopt}/B^*$. If $\rho_i<r_i/B^*$, the
     \geq\frac{r_i\cdot(B^*+1)}{2}>\frac{r_i\cdot B^*}{2}>\coverageTime\br{\cCopt},
 \]
 a contradiction. Hence $r_i/\rho_i\leq B^*$. Put $h=\cl{r_i/\rho_i}$, so $1\leq h\leq B^*$ and $0\leq h-r_i/\rho_i<1$. Summing over the first $h$ terms gives
-\[
-    \coverageTime\br{\cCopt}\geq\sum_{j=0}^{h-1}\br{r_i-\rho_i\cdot j}
+\begin{align*}
+    \coverageTime\br{\cCopt}&\geq\sum_{j=0}^{h-1}\br{r_i-\rho_i\cdot j}
     =h\cdot r_i-\frac{\rho_i\cdot h\cdot(h-1)}{2}
+    =\frac{\rho_i}{2}\cdot\br{\frac{2\cdot h\cdot r_i}{\rho_i}-h^2+h}\\
+    &=\frac{\rho_i}{2}\cdot\br{\frac{r_i^2}{\rho_i^2}+h-\br{h-\frac{r_i}{\rho_i}}^2}
     =\frac{r_i^2}{2\cdot\rho_i}+\frac{\rho_i}{2}\cdot\br{h-\br{h-\frac{r_i}{\rho_i}}^2}
     \geq\frac{r_i^2}{2\cdot\rho_i}.
-\]
+\end{align*}
 The last inequality uses $h-(h-r_i/\rho_i)^2\geq h-1\geq0$. Therefore $\rho_i\geq\frac{r_i^2}{2\cdot\coverageTime\br{\cCopt}}$.
 \end{proof}
 
@@ -684,7 +686,12 @@ Since $i\in[\ell]$ was arbitrary, Claim~\ref{claim:inforest-pcmssc-density} and 
         c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq\frac{B^*\cdot g_i\cdot r_i}{\delta_i}\leq2\cdot\coverageTime\br{\cCopt}\cdot\frac{g_i}{\delta_i}.
     \]
 \end{enumerate}
-For $i\in[\ell]$ with $i<\ell$, we have $\delta_{i+1}=\delta_i-g_i>0$ and hence
+For $i\in[\ell-1]$, the loop condition gives $\delta_{i+1}>0$, and
+\[
+    \delta_i-\delta_{i+1}=\spr{\cov\br{\pi_{i+1}}}-\spr{\cov\br{\pi_i}}
+    =\spr{\cov\br{D_{i,S_i},\cU\setminus\cov\br{\pi_i}}}=g_i.
+\]
+Hence,
 \[
     \frac{g_i}{\delta_i}=\sum_{j=\delta_{i+1}+1}^{\delta_i}\frac{1}{\delta_i}
     \leq\sum_{j=\delta_{i+1}+1}^{\delta_i}\frac{1}{j}
@@ -693,11 +700,11 @@ For $i\in[\ell]$ with $i<\ell$, we have $\delta_{i+1}=\delta_i-g_i>0$ and hence
 \]
 The second inequality uses $1/j\leq\ln\br{j/(j-1)}$ for $j\geq2$, which follows from $\ln x\leq x-1$ with $x=(j-1)/j$.
 Since $\delta_1=\spr{\cov\br{\cCopt}}$ and $\delta_{\ell}>\delta_1/e$, summing and telescoping yields
-\begin{align*}
-    \sum_{i=1}^{\ell-1}c_i\cdot r_i&\leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\frac{g_i}{\delta_i}
-    \leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\ln\br{\frac{\delta_i}{\delta_{i+1}}}\\
-    &=2\cdot\coverageTime\br{\cCopt}\cdot\ln\br{\frac{\delta_1}{\delta_{\ell}}}<2\cdot\coverageTime\br{\cCopt}.
-\end{align*}
+\[
+    \coverageTime\br{\pi_{\ell}}\leq\sum_{i=1}^{\ell-1}c_i\cdot r_i\leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\frac{g_i}{\delta_i}
+    \leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\ln\br{\frac{\delta_i}{\delta_{i+1}}}
+    =2\cdot\coverageTime\br{\cCopt}\cdot\ln\br{\frac{\delta_1}{\delta_{\ell}}}<2\cdot\coverageTime\br{\cCopt}.
+\]
 For the final iteration, Claim~\ref{claim:inforest-pcmssc-density} gives the following two cases:
 \begin{enumerate}
     \item If $r_{\ell}>2\cdot\coverageTime\br{\cCopt}/B^*$, then $g_{\ell}\leq r_{\ell}$ gives
