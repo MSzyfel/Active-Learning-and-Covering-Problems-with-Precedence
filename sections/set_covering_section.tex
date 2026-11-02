@@ -2,9 +2,9 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-We obtain approximation guarantees for our covering tasks using the \textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$) problem. We first give an algorithm for $\ProblemPRBSC$ and reduce $\ProblemPCSC$ to it. We then introduce a budgeted variant, obtain an approximation for it using $\ProblemPCSC$, and use it to approximate $\ProblemPCMSSC$. Although approximation algorithms for $\ProblemPRBSC$ are already known, we give an algorithm with an improved approximation ratio.
+We obtain approximation guarantees for our covering tasks using the \textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$) problem. We first give an algorithm for $\ProblemPRBSC$ and reduce $\ProblemPCSC$ to it. We then introduce a budgeted variant, obtain an approximation for it using $\ProblemPCSC$, and use it to approximate $\ProblemPCMSSC$. Although approximation algorithms for $\ProblemPRBSC$ are already known, we give an algorithm with an improved approximation ratio.
 
-\begin{problem}[\textsc{Partial Red-Blue Set Cover} ($\ProblemPRBSC$)] \label{problem:PRBSC}
+\begin{problem}[\textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$)] \label{problem:PRBSC}
 Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cS$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cS'\subseteq\cS$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cS',\cR}}$.
 \end{problem}
 
@@ -51,7 +51,7 @@ For the correct guess $K=\OPT$, the above system is a polynomial-size relaxation
 Let $\cS^*\subseteq\cS$ be an optimal solution, with $\spr{\cov\br{\cS^*,\cB}}\geq t$ and $\spr{\cov\br{\cS^*,\cR}}=\OPT=K$. Choose $\cB^*\subseteq\cov\br{\cS^*,\cB}$ with $\spr{\cB^*}=t$ and, for each $u\in\cB^*$, choose a set $S_u\in\cS^*$ containing $u$. Define
 \[
  x_S=\boldsymbol{1}_{S\in\cS^*},\qquad
- y_r=\boldsymbol{1}_{r\in\cov\br{\cS^*,\cR}},\qquad
+ y_r=\boldsymbol{1}_{r\in\cov\br{\cS^*}},\qquad
  z_u=\boldsymbol{1}_{u\in\cB^*},\qquad
  y_{r,q}=y_r\cdot y_q.
 \]
@@ -68,7 +68,7 @@ For the smallest feasible guess $K\leq \OPT$ fix a feasible solution and put
 \[
  T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_S=\cR_S\setminus \cR_+, \textup{ for }S\in\cS.
 \]
-We call $\cR'_S$ the \emph{residual red part} of $S$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cS_0=\brc{S\in\cS\colon \cR'_S=\emptyset}$. Its red coverage satisfies $\cov\br{\cS_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cS_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cS_0,\cB}}\geq t/8$, retain $\cS_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cS_0,\cB}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cS_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_S$ the \emph{residual red part} of $S$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cS_0=\brc{S\in\cS\colon \cR'_S=\emptyset}$. Its red coverage satisfies $\cov\br{\cS_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cS_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cS_0,\cB}}\geq t/8$, retain $\cS_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cS_0}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cS_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
@@ -316,7 +316,7 @@ Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim
  >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot T}{360\cdot K\cdot T}-\frac{t}{8}
  =0.
 \]
-If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cS',\cB}$, we have $\spr{\cov\br{\cS',\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
+If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cS'}$, we have $\spr{\cov\br{\cS',\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
 \[
  \frac{7\cdot t\cdot R}{360\cdot K\cdot T}
  \leq Y-\frac{W^2}{72\cdot t}-\frac{t}{8}
@@ -421,8 +421,8 @@ Combine Theorem~\ref{thm:PCSC-RBSC} with Theorem~\ref{thm:PCSC-to-PCWCDT}.
 
 \subsection{\texorpdfstring{$\ProblemPCMSSC$ via $\ProblemBPCSC$}{PCMSSC via B-PCSC}} \label{subsection:PCMSSC}
 We introduce a budgeted variant of precedence-constrained set cover.
-\begin{problem}[\textsc{Budgeted Precedence Constrained Set Cover} ($\ProblemBPCSC$)] \label{problem:BPCSC}
-Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC,\cU}}$ and satisfies $\spr{\cC}\leq \budget$.
+\begin{problem}[\textup{\textsc{Budgeted Precedence Constrained Set Cover}} ($\ProblemBPCSC$)] \label{problem:BPCSC}
+Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC}}$ and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 
 An approximation for $\ProblemPCSC$ gives the same bicriteria guarantee for $\ProblemBPCSC$ by guessing the fraction of elements covered by an optimal budgeted solution.
@@ -430,11 +430,11 @@ An approximation for $\ProblemPCSC$ gives the same bicriteria guarantee for $\Pr
 If there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$, then there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemBPCSC$. In particular, there approximations are $\br{\bigo\br{m^{1/3}\cdot\log n},1}$ and $\br{\bigo\br{m^{1/3}},8}$.
 \end{theorem}
 \begin{proof}
-For each integer $t\in[\spr{\cov\br{\cS,\cU}}]$, run the $\ProblemPCSC$ algorithm with target fraction $f=t/n$. Among the resulting families of size at most $\alpha\cdot\budget$ and the empty family, return one with maximum coverage.
-Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt,\cU}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
+For each integer $t\in[\spr{\cov\br{\cS}}]$, run the $\ProblemPCSC$ algorithm with target fraction $f=t/n$. Among the resulting families of size at most $\alpha\cdot\budget$ and the empty family, return one with maximum coverage.
+Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
 \end{proof}
 
-We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textsc{Minimum Latency TSP}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textsc{Adaptive TSP}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition is not exact and is not used directly in the procedure or its analysis.
+We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving problems regarding \textup{\textsc{Minimum Latency TSP}}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textup{\textsc{Adaptive TSP}}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is that one can treat appending sets to the covering sequence as a kind of tour on a DAG induced by the precedence constraints, and the cost of covering an element as a latency of `visiting' that element. This intuition is not exact and is not used directly in the procedure or its analysis.
 
 Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta+1}{3\cdot\beta-1}$, so $1<a\leq 2$.
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
@@ -445,7 +445,7 @@ We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
 Each family returned by $\ProblemBPCSC$ is precedence-closed, so the family $P_l$ of sets already appended is also precedence-closed. When a family is appended, only sets outside $P_l$ are used and they are ordered by $\operatorname{ord}$. Every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets. In the analysis, $\pi_l$ denotes the padded prefix before the final family is appended.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
     \begin{lemma}\label{lem:pi-spread-cost}
-        We have that $\spr{\pi_{l^*}} = \bigo\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$, and if $\spr{\pi_{l^*}}<m$, then $\spr{\pi_{l^*}}=\Omega\br{\alpha\cdot\beta}\cdot\spr{\cCopt}$. Moreover, $\coverageTime\br{\pi_{l^*},\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        We have that $\spr{\pi_{l^*}} = \bigo\br{\alpha \cdot \beta}\cdot \spr{\cCopt}$, and if $\spr{\pi_{l^*}}<m$, then $\spr{\pi_{l^*}}=\Omega\br{\alpha\cdot\beta}\cdot\spr{\cCopt}$. Moreover, $\coverageTime\br{\pi_{l^*}} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt}$.
     \end{lemma}
     \begin{proof}
         We observe that since we used an $\br{\alpha, \beta}$-approximation algorithm for $\ProblemBPCSC$ in each iteration of the inner for loop, we have that for each $1\leq i\leq l^*$, $\spr{\tau_{l^*}^i} \leq \alpha \cdot a^{i+1}$. Thus, the length after padding satisfies:
@@ -456,7 +456,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
 
         For every $i\in [l^*]$, let $\ell_i=\min\brc{\spr{\cCopt},\fl{a^i}}$ and $n_i^*=\spr{\cov\br{\pref{\cCopt}{\ell_i}}}$, so $n_{l^*}^* = \spr{\cov\br{\cCopt}}$. Let $n_i=\spr{\cov\br{\bigcup_{j=1}^{i}\tau_{l^*}^j}}$ and $n_0=n_0^*=0$. We have:
         \begin{align*}
-            &\coverageTime\br{\pi_{l^*},\cU}\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
+            &\coverageTime\br{\pi_{l^*}}\leq \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \sum_{j=1}^{i}\alpha\cdot a^{j+1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&\leq
             \sum_{i=1}^{l^*}\br{n_i-n_{i-1}}\cdot \frac{\alpha\cdot a^{i+2}}{a-1} + \br{n-n_{l^*}}\cdot \spr{\pi_{l^*}}
             \\&=
@@ -466,7 +466,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         Here $Q$ denotes the last sum, and the last inequality follows from \eqref{eq:pi}.
         Moreover, we have that:
         \begin{align*}
-            &2\cdot\coverageTime\br{\cCopt,\cU}\geq a^{l^*-1}\cdot\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\cdot\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\cCopt}
+            &2\cdot\coverageTime\br{\cCopt}\geq a^{l^*-1}\cdot\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\cdot\br{n_i^*-n_{i-1}^*}+\br{n-n_{l^*}^*}\cdot\spr{\cCopt}
             \\&\geq
         a^{l^*-1}\cdot\br{n-n_{l^*-1}^*}+ \sum_{i=1}^{l^*-1}a^{i-1}\cdot\br{\br{n-n_{i-1}^*}-\br{n-n_{i}^*}}+\br{n-n_{l^*}^*}\cdot a^{l^*-1}
             \\&=
@@ -484,14 +484,14 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
             \sum_{i=0}^{l^*}a^{i+3}\cdot \br{n-n_i} \leq
             a^3\cdot n + \frac{1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_i^*} + \frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&\leq
-            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
+            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt}+\frac{\beta-1}{\beta}\cdot\sum_{i=1}^{l^*}a^{i+3}\cdot \br{n-n_{i-1}}
             \\&=
-            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}} \leq
-            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt,\cU}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
+            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\sum_{i=0}^{l^*-1}a^{i+3}\cdot \br{n-n_{i}} \leq
+            \frac{2\cdot a^4}{a-1}\cdot\coverageTime\br{\cCopt}+\frac{\br{\beta-1}\cdot a}{\beta}\cdot\br{a-1}\cdot\frac{Q}{\alpha}.
         \end{align*}
         Rearranging and substituting $a=(3\cdot\beta+1)/(3\cdot\beta-1)$ gives
         \begin{align*}
-            \frac{Q}{\alpha\cdot\coverageTime\br{\cCopt,\cU}}
+            \frac{Q}{\alpha\cdot\coverageTime\br{\cCopt}}
             &\leq \frac{2\cdot a^4}{(a-1)^2\cdot\br{1-\frac{(\beta-1)\cdot a}{\beta}}}
             =\frac{\beta\cdot(3\cdot\beta+1)^4}{2\cdot(\beta+1)\cdot(3\cdot\beta-1)}
             =\bigo\br{\beta^3}.
@@ -500,7 +500,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
         The lemma follows.
     \end{proof}
 
-    If $\spr{\pi_{l^*}}=m$, then $\pi_{l^*}$ contains every set in $\cS$, and thus covers every element covered by $\cCopt$. The candidate is feasible and its latency is bounded by Lemma~\ref{lem:pi-spread-cost}. Otherwise, let $P_{l^*}$ be the family of sets in $\pi_{l^*}$, let $\cR_{l^*}=\cU\setminus\cov\br{P_{l^*}}$, and let $r=\spr{\cov\br{P_{l^*},\cU}}$.
+    If $\spr{\pi_{l^*}}=m$, then $\pi_{l^*}$ contains every set in $\cS$, and thus covers every element covered by $\cCopt$. The candidate is feasible and its latency is bounded by Lemma~\ref{lem:pi-spread-cost}. Otherwise, let $P_{l^*}$ be the family of sets in $\pi_{l^*}$, let $\cR_{l^*}=\cU\setminus\cov\br{P_{l^*}}$, and let $r=\spr{\cov\br{P_{l^*}}}$.
     \begin{lemma}\label{lem:sigma-coverage}
         We have that $\spr{\cov\br{\sigma_{l^*},\cR_{l^*}}} \geq \frac{\max\brc{0,f\cdot n-r}}{\beta}$ and $\spr{\sigma_{l^*}} = \bigo\br{\alpha}\cdot \spr{\cCopt}$.
     \end{lemma}
@@ -509,23 +509,23 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
     \end{proof}
     Let $\pi_{l^*}^+=\pi_{l^*}\circ\operatorname{ord}\br{\sigma_{l^*}\setminus P_{l^*}}$ denote the sequence obtained by appending only the final solution's new sets.
     \begin{lemma}\label{lem:combined-coverage-cost}
-        We have that $\spr{\cov\br{\pi_{l^*}^+,\cU}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*}^+,\cU} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}$.
+        We have that $\spr{\cov\br{\pi_{l^*}^+}}\geq \frac{f\cdot n}{\beta}$ and $\coverageTime\br{\pi_{l^*}^+} = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt}$.
     \end{lemma}
     \begin{proof}
         By Lemma~\ref{lem:sigma-coverage}, the prefix and the final solution together cover at least $r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}$ elements. Here the residual coverage from $\sigma_{l^*}$ is disjoint from the prefix coverage by definition of $\cR_{l^*}$.
         For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise set $t_u=\spr{\pi_{l^*}}$.
         Lemma \ref{lem:pi-spread-cost} implies that 
         \[
-        \coverageTime\br{\pi_{l^*},\cU}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt,\cU}.
+        \coverageTime\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt}.
         \]
         Observe, that for each $u\in\cov\br{\pi_{l^*}}$, its coverage time in $\pi_{l^*}^+$ is also $t_u$.
         For each $u\notin\cov\br{\pi_{l^*}}$, we have $t_u=\spr{\pi_{l^*}}$. Since this case has $\spr{\pi_{l^*}}<m$, the padding guarantee gives $\spr{\pi_{l^*}}\geq\alpha\cdot\beta\cdot a^{l^*}$. The appended suffix contains at most $\spr{\sigma_{l^*}}\leq\alpha\cdot a^{l^*}\leq\spr{\pi_{l^*}}/\beta$ new sets. Thus the coverage time of $u$ in $\pi_{l^*}^+$ is at most $(1+1/\beta)\cdot t_u$.
         The explicit bound in the proof of Lemma~\ref{lem:pi-spread-cost} therefore gives
         \[
-        \coverageTime\br{\pi_{l^*}^+,\cU}
-        \leq\br{1+\frac{1}{\beta}}\cdot\coverageTime\br{\pi_{l^*},\cU}
-        \leq\frac{\alpha\cdot(3\cdot\beta+1)^4}{2\cdot(3\cdot\beta-1)}\cdot\coverageTime\br{\cCopt,\cU}
-        =\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt,\cU}.
+        \coverageTime\br{\pi_{l^*}^+}
+        \leq\br{1+\frac{1}{\beta}}\cdot\coverageTime\br{\pi_{l^*}}
+        \leq\frac{\alpha\cdot(3\cdot\beta+1)^4}{2\cdot(3\cdot\beta-1)}\cdot\coverageTime\br{\cCopt}
+        =\bigo\br{\alpha\cdot\beta^3}\cdot\coverageTime\br{\cCopt}.
         \]
     \end{proof}
 Since $\log a=\Theta(1/\beta)$, Algorithm~\ref{alg:fPCMSSC} makes $\bigo((1+\beta\log(m+1))^2)$ calls to the budgeted algorithm. Its running time is therefore polynomial whenever $\beta$ is polynomially bounded in the input size. All applications below use constant $\beta$.
@@ -544,10 +544,10 @@ Combine the budgeted guarantee in Theorem~\ref{thm:PCSC-to-BPCSC} with Theorems~
 \end{proof}
 
 \subsection{Special cases of precedence constraints} \label{subsection:SpecialCases}
-In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a family $\cS$ of subsets of $\cU$, each with a cost $c(S)\geq0$, and a budget $\budget>0$. The goal is to maximize $\spr{\cov\br{\cS',\cU}}$ over subfamilies $\cS'\subseteq\cS$ with $\sum_{S\in\cS'}c(S)\leq\budget$.
+In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a family $\cS$ of subsets of $\cU$, each with a cost $c(S)\geq0$, and a budget $\budget>0$. The goal is to maximize $\spr{\cov\br{\cS'}}$ over subfamilies $\cS'\subseteq\cS$ with $\sum_{S\in\cS'}c(S)\leq\budget$.
 
 \begin{theorem}[Khuller, Moss and Naor \cite{TheBudgetedMaximumCoverageProblem}]\label{thm:budgeted-maximum-coverage-source}
-    There is a polynomial-time algorithm for \textsc{Budgeted Maximum Coverage} that respects the budget and covers at least a $(1-1/e)$-fraction of the maximum number of elements coverable within that budget.
+    There exists a polynomial-time $(1-1/e)$-approximation algorithm for \textsc{Budgeted Maximum Coverage}.
 \end{theorem}
 
 \begin{theorem}\label{thm:BPCSC-inforest}
@@ -560,7 +560,7 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
     Given a $\ProblemBPCSC$ instance $(\cU,\cS,\preceq,\budget)$, construct a \textsc{Budgeted Maximum Coverage} instance with universe $\cU$ and budget $\budget$. For each $S\in\cS$, create a set $C_S=\cov\br{\closure{S}}$ with cost $c(C_S)=\spr{\closure{S}}$, and put $\cS'=\brc{C_S\colon S\in\cS}$.
     For any selected family $\cA\subseteq\cS'$, define $\cC=\bigcup_{C_S\in\cA}\closure{S}$. This family is precedence-closed and satisfies
     \[
-        \cov\br{\cC,\cU}=\cov\br{\cA}
+        \cov\br{\cC}=\cov\br{\cA}
         \qquad\text{and}\qquad
         \spr{\cC}\leq\sum_{T\in\cA}c(T).
     \]
@@ -568,7 +568,7 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
     \[
         \cC=\biguplus_{S\in\mathcal{M}}\closure{S}
         \qquad\text{and}\qquad
-        \cov\br{\cA_{\cC}}=\cov\br{\cC,\cU}.
+        \cov\br{\cA_{\cC}}=\cov\br{\cC}.
     \]
     By the definition of the costs,
     \[
@@ -577,10 +577,11 @@ In \textsc{Budgeted Maximum Coverage}, the input consists of a universe $\cU$, a
     \]
     The maximum coverage attainable within budget $\budget$ is therefore the same in both instances, which gives the $\ProblemBPCSC$ guarantee.
 
-For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements among the outputs and the empty family. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
+For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $(1-1/e)\cdot f\cdot n$ elements among the outputs and the empty family.
+%  Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size at most $\spr{\cCopt}$.
 \end{proof}
 
-The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using Algorithm~\ref{alg:inforest-fPCMSSC}. The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
+The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure. The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
 
 In the algorithm and its analysis, we identify a sequence with its family of sets when using set operations.
 \input{pseudocodes/inforest_f_PCMSSC.tex}
@@ -589,18 +590,17 @@ In the algorithm and its analysis, we identify a sequence with its family of set
     There exists a polynomial-time bicriteria $\br{4,\frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
 \end{corollary}
 \begin{proof}
-Each sequence constructed by Algorithm~\ref{alg:inforest-fPCMSSC} respects the precedence constraints: initially $\pi$ is empty, and for each selected $S\in\cS$, the family $\pi\cup D_S=\pi\cup\closure{S}$, where $D_S=\closure{S}\setminus\pi$, is precedence-closed whenever $\pi$ is, while $D_S$ is appended in topological order.
-
-Let $\cCopt$ be an optimal solution with $\spr{\cCopt}>0$ and no repeated sets; deleting repeated sets preserves precedence and coverage and does not increase coverage time. Put $B^*=\spr{\cCopt}$. We analyze the guess $B=B^*$ and let $\ell$ be the number of iterations of its while loop. For each $i\in[\ell]$, let $\pi_i$ be the sequence at the start of iteration $i$ and put
+Consider sequences constructed by Algorithm~\ref{alg:inforest-fPCMSSC} as cnadidate solutions. Each of them respects the precedence constraints: initially $\pi$ is empty, and for each selected $S\in\cS$, the family $\pi\cup D_S=\pi\cup\closure{S}$, where $D_S=\closure{S}\setminus\pi$, is precedence-closed whenever $\pi$ is, while $D_S$ is appended in topological order.
+Let $\cCopt$ be an optimal solution and put $B^*=\spr{\cCopt}$. We analyze the guess $B=B^*$ and let $\ell$ be the number of iterations of its while loop. For each $i\in[\ell]$, let $\pi_i$ be the sequence at the start of iteration $i$ and put
 \[
-    r_i=n-\spr{\cov\br{\pi_i,\cU}},\qquad
-    \delta_i=\spr{\cov\br{\cCopt,\cU}}-\spr{\cov\br{\pi_i,\cU}}.
+    r_i=n-\spr{\cov\br{\pi_i}},\qquad
+    \delta_i=\spr{\cov\br{\cCopt}}-\spr{\cov\br{\pi_i}}.
 \]
-Let $\pi_{\ell+1}$ be the sequence after the loop. Fix $i\in[\ell]$. Since $\spr{\cov\br{\cCopt,\cU}}\geq f\cdot n$, we have
+Let $\pi_{\ell+1}$ be the sequence after the loop. Fix $i\in[\ell]$. Since $\spr{\cov\br{\cCopt}}\geq f\cdot n$, we have
 \[
-    \delta_i>\spr{\cov\br{\cCopt,\cU}}-\br{1-1/e}\cdot f\cdot n\geq\spr{\cov\br{\cCopt,\cU}}/e>0.
+    \delta_i>\spr{\cov\br{\cCopt}}-\br{1-1/e}\cdot f\cdot n\geq\spr{\cov\br{\cCopt}}/e>0.
 \]
-For each $S\in\cS$, let $D_S=\closure{S}\setminus\pi_i$, $c_S=\spr{D_S}$ and $g_S=\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}$. As in the algorithm, let $\cA=\brc{S\in\cS\colon 1\leq c_S\leq B^*,\ g_S>0}$. For $j\in[B^*]$, let $\mathcal{M}_j$ be the family of $\preceq$-maximal members of $\pref{\cCopt}{j}$. The inforest property gives
+For each $S\in\cS$, let $D_S=\closure{S}\setminus\pi_i$, $c_S=\spr{D_S}$ and $g_S=\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}$. As in the algorithm, let $\cA=\brc{S\in\cS\colon 1\leq c_S\leq B^*,\ g_S>0}$. For $j\in[B^*]$, let $\mathcal{M}_j$ be the family of $\preceq$-maximal members of $\pref{\cCopt}{j}$. The inforest property gives
 \[
     \pref{\cCopt}{j}=\biguplus_{S\in\mathcal{M}_j}\closure{S},\qquad
     \sum_{S\in\mathcal{M}_j}c_S
@@ -608,17 +608,17 @@ For each $S\in\cS$, let $D_S=\closure{S}\setminus\pi_i$, $c_S=\spr{D_S}$ and $g_
     =\spr{\pref{\cCopt}{j}}=j.
 \]
 \begin{claim}\label{claim:inforest-pcmssc-coverage}
-In iteration $i$, the family $\cA$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1},\cU}}\geq(1-1/e)\cdot f\cdot n$.
+In iteration $i$, the family $\cA$ is nonempty. Moreover, $\pi_{\ell+1}\in\cQ$ satisfies $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{claim}
 \begin{proof}
 For $j=B^*$, we have
 \begin{align*}
     \sum_{S\in\mathcal{M}_{B^*}}g_S
-    &=\sum_{S\in\mathcal{M}_{B^*}}\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}
-    \geq\spr{\bigcup_{S\in\mathcal{M}_{B^*}}\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}\\
-    &=\spr{\cov\br{\cCopt,\cU}\setminus\cov\br{\pi_i,\cU}}\geq\delta_i>0.
+    &=\sum_{S\in\mathcal{M}_{B^*}}\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}
+    \geq\spr{\bigcup_{S\in\mathcal{M}_{B^*}}\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}\\
+    &=\spr{\cov\br{\cCopt}\setminus\cov\br{\pi_i}}\geq\delta_i>0.
 \end{align*}
-Since $c_S\leq B^*$ for each $S\in\mathcal{M}_{B^*}$ and $g_S>0$ requires $c_S\geq1$, this implies $\cA\neq\emptyset$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1},\cU}}\geq(1-1/e)\cdot f\cdot n$.
+Since $c_S\leq B^*$ for each $S\in\mathcal{M}_{B^*}$ and $g_S>0$ requires $c_S\geq1$, this implies $\cA\neq\emptyset$. As $i\in[\ell]$ was arbitrary, each iteration appends at least one set, so the algorithm reaches the coverage threshold for this guess. Thus $\pi_{\ell+1}\in\cQ$ and $\spr{\cov\br{\pi_{\ell+1}}}\geq(1-1/e)\cdot f\cdot n$.
 \end{proof}
 
 For each $i\in[\ell]$, put $c_i=c_{S_B}$ and $g_i=g_{S_B}$, where $S_B$, $c_{S_B}$ and $g_{S_B}$ are taken from iteration $i$, and set $\rho_i=g_i/c_i$. For the fixed iteration $i$, we have
@@ -626,20 +626,20 @@ For each $i\in[\ell]$, put $c_i=c_{S_B}$ and $g_i=g_{S_B}$, where $S_B$, $c_{S_B
     \rho_i=\frac{g_i}{c_i}=\max_{S\in\cA}\frac{g_S}{c_S}.
 \]
 
-For $j\in\brc{0,\ldots,B^*}$, let $r^*(j)=n-\spr{\cov\br{\pref{\cCopt}{j},\cU}}$ be the number of elements not covered by the first $j$ sets of $\cCopt$, where $\pref{\cCopt}{0}$ is empty.
+For $j\in\brc{0,\ldots,B^*}$, let $r^*(j)=n-\spr{\cov\br{\pref{\cCopt}{j}}}$ be the number of elements not covered by the first $j$ sets of $\cCopt$, where $\pref{\cCopt}{0}$ is empty.
 \begin{claim}\label{claim:inforest-pcmssc-density}
-We have $\rho_i\geq\delta_i/B^*$. If $r_i>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $\rho_i\geq r_i^2/\br{2\cdot\coverageTime\br{\cCopt,\cU}}$.
+We have $\rho_i\geq\delta_i/B^*$. If $r_i>2\cdot\coverageTime\br{\cCopt}/B^*$, then $\rho_i\geq r_i^2/\br{2\cdot\coverageTime\br{\cCopt}}$.
 \end{claim}
 \begin{proof}
 Since uncovered elements have coverage time $B^*$, the definition of coverage time gives
 \[
-    \coverageTime\br{\cCopt,\cU}=\sum_{j=0}^{B^*-1}r^*(j).
+    \coverageTime\br{\cCopt}=\sum_{j=0}^{B^*-1}r^*(j).
 \]
 For each $j\in[B^*]$ and $S\in\mathcal{M}_j$ with $g_S>0$, we have $S\in\cA$ and hence $g_S\leq\rho_i\cdot c_S$. The same inequality holds when $g_S=0$. Thus,
 \begin{align*}
-    r_i-r^*(j)&=\spr{\cov\br{\pref{\cCopt}{j},\cU}}-\spr{\cov\br{\pi_i,\cU}}
-    \leq\spr{\cov\br{\pref{\cCopt}{j},\cU}\setminus\cov\br{\pi_i,\cU}}\\
-    &=\spr{\bigcup_{S\in\mathcal{M}_j}\cov\br{D_S,\cU\setminus\cov\br{\pi_i,\cU}}}
+    r_i-r^*(j)&=\spr{\cov\br{\pref{\cCopt}{j}}}-\spr{\cov\br{\pi_i}}
+    \leq\spr{\cov\br{\pref{\cCopt}{j}}\setminus\cov\br{\pi_i}}\\
+    &=\spr{\bigcup_{S\in\mathcal{M}_j}\cov\br{D_S,\cU\setminus\cov\br{\pi_i}}}
     \leq\sum_{S\in\mathcal{M}_j}g_S
     \leq\rho_i\cdot\sum_{S\in\mathcal{M}_j}c_S\leq\rho_i\cdot j.
 \end{align*}
@@ -649,39 +649,39 @@ Consequently, since $r^*(0)=n\geq r_i$,
     \rho_i\geq\frac{\delta_i}{B^*}.
 \]
 The last inequality uses $j=B^*$ and $r^*(B^*)=r_i-\delta_i$.
-Suppose that $r_i>2\cdot \coverageTime\br{\cCopt,\cU}/B^*$. If $\rho_i<r_i/B^*$, then
+Suppose that $r_i>2\cdot \coverageTime\br{\cCopt}/B^*$. If $\rho_i<r_i/B^*$, then
 \[
-    \coverageTime\br{\cCopt,\cU}\geq\sum_{j=0}^{B^*-1}\br{r_i-\rho_i\cdot j}
+    \coverageTime\br{\cCopt}\geq\sum_{j=0}^{B^*-1}\br{r_i-\rho_i\cdot j}
     =r_i\cdot B^*-\frac{\rho_i\cdot B^*\cdot(B^*-1)}{2}
-    \geq\frac{r_i\cdot(B^*+1)}{2}>\frac{r_i\cdot B^*}{2}>\coverageTime\br{\cCopt,\cU},
+    \geq\frac{r_i\cdot(B^*+1)}{2}>\frac{r_i\cdot B^*}{2}>\coverageTime\br{\cCopt},
 \]
 a contradiction. Hence $r_i/\rho_i\leq B^*$. Put $h=\cl{r_i/\rho_i}$, so $1\leq h\leq B^*$ and $0\leq h-r_i/\rho_i<1$. Summing over the first $h$ terms gives
 \[
-    \coverageTime\br{\cCopt,\cU}\geq\sum_{j=0}^{h-1}\br{r_i-\rho_i\cdot j}
+    \coverageTime\br{\cCopt}\geq\sum_{j=0}^{h-1}\br{r_i-\rho_i\cdot j}
     =h\cdot r_i-\frac{\rho_i\cdot h\cdot(h-1)}{2}
     =\frac{r_i^2}{2\cdot\rho_i}+\frac{\rho_i}{2}\cdot\br{h-\br{h-\frac{r_i}{\rho_i}}^2}
     \geq\frac{r_i^2}{2\cdot\rho_i}.
 \]
-The last inequality uses $h-(h-r_i/\rho_i)^2\geq h-1\geq0$. Therefore $\rho_i\geq\frac{r_i^2}{2\cdot\coverageTime\br{\cCopt,\cU}}$.
+The last inequality uses $h-(h-r_i/\rho_i)^2\geq h-1\geq0$. Therefore $\rho_i\geq\frac{r_i^2}{2\cdot\coverageTime\br{\cCopt}}$.
 \end{proof}
 
 \begin{claim}\label{claim:inforest-pcmssc-cost}
-We have $\coverageTime\br{\pi_{\ell+1},\cU}<4\cdot\coverageTime\br{\cCopt,\cU}$.
+We have $\coverageTime\br{\pi_{\ell+1}}<4\cdot\coverageTime\br{\cCopt}$.
 \end{claim}
 \begin{proof}
 Each element uncovered before iteration $i$ contributes at most $c_i$ to its coverage time during that iteration, and hence
 \[
-    \coverageTime\br{\pi_{\ell+1},\cU}\leq\sum_{i=1}^{\ell} c_i\cdot r_i.
+    \coverageTime\br{\pi_{\ell+1}}\leq\sum_{i=1}^{\ell} c_i\cdot r_i.
 \]
-Since $i\in[\ell]$ was arbitrary, Claim~\ref{claim:inforest-pcmssc-density} and $r_i-\delta_i=n-\spr{\cov\br{\cCopt,\cU}}\geq0$ give, for every $i\in[\ell]$:
+Since $i\in[\ell]$ was arbitrary, Claim~\ref{claim:inforest-pcmssc-density} and $r_i-\delta_i=n-\spr{\cov\br{\cCopt}}\geq0$ give, for every $i\in[\ell]$:
 \begin{enumerate}
-    \item If $r_i>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then
+    \item If $r_i>2\cdot\coverageTime\br{\cCopt}/B^*$, then
     \[
-        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{r_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{\delta_i}.
+        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq2\cdot\coverageTime\br{\cCopt}\cdot\frac{g_i}{r_i}\leq2\cdot\coverageTime\br{\cCopt}\cdot\frac{g_i}{\delta_i}.
     \]
-    \item If $r_i\leq2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then
+    \item If $r_i\leq2\cdot\coverageTime\br{\cCopt}/B^*$, then
     \[
-        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq\frac{B^*\cdot g_i\cdot r_i}{\delta_i}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_i}{\delta_i}.
+        c_i\cdot r_i=\frac{g_i\cdot r_i}{\rho_i}\leq\frac{B^*\cdot g_i\cdot r_i}{\delta_i}\leq2\cdot\coverageTime\br{\cCopt}\cdot\frac{g_i}{\delta_i}.
     \]
 \end{enumerate}
 For $i\in[\ell]$ with $i<\ell$, we have $\delta_{i+1}=\delta_i-g_i>0$ and hence
@@ -692,21 +692,21 @@ For $i\in[\ell]$ with $i<\ell$, we have $\delta_{i+1}=\delta_i-g_i>0$ and hence
     =\ln\br{\frac{\delta_i}{\delta_{i+1}}}.
 \]
 The second inequality uses $1/j\leq\ln\br{j/(j-1)}$ for $j\geq2$, which follows from $\ln x\leq x-1$ with $x=(j-1)/j$.
-Since $\delta_1=\spr{\cov\br{\cCopt,\cU}}$ and $\delta_{\ell}>\delta_1/e$, summing and telescoping yields
+Since $\delta_1=\spr{\cov\br{\cCopt}}$ and $\delta_{\ell}>\delta_1/e$, summing and telescoping yields
 \begin{align*}
-    \sum_{i=1}^{\ell-1}c_i\cdot r_i&\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\sum_{i=1}^{\ell-1}\frac{g_i}{\delta_i}
-    \leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\sum_{i=1}^{\ell-1}\ln\br{\frac{\delta_i}{\delta_{i+1}}}\\
-    &=2\cdot\coverageTime\br{\cCopt,\cU}\cdot\ln\br{\frac{\delta_1}{\delta_{\ell}}}<2\cdot\coverageTime\br{\cCopt,\cU}.
+    \sum_{i=1}^{\ell-1}c_i\cdot r_i&\leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\frac{g_i}{\delta_i}
+    \leq2\cdot\coverageTime\br{\cCopt}\cdot\sum_{i=1}^{\ell-1}\ln\br{\frac{\delta_i}{\delta_{i+1}}}\\
+    &=2\cdot\coverageTime\br{\cCopt}\cdot\ln\br{\frac{\delta_1}{\delta_{\ell}}}<2\cdot\coverageTime\br{\cCopt}.
 \end{align*}
 For the final iteration, Claim~\ref{claim:inforest-pcmssc-density} gives the following two cases:
 \begin{enumerate}
-    \item If $r_{\ell}>2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $g_{\ell}\leq r_{\ell}$ gives
+    \item If $r_{\ell}>2\cdot\coverageTime\br{\cCopt}/B^*$, then $g_{\ell}\leq r_{\ell}$ gives
     \[
-        c_{\ell}\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}\cdot\frac{g_{\ell}}{r_{\ell}}\leq2\cdot\coverageTime\br{\cCopt,\cU}.
+        c_{\ell}\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt}\cdot\frac{g_{\ell}}{r_{\ell}}\leq2\cdot\coverageTime\br{\cCopt}.
     \]
-    \item If $r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}/B^*$, then $c_{\ell}\leq B^*$ gives
+    \item If $r_{\ell}\leq2\cdot\coverageTime\br{\cCopt}/B^*$, then $c_{\ell}\leq B^*$ gives
     \[
-        c_{\ell}\cdot r_{\ell}\leq B^*\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt,\cU}.
+        c_{\ell}\cdot r_{\ell}\leq B^*\cdot r_{\ell}\leq2\cdot\coverageTime\br{\cCopt}.
     \]
 \end{enumerate}
 Combining the bounds for the first $\ell-1$ iterations and the final iteration proves the claim.
@@ -714,9 +714,9 @@ Combining the bounds for the first $\ell-1$ iterations and the final iteration p
 
 Let $\pi'$ be the sequence returned by the algorithm. By Claims~\ref{claim:inforest-pcmssc-coverage} and~\ref{claim:inforest-pcmssc-cost},
 \[
-    \coverageTime\br{\pi',\cU}
-    \leq\coverageTime\br{\pi_{\ell+1},\cU}<4\cdot\coverageTime\br{\cCopt,\cU},\qquad
-    \spr{\cov\br{\pi',\cU}}\geq(1-1/e)\cdot f\cdot n.
+    \coverageTime\br{\pi'}
+    \leq\coverageTime\br{\pi_{\ell+1}}<4\cdot\coverageTime\br{\cCopt},\qquad
+    \spr{\cov\br{\pi'}}\geq(1-1/e)\cdot f\cdot n.
 \]
 
 Each iteration that does not terminate the loop appends at least one new set. There are polynomially many guesses and at most $m$ such iterations per guess. Thus the algorithm runs in polynomial time and returns a candidate with the stated guarantees.
@@ -731,7 +731,7 @@ Let $w\colon \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{covered} by $\tau$ is $\cX_\tau=\brc{X\in\cX\colon X\cap V(\tau)\neq\emptyset}$.
 % For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cX_\tau$, we set $t_\tau(X) = \spr{\tau}$.
 
-\begin{problem}[\textsc{Group Steiner Orienteering} (GSO)] \label{problem:GSO}
+\begin{problem}[\textup{\textsc{Group Steiner Orienteering}} (GSO)] \label{problem:GSO}
 Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cX_\tau} w(X)$.
 \end{problem}
@@ -739,7 +739,7 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
 \begin{theorem}[Gupta, Nagarajan and Ravi \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}, Section~5.1]\label{thm:gso-tree-source}
     For a $\ProblemGSO$ instance on a tree metric $(V,d)$ with budget $\budget$, a polynomial-time algorithm finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least one quarter of the maximum weight coverable by an $r$-tour of length at most $\budget$.
 \end{theorem}
-% \begin{problem}[\textsc{Partial Latency Group Steiner Tree} (LPGST)] \label{problem:LPGST}
+% \begin{problem}[\textup{\textsc{Partial Latency Group Steiner Tree}} (LPGST)] \label{problem:LPGST}
 % Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cX_\tau} \geq h$ and that minimizes
 % $c(\tau) = \sum_{X\in \cX} w(X) \cdot t_\tau(X)$.
 % %$$c(\tau) = \sum_{X \in \cX_\tau} w(X) \cdot t_\tau(X) + \sum_{X \in \cX \setminus \cX_\tau} w(X) \cdot \spr{\tau}.$$
@@ -763,10 +763,10 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
     \[
         \sum_{X\in\cX_\tau}w(X)
         =\spr{\brc{u\in\cU\colon X_u\cap V(\tau)\neq\emptyset}}
-        =\spr{\cov\br{\cC_\tau,\cU}}.
+        =\spr{\cov\br{\cC_\tau}}.
     \]
 
-    Conversely, for any precedence-closed family $\cC\subseteq\cS$, the union of the root-to-$v_S$ paths for $S\in\cC$ has $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC,\cU}}$. Thus the reduction preserves the optimum coverage for each budget. Since $\spr{V}=m+1$, Theorem~\ref{thm:gso-tree-source} gives the $\ProblemBPCSC$ guarantee.
+    Conversely, for any precedence-closed family $\cC\subseteq\cS$, the union of the root-to-$v_S$ paths for $S\in\cC$ has $\spr{\cC}$ edges. A closed DFS walk traverses each edge twice, so its length is $2\cdot\frac12\cdot\spr{\cC}=\spr{\cC}$ and it covers groups of total weight $\spr{\cov\br{\cC}}$. Thus the reduction preserves the optimum coverage for each budget. Since $\spr{V}=m+1$, Theorem~\ref{thm:gso-tree-source} gives the $\ProblemBPCSC$ guarantee.
 
     For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ and return a smallest family covering at least $f\cdot n/4$ elements among the outputs and the empty family. Let $\cCopt$ be an optimal $\ProblemPCSC$ solution. For $\spr{\cCopt}>0$, the budget $\spr{\cCopt}$ yields such a family of size $\bigo\br{\log m}\cdot\spr{\cCopt}$. The $\ProblemPCMSSC$ guarantee follows from Theorem~\ref{thm:BPCSC-to-PCMSSC}.
 \end{proof}

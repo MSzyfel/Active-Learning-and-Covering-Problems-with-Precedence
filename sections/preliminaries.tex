@@ -45,10 +45,10 @@ All tests have unit cost, and the average-case objective uses the uniform distri
 
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
 Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution for $\cI$.
-\begin{problem}[\textsc{Precedence Constrained Worst Case Decision Tree} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
+\begin{problem}[\textup{\textsc{Precedence Constrained Worst Case Decision Tree}} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the worst-case cost, $\COSTW\br{D}=\OPT\br{\cI}$.
 \end{problem}
-\begin{problem}[\textsc{Precedence Constrained Average Case Decision Tree} ($\ProblemPCACDT$)] \label{problem:PCACDT}
+\begin{problem}[\textup{\textsc{Precedence Constrained Average Case Decision Tree}} ($\ProblemPCACDT$)] \label{problem:PCACDT}
 Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the average-case cost, $\COSTA\br{D}=\OPT\br{\cI}$.
 \end{problem}
 
@@ -66,11 +66,11 @@ The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such p
 We denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
 When the universe is clear from the context we write $\coverageTime\br{\cC}$.
 
-\begin{problem}[\textsc{Precedence Constrained Set Cover} ($\ProblemPCSC$)] \label{problem:PCSC}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
+\begin{problem}[\textup{\textsc{Precedence Constrained Set Cover}} ($\ProblemPCSC$)] \label{problem:PCSC}
+Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$.
 \end{problem}
-\begin{problem}[\textsc{Precedence Constrained Min-Sum Set Cover} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that minimizes $\coverageTime\br{\cC, \cU}$ and satisfies $\spr{\cov\br{\cC,\cU}}\geq f\cdot n$.
+\begin{problem}[\textup{\textsc{Precedence Constrained Min-Sum Set Cover}} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
+Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that minimizes $\coverageTime\br{\cC}$ and satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$.
 \end{problem}
 
 \paraTitle{Approximation conventions.}

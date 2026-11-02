@@ -27,11 +27,11 @@ Fix a topological ordering of $(\cS,\preceq)$. Let $\operatorname{ord}(A)$ denot
         $R_l\gets\cU\setminus\cov(P_l)$\;
         $\sigma_l\gets$ Run the $\br{\alpha,\beta}$-approximation for $\ProblemBPCSC$ on $(R_l,\cS,\preceq,\budget=a^l)$.\;
         $\pi_l\gets\pi_l\circ\operatorname{ord}(\sigma_l\setminus P_l)$\;
-        \If{$\spr{\cov\br{\pi_l,\cU}}\geq f\cdot\spr{\cU}/\beta$}{
+        \If{$\spr{\cov\br{\pi_l}}\geq f\cdot\spr{\cU}/\beta$}{
             $\cQ\gets\cQ\cup\brc{\pi_l}$\;
         }
     }
-    \Return $\argmin_{\pi\in\cQ}\brc{\coverageTime\br{\pi,\cU}}$\;
+    \Return $\argmin_{\pi\in\cQ}\brc{\coverageTime\br{\pi}}$\;
 }
 \end{algorithm}
 \endgroup
