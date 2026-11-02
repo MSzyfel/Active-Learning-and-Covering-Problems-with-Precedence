@@ -666,7 +666,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
 The preceding reduction uses $f<1$, so it does not transfer to $\ProblemPCACDT$. We next establish a full-cover hardness result by representing the edges of a tree-metric $\ProblemMGL$ instance by chains of sets, as in the preceding $\ProblemGST$ reduction.
 
 \begin{problem}[\textup{\textsc{Minimum Group Latency}} ($\ProblemMGL$)] \label{problem:MGL}
-Given a finite metric space $(V,d)$, a root $r\in V$, and an indexed family of nonempty groups $X_1,\ldots,X_g\subseteq V$, find a route $P=(v_0,v_1,\ldots,v_\ell)$ with $v_0=r$ that visits at least one vertex of every group and minimizes its total latency $\lt\br{P}=\sum_{j=1}^{g}\lt\br{P,X_j}$, where the latency of group $X_j$ is
+Given a finite metric space $(V,d)$, a root $r\in V$, and an indexed family of nonempty groups $\cX=(X_1,\ldots,X_g)$ with $X_j\subseteq V$ for each $j\in[g]$, find a route $P=(v_0,v_1,\ldots,v_\ell)$ with $v_0=r$ that visits at least one vertex of every group and minimizes its total latency $\lt\br{P}=\sum_{j=1}^{g}\lt\br{P,X_j}$, where the latency of group $X_j$ is
 \[
     \lt\br{P,X_j}=\min_{\substack{0\leq i\leq\ell\\v_i\in X_j}}\sum_{h=1}^{i}d(v_{h-1},v_h).
 \]
@@ -684,7 +684,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 \begin{proof}
     We reduce from \textup{\textsc{Minimum Group Latency}} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
 
-    Let $(T=(V,E),d,r,\cX)$ be an $\ProblemMGL$ instance, where $d$ gives positive rational edge lengths. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
+    Let $(V,d,r,\cX)$ be an $\ProblemMGL$ instance, where $d$ is the metric induced by positive rational edge lengths on a tree $T=(V,E)$. For each edge $e=\{u,v\}\in E$, write $d(e)=d(u,v)$ for its length. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
     To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e)\colon e\in E\}$. Delete every edge of length greater than $B$ and all vertices \DDfix{not reachable from $r$}, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
     \[

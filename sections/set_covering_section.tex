@@ -733,14 +733,14 @@ Each iteration that does not terminate the loop appends at least one new set. Th
 \medskip
 \paraTitle{Steiner problems.}
 Let $(V,d)$ denote a symmetric metric with distance function $d\colon V \times V \to \mathbb{R}_{\geq 0}$ satisfying the triangle inequality.
-An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\spr{\tau}$ the length of tour $\tau$ with respect to $d$.
-Let $\cX$ be a family of \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
+An \emph{$r$-tour} $\tau$ is a walk that starts and ends at $r \in V$. Denote by $\operatorname{len}\br{\tau}$ the length of tour $\tau$ with respect to $d$.
+Let $\cX$ be a set of distinct \emph{groups}, where $X\subseteq V$ for each $X \in \cX$.
 Let $w\colon \cX \to \mathbb{R}_{\geq 0}$ be a weight assignment to groups.
 Let $V(\tau)$ be the set of vertices visited by $\tau$. The set of groups \emph{covered} by $\tau$ is $\cX_\tau=\brc{X\in\cX\colon X\cap V(\tau)\neq\emptyset}$.
 % For a tour $\tau$ and a group $X \in \cX$, define $t_\tau(X)$ as the length of the shortest prefix of $\tau$ (with respect to $d$) that visits at least one vertex from $X$. If $X \notin \cX_\tau$, we set $t_\tau(X) = \spr{\tau}$.
 
-\begin{problem}[\textup{\textsc{Group Steiner Orienteering}} (GSO)] \label{problem:GSO}
-Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\spr{\tau} \leq \budget$ that maximizes
+\begin{problem}[\textup{\textsc{Group Steiner Orienteering}} ($\ProblemGSO$)] \label{problem:GSO}
+Given a metric space $(V, d)$, a root vertex $r \in V$, a set of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a budget $\budget > 0$, find an $r$-tour $\tau$ with $\operatorname{len}\br{\tau} \leq \budget$ that maximizes
 $\sum_{X \in \cX_\tau} w(X)$.
 \end{problem}
 The following tree-metric guarantee follows from the algorithm and analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
@@ -759,7 +759,6 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
 \end{theorem}
 \begin{proof}
     We reduce $\ProblemBPCSC$ to $\ProblemGSO$ on tree metrics and apply Theorem~\ref{thm:gso-tree-source}. Let $(\cU,\cS,\preceq,\budget)$ be a $\ProblemBPCSC$ instance.
-    
     Create a rooted tree with vertex set $V=\brc{r}\cup\brc{v_S\colon S\in\cS}$, where $r$ is a dummy root. For every minimal $S\in\cS$, connect $r$ to $v_S$ by an edge of length~$1/2$. For every nonminimal $W\in\cS$, let $S\in\cS$ be its unique immediate predecessor, and connect $v_S$ to $v_W$ by an edge of length~$1/2$. Thus, the path from $r$ to $v_W$ visits the representatives of all strict predecessors of $W$. For each $u\in\cU$, let $X_u=\brc{v_S\colon S\in\cS,\ u\in S}$. Set the GSO budget to $\budget$ and define its groups and their weights by
     \[
         \cX=\brc{X_u\colon u\in\cU,\ X_u\neq\emptyset},
@@ -767,7 +766,7 @@ The following tree-metric guarantee follows from the algorithm and analysis in S
     \]
     Here $\cX$ contains each distinct nonempty set $X_u$ once.
 
-    Expand each edge of an $r$-tour in the tree metric along its tree path. The resulting walk $\tau$ has the same length and covers every group covered by the original tour. Let $\cC_\tau=\brc{S\in\cS\colon v_S\in V(\tau)}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\spr{\tau}$. Moreover,
+    Expand each edge of an $r$-tour in the tree metric along its tree path. The resulting walk $\tau$ has the same length and covers every group covered by the original tour. Let $\cC_\tau=\brc{S\in\cS\colon v_S\in V(\tau)}$. The root-to-vertex paths imply that $\cC_\tau$ is precedence-closed. The subtree formed by these paths has $\spr{\cC_\tau}$ edges, one for each visited representative. Since $\tau$ starts and ends at $r$, it traverses each edge in this subtree at least twice. As every edge has length~$1/2$, we have $\spr{\cC_\tau}\leq\operatorname{len}\br{\tau}$. Moreover,
     \[
         \sum_{X\in\cX_\tau}w(X)
         =\spr{\brc{u\in\cU\colon X_u\cap V(\tau)\neq\emptyset}}
