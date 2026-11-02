@@ -2,7 +2,8 @@
 
 % Similarly as in previous section we assume our input instance to be unweighted. Note that the analysis of the following procedures works also in the weighted setting, where every element $u\in\cU$ has a weight $w(u)$ and the goal is to maximize the total weight of covered elements or cover at least a given total weight of elements with minimal size of the cover. Since this generalization is straightforward we omit it for clarity.
 
-We obtain approximation guarantees for our covering tasks using the \textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$) problem. We first give an algorithm for $\ProblemPRBSC$ and reduce $\ProblemPCSC$ to it. We then introduce a budgeted variant, obtain an approximation for it using $\ProblemPCSC$, and use it to approximate $\ProblemPCMSSC$. Although approximation algorithms for $\ProblemPRBSC$ are already known, we give an algorithm with an improved approximation ratio.
+\DDfix{Our starting point is the \textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$) problem.
+We first improve an existing algorithm for $\ProblemPRBSC$ and then use it for $\ProblemPCSC$. We then introduce a budgeted variant of precedence-constrained set covering, obtain an approximation for it using $\ProblemPCSC$, which leads to an approximation for $\ProblemPCMSSC$.}
 
 \begin{problem}[\textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$)] \label{problem:PRBSC}
 Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cS$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cS'\subseteq\cS$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cS',\cR}}$.
@@ -584,7 +585,7 @@ For $\ProblemPCSC$, run the same construction for every integer budget in $[m]$ 
 The inforest structure also allows us to give a stronger guarantee for $\ProblemPCMSSC$ using a greedy procedure. The algorithm guesses the size of an optimal solution and repeatedly appends a set together with its predecessors not yet selected, choosing the most newly covered elements per added set among choices that add at most the guessed number of sets. In an inforest, every precedence-closed family decomposes into disjoint closures, which lets us compare this choice with any prefix of an optimal solution. Unlike the histogram-shrinkage argument for \textsc{Min-Sum Set Cover}~\cite{ApproximatingMinSumSetCover}, which compares histograms associated with the greedy and optimal solutions, we use the optimal prefixes to bound coverage time directly. Our analysis accounts for elements left uncovered when the algorithm stops and handles the final iteration separately.
 
 In the algorithm and its analysis, we identify a sequence with its family of sets when using set operations.
-\input{pseudocodes/inforest_f_PCMSSC.tex}
+%\input{pseudocodes/inforest_f_PCMSSC.tex}
 \begin{corollary}\label{cor:BPCSC-inforest-to-PCMSSC}
     \setlength{\emergencystretch}{2em}
     There exists a polynomial-time bicriteria $\br{4,\frac{e}{e-1}}$-approximation algorithm for $\ProblemPCMSSC$ when the precedence constraints form an inforest.
