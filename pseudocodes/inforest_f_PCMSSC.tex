@@ -1,0 +1,30 @@
+\begingroup
+\LinesNumbered
+\begin{algorithm}[h]
+\DontPrintSemicolon
+\caption{A greedy algorithm for $\ProblemPCMSSC$ with inforest precedence constraints.}
+\label{alg:inforest-fPCMSSC}
+\SetKwProg{Proc}{procedure}{}{}
+\SetKw{Break}{break}
+Fix a topological ordering of $(\cS,\preceq)$. Let $\operatorname{ord}(A)$ denote its restriction to $A\subseteq\cS$.\;
+\Proc{\textsc{Inforest-f-PCMSSC}$(\cU,\cS,\preceq,f)$}{
+    $\cQ\gets\emptyset$\;
+    \For{$B\in[m]$}{
+        $\pi\gets\angl{}$\;
+        \While{$\spr{\cov\br{\pi}}<\br{1-1/e}\cdot f\cdot\spr{\cU}$}{
+            \ForEach{$S\in\cS$}{
+                $D_S\gets\closure{S}\setminus\pi$, $c_S\gets\spr{D_S}$, $g_S\gets\spr{\cov\br{D_S,\cU\setminus\cov\br{\pi}}}$\;
+            }
+            $\cA\gets\brc{S\in\cS\colon 1\leq c_S\leq B,\ g_S>0}$\;
+            \If{$\cA=\emptyset$}{\Break\;}
+            $S_B\gets\argmax_{S\in\cA}\brc{g_S/c_S}$\;
+            $\pi\gets\pi\circ\operatorname{ord}(D_{S_B})$\;
+        }
+        \If{$\spr{\cov\br{\pi}}\geq\br{1-1/e}\cdot f\cdot\spr{\cU}$}{
+            $\cQ\gets\cQ\cup\brc{\pi}$\;
+        }
+    }
+    \Return $\argmin_{\pi\in\cQ}\brc{\coverageTime\br{\pi}}$\;
+}
+\end{algorithm}
+\endgroup
