@@ -88,7 +88,10 @@ When allowing arbitrary precedence constraints, $\ProblemPCMSSC$ admits an $\big
 % \end{figure}
 
 \begingroup\setlength{\emergencystretch}{2em}
-The reductions in Section~\ref{sec:AL}, combined with our covering algorithms, give an $\bigo\br{m^{1/3}\cdot\log n}$-approximation for both $\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$ and $\hyperref[problem:PCACDT]{\ProblemPCACDT}$ under arbitrary precedence constraints (Corollaries~\ref{cor:bicriteria-decision-trees} and~\ref{cor:PCACDT-general}), where $m$ is the number of tests and $n$ is the number of hypotheses. The reductions use partial set covering problems ($\hyperref[problem:PCSC]{\ProblemPCSC}$, $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$) and incur only a logarithmic factor loss. The idea is to find a precedence-constrained sequence of tests whose execution separates the hypotheses relatively well, and then recurse on the remaining subproblems. To that end we construct a corresponding covering instance, where the sets correspond to tests and the elements correspond to hypotheses.
+In order to obtain our algorithmic results for $\hyperref[problem:PCWCDT]{\ProblemPCWCDT}$ and $\hyperref[problem:PCACDT]{\ProblemPCACDT}$
+we use general reductions to $\hyperref[problem:PCSC]{\ProblemPCSC}$ and  $\hyperref[problem:PCMSSC]{\ProblemPCMSSC}$, respectively, combined with our covering algorithms, to obtain a series of approximation algorithms (Corollaries~\ref{cor:bicriteria-decision-trees} and~\ref{cor:PCACDT-general}) for various types of precedence constraints. Table~\ref{tab:results} compares these guarantees with the known bounds. The idea is to use set covering to find a precedence-constrained sequence of tests whose execution separates the hypotheses relatively well, and then recurse on the remaining subproblems. 
+% To that end we construct a corresponding covering instance, where the sets correspond to tests and the elements correspond to hypotheses.
+\input{tables/approximation_results.tex}
 
 The remaining task is to obtain the promised approximation for the precedence-constrained covering problems (cf. Section~\ref{sec:SC}).
 We remark that there already exists an $\bigo(\sqrt{m})$-approximation for the \textup{\textsc{Precedence-Constrained Min-Sum Set Cover}}~\cite{PCMSSC}, but it works only for $f=1$. As it turns out, for our decision tree algorithms we require $f=1/4$, and moreover, better guarantees can be achieved. In particular, we obtain an $\bigo\br{m^{1/3}\cdot\log n}$-approximation algorithms for both cost criteria and all values of $f$. To do so, firstly, we show that we can encode $\ProblemPCSC$ as an instance of the well-known \textup{\textsc{Partial Red-Blue Set Cover}} \cite{RedBlueSetCover} problem. Moreover, for the latter task we give a new linear-programming-based randomized rounding procedure that covers at least one eighth of the target at red cost $\bigo\br{m^{1/3}}$ times the optimum. Moreover, we use conditional expectations to make the rounding deterministic. 
@@ -99,10 +102,8 @@ Finally, we consider special cases of precedence relations. For the inforests, w
 This allows us to obtain an $\bigo(\log n)$-approximation for both $\ProblemPCWCDT$ and $\ProblemPCACDT$. For the case of outforests, for which every test or set has at most one immediate predecessor, we show that $\ProblemBPCSC$ can be reduced to \textup{\textsc{Group Steiner Orienteering}} on trees, which yields an $\br{\bigo\br{\log m}, 4}$-bicriteria approximation for $\ProblemBPCSC$, and as a consequence $\bigo\br{\log m\cdot\log n}$-approximations for $\ProblemPCWCDT$ and $\ProblemPCACDT$.
 % For this subcase, the connection between our problems and graph exploration becomes apparent, since any sequence of sets becomes a tour of the precedence graph.
 % The hierarchy of our reductions, is illustrated by Figure~\ref{fig:reductions}.
-Table~\ref{tab:results} compares our approximation guarantees with the known bounds. We write $\alpha_{m,n}=\bigo\br{m^{1/3}\cdot\log n}$ for the factor used in the general-precedence covering bounds with no coverage loss and in both decision-tree bounds.
 
 \par\endgroup
-\input{tables/approximation_results.tex}
 
 
 
