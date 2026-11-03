@@ -11,7 +11,7 @@ Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a 
 
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
 \label{subsection:PRBSC-bicriteria}
-Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, and $k=\spr{\cR}$ the number of red elements. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian gave a $\bigo\br{m^{1/3}\cdot \log^{4/3}k\cdot \log n}$-approximation for $\ProblemPRBSC$~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. We first show that allowing a constant-factor loss in the blue coverage (which is sufficient for our needs) leads to an improvement to a `pure' $\bigo\br{m^{1/3}}$ guarantee, and by repetition, an $\bigo\br{m^{1/3}\cdot\log n}$-approximation for $\ProblemPRBSC$.
+Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, and $k=\spr{\cR}$ the number of red elements. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian gave a $\bigo\br{m^{1/3}\cdot \log^{4/3}k\cdot \log n}$-approximation for $\ProblemPRBSC$~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. We show that allowing a constant-factor loss in the blue coverage, which is sufficient for our needs, leads to an $\bigo\br{m^{1/3}}$ bound on the red cost.
 %  Our deterministic algorithm covers at least one eighth of the target at cost $\bigo\br{m^{1/3}}$ times the optimum for target $t$.
 Our algorithm builds on an existing LP-rounding \cite{RedBlueSetCover}, however, we use a stronger LP relaxation enhanced with a non-trivial derandomization step. In the original algorithm, the sets are partitioned according to the number of red elements they contain and a step finding a collection with a favorable ratio of red cost to blue coverage is repeated until the target is met. We inherit this bucketing idea, however, we round all these size groups together. In order to bound the cost of our solution we distinguish \emph{heavy} and \emph{light} covering sets according to the LP solution. Additional constraints for pairs of red elements allow us to bound the expected red cost of heavy sets across all sizes, while light sets have sufficiently small selection probabilities that we can bound their total cost by counting them with multiplicity. In order to show that our algorithm covers a significant fraction of the blue elements, we use random marks to identify some of the covered blue elements. Their randomized choice allows us to lower bound the expected number of distinct marked elements and, at the same time, upper bound this value's second moment. This comes in handy during the derandomization step where we design a carefully defined random variable we call \emph{potential}, whose non-negative value is maintained throughout the rounding using the method of conditional expectations, yielding a quality deterministic solution in polynomial time.
 
@@ -391,25 +391,20 @@ By averaging, one such value does not decrease the conditional expectation. Ther
 For the smallest feasible guess $K$, return $\cC=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cC$ with a nonnegative potential. In both cases, $\spr{\cov\br{\cC,\cB}}\geq t/8$ and $\spr{\cov\br{\cC,\cR}}\leq920\cdot K\cdot \gamma$. Since $K=\OPT\br{\cI}$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT\br{\cI}$. Hence, $\spr{\cov\br{\cC,\cR}}\leq920\cdot\OPT\br{\cI}\cdot \gamma = \bigo\br{m^{1/3}}\cdot \OPT\br{\cI}$ as promised.
 \end{proof}
 
-Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
-\begin{corollary}\label{cor:partial-red-blue}
-    There is an $\bigo\br{m^{1/3}\cdot\log n}$-approximation algorithm for $\ProblemPRBSC$ running in polynomial time.
-\end{corollary}
-
 \subsection{\texorpdfstring{$\ProblemPCSC$}{PCSC} via Partial Red-Blue Set Cover}
 \label{subsection:PCSC}
 We now reduce $\ProblemPCSC$ to $\ProblemPRBSC$.
-Given a precedence-constrained set covering instance $(\cU,\cS,\preceq,f)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $S^{+}=\closure{S}$ and create a red-blue set $A_S=\brc{r_T\colon T\in S^{+}}\cup\brc{b_u\colon u\in\cov\br{S^{+}}}$.
-The resulting red-blue instance has $m$ sets and $n$ blue elements. For any selected subfamily indexed by $\mathcal{J}\subseteq\cS$, define a precedence-closed family $\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}S^{+}$.
+Given a precedence-constrained set covering instance $(\cU,\cS,\preceq,f)$, create a red element $r_S$ for each $S\in\cS$ and a blue element $b_u$ for each $u\in\cU$. For each $S\in\cS$, let $\cS_S=\closure{S}$ and create a red-blue set $A_S=\brc{r_T\colon T\in \cS_S}\cup\brc{b_u\colon u\in\cov\br{\cS_S}}$.
+The resulting red-blue instance has $m$ sets and $n$ blue elements. For any selected subfamily $\mathcal{J}\subseteq\cS$, define a precedence-closed family $\cC_{\mathcal{J}}=\bigcup_{S\in\mathcal{J}}\cS_S$.
 The red elements covered by the selected red-blue sets are in $\brc{r_T\colon T\in\cC_{\mathcal{J}}}$, and the blue elements covered are in $\brc{b_u\colon u\in\cov\br{\cC_{\mathcal{J}}}}$.
 Thus, the red cost and blue coverage equal the size and coverage of $\cC_{\mathcal{J}}$, respectively.
-Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$, and no others: each $S^{+}\subseteq\cC$, and every $S\in\cC$ belongs to $S^{+}$. Hence, the reduction preserves cost and coverage in both directions.
+Conversely, for any precedence-closed family $\cC\subseteq\cS$, selecting $A_S$ for every $S\in\cC$ covers the red elements corresponding to $\cC$ and the blue elements corresponding to $\cov\br{\cC}$, and no others: each $\cS_S\subseteq\cC$, and every $S\in\cC$ belongs to $\cS_S$. Hence, the reduction preserves cost and coverage in both directions.
 
 \begin{theorem}\label{thm:PCSC-RBSC}
-There are polynomial-time approximation algorithms for $\ProblemPCSC$ with ratios $\bigo\br{m^{1/3}\cdot\log n}$ and $\br{\bigo\br{m^{1/3}},8}$.
+There is a polynomial-time $\br{\bigo\br{m^{1/3}},8}$-approximation algorithm for $\ProblemPCSC$.
 \end{theorem}
 \begin{proof}
-Apply the reduction above with $t=\cl{f\cdot n}$, followed by either Corollary~\ref{cor:partial-red-blue} or Theorem~\ref{thm:partial-red-blue-bicriteria}. Since the reduction preserves cost and coverage, the theorem follows.
+Apply the reduction above with $t=\cl{f\cdot n}$, followed by Theorem~\ref{thm:partial-red-blue-bicriteria}. Since the reduction preserves cost and coverage, the theorem follows.
 \end{proof}
 
 \begin{corollary}\label{cor:bicriteria-decision-trees}
@@ -421,18 +416,18 @@ Combine Theorem~\ref{thm:PCSC-RBSC} with Theorem~\ref{thm:PCSC-to-PCWCDT}.
 
 
 \subsection{\texorpdfstring{$\ProblemPCMSSC$ via $\ProblemBPCSC$}{PCMSSC via B-PCSC}} \label{subsection:PCMSSC}
-We introduce a budgeted variant of precedence-constrained set cover.
+To solve $\ProblemPCMSSC$, we first introduce a budgeted variant of precedence-constrained set cover.
 \begin{problem}[\textup{\textsc{Budgeted Precedence-Constrained Set Cover}} ($\ProblemBPCSC$)] \label{problem:BPCSC}
 Given a universe $\cU$ of items, a family $\cS$ of subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and a budget $\budget>0$, find a precedence-closed set $\cC\subseteq\cS$ that maximises $\spr{\cov\br{\cC}}$ and satisfies $\spr{\cC}\leq \budget$.
 \end{problem}
 
 An approximation for $\ProblemPCSC$ gives the same bicriteria guarantee for $\ProblemBPCSC$ by guessing the fraction of elements covered by an optimal budgeted solution.
 \begin{theorem}\label{thm:PCSC-to-BPCSC}\label{thm:BPCSC}
-If there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$, then there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemBPCSC$. In particular, these approximation ratios are $\br{\bigo\br{m^{1/3}\cdot\log n},1}$ and $\br{\bigo\br{m^{1/3}},8}$.
+If there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemPCSC$, then there is a polynomial-time $\br{\alpha,\beta}$-approximation algorithm for $\ProblemBPCSC$. In particular, $\ProblemBPCSC$ admits a polynomial-time $\br{\bigo\br{m^{1/3}},8}$-approximation algorithm.
 \end{theorem}
 \begin{proof}
 For each integer $t\in[\spr{\cov\br{\cS}}]$, run the $\ProblemPCSC$ algorithm with target fraction $f=t/n$. Among the resulting families of size at most $\alpha\cdot\budget$ and the empty family, return one with maximum coverage.
-Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements.
+Let $\cCopt$ be an optimal solution to $\ProblemBPCSC$ and put $t^*=\spr{\cov\br{\cCopt}}$. If $t^*>0$, then $\cCopt$ is feasible for $\ProblemPCSC$ with target fraction $f^*=t^*/n$, so the corresponding optimum is at most $\budget$. For the guess $t=t^*$, the algorithm therefore obtains a family of size at most $\alpha\cdot\budget$ covering at least $t^*/\beta$ elements. The stated bicriteria guarantee follows from Theorem~\ref{thm:PCSC-RBSC}.
 \end{proof}
 
 We show how to use an $(\alpha,\beta)$-approximation algorithm for $\ProblemBPCSC$ to obtain an $\br{\bigo\br{\alpha\cdot\beta^3}, \beta}$-approximation for $\ProblemPCMSSC$.  Our approach is reminiscent of the ideas used for solving \textup{\textsc{Minimum Latency TSP}}~\cite{PathsTreesMinimumLatencyTours,KTravelingRepairmenProblem} and \textup{\textsc{Adaptive TSP}}~\cite{ApproxAlgsForOptDTsAndAdapTSPProblems}. The overarching theme of this connection is to treat appending sets to a covering sequence as a kind of tour on the Hasse diagram of the precedence POSET, and the cost of covering an element as a latency of `visiting' that element. This intuition, however, is not exact and is not used directly in the procedure or its analysis.
@@ -441,7 +436,7 @@ Let $\alpha,\beta\geq 1$ and $a=\frac{3\cdot\beta+1}{3\cdot\beta-1}$, so $1<a\le
 % Denote by $\cCopt$ any optimal solution to $\ProblemPCMSSC$ on the input $(\cU, \cS, \preceq, f)$.
 For an optimal solution $\cCopt$ to $\ProblemPCMSSC$ with $\spr{\cCopt}>0$, let $l^*=\max\brc{1,\cl{\log_a\spr{\cCopt}}}$.
 So, $a^{l^*-1}\leq\spr{\cCopt}\leq a^{l^*}$.
-We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}.
+We start with pseudocode for $\ProblemPCMSSC$ in Algorithm~\ref{alg:fPCMSSC}. The algorithm first guesses the value of $l^*$. Then, $\ProblemBPCSC$ is used with geometrically growing budgets
 \input{pseudocodes/f_PCMSSC.tex}
 Each family returned by $\ProblemBPCSC$ is precedence-closed, so the family $P_l$ of sets already appended is also precedence-closed. When a family is appended, only sets outside $P_l$ are used and they are ordered by $\operatorname{ord}$. Every predecessor of a new set is therefore either already in the sequence or earlier in the appended block. The same holds for the padding and the final family, so every sequence considered by the algorithm is precedence-closed and contains no repeated sets. In the analysis, $\pi_l$ denotes the padded prefix before the final family is appended.
 We start with a lemma that relates the coverage times and the lengths of $\pi_{l^*}$ and $\cCopt$.
