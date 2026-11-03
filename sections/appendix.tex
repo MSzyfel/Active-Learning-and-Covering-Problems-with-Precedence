@@ -113,15 +113,15 @@ The following is analogous to Observation~\ref{obs:DS} but requires a more caref
 \end{theorem}
 \begin{proof}
     \setlength{\emergencystretch}{2em}
-    Let $D$ be the decision tree induced by \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$ when repeated tests are included, using a $\br{\alpha,\beta}$-approximation for $\ProblemPCMSSC$ as $\blackBox$.
+    Let $D$ be the decision tree induced by \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$, using a $\br{\alpha,\beta}$-approximation for $\ProblemPCMSSC$ as $\blackBox$.
     We argue by induction on $n$ that
     \begin{equation} \label{eq:D-average}
      \COSTA\br{D} \leq \frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
     \end{equation}
-    The base case $n=1$ has cost zero. Assume that \eqref{eq:D-average} holds for every recursive call on $\cI'=\br{\cH',\cT,\preceq}$. Let $\cF=D\setminus V\br{D_{\cC}}$ be the forest of recursive subtrees. Then
+    For $n=1$, $\COSTA\br{D}=0$. Assume that \eqref{eq:D-average} holds for every recursive call on $\cI'=\br{\cH',\cT,\preceq}$. Then
 \begin{align*}
-    &\COSTA\br{D}=\COSTA\br{D_{\cC}}+\sum_{D'\in\cF}\COSTA\br{D'} &&\\
-    &\leq 2\cdot\alpha\cdot\COSTA\br{\sepcover{\cI}}+\sum_{D'\in\cF}\frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'} &&\\
+    &\COSTA\br{D}=\COSTA\br{D_{\cC}}+\sum_{D'\in D\setminus V\br{D_{\cC}}}\COSTA\br{D'} &&\\
+    &\leq 2\cdot\alpha\cdot\COSTA\br{\sepcover{\cI}}+\sum_{D'\in D\setminus V\br{D_{\cC}}}\frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'} &&\\
     &\leq 2\cdot\alpha\cdot\OPT\br{\cI}+\frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\br{\frac{5\cdot\beta-1}{5\cdot\beta}\cdot n}\cdot\OPT\br{\cI} &&\\
     &=2\cdot\alpha\cdot\OPT\br{\cI}+\frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log n\cdot\OPT\br{\cI}-2\cdot\alpha\cdot\OPT\br{\cI} &&\\
     &=\frac{2\cdot\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log n\cdot\OPT\br{\cI}. &&

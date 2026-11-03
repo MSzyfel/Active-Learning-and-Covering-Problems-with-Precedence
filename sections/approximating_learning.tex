@@ -1,12 +1,8 @@
 \section{Decision Trees via Covering Problems} \label{sec:AL}
-
-
-In this section we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea is to use a solution of the appropriate covering problem to find a precedence-closed sequence of tests whose execution makes every remaining hypothesis set significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$ for the constant coverage-loss factors used in our applications, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$. In what follows we make these ideas precise.
-
-We consider feasible instances, so some test distinguishes each pair of hypotheses. Singleton instances require no tests. All sepcover constructions below concern instances with at least two hypotheses. We will require some additional notation.
+Here, we present approximation algorithms for $\ProblemPCWCDT$ and $\ProblemPCACDT$ by reducing them to $\ProblemPCSC$ and $\ProblemPCMSSC$, respectively. The overarching idea is to use an appropriate covering problem to find a precedence-closed sequence of tests whose execution makes every remaining hypothesis set significantly smaller than $\spr{\cH}$. Moreover, the cost of performing these tests should be $\bigo\br{\OPT}$ (up to the approximation ratio of the covering problem). The rest of the decision tree is then built recursively and since the depth of the recursion is $\bigo\br{\log n}$, the multiplicative loss in the approximation ratio is $\bigo\br{\log n}$.
 %For any node $v$ of the $D$ by $\cH_v$ we will mean the set of hypotheses such that the test $t$ associated with $v$ is performed in $D$ if the set of possible hypotheses is $\cH_v$.
 Let $\cH'\subseteq \cH$. By $t\br{\cH'}$ we denote the test $t$ restricted to hypotheses in $\cH'$, i.e., for each reply $H\in t$, we have a reply $H\cap \cH'$ in $t\br{\cH'}$ (if it is nonempty). By $D\setminus V$ we denote the collection of subtrees (a forest) obtained by the removal of all nodes in $V$ from $D$.
-We will use the following immediate monotonicity properties. 
+We will use the following immediate folklore monotonicity properties. 
 \begin{lemma}\label{lemma:subspace_opt}
     Let $\cI=\br{\cH, \cT,\preceq}$ and $\cI'=\br{\cH', \cT, \preceq}$ be two instances of $\ProblemPCACDT$ or $\ProblemPCWCDT$, where $\cH'\subseteq \cH$.
     Then, $\OPT\br{\cI'} \leq \OPT\br{\cI}$.
@@ -17,12 +13,11 @@ We will use the following immediate monotonicity properties.
     Then, $\OPT\br{\cI} \geq \sum_{i=1}^k \OPT\br{\br{\cH_i, \cT, \preceq}}$.
 \end{lemma}
 
-The following definition gives a basic tool for analysis of our algorithms.
+Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$. The next definition gives us a basic tool for the analysis of our algorithms.
 \begin{definition}[Sepcover]
-  Let $D$ be any decision tree for $\cI=\br{\cH, \cT, \preceq}$.
-  Let $v$ be a test node that is closest to the root and has the property that after removal of the vertices on the root-to-$v$ path from $D$, each remaining subtree has at most $\spr{\cH}/2$ leaves.
+  Starting at the root of $D$, follow a reply whose subtree has the largest number of leaves until reaching a test $v$ at which every reply subtree has at most $\spr{\cH}/2$ leaves.
   Then the sequence $\tests{D}{v}$ is called a \emph{sepcover} for $D$ and is denoted by $\sepcoverD{D}$.
-  If $D$ is optimal for the decision-tree objective under consideration, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
+  If $D$ is optimal for a considered objective, then we write $\sepcover{\cI} = \sepcoverD{D}$ (ties broken arbitrarily).
 \end{definition}
 % Figure \ref{fig:sepcover} illustrates the definition of sepcover. 
 
@@ -59,8 +54,8 @@ At each recursive call, the strategy obtains a cover $\cC$ for an instance $\br{
 % Note that $\cC$ is supposed to play the role of $\sepcover{\cI}$ according to the lower bounds in Lemmas~\ref{lemma:cover_sep_worst_case} and~\ref{lemma:cover_sep_average_case} given in the subsections below.
 The strategy performs the tests associated with the sets in $\cC$ in order, updating the candidate hypotheses after each reply. Once the remaining set $\cH'$ has size at most $\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$, where $\cH$ is the set at the beginning of the call, the strategy recurses on $\cH'$. Since $\frac{5\cdot\beta-1}{5\cdot\beta}>\frac12$ for $\beta\geq1$, each test has at most one reply that continues the current call.
 % We also note that the sequence of tests $t_1,t_2\ldots$ in Algorithm~\ref{alg:worstDecisionTree} is a `substitute' of sepcover (cf. Lemma~\ref{lemma:cover_sep_worst_case}).
-Every hypothesis covered by a prefix of $\cC$ leaves the current call by its covering test, unless the call has already ended. Since $\spr{\cov\br{\cC}}\geq\spr{\cU_{\xi}}/(4\cdot\beta)\geq\spr{\cH}/(5\cdot\beta)$, the recursion threshold is reached by the end of any prefix covering at least $\spr{\cU_{\xi}}/(4\cdot\beta)$ hypotheses, and in particular by the end of $\cC$. Each selected sequence is precedence-closed, so the strategy is feasible.
-For convenience, we state the algorithm implicitly as a strategy of performing the tests; let $D$ be the explicit decision tree reflecting it. 
+Every hypothesis covered by a prefix of $\cC$ leaves the current call by its covering test, unless the call has already ended. Since $\spr{\cov\br{\cC}}\geq\spr{\cU_{\xi}}/(4\cdot\beta)\geq\spr{\cH}/(5\cdot\beta)$, the recursion threshold is reached by the end of $\cC$. It is also easy to see that each selected sequence is precedence-closed, so the strategy is feasible.
+For convenience, we state the algorithm implicitly as a strategy of performing the tests, let $D$ be the explicit decision tree reflecting it. 
 \input{pseudocodes/worst_case_learning.tex}
 
 
@@ -80,7 +75,7 @@ We have the following immediate corollary of the definition of sepcover.
     Then, $\spr{\cC^*} \leq \spr{\sepcover{\cI}}$.
 \end{lemma}
 \begin{proof}
-    Write $S=\angl{t_1,\ldots,t_\ell}=\sepcover{\cI}$ in path order and put $n=\spr{\cH}$. Before the first prefix of $\xi(S)$ covers at least $\spr{\cU_{\xi}}/4$ hypotheses, we claim that every hypothesis that has left the path is already covered. This holds before $t_1$. Suppose it holds before $t_i$, and let $\cH_i$ be the hypotheses still on the path. For any reply $H\in t_i$ that leaves the path, the sepcover property gives $\spr{H\cap\cH_i}\leq n/2$. The induction hypothesis gives
+    Write $S=\angl{t_1,\ldots,t_\ell}=\sepcover{\cI}$ in path order. Before the first prefix of $\xi(S)$ covers at least $\spr{\cU_{\xi}}/4$ hypotheses, we claim that every hypothesis that has left the path is already covered. This holds before $t_1$. Suppose it holds before $t_i$, and let $\cH_i$ be the hypotheses still on the path. For any reply $H\in t_i$ that leaves the path, the sepcover property gives $\spr{H\cap\cH_i}\leq n/2$. The induction hypothesis gives
     \[
     \spr{H}=\spr{H\cap\cH_i}+\spr{H\setminus\cH_i}
     \leq \frac n2+\spr{\cH\setminus\cH_i}
@@ -105,21 +100,21 @@ $\bigo\br{\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}} \cdot \log 
 \end{theorem}
 \begin{proof}
      \setlength{\emergencystretch}{2em}
-     Let $D$ be the decision tree induced by \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$ when repeated tests are included, using a $\br{\alpha,\beta}$-approximation for $\ProblemPCSC$ as $\blackBox$.
+     Let $D$ be the decision tree induced by \ProcDecisionTree on $\cI=\br{\cH,\cT,\preceq}$, using a $\br{\alpha,\beta}$-approximation for $\ProblemPCSC$ as $\blackBox$.
      We prove by induction on $n=\spr{\cH}$ that
      \begin{equation} \label{eq:D}
      \COSTW\br{D} \leq \frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta -1}}}\cdot \log n \cdot \OPT\br{\cI}.
      \end{equation}
 
-     The base case $n=1$ has cost zero. Assume that \eqref{eq:D} holds for every recursive call on $\cI'=\br{\cH',\cT,\preceq}$. Let $\cF=D\setminus V\br{D_{\cC}}$ be the forest of recursive subtrees. Then
+     For $n=1$, $\COSTW\br{D}=0$. Assume that \eqref{eq:D} holds for every recursive call on $\cI'=\br{\cH',\cT,\preceq}$. Then
         \begin{align*}
-            &\COSTW\br{D}\leq \COSTW\br{D_{\cC}}+\max_{D'\in\cF}\COSTW\br{D'} &&\\
-            &\leq \alpha\cdot\spr{\sepcover{\cI}}+\max_{D'\in\cF}\brc{\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}} &&\\
+            &\COSTW\br{D}\leq \COSTW\br{D_{\cC}}+\max_{D'\in D\setminus V\br{D_{\cC}}}\COSTW\br{D'} &&\\
+            &\leq \alpha\cdot\spr{\sepcover{\cI}}+\max_{D'\in D\setminus V\br{D_{\cC}}}\brc{\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\spr{\cH'}\cdot\OPT\br{\cI'}} &&\\
             &\leq \alpha\cdot\OPT\br{\cI}+\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log\br{\frac{5\cdot\beta-1}{5\cdot\beta}\cdot n}\cdot\OPT\br{\cI} &&\\
             &=\alpha\cdot\OPT\br{\cI}+\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log n\cdot\OPT\br{\cI}-\alpha\cdot\OPT\br{\cI}
             =\frac{\alpha}{\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}}\cdot\log n\cdot\OPT\br{\cI}. &&
         \end{align*}
-        The second inequality uses the induction hypothesis and Observation~\ref{obs:DS}. The third uses Observation~\ref{obs:sepcoverWC}, Lemma~\ref{lemma:subspace_opt}, and $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{5\cdot\beta-1}{5\cdot\beta}\cdot n$ for every $D'\in\cF$. The first equality follows by expanding the logarithm and using $\log\br{\frac{5\cdot\beta-1}{5\cdot\beta}}=-\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}$, proving~\eqref{eq:D}.
+        The second inequality uses the induction hypothesis and Observation~\ref{obs:DS}. The third uses Observation~\ref{obs:sepcoverWC}, Lemma~\ref{lemma:subspace_opt}, and $\spr{\cH'}\leq\br{1-\frac45\cdot\frac{1}{4\cdot\beta}}\cdot n=\frac{5\cdot\beta-1}{5\cdot\beta}\cdot n$ for every recursive subtree $D'$. The first equality follows by expanding the logarithm and using $\log\br{\frac{5\cdot\beta-1}{5\cdot\beta}}=-\log\br{\frac{5\cdot\beta}{5\cdot\beta-1}}$.
 \end{proof}
 
 Theorem~\ref{thm:PCSC-to-PCWCDT} and the covering algorithms in Section~\ref{sec:SC} give the following corollary.

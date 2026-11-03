@@ -13,7 +13,7 @@
     $\cC\gets$ Call the $\br{\alpha,\beta}$-approximation algorithm $\blackBox$ on $(\cU_{\xi},\xi(\cT),\preceq_{\xi},f=1/4)$.\;
     Order $\cC$ topologically if it is a family
     $\cH'\gets \cH$.\;
-    \ForEach{test $t$ in $\xi^{-1}(\cC)$ in order}{
+    \ForEach{test $t\in \angl{\xi(t_1),\ldots,\xi(t_{\spr{\cC}})}$}{
         Perform $t$ and observe its reply $H$, and let $\cH'\gets\cH'\cap H$\;
         \If{$\spr{\cH'}\leq\frac{5\cdot\beta-1}{5\cdot\beta}\cdot\spr{\cH}$}{
             \Return \ProcDecisionTree$(\cH',\cT,\preceq,\blackBox)$.\;
