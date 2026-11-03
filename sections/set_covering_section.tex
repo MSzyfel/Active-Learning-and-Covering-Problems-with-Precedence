@@ -67,9 +67,9 @@ which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constr
 
 For the smallest feasible guess $K\leq \OPT\br{\cI}$ fix a feasible solution and put
 \[
- T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_S=\cR_S\setminus \cR_+, \textup{ for }S\in\cS.
+ \gamma=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/\gamma},\qquad \cR'_S=\cR_S\setminus \cR_+, \textup{ for }S\in\cS.
 \]
-We call $\cR'_S$ the \emph{residual red part} of $S$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/T\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot T$. Initially select the family $\cS_0=\brc{S\in\cS\colon \cR'_S=\emptyset}$. Its red coverage satisfies $\cov\br{\cS_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cS_0,\cR}}\leq K\cdot T$. If $\spr{\cov\br{\cS_0,\cB}}\geq t/8$, retain $\cS_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cS_0}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cS_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
+We call $\cR'_S$ the \emph{residual red part} of $S$. By~\eqref{eq:rbsc-lp-budget}, $\spr{\cR_+}/\gamma\leq\sum_{r\in \cR_+}y_r\leq K$, so $\spr{\cR_+}\leq K\cdot \gamma$. Initially select the family $\cS_0=\brc{S\in\cS\colon \cR'_S=\emptyset}$. Its red coverage satisfies $\cov\br{\cS_0,\cR}\subseteq\cR_+$, and hence $\spr{\cov\br{\cS_0,\cR}}\leq K\cdot \gamma$. If $\spr{\cov\br{\cS_0,\cB}}\geq t/8$, retain $\cS_0$ as the candidate. Otherwise, define $\cB'=\cB\setminus\cov\br{\cS_0}$. Then $\spr{\cB\setminus\cB'}=\spr{\cov\br{\cS_0,\cB}}<t/8$. Since $z_u\leq1$, we obtain
 \begin{equation}\label{eq:rbsc-residual-mass}
  \sum_{u\in\cB'}z_u
  =t-\sum_{u\in\cB\setminus\cB'}z_u
@@ -85,10 +85,10 @@ For every power of two $d=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which
 Each set with a nonempty residual red part belongs to exactly one $\cS_d$. We call $r$ the \emph{pivot} of $\cS_{r,d}$. A set $S\in\cS_d$ belongs to the group $\cS_{r,d}$ for each residual red element $r\in\cR'_S$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $S$. A set at scale $d$ has at least $d$ residual red elements and hence, unless its LP value is zero, at least $d$ occurrences.
 % This multiplicity will compensate for the factor $1/d$ in the activation probability.
 
-For each $r$ and $d$, let $E_{r,d}$ be the event that group $\cS_{r,d}$ is \emph{activated}, with $\Pr[E_{r,d}]=y_r/d$. For each $S\in\cS_{r,d}$, let $J_{r,d,S}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,d,S}]=x_S/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $S$ is \emph{selected} if and only if both $E_{r,d}$ and $J_{r,d,S}$ occur, so selection events in the same group share the activation event. Note that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $d\geq1$. Define the random families $\cF_{r,d}$ and $\cC$, sets $\cR_{r,d}$ and $\cR_0$, and the variable $R$ by
+For each $r$ and $d$, let $A_{r,d}$ be the event that group $\cS_{r,d}$ is \emph{activated}, with $\Pr[A_{r,d}]=y_r/d$. For each $S\in\cS_{r,d}$, let $T_{r,d,S}$ be the event that its \emph{trial} succeeds, with $\Pr[T_{r,d,S}]=x_S/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $S$ is \emph{selected} if and only if both $A_{r,d}$ and $T_{r,d,S}$ occur, so selection events in the same group share the activation event. Note that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $d\geq1$. Define the random families $\cF_{r,d}$ and $\cC$, sets $\cR_{r,d}$ and $\cR_0$, and the variable $R$ by
 \[
  \begin{gathered}
- \cF_{r,d}=\brc{S\in\cS_{r,d}\colon E_{r,d}\text{ and }J_{r,d,S}\text{ occur}},
+ \cF_{r,d}=\brc{S\in\cS_{r,d}\colon A_{r,d}\text{ and }T_{r,d,S}\text{ occur}},
  \qquad \cC=\cS_0\cup\bigcup_{r,d}\cF_{r,d},\\
  \cR_{r,d}=\bigcup_{S\in\cF_{r,d}}\cR'_S,
  \qquad \cR_0=\bigcup_{r,d}\cR_{r,d},
@@ -98,10 +98,10 @@ For each $r$ and $d$, let $E_{r,d}$ be the event that group $\cS_{r,d}$ is \emph
 The output satisfies $\cov\br{\cC,\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cC,\cR}}\leq R$.
 
 \begin{claim}\label{claim:rbsc-red-cost}
-The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
+The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot \gamma$.
 \end{claim}
 \begin{proof}
-Put $\theta=K/T$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cS_{r,d}$, partition its occurrences into the \emph{heavy} and \emph{light} families
+Put $\theta=K/\gamma$. We split occurrences according to their trial probabilities: heavy occurrences can be charged to the joint red variables, while light occurrences are cheap enough to count individually. For each group $\cS_{r,d}$, partition its occurrences into the \emph{heavy} and \emph{light} families
 \[
  \cS^h_{r,d}=\brc{S\in\cS_{r,d}\colon x_S/y_r\geq\theta/d},
  \qquad \cS^\ell_{r,d}=\cS_{r,d}\setminus\cS^h_{r,d}.
@@ -116,23 +116,23 @@ Define $R_h=\spr{\cR_h}$ and $R_\ell=\spr{\cR_\ell}$. Since every selected occur
 
 Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\cD_{r,q}=\brc{d\colon \exists S\in\cS^h_{r,d}\colon q\in\cR'_S}$ and the event
 \[
- F_{r,q}=\bigcup_{d\in\cD_{r,q}}\ \bigcup_{S\in\cS^h_{r,d}\colon q\in\cR'_S}\br{E_{r,d}\cap J_{r,d,S}}.
+ C_{r,q}=\bigcup_{d\in\cD_{r,q}}\ \bigcup_{S\in\cS^h_{r,d}\colon q\in\cR'_S}\br{A_{r,d}\cap T_{r,d,S}}.
 \]
-Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cS_{r,d}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\cD_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $d\in\cD_{r,q}$, a corresponding heavy occurrence satisfies
+Thus, $C_{r,q}$ occurs when a selected heavy occurrence in a group $\cS_{r,d}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $C_{r,q}$ be the empty event. If $\cD_{r,q}$ is empty, the event $C_{r,q}$ is impossible. Otherwise, for each $d\in\cD_{r,q}$, a corresponding heavy occurrence satisfies
 \[
  y_{r,q}\geq x_S\geq\frac{\theta\cdot y_r}{d},
 \]
-where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $d\geq\theta\cdot y_r/y_{r,q}$. Let $d_0$ be the smallest scale in $\cD_{r,q}$. All scales are powers of two, so every scale in $\cD_{r,q}$ is of the form $2^j\cdot d_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{d\in\cD_{r,q}}E_{r,d}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
+where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $d\geq\theta\cdot y_r/y_{r,q}$. Let $d_0$ be the smallest scale in $\cD_{r,q}$. All scales are powers of two, so every scale in $\cD_{r,q}$ is of the form $2^j\cdot d_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $C_{r,q}\subseteq\bigcup_{d\in\cD_{r,q}}A_{r,d}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
 \[
- \Pr[F_{r,q}]\leq\sum_{d\in\cD_{r,q}}\frac{y_r}{d}
+ \Pr[C_{r,q}]\leq\sum_{d\in\cD_{r,q}}\frac{y_r}{d}
  \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot d_0}=\frac{2\cdot y_r}{d_0}
  \leq\frac{2\cdot y_{r,q}}{\theta}.
 \]
-The same bound holds when $\cD_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cS_{r,d}$, so $F_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
+The same bound holds when $\cD_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cS_{r,d}$, so $C_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[C_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
 \[
  \mathbb{E}[R_h]
  =\sum_{q\in\cR}\Pr[q\in\cR_h]
- \leq\sum_{r\in\cR}\sum_{q\in\cR}\Pr[F_{r,q}]
+ \leq\sum_{r\in\cR}\sum_{q\in\cR}\Pr[C_{r,q}]
  \leq\frac{2}{\theta}\cdot\sum_{r\in\cR}\sum_{q\in\cR}y_{r,q}
  \leq\frac{2\cdot K}{\theta}\cdot\sum_{r\in\cR}y_r
  \leq\frac{2\cdot K^2}{\theta}.
@@ -140,29 +140,29 @@ The same bound holds when $\cD_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\c
 
 Now, for each $S\in\cS^\ell_{r,d}$, the independence of the activation and trial events gives
 \[
- \Pr[E_{r,d}\cap J_{r,d,S}]
- =\Pr[E_{r,d}]\cdot\Pr[J_{r,d,S}]
+ \Pr[A_{r,d}\cap T_{r,d,S}]
+ =\Pr[A_{r,d}]\cdot\Pr[T_{r,d,S}]
  =\frac{y_r}{d}\cdot\frac{x_S}{y_r}
  =\frac{x_S}{d}<\frac{\theta\cdot y_r}{d^2}.
 \]
-By linearity of expectation, the above probability bound and $y_r<1/T$,
+By linearity of expectation, the above probability bound and $y_r<1/\gamma$,
 \[
  \mathbb{E}[R_\ell]
- \leq\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\spr{\cR'_S}\cdot\Pr[E_{r,d}\cap J_{r,d,S}]
- \leq\frac{\theta}{T}\cdot\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\frac{\spr{\cR'_S}}{d^2}
- \leq\frac{\theta}{T}\cdot\sum_d\sum_{S\in\cS_d}\frac{\spr{\cR'_S}^2}{d^2}
- \leq\frac{4\cdot\theta\cdot m}{T}.
+ \leq\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\spr{\cR'_S}\cdot\Pr[A_{r,d}\cap T_{r,d,S}]
+ \leq\frac{\theta}{\gamma}\cdot\sum_{r,d}\sum_{S\in\cS^\ell_{r,d}}\frac{\spr{\cR'_S}}{d^2}
+ \leq\frac{\theta}{\gamma}\cdot\sum_d\sum_{S\in\cS_d}\frac{\spr{\cR'_S}^2}{d^2}
+ \leq\frac{4\cdot\theta\cdot m}{\gamma}.
 \]
-Here, the third inequality counts, for each $S\in\cS_d$, at most one occurrence for each of its $\spr{\cR'_S}$ residual red elements. The last inequality uses $\spr{\cR'_S}/d<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot T$ and substituting $\theta=K/T$ and $m=T^3$ gives
+Here, the third inequality counts, for each $S\in\cS_d$, at most one occurrence for each of its $\spr{\cR'_S}$ residual red elements. The last inequality uses $\spr{\cR'_S}/d<2$ and the fact that there are at most $m$ sets. Adding $\spr{\cR_+}\leq K\cdot \gamma$ and substituting $\theta=K/\gamma$ and $m=\gamma^3$ gives
 \begin{equation}\label{eq:rbsc-cost-expectation}
  \mathbb{E}[R]
- \leq K\cdot T+\frac{2\cdot K^2}{\theta}+\frac{4\cdot\theta\cdot m}{T}
- =3\cdot K\cdot T+\frac{4\cdot K\cdot m}{T^2}
- =7\cdot K\cdot T.
+ \leq K\cdot \gamma+\frac{2\cdot K^2}{\theta}+\frac{4\cdot\theta\cdot m}{\gamma}
+ =3\cdot K\cdot \gamma+\frac{4\cdot K\cdot m}{\gamma^2}
+ =7\cdot K\cdot \gamma.
 \end{equation}
 \end{proof}
 
-To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $S$ with $x_S>0$ in group $\cS_{r,d}$, independently mark each $u\in\cB_S\cap\cB'$ using a coin $Z_{r,d,S,u}$ with $\Pr[Z_{r,d,S,u}=1]=a_{u,S}/x_S$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_S=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,S}$. Define $\cM_{r,d,S}=\brc{u\in\cB_S\cap\cB'\colon J_{r,d,S}\text{ occurs and }Z_{r,d,S,u}=1}$. Let $\cM_{r,d}=\bigcup_{S\in\cF_{r,d}}\cM_{r,d,S}$ be the set of elements marked by selected occurrences in group $\cS_{r,d}$ and $\cM=\bigcup_{r,d}\cM_{r,d}$ with $M=\spr{\cM}$.
+To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $S$ with $x_S>0$ in group $\cS_{r,d}$, independently mark each $u\in\cB_S\cap\cB'$ using a coin $Z_{r,d,S,u}$ with $\Pr[Z_{r,d,S,u}=1]=a_{u,S}/x_S$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_S=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,S}$. Define $\cM_{r,d,S}=\brc{u\in\cB_S\cap\cB'\colon T_{r,d,S}\text{ occurs and }Z_{r,d,S,u}=1}$. Let $\cM_{r,d}=\bigcup_{S\in\cF_{r,d}}\cM_{r,d,S}$ be the set of elements marked by selected occurrences in group $\cS_{r,d}$ and $\cM=\bigcup_{r,d}\cM_{r,d}$ with $M=\spr{\cM}$.
 % In an active group, a successful trial with no marks still selects the occurrence and its red elements.
 
 \begin{claim}\label{claim:rbsc-blue-coverage}
@@ -173,7 +173,7 @@ Fix $u\in\cB'$. For an occurrence of $S$ in group $\cS_{r,d}$ with $u\in \cB_S$ 
 \[
  \Pr[u\in \cM_{r,d,S}]=\frac{x_S}{y_r}\cdot\frac{a_{u,S}}{x_S}=\frac{a_{u,S}}{y_r}.
 \]
-When $x_S=0$, $\Pr[u\in \cM_{r,d,S}]=a_{u,S}=0$. The sum of these probabilities within $\cS_{r,d}$ is
+When $x_S=0$, $\Pr[u\in \cM_{r,d,S}]=a_{u,S}=0$. Let the sum of these probabilities within $\cS_{r,d}$ be
 \[
  \lambda_{r,d,u}
  =\sum_{S\in\cS_{r,d}\colon u\in\cB_S}\Pr[u\in\cM_{r,d,S}]
@@ -182,7 +182,7 @@ When $x_S=0$, $\Pr[u\in \cM_{r,d,S}]=a_{u,S}=0$. The sum of these probabilities 
 \]
 by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are independent. We use the inequality $1-x\leq e^{-x}$ and the concavity of $1-e^{-a\cdot x}$, which gives $1-e^{-a\cdot x}\geq(1-e^{-a})\cdot x$ for $a\geq0$ and $x\in[0,1]$. The group's conditional probability of marking $u$ is therefore at least
 \[
- \Pr[u\in\cM_{r,d}\mid E_{r,d}]
+ \Pr[u\in\cM_{r,d}\mid A_{r,d}]
  =1-\prod_{S\in\cS_{r,d}\colon u\in \cB_S}
        \br{1-\frac{a_{u,S}}{y_r}}
  \geq1-e^{-\lambda_{r,d,u}}
@@ -190,7 +190,7 @@ by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are indepen
 \]
 Since $\cM_{r,d}=\emptyset$ when the group is inactive, the preceding bound and the definition of $\lambda_{r,d,u}$ give
 \[
- \Pr[u\in\cM_{r,d}]=\Pr[E_{r,d}]\cdot\Pr[u\in\cM_{r,d}\mid E_{r,d}]
+ \Pr[u\in\cM_{r,d}]=\Pr[A_{r,d}]\cdot\Pr[u\in\cM_{r,d}\mid A_{r,d}]
  \geq\frac{y_r}{d}\cdot(1-e^{-1})\cdot\lambda_{r,d,u}
  =\frac{1-e^{-1}}{d}\cdot\sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}.
 \]
@@ -228,7 +228,7 @@ Since $c>23/50$, summing over $\cB'$ and using~\eqref{eq:rbsc-residual-mass} giv
 For each group $\cS_{r,d}$, define
 \[
  M_{r,d}=\sum_{S\in\cS_{r,d}}\spr{\cM_{r,d,S}},
- \qquad W_{r,d}=\boldsymbol{1}_{E_{r,d}}\cdot M_{r,d},
+ \qquad W_{r,d}=\boldsymbol{1}_{A_{r,d}}\cdot M_{r,d},
  \qquad W=\sum_{r,d}W_{r,d}.
 \]
 Thus $W_{r,d}$ counts the marks in group $\cS_{r,d}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $M\leq W$.
@@ -242,14 +242,14 @@ Fix a group $\cS_{r,d}$. For each occurrence $S\in\cS_{r,d}$, let $M_S=\spr{\cM_
  \mathbb{E}[M_S]=\sum_{u\in\cB_S\cap\cB'}\Pr[u\in\cM_{r,d,S}]
  =\frac1{y_r}\cdot\sum_{u\in \cB_S\cap\cB'}a_{u,S}.
 \]
-For the second moment, put $p_{u,S}=\Pr[Z_{r,d,S,u}=1]$ and $\mu_S=\sum_{u\in\cB_S\cap\cB'}p_{u,S}$. Let $N_S=\sum_{u\in\cB_S\cap\cB'}Z_{r,d,S,u}$. By~\eqref{eq:rbsc-lp-set}, $\mu_S\leq t$. The marking coins are independent Bernoulli variables, so
+For the second moment, put $\mu_S=\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1]$. Let $N_S=\sum_{u\in\cB_S\cap\cB'}Z_{r,d,S,u}$. By~\eqref{eq:rbsc-lp-set}, $\mu_S\leq t$. The marking coins are independent Bernoulli variables, so
 \[
  \mathbb{E}[N_S]=\mu_S,\qquad
- \operatorname{Var}(N_S)=\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S}).
+ \operatorname{Var}(N_S)=\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1]\cdot\br{1-\Pr[Z_{r,d,S,u}=1]}.
 \]
-Moreover, $M_S=\boldsymbol{1}_{J_{r,d,S}}\cdot N_S$ and the trial is independent of $N_S$, so $\mathbb{E}[M_S]=(x_S/y_r)\cdot \mu_S$. Using $\mathbb{E}[N_S^2]=\mathbb{E}[N_S]^2+\operatorname{Var}(N_S)$ gives
+Moreover, $M_S=\boldsymbol{1}_{T_{r,d,S}}\cdot N_S$ and the trial is independent of $N_S$, so $\mathbb{E}[M_S]=(x_S/y_r)\cdot \mu_S$. Using $\mathbb{E}[N_S^2]=\mathbb{E}[N_S]^2+\operatorname{Var}(N_S)$ gives
 \[
- \mathbb{E}[M_S^2]=\frac{x_S}{y_r}\cdot\br{\mu_S^2+\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S})}
+ \mathbb{E}[M_S^2]=\frac{x_S}{y_r}\cdot\br{\mu_S^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1]\cdot\br{1-\Pr[Z_{r,d,S,u}=1]}}
  \leq\frac{x_S}{y_r}\cdot(\mu_S^2+\mu_S)
  \leq(t+1)\cdot\mathbb{E}[M_S].
 \]
@@ -270,11 +270,11 @@ The variable $M_{r,d}$ is independent of activation. Multiplying the last bound 
 \begin{equation}\label{eq:rbsc-group-second-moment}
  \mathbb{E}[W_{r,d}^2]\leq(2t+1)\cdot\mathbb{E}[W_{r,d}].
 \end{equation}
-Moreover, by linearity of expectation, independence of $E_{r,d}$ and $M_{r,d}$, and the first-moment calculation above,
+Moreover, by linearity of expectation, independence of $A_{r,d}$ and $M_{r,d}$, and the first-moment calculation above,
 \begingroup\small
 \begin{align*}
  \mathbb{E}[W]
- &=\sum_{r,d}\Pr[E_{r,d}]\cdot\mathbb{E}[M_{r,d}]
+ &=\sum_{r,d}\Pr[A_{r,d}]\cdot\mathbb{E}[M_{r,d}]
  =\sum_{r,d}\frac1d\cdot\sum_{S\in\cS_{r,d}}
        \sum_{u\in\cB_S\cap\cB'}a_{u,S}
  =\sum_d\sum_{S\in\cS_d}\frac1d\cdot
@@ -298,7 +298,7 @@ which gives the proof of the claim.
 
 To find an outcome with both sufficient coverage and small red cost, we define a \emph{potential}
 \begin{equation}\label{eq:rbsc-potential}
- \Phi=M-\frac{W^2}{72\cdot t}-\frac{7\cdot t\cdot R}{360\cdot K\cdot T}-\frac{t}{8}
+ \Phi=M-\frac{W^2}{72\cdot t}-\frac{7\cdot t\cdot R}{360\cdot K\cdot \gamma}-\frac{t}{8}
 \end{equation}
 to be an affine combination of the random variables $M$, $W^2$, and $R$. The term involving $M$ rewards blue coverage, while the term involving $R$ penalizes red cost. Without the quadratic penalty, a large coverage reward could offset an arbitrarily large red cost. Since $W\geq M$, the quadratic penalty grows faster than the coverage reward and prevents this from happening. At the same time, our bound on the second moment of $W$ ensures that the penalty is small enough on average to keep the expected potential nonnegative. An outcome with nonnegative potential then guarantees both sufficient coverage and a small red cost.
 \begin{claim}\label{claim:rbsc-positive-potential}
@@ -306,26 +306,26 @@ We have $\mathbb{E}[\Phi]\geq0$. Every output $\cC$ obtained from an outcome wit
 \[
  \spr{\cov\br{\cC,\cB}}\geq t/8
  \qquad\text{and}\qquad
- \spr{\cov\br{\cC,\cR}}<920\cdot K\cdot T.
+ \spr{\cov\br{\cC,\cR}}<920\cdot K\cdot \gamma.
 \]
-In particular, for the correct guess $K=\OPT\br{\cI}$, the red cost is smaller than $920\cdot\OPT\br{\cI}\cdot T$.
+In particular, for the correct guess $K=\OPT\br{\cI}$, the red cost is smaller than $920\cdot\OPT\br{\cI}\cdot \gamma$.
 \end{claim}
 \begin{proof}
 Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim:rbsc-second-moment} give
 \[
  \mathbb{E}[\Phi]
- >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot T}{360\cdot K\cdot T}-\frac{t}{8}
+ >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot \gamma}{360\cdot K\cdot \gamma}-\frac{t}{8}
  =0.
 \]
 If $\Phi\geq0$, all three subtracted terms are nonnegative, so $M\geq t/8$. Since $\cM\subseteq\cov\br{\cC}$, we have $\spr{\cov\br{\cC,\cB}}\geq M\geq t/8$. Furthermore, $W\geq M$ implies
 \[
- \frac{7\cdot t\cdot R}{360\cdot K\cdot T}
+ \frac{7\cdot t\cdot R}{360\cdot K\cdot \gamma}
  \leq M-\frac{W^2}{72\cdot t}-\frac{t}{8}
  \leq M-\frac{M^2}{72\cdot t}-\frac{t}{8}
  =18\cdot t-\frac{(M-36\cdot t)^2}{72\cdot t}-\frac{t}{8}
  \leq\frac{143\cdot t}{8}.
 \]
-It follows that $\spr{\cov\br{\cC,\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
+It follows that $\spr{\cov\br{\cC,\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot \gamma<920\cdot K\cdot \gamma$.
 \end{proof}
 
 Using the method of conditional expectations applied to the potential $\Phi$ in a relatively straightforward manner allows us to derandomize our procedure as follows.
@@ -340,15 +340,15 @@ Fix a history of exposed coins, and let $\mathcal{E}$ be the event that they tak
 For $S\in\cS_{r,d}$ and $u\in\cB_S\cap\cB'$, independence conditional on $\mathcal{E}$ gives
 \[
  \Pr[u\in\cM_{r,d,S}\mid\mathcal{E}]
- =\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}].
+ =\Pr[T_{r,d,S}\mid\mathcal{E}]\cdot\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}].
 \]
 For $u\in\cB'$ and $q\in\cR\setminus\cR_+$, the probabilities that the group misses a blue or red element are
 \[
  \begin{aligned}
  \Pr[u\notin\cM_{r,d}\mid\mathcal{E}]
- &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon u\in\cB_S}\br{1-\Pr[u\in\cM_{r,d,S}\mid\mathcal{E}]},\\
+ &=1-\Pr[A_{r,d}\mid\mathcal{E}]+\Pr[A_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon u\in\cB_S}\br{1-\Pr[u\in\cM_{r,d,S}\mid\mathcal{E}]},\\
  \Pr[q\notin\cR_{r,d}\mid\mathcal{E}]
- &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon q\in\cR'_S}\br{1-\Pr[J_{r,d,S}\mid\mathcal{E}]}.
+ &=1-\Pr[A_{r,d}\mid\mathcal{E}]+\Pr[A_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon q\in\cR'_S}\br{1-\Pr[T_{r,d,S}\mid\mathcal{E}]}.
  \end{aligned}
 \]
 Independence of distinct groups and linearity of expectation then give
@@ -364,8 +364,8 @@ For the second moment, fix a group $\cS_{r,d}$ and use the variables $N_S$ and $
 \[
  \begin{gathered}
  \mathbb{E}[N_S\mid\mathcal{E}]=\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}],\qquad
- \mathbb{E}[M_S\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\mathbb{E}[N_S\mid\mathcal{E}],\\
- \mathbb{E}[M_S^2\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_S\mid\mathcal{E}]^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]}}.
+ \mathbb{E}[M_S\mid\mathcal{E}]=\Pr[T_{r,d,S}\mid\mathcal{E}]\cdot\mathbb{E}[N_S\mid\mathcal{E}],\\
+ \mathbb{E}[M_S^2\mid\mathcal{E}]=\Pr[T_{r,d,S}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_S\mid\mathcal{E}]^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]}}.
  \end{gathered}
 \]
 The variables $M_S$ remain independent across occurrences, and $M_{r,d}$ remains independent of activation. Thus
@@ -373,8 +373,8 @@ The variables $M_S$ remain independent across occurrences, and $M_{r,d}$ remains
  \begin{gathered}
  \mathbb{E}[M_{r,d}\mid\mathcal{E}]=\sum_{S\in\cS_{r,d}}\mathbb{E}[M_S\mid\mathcal{E}],\qquad
  \mathbb{E}[M_{r,d}^2\mid\mathcal{E}]=\mathbb{E}[M_{r,d}\mid\mathcal{E}]^2+\sum_{S\in\cS_{r,d}}\br{\mathbb{E}[M_S^2\mid\mathcal{E}]-\mathbb{E}[M_S\mid\mathcal{E}]^2},\\
- \mathbb{E}[W_{r,d}\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}\mid\mathcal{E}],\qquad
- \mathbb{E}[W_{r,d}^2\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}^2\mid\mathcal{E}].
+ \mathbb{E}[W_{r,d}\mid\mathcal{E}]=\Pr[A_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}\mid\mathcal{E}],\qquad
+ \mathbb{E}[W_{r,d}^2\mid\mathcal{E}]=\Pr[A_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}^2\mid\mathcal{E}].
  \end{gathered}
 \]
 Conditional on $\mathcal{E}$, the unfixed coins remain independent, and each $W_{r,d}$ depends only on coins belonging to its own group. Hence the variables $W_{r,d}$ are conditionally independent, and
@@ -388,7 +388,7 @@ Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-condit
 By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the nonnegative initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
-For the smallest feasible guess $K$, return $\cC=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cC$ with a nonnegative potential. In both cases, $\spr{\cov\br{\cC,\cB}}\geq t/8$ and $\spr{\cov\br{\cC,\cR}}\leq920\cdot K\cdot T$. Since $K=\OPT\br{\cI}$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT\br{\cI}$. Hence, $\spr{\cov\br{\cC,\cR}}\leq920\cdot\OPT\br{\cI}\cdot T = \bigo\br{m^{1/3}}\cdot \OPT\br{\cI}$ as promised.
+For the smallest feasible guess $K$, return $\cC=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cC$ with a nonnegative potential. In both cases, $\spr{\cov\br{\cC,\cB}}\geq t/8$ and $\spr{\cov\br{\cC,\cR}}\leq920\cdot K\cdot \gamma$. Since $K=\OPT\br{\cI}$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT\br{\cI}$. Hence, $\spr{\cov\br{\cC,\cR}}\leq920\cdot\OPT\br{\cI}\cdot \gamma = \bigo\br{m^{1/3}}\cdot \OPT\br{\cI}$ as promised.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
