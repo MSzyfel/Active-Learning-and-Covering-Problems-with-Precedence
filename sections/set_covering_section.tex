@@ -114,21 +114,21 @@ The same set may be heavy in one group and light in another. Define the random s
 \]
 Define $R_h=\spr{\cR_h}$ and $R_\ell=\spr{\cR_\ell}$. Since every selected occurrence is either heavy or light, $R\leq\spr{\cR_+}+R_h+R_\ell$. We bound the expectations of these two variables separately.
 
-Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\mathcal{I}_{r,q}=\brc{d\colon \exists S\in\cS^h_{r,d}\colon q\in\cR'_S}$ and the event
+Fix $r,q\in\cR\setminus\cR_+$ with $y_r>0$. Define $\cD_{r,q}=\brc{d\colon \exists S\in\cS^h_{r,d}\colon q\in\cR'_S}$ and the event
 \[
- F_{r,q}=\bigcup_{d\in\mathcal{I}_{r,q}}\ \bigcup_{S\in\cS^h_{r,d}\colon q\in\cR'_S}\br{E_{r,d}\cap J_{r,d,S}}.
+ F_{r,q}=\bigcup_{d\in\cD_{r,q}}\ \bigcup_{S\in\cS^h_{r,d}\colon q\in\cR'_S}\br{E_{r,d}\cap J_{r,d,S}}.
 \]
-Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cS_{r,d}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\mathcal{I}_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $d\in\mathcal{I}_{r,q}$, a corresponding heavy occurrence satisfies
+Thus, $F_{r,q}$ occurs when a selected heavy occurrence in a group $\cS_{r,d}$ contains $q$ in its residual red part. For all other ordered pairs $r,q\in\cR$, let $F_{r,q}$ be the empty event. If $\cD_{r,q}$ is empty, the event $F_{r,q}$ is impossible. Otherwise, for each $d\in\cD_{r,q}$, a corresponding heavy occurrence satisfies
 \[
  y_{r,q}\geq x_S\geq\frac{\theta\cdot y_r}{d},
 \]
-where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $d\geq\theta\cdot y_r/y_{r,q}$. Let $d_0$ be the smallest scale in $\mathcal{I}_{r,q}$. All scales are powers of two, so every scale in $\mathcal{I}_{r,q}$ is of the form $2^j\cdot d_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{d\in\mathcal{I}_{r,q}}E_{r,d}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
+where the first inequality follows from~\eqref{eq:rbsc-lp-pair}. In particular, $y_{r,q}>0$ and $d\geq\theta\cdot y_r/y_{r,q}$. Let $d_0$ be the smallest scale in $\cD_{r,q}$. All scales are powers of two, so every scale in $\cD_{r,q}$ is of the form $2^j\cdot d_0$ for some integer $j\geq0$. A selected occurrence requires its group to be active, so $F_{r,q}\subseteq\bigcup_{d\in\cD_{r,q}}E_{r,d}$. Applying the union bound and using the geometric series $\sum_{j\geq0}2^{-j}=2$ gives
 \[
- \Pr[F_{r,q}]\leq\sum_{d\in\mathcal{I}_{r,q}}\frac{y_r}{d}
+ \Pr[F_{r,q}]\leq\sum_{d\in\cD_{r,q}}\frac{y_r}{d}
  \leq\sum_{j\geq0}\frac{y_r}{2^j\cdot d_0}=\frac{2\cdot y_r}{d_0}
  \leq\frac{2\cdot y_{r,q}}{\theta}.
 \]
-The same bound holds when $\mathcal{I}_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cS_{r,d}$, so $F_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
+The same bound holds when $\cD_{r,q}$ is empty, since $y_{r,q}\geq0$. If $q\in\cR_h$, then some selected heavy occurrence containing $q$ belongs to a group $\cS_{r,d}$, so $F_{r,q}$ occurs for its pivot $r$. Thus the union bound gives $\Pr[q\in\cR_h]\leq\sum_{r\in\cR}\Pr[F_{r,q}]$ for each $q\in\cR$. By linearity of expectation,
 \[
  \mathbb{E}[R_h]
  =\sum_{q\in\cR}\Pr[q\in\cR_h]
@@ -162,41 +162,41 @@ Here, the third inequality counts, for each $S\in\cS_d$, at most one occurrence 
 \end{equation}
 \end{proof}
 
-To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $S$ with $x_S>0$ in group $\cS_{r,d}$, independently mark each $u\in\cB_S\cap\cB'$ using a coin $Z_{r,d,S,u}$ with $\Pr[Z_{r,d,S,u}=1]=a_{u,S}/x_S$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_S=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,S}$. Define $\cD_{r,d,S}=\brc{u\in\cB_S\cap\cB'\colon J_{r,d,S}\text{ occurs and }Z_{r,d,S,u}=1}$. Let $\cB_{r,d}=\bigcup_{S\in\cF_{r,d}}\cD_{r,d,S}$ be the set of elements marked by selected occurrences in group $\cS_{r,d}$ and $\widehat{\cB}=\bigcup_{r,d}\cB_{r,d}$ with $Y=\spr{\widehat{\cB}}$.
+To control blue coverage, we use auxiliary \emph{marks} to identify some of the blue elements covered by selected occurrences. For each occurrence of $S$ with $x_S>0$ in group $\cS_{r,d}$, independently mark each $u\in\cB_S\cap\cB'$ using a coin $Z_{r,d,S,u}$ with $\Pr[Z_{r,d,S,u}=1]=a_{u,S}/x_S$. These marking choices are independent of all activations, trials, and other marking choices. The probabilities lie in $[0,1]$ by~\eqref{eq:rbsc-lp-marginal}. For $x_S=0$, take the coins to be always zero. The marking probability is chosen so that, combined with the trial probability, an occurrence contributes in proportion to its assignment mass $a_{u,S}$. Define $\cM_{r,d,S}=\brc{u\in\cB_S\cap\cB'\colon J_{r,d,S}\text{ occurs and }Z_{r,d,S,u}=1}$. Let $\cM_{r,d}=\bigcup_{S\in\cF_{r,d}}\cM_{r,d,S}$ be the set of elements marked by selected occurrences in group $\cS_{r,d}$ and $\cM=\bigcup_{r,d}\cM_{r,d}$ with $M=\spr{\cM}$.
 % In an active group, a successful trial with no marks still selects the occurrence and its red elements.
 
 \begin{claim}\label{claim:rbsc-blue-coverage}
-The expected number of distinct marked blue elements satisfies $\mathbb{E}[Y]>2\cdot t/5$.
+The expected number of distinct marked blue elements satisfies $\mathbb{E}[M]>2\cdot t/5$.
 \end{claim}
 \begin{proof}
 Fix $u\in\cB'$. For an occurrence of $S$ in group $\cS_{r,d}$ with $u\in \cB_S$ and $x_S>0$, the probability that its trial succeeds and its marking coin for $u$ succeeds is
 \[
- \Pr[u\in \cD_{r,d,S}]=\frac{x_S}{y_r}\cdot\frac{a_{u,S}}{x_S}=\frac{a_{u,S}}{y_r}.
+ \Pr[u\in \cM_{r,d,S}]=\frac{x_S}{y_r}\cdot\frac{a_{u,S}}{x_S}=\frac{a_{u,S}}{y_r}.
 \]
-When $x_S=0$, $\Pr[u\in \cD_{r,d,S}]=a_{u,S}=0$. The sum of these probabilities within $\cS_{r,d}$ is
+When $x_S=0$, $\Pr[u\in \cM_{r,d,S}]=a_{u,S}=0$. The sum of these probabilities within $\cS_{r,d}$ is
 \[
  \lambda_{r,d,u}
- =\sum_{S\in\cS_{r,d}\colon u\in\cB_S}\Pr[u\in\cD_{r,d,S}]
+ =\sum_{S\in\cS_{r,d}\colon u\in\cB_S}\Pr[u\in\cM_{r,d,S}]
  =\frac1{y_r}\cdot\sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}
  \leq1
 \]
 by~\eqref{eq:rbsc-lp-blue-load}. The choices for the set occurrences are independent. We use the inequality $1-x\leq e^{-x}$ and the concavity of $1-e^{-a\cdot x}$, which gives $1-e^{-a\cdot x}\geq(1-e^{-a})\cdot x$ for $a\geq0$ and $x\in[0,1]$. The group's conditional probability of marking $u$ is therefore at least
 \[
- \Pr[u\in\cB_{r,d}\mid E_{r,d}]
+ \Pr[u\in\cM_{r,d}\mid E_{r,d}]
  =1-\prod_{S\in\cS_{r,d}\colon u\in \cB_S}
        \br{1-\frac{a_{u,S}}{y_r}}
  \geq1-e^{-\lambda_{r,d,u}}
  \geq(1-e^{-1})\cdot\lambda_{r,d,u}.
 \]
-Since $\cB_{r,d}=\emptyset$ when the group is inactive, the preceding bound and the definition of $\lambda_{r,d,u}$ give
+Since $\cM_{r,d}=\emptyset$ when the group is inactive, the preceding bound and the definition of $\lambda_{r,d,u}$ give
 \[
- \Pr[u\in\cB_{r,d}]=\Pr[E_{r,d}]\cdot\Pr[u\in\cB_{r,d}\mid E_{r,d}]
+ \Pr[u\in\cM_{r,d}]=\Pr[E_{r,d}]\cdot\Pr[u\in\cM_{r,d}\mid E_{r,d}]
  \geq\frac{y_r}{d}\cdot(1-e^{-1})\cdot\lambda_{r,d,u}
  =\frac{1-e^{-1}}{d}\cdot\sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}.
 \]
-Let $M_u=\sum_{r,d}\boldsymbol{1}_{u\in\cB_{r,d}}$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
+Let $M_u=\sum_{r,d}\boldsymbol{1}_{u\in\cM_{r,d}}$ be the number of groups that mark $u$. By linearity of expectation and the group bound above,
 \begin{align*}
- \mathbb{E}[M_u]&=\sum_{r,d}\Pr[u\in\cB_{r,d}]
+ \mathbb{E}[M_u]&=\sum_{r,d}\Pr[u\in\cM_{r,d}]
  \geq(1-e^{-1})\cdot\sum_{r,d}\frac1d\cdot
        \sum_{S\in\cS_{r,d}\colon u\in \cB_S}a_{u,S}\\
  &=(1-e^{-1})\cdot\sum_d\sum_{S\in\cS_d\colon u\in \cB_S}
@@ -210,8 +210,8 @@ For the second equality, fix a scale $d$ and a set $S\in\cS_d$ containing $u$. T
 
 The rounding choices for distinct group indices are independent. Applying $1-x\leq e^{-x}$ across groups and then the above concavity bound for $z_u\in[0,1]$ yields
 \[
- \Pr[u\in\widehat{\cB}]
- =1-\prod_{r,d}\br{1-\Pr[u\in\cB_{r,d}]}
+ \Pr[u\in\cM]
+ =1-\prod_{r,d}\br{1-\Pr[u\in\cM_{r,d}]}
  \geq1-e^{-\mathbb{E}[M_u]}
  \geq1-e^{-(1-e^{-1})\cdot z_u}
  \geq c\cdot z_u,
@@ -219,7 +219,7 @@ The rounding choices for distinct group indices are independent. Applying $1-x\l
 \]
 Since $c>23/50$, summing over $\cB'$ and using~\eqref{eq:rbsc-residual-mass} gives
 \[
- \mathbb{E}[Y]=\sum_{u\in\cB'}\Pr[u\in\widehat{\cB}]\geq c\cdot\sum_{u\in\cB'}z_u
+ \mathbb{E}[M]=\sum_{u\in\cB'}\Pr[u\in\cM]\geq c\cdot\sum_{u\in\cB'}z_u
  >\frac{23}{50}\cdot\frac{7\cdot t}{8}
  =\frac{161\cdot t}{400}>\frac{2\cdot t}{5}.
 \]
@@ -227,19 +227,19 @@ Since $c>23/50$, summing over $\cB'$ and using~\eqref{eq:rbsc-residual-mass} giv
 
 For each group $\cS_{r,d}$, define
 \[
- L_{r,d}=\sum_{S\in\cS_{r,d}}\spr{\cD_{r,d,S}},
- \qquad W_{r,d}=\boldsymbol{1}_{E_{r,d}}\cdot L_{r,d},
+ M_{r,d}=\sum_{S\in\cS_{r,d}}\spr{\cM_{r,d,S}},
+ \qquad W_{r,d}=\boldsymbol{1}_{E_{r,d}}\cdot M_{r,d},
  \qquad W=\sum_{r,d}W_{r,d}.
 \]
-Thus $W_{r,d}$ counts the marks in group $\cS_{r,d}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $Y\leq W$.
+Thus $W_{r,d}$ counts the marks in group $\cS_{r,d}$ with multiplicity over its selected occurrences. A blue element marked by two occurrences is counted twice in $W$, even if the occurrences are in the same group. In particular, $M\leq W$.
 
 \begin{claim}\label{claim:rbsc-second-moment}
 We have $\mathbb{E}[W^2]\leq10\cdot t^2$.
 \end{claim}
 \begin{proof}
-Fix a group $\cS_{r,d}$. For each occurrence $S\in\cS_{r,d}$, let $X_S=\spr{\cD_{r,d,S}}$, so $L_{r,d}=\sum_{S\in\cS_{r,d}}X_S$. These variables are defined before activation and are independent across occurrences. By linearity of expectation and the marking probabilities calculated above,
+Fix a group $\cS_{r,d}$. For each occurrence $S\in\cS_{r,d}$, let $M_S=\spr{\cM_{r,d,S}}$, so $M_{r,d}=\sum_{S\in\cS_{r,d}}M_S$. These variables are defined before activation and are independent across occurrences. By linearity of expectation and the marking probabilities calculated above,
 \[
- \mathbb{E}[X_S]=\sum_{u\in\cB_S\cap\cB'}\Pr[u\in\cD_{r,d,S}]
+ \mathbb{E}[M_S]=\sum_{u\in\cB_S\cap\cB'}\Pr[u\in\cM_{r,d,S}]
  =\frac1{y_r}\cdot\sum_{u\in \cB_S\cap\cB'}a_{u,S}.
 \]
 For the second moment, put $p_{u,S}=\Pr[Z_{r,d,S,u}=1]$ and $\mu_S=\sum_{u\in\cB_S\cap\cB'}p_{u,S}$. Let $N_S=\sum_{u\in\cB_S\cap\cB'}Z_{r,d,S,u}$. By~\eqref{eq:rbsc-lp-set}, $\mu_S\leq t$. The marking coins are independent Bernoulli variables, so
@@ -247,34 +247,34 @@ For the second moment, put $p_{u,S}=\Pr[Z_{r,d,S,u}=1]$ and $\mu_S=\sum_{u\in\cB
  \mathbb{E}[N_S]=\mu_S,\qquad
  \operatorname{Var}(N_S)=\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S}).
 \]
-Moreover, $X_S=\boldsymbol{1}_{J_{r,d,S}}\cdot N_S$ and the trial is independent of $N_S$, so $\mathbb{E}[X_S]=(x_S/y_r)\cdot \mu_S$. Using $\mathbb{E}[N_S^2]=\mathbb{E}[N_S]^2+\operatorname{Var}(N_S)$ gives
+Moreover, $M_S=\boldsymbol{1}_{J_{r,d,S}}\cdot N_S$ and the trial is independent of $N_S$, so $\mathbb{E}[M_S]=(x_S/y_r)\cdot \mu_S$. Using $\mathbb{E}[N_S^2]=\mathbb{E}[N_S]^2+\operatorname{Var}(N_S)$ gives
 \[
- \mathbb{E}[X_S^2]=\frac{x_S}{y_r}\cdot\br{\mu_S^2+\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S})}
+ \mathbb{E}[M_S^2]=\frac{x_S}{y_r}\cdot\br{\mu_S^2+\sum_{u\in\cB_S\cap\cB'}p_{u,S}\cdot(1-p_{u,S})}
  \leq\frac{x_S}{y_r}\cdot(\mu_S^2+\mu_S)
- \leq(t+1)\cdot\mathbb{E}[X_S].
+ \leq(t+1)\cdot\mathbb{E}[M_S].
 \]
 The first-moment calculation and $r\in\cR_S$ for every $S\in\cS_{r,d}$ give
 \[
- \mathbb{E}[L_{r,d}]=\frac1{y_r}\cdot\sum_{S\in\cS_{r,d}}\sum_{u\in\cB_S\cap\cB'}a_{u,S}
+ \mathbb{E}[M_{r,d}]=\frac1{y_r}\cdot\sum_{S\in\cS_{r,d}}\sum_{u\in\cB_S\cap\cB'}a_{u,S}
  \leq\frac1{y_r}\cdot\sum_{S\in\cS\colon r\in\cR_S}\sum_{u\in\cB_S}a_{u,S}\leq t,
 \]
-where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $L_{r,d}^2$ and using independence across distinct occurrences gives
+where the last inequality follows from~\eqref{eq:rbsc-lp-total-load}. Expanding $M_{r,d}^2$ and using independence across distinct occurrences gives
 \begin{align*}
- \mathbb{E}[L_{r,d}^2]
- &=\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S^2]+\sum_{S,S'\in\cS_{r,d}\colon S\ne S'}\mathbb{E}[X_S]\cdot\mathbb{E}[X_{S'}]\\
- &\leq(t+1)\cdot\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S]+\br{\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S]}^2
- =(t+1)\cdot\mathbb{E}[L_{r,d}]+\mathbb{E}[L_{r,d}]^2\leq(2t+1)\cdot\mathbb{E}[L_{r,d}].
+ \mathbb{E}[M_{r,d}^2]
+ &=\sum_{S\in\cS_{r,d}}\mathbb{E}[M_S^2]+\sum_{S,S'\in\cS_{r,d}\colon S\ne S'}\mathbb{E}[M_S]\cdot\mathbb{E}[M_{S'}]\\
+ &\leq(t+1)\cdot\sum_{S\in\cS_{r,d}}\mathbb{E}[M_S]+\br{\sum_{S\in\cS_{r,d}}\mathbb{E}[M_S]}^2
+ =(t+1)\cdot\mathbb{E}[M_{r,d}]+\mathbb{E}[M_{r,d}]^2\leq(2t+1)\cdot\mathbb{E}[M_{r,d}].
 \end{align*}
-The first inequality uses the bound on $\mathbb{E}[X_S^2]$ and adds the nonnegative terms with $S=S'$ to the cross terms. The last inequality uses $\mathbb{E}[L_{r,d}]\leq t$.
-The variable $L_{r,d}$ is independent of activation. Multiplying the last bound by $y_r/d$ therefore gives
+The first inequality uses the bound on $\mathbb{E}[M_S^2]$ and adds the nonnegative terms with $S=S'$ to the cross terms. The last inequality uses $\mathbb{E}[M_{r,d}]\leq t$.
+The variable $M_{r,d}$ is independent of activation. Multiplying the last bound by $y_r/d$ therefore gives
 \begin{equation}\label{eq:rbsc-group-second-moment}
  \mathbb{E}[W_{r,d}^2]\leq(2t+1)\cdot\mathbb{E}[W_{r,d}].
 \end{equation}
-Moreover, by linearity of expectation, independence of $E_{r,d}$ and $L_{r,d}$, and the first-moment calculation above,
+Moreover, by linearity of expectation, independence of $E_{r,d}$ and $M_{r,d}$, and the first-moment calculation above,
 \begingroup\small
 \begin{align*}
  \mathbb{E}[W]
- &=\sum_{r,d}\Pr[E_{r,d}]\cdot\mathbb{E}[L_{r,d}]
+ &=\sum_{r,d}\Pr[E_{r,d}]\cdot\mathbb{E}[M_{r,d}]
  =\sum_{r,d}\frac1d\cdot\sum_{S\in\cS_{r,d}}
        \sum_{u\in\cB_S\cap\cB'}a_{u,S}
  =\sum_d\sum_{S\in\cS_d}\frac1d\cdot
@@ -298,9 +298,9 @@ which gives the proof of the claim.
 
 To find an outcome with both sufficient coverage and small red cost, we define a \emph{potential}
 \begin{equation}\label{eq:rbsc-potential}
- \Phi=Y-\frac{W^2}{72\cdot t}-\frac{7\cdot t\cdot R}{360\cdot K\cdot T}-\frac{t}{8}
+ \Phi=M-\frac{W^2}{72\cdot t}-\frac{7\cdot t\cdot R}{360\cdot K\cdot T}-\frac{t}{8}
 \end{equation}
-to be an affine combination of the random variables $Y$, $W^2$, and $R$. The term involving $Y$ rewards blue coverage, while the term involving $R$ penalizes red cost. Without the quadratic penalty, a large coverage reward could offset an arbitrarily large red cost. Since $W\geq Y$, the quadratic penalty grows faster than the coverage reward and prevents this from happening. At the same time, our bound on the second moment of $W$ ensures that the penalty is small enough on average to keep the expected potential nonnegative. An outcome with nonnegative potential then guarantees both sufficient coverage and a small red cost.
+to be an affine combination of the random variables $M$, $W^2$, and $R$. The term involving $M$ rewards blue coverage, while the term involving $R$ penalizes red cost. Without the quadratic penalty, a large coverage reward could offset an arbitrarily large red cost. Since $W\geq M$, the quadratic penalty grows faster than the coverage reward and prevents this from happening. At the same time, our bound on the second moment of $W$ ensures that the penalty is small enough on average to keep the expected potential nonnegative. An outcome with nonnegative potential then guarantees both sufficient coverage and a small red cost.
 \begin{claim}\label{claim:rbsc-positive-potential}
 We have $\mathbb{E}[\Phi]\geq0$. Every output $\cC$ obtained from an outcome with $\Phi\geq0$ satisfies
 \[
@@ -317,12 +317,12 @@ Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim
  >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot T}{360\cdot K\cdot T}-\frac{t}{8}
  =0.
 \]
-If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cC}$, we have $\spr{\cov\br{\cC,\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
+If $\Phi\geq0$, all three subtracted terms are nonnegative, so $M\geq t/8$. Since $\cM\subseteq\cov\br{\cC}$, we have $\spr{\cov\br{\cC,\cB}}\geq M\geq t/8$. Furthermore, $W\geq M$ implies
 \[
  \frac{7\cdot t\cdot R}{360\cdot K\cdot T}
- \leq Y-\frac{W^2}{72\cdot t}-\frac{t}{8}
- \leq Y-\frac{Y^2}{72\cdot t}-\frac{t}{8}
- =18\cdot t-\frac{(Y-36\cdot t)^2}{72\cdot t}-\frac{t}{8}
+ \leq M-\frac{W^2}{72\cdot t}-\frac{t}{8}
+ \leq M-\frac{M^2}{72\cdot t}-\frac{t}{8}
+ =18\cdot t-\frac{(M-36\cdot t)^2}{72\cdot t}-\frac{t}{8}
  \leq\frac{143\cdot t}{8}.
 \]
 It follows that $\spr{\cov\br{\cC,\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
@@ -339,14 +339,14 @@ Fix a history of exposed coins, and let $\mathcal{E}$ be the event that they tak
 
 For $S\in\cS_{r,d}$ and $u\in\cB_S\cap\cB'$, independence conditional on $\mathcal{E}$ gives
 \[
- \Pr[u\in\cD_{r,d,S}\mid\mathcal{E}]
+ \Pr[u\in\cM_{r,d,S}\mid\mathcal{E}]
  =\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}].
 \]
 For $u\in\cB'$ and $q\in\cR\setminus\cR_+$, the probabilities that the group misses a blue or red element are
 \[
  \begin{aligned}
- \Pr[u\notin\cB_{r,d}\mid\mathcal{E}]
- &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon u\in\cB_S}\br{1-\Pr[u\in\cD_{r,d,S}\mid\mathcal{E}]},\\
+ \Pr[u\notin\cM_{r,d}\mid\mathcal{E}]
+ &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon u\in\cB_S}\br{1-\Pr[u\in\cM_{r,d,S}\mid\mathcal{E}]},\\
  \Pr[q\notin\cR_{r,d}\mid\mathcal{E}]
  &=1-\Pr[E_{r,d}\mid\mathcal{E}]+\Pr[E_{r,d}\mid\mathcal{E}]\cdot\prod_{S\in\cS_{r,d}\colon q\in\cR'_S}\br{1-\Pr[J_{r,d,S}\mid\mathcal{E}]}.
  \end{aligned}
@@ -354,27 +354,27 @@ For $u\in\cB'$ and $q\in\cR\setminus\cR_+$, the probabilities that the group mis
 Independence of distinct groups and linearity of expectation then give
 \begingroup\small
 \begin{equation}\label{eq:rbsc-conditional-coverage-cost}
- \mathbb{E}[Y\mid\mathcal{E}]
- =\sum_{u\in\cB'}\br{1-\prod_{r,d}\Pr[u\notin\cB_{r,d}\mid\mathcal{E}]},\quad
+ \mathbb{E}[M\mid\mathcal{E}]
+ =\sum_{u\in\cB'}\br{1-\prod_{r,d}\Pr[u\notin\cM_{r,d}\mid\mathcal{E}]},\quad
  \mathbb{E}[R\mid\mathcal{E}]
  =\spr{\cR_+}+\sum_{q\in\cR\setminus \cR_+}\br{1-\prod_{r,d}\Pr[q\notin\cR_{r,d}\mid\mathcal{E}]}.
 \end{equation}
 \endgroup
-For the second moment, fix a group $\cS_{r,d}$ and use the variables $N_S$ and $X_S$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
+For the second moment, fix a group $\cS_{r,d}$ and use the variables $N_S$ and $M_S$ defined in the proof of Claim~\ref{claim:rbsc-second-moment}. Conditional on $\mathcal{E}$, the marking coins and trial remain independent, so
 \[
  \begin{gathered}
  \mathbb{E}[N_S\mid\mathcal{E}]=\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}],\qquad
- \mathbb{E}[X_S\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\mathbb{E}[N_S\mid\mathcal{E}],\\
- \mathbb{E}[X_S^2\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_S\mid\mathcal{E}]^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]}}.
+ \mathbb{E}[M_S\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\mathbb{E}[N_S\mid\mathcal{E}],\\
+ \mathbb{E}[M_S^2\mid\mathcal{E}]=\Pr[J_{r,d,S}\mid\mathcal{E}]\cdot\br{\mathbb{E}[N_S\mid\mathcal{E}]^2+\sum_{u\in\cB_S\cap\cB'}\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]\cdot\br{1-\Pr[Z_{r,d,S,u}=1\mid\mathcal{E}]}}.
  \end{gathered}
 \]
-The variables $X_S$ remain independent across occurrences, and $L_{r,d}$ remains independent of activation. Thus
+The variables $M_S$ remain independent across occurrences, and $M_{r,d}$ remains independent of activation. Thus
 \[
  \begin{gathered}
- \mathbb{E}[L_{r,d}\mid\mathcal{E}]=\sum_{S\in\cS_{r,d}}\mathbb{E}[X_S\mid\mathcal{E}],\qquad
- \mathbb{E}[L_{r,d}^2\mid\mathcal{E}]=\mathbb{E}[L_{r,d}\mid\mathcal{E}]^2+\sum_{S\in\cS_{r,d}}\br{\mathbb{E}[X_S^2\mid\mathcal{E}]-\mathbb{E}[X_S\mid\mathcal{E}]^2},\\
- \mathbb{E}[W_{r,d}\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,d}\mid\mathcal{E}],\qquad
- \mathbb{E}[W_{r,d}^2\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[L_{r,d}^2\mid\mathcal{E}].
+ \mathbb{E}[M_{r,d}\mid\mathcal{E}]=\sum_{S\in\cS_{r,d}}\mathbb{E}[M_S\mid\mathcal{E}],\qquad
+ \mathbb{E}[M_{r,d}^2\mid\mathcal{E}]=\mathbb{E}[M_{r,d}\mid\mathcal{E}]^2+\sum_{S\in\cS_{r,d}}\br{\mathbb{E}[M_S^2\mid\mathcal{E}]-\mathbb{E}[M_S\mid\mathcal{E}]^2},\\
+ \mathbb{E}[W_{r,d}\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}\mid\mathcal{E}],\qquad
+ \mathbb{E}[W_{r,d}^2\mid\mathcal{E}]=\Pr[E_{r,d}\mid\mathcal{E}]\cdot\mathbb{E}[M_{r,d}^2\mid\mathcal{E}].
  \end{gathered}
 \]
 Conditional on $\mathcal{E}$, the unfixed coins remain independent, and each $W_{r,d}$ depends only on coins belonging to its own group. Hence the variables $W_{r,d}$ are conditionally independent, and

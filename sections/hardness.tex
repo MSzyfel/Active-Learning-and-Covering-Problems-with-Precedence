@@ -612,7 +612,7 @@ Let $\mathrm{ZQP}=\bigcup_{c\geq1}\mathrm{ZTIME}(2^{(\log s)^c})$ denote zero-er
     For every $\epsilon>0$, \textup{\textsc{Group Steiner Tree}} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 
-The following construction will be used for both covering problems. We start with a hard instance $(T=(V,E),d,r,\cX)$ of Theorem~\ref{thm:source-GST-hardness}. Those instances are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$ \cite[Section~3.3]{PolylogarithmicInapproximability}. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$, and their groups contain only leaves (so none contains $r$).
+The following construction will be used for both covering problems. We start with a hard instance $(T=(V,E),d,r,\cX)$ of Theorem~\ref{thm:source-GST-hardness}. Those instances are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$ \cite[Section~3.3]{PolylogarithmicInapproximability}. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. Let $\cI_{\mathrm{GST}}$ denote the resulting instance. These instances also satisfy $\spr{V}=g^{\bigo(1)}$, and their groups contain only leaves (so none contains $r$).
 For each $v\neq r$, let $e_v$ be its parent edge in $T$, and create a chain of $d(e_v)$ indexed \emph{representative sets}
     \[
         S_v^1\preceq\cdots\preceq S_v^{d(e_v)},\qquad
@@ -658,11 +658,11 @@ For each $v\neq r$, let $e_v$ be its parent edge in $T$, and create a chain of $
         \leq\coverageTime\br{\sigma,\cU}
         \leq n\cdot\spr{\sigma}.
     \]
-    Such a sequence must cover all $g$ group indices to meet the target. Let $\OPT_{\mathrm{GST}}$ be the optimum for the $\ProblemGST$ instance. A minimum-cost Steiner tree yields a representative-only sequence of length $\OPT_{\mathrm{GST}}$, so the upper bound above gives $\OPT\br{\cI}\leq n\cdot\OPT_{\mathrm{GST}}$. Given an $\alpha$-approximate covering sequence, first remove or replace the dummy chain as described above. The resulting sequence $\sigma$ has cost at most $\alpha\cdot\OPT\br{\cI}$. Deleting incomplete representative chains gives a Steiner tree of cost at most $\spr{\sigma}$. The lower bound therefore gives
+    Such a sequence must cover all $g$ group indices to meet the target. A minimum-cost Steiner tree yields a representative-only sequence of length $\OPT\br{\cI_{\mathrm{GST}}}$, so the upper bound above gives $\OPT\br{\cI}\leq n\cdot\OPT\br{\cI_{\mathrm{GST}}}$. Given an $\alpha$-approximate covering sequence, first remove or replace the dummy chain as described above. The resulting sequence $\sigma$ has cost at most $\alpha\cdot\OPT\br{\cI}$. Deleting incomplete representative chains gives a Steiner tree of cost at most $\spr{\sigma}$. The lower bound therefore gives
     \[
         \spr{\sigma}\leq\frac{\alpha\cdot\OPT\br{\cI}}{\spr{D}}
-        \leq\alpha\cdot\frac{n}{\spr{D}}\cdot\OPT_{\mathrm{GST}}
-        =\bigo\br{\alpha}\cdot\OPT_{\mathrm{GST}},
+        \leq\alpha\cdot\frac{n}{\spr{D}}\cdot\OPT\br{\cI_{\mathrm{GST}}}
+        =\bigo\br{\alpha}\cdot\OPT\br{\cI_{\mathrm{GST}}},
     \]
     where the constant depends only on $f$, since $n=\Theta(g)$ and $\spr{D}=\Theta(g)$. As $n=\Theta(g)$, we have $\log n=\Theta(\log g)$.
 
@@ -689,7 +689,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 \begin{proof}
     We reduce from \textup{\textsc{Minimum Group Latency}} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
 
-    Let $(V,d,r,\cX)$ be an $\ProblemMGL$ instance, where $d$ is the metric induced by positive rational edge lengths on a tree $T=(V,E)$. For each edge $e=\{u,v\}\in E$, write $d(e)=d(u,v)$ for its length. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
+    Let $\cI_{\mathrm{MGL}}=(V,d,r,\cX)$ be an $\ProblemMGL$ instance, where $d$ is the metric induced by positive rational edge lengths on a tree $T=(V,E)$. For each edge $e=\{u,v\}\in E$, write $d(e)=d(u,v)$ for its length. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
     To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e)\colon e\in E\}$. Delete every edge of length greater than $B$ and all vertices \DDfix{not reachable from $r$}, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
     \[
@@ -697,13 +697,12 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     \]
     indexed representative sets $S_v^1\preceq\cdots\preceq S_v^{q_v}$, where $S_v^i=\emptyset$ for $i<q_v$ and $S_v^{q_v}=\{j\in[g]\colon v\in X_j\}$. If $u$ is the parent of $v$ and $u\neq r$, impose $S_u^{q_u}\preceq S_v^1$. The precedence constraints form an outforest, and each guess creates at most $g\cdot M^2$ sets.
 
-    Let $P^*$ be an optimal $\ProblemMGL$ route, expanded into a walk on $T$ and stopped when all groups have been visited. Let $B^*$ be the maximum length of an edge traversed by this walk. Since the walk stops at the first visit to its last group, $B^*\leq\OPT_{\mathrm{MGL}}=\lt\br{P^*}$. For the guess $B=B^*$, every vertex visited by the walk survives pruning. List these vertices in order of first visit and append each vertex's entire representative chain in that order. The resulting sequence $\sigma$ is precedence-feasible and covers every group index. For each group $X_j$, the edges represented up to the first set covering $j$ have total length at most $\lt\br{P^*,X_j}$. Rounding the length of each such edge up to a multiple of $\delta$ adds less than $\delta$ per edge, and at most $M$ edges are represented. Therefore
-    \[
-        \delta\cdot\coverageTime\br{j,\sigma}\leq\lt\br{P^*,X_j}+M\cdot\delta,
-        \qquad
-        \delta\cdot\OPT\br{\cI_{B^*}}\leq\lt\br{P^*}+g\cdot M\cdot\delta
-        =\OPT_{\mathrm{MGL}}+B^*\leq2\cdot\OPT_{\mathrm{MGL}},
-    \]
+    Let $P^*$ be an optimal $\ProblemMGL$ route, expanded into a walk on $T$ and stopped when all groups have been visited. Let $B^*$ be the maximum length of an edge traversed by this walk. Since the walk stops at the first visit to its last group, $B^*\leq\OPT\br{\cI_{\mathrm{MGL}}}=\lt\br{P^*}$. For the guess $B=B^*$, every vertex visited by the walk survives pruning. List these vertices in order of first visit and append each vertex's entire representative chain in that order. The resulting sequence $\sigma$ is precedence-feasible and covers every group index. For each group $X_j$, the edges represented up to the first set covering $j$ have total length at most $\lt\br{P^*,X_j}$. Rounding the length of each such edge up to a multiple of $\delta$ adds less than $\delta$ per edge, and at most $M$ edges are represented. Therefore
+    \begin{align*}
+        \delta\cdot\coverageTime\br{j,\sigma}&\leq\lt\br{P^*,X_j}+M\cdot\delta,\\
+        \delta\cdot\OPT\br{\cI_{B^*}}&\leq\lt\br{P^*}+g\cdot M\cdot\delta
+        =\OPT\br{\cI_{\mathrm{MGL}}}+B^*\leq2\cdot\OPT\br{\cI_{\mathrm{MGL}}},
+    \end{align*}
     where $\OPT\br{\cI_{B^*}}$ is the optimum covering cost for the instance constructed using $B=B^*$.
 
     Conversely, let $\pi$ be any precedence-feasible full-cover sequence for a guess. For each $k=0,1,\ldots$, take its prefix of length $\min\{2^k,\spr{\pi}\}$ and consider the vertices whose representative chains are complete in that prefix. These vertices and $r$ induce a rooted subtree. Its edge lengths sum to at most $\delta\cdot2^k$, because $d(e_v)\leq\delta\cdot q_v$ and the complete chains are disjoint. Traverse this subtree by a walk starting and ending at $r$, of length at most $2\cdot\delta\cdot2^k$. Concatenate these walks until the full sequence has been considered. If index $j$ is first covered at position $t=\coverageTime\br{j,\pi}$, the walk for $k=\lceil\log_2 t\rceil$ visits $X_j$. The resulting $\ProblemMGL$ route $P$ therefore satisfies
@@ -712,7 +711,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
         \qquad
         \lt\br{P}<8\cdot\delta\cdot\coverageTime\br{\pi}.
     \]
-    Run an $\alpha$-approximation for every guess, convert each output to a route, and return the route of minimum latency. The correct guess yields a route of latency less than $16\cdot\alpha\cdot\OPT_{\mathrm{MGL}}$. Each covering instance has $n=g$ elements and at most $g\cdot M^2$ sets, and there are at most $M$ guesses. Thus the reduction runs in polynomial time in the $\ProblemMGL$ input size, and an $\bigo\br{\log^{1-\epsilon}n}$-approximation for $\ProblemPCMSSC$ would give an $\bigo\br{\log^{1-\epsilon}g}$-approximation for $\ProblemMGL$. As $g$ is at most the original number of groups, this contradicts Theorem~\ref{thm:source-MGL-hardness} under the stated assumption.
+    Run an $\alpha$-approximation for every guess, convert each output to a route, and return the route of minimum latency. The correct guess yields a route of latency less than $16\cdot\alpha\cdot\OPT\br{\cI_{\mathrm{MGL}}}$. Each covering instance has $n=g$ elements and at most $g\cdot M^2$ sets, and there are at most $M$ guesses. Thus the reduction runs in polynomial time in the $\ProblemMGL$ input size, and an $\bigo\br{\log^{1-\epsilon}n}$-approximation for $\ProblemPCMSSC$ would give an $\bigo\br{\log^{1-\epsilon}g}$-approximation for $\ProblemMGL$. As $g$ is at most the original number of groups, this contradicts Theorem~\ref{thm:source-MGL-hardness} under the stated assumption.
 \end{proof}
 
 \begin{corollary}\label{cor:PCACDT-outforest-hardness}
