@@ -6,22 +6,22 @@
 We first improve an existing algorithm for $\ProblemPRBSC$ and then use it for $\ProblemPCSC$. We then introduce a budgeted variant of precedence-constrained set covering and obtain an approximation for it using $\ProblemPCSC$, which leads to an approximation for $\ProblemPCMSSC$.}
 
 \begin{problem}[\textup{\textsc{Partial Red-Blue Set Cover}} ($\ProblemPRBSC$)] \label{problem:PRBSC}
-Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cS$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a subfamily $\cS'\subseteq\cS$ that covers at least $t$ blue elements and minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cS',\cR}}$.
+Given disjoint sets $\cR$ of $k$ red elements and $\cB$ of $n$ blue elements, a family $\cS$ of subsets of $\cR\cup\cB$, and an integer target $t$, choose a cover $\cC\subseteq\cS$ such that $\spr{\cov\br{\cC,\cB}}\geq t$ which minimizes \DDfix{the \emph{red cost}} $\spr{\cov\br{\cC,\cR}}$.
 \end{problem}
 
 \subsection{A bicriteria algorithm for Partial Red-Blue Set Cover}
 \label{subsection:PRBSC-bicriteria}
-Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, $k=\spr{\cR}$ the number of red elements, and $t$ the target number of blue elements to cover. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian gave a $\bigo\br{m^{1/3}\cdot \log^{4/3}k\cdot \log n}$-approximation for $\ProblemPRBSC$~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. We first show that allowing a constant-factor loss in the blue coverage (which is sufficient for our needs) leads to an improvement to a `pure' $\bigo\br{m^{1/3}}$ guarantee, and by repetition, a $\bigo\br{m^{1/3}\cdot\log n}$-approximation for $\ProblemPRBSC$.
+Let $m$ be the number of input sets, $n=\spr{\cB}$ the number of blue elements, and $k=\spr{\cR}$ the number of red elements. Chlamt{\'{a}}{\v{c}}, Makarychev and Vakilian gave a $\bigo\br{m^{1/3}\cdot \log^{4/3}k\cdot \log n}$-approximation for $\ProblemPRBSC$~\cite[Section~3 and Appendix~A]{RedBlueSetCover}. We first show that allowing a constant-factor loss in the blue coverage (which is sufficient for our needs) leads to an improvement to a `pure' $\bigo\br{m^{1/3}}$ guarantee, and by repetition, an $\bigo\br{m^{1/3}\cdot\log n}$-approximation for $\ProblemPRBSC$.
 %  Our deterministic algorithm covers at least one eighth of the target at cost $\bigo\br{m^{1/3}}$ times the optimum for target $t$.
-\DDfix{Our algorithm builds on an existing LP-rounding \cite{RedBlueSetCover}; however, we use a stronger LP relaxation enhanced with a non-trivial derandomization step.} In the original algorithm, the sets are partitioned according to the number of red elements they contain and a step finding a collection with a favorable ratio of red cost to blue coverage is repeated until the target is met. We inherit this bucketing idea; however, we round all these size groups together. In order to bound the cost of our solution we distinguish \emph{heavy} and \emph{light} covering sets according to the LP solution. Additional constraints for pairs of red elements allow us to bound the expected red cost of heavy sets across all sizes, while light sets have sufficiently small selection probabilities that we can bound their total cost by counting them with multiplicity. In order to show that our algorithm covers a significant fraction of the blue elements, we use random marks to identify some of the covered blue elements. Their randomized choice allows us to lower bound the expected number of distinct marked elements and, at the same time, upper bound this value's second moment. This comes in handy during the derandomization step where we design a carefully defined random variable we call \emph{potential}, whose non-negative value is maintained throughout the rounding using the method of conditional expectations, yielding a quality deterministic solution in polynomial time.
+\DDfix{Our algorithm builds on an existing LP-rounding \cite{RedBlueSetCover}, however, we use a stronger LP relaxation enhanced with a non-trivial derandomization step.} In the original algorithm, the sets are partitioned according to the number of red elements they contain and a step finding a collection with a favorable ratio of red cost to blue coverage is repeated until the target is met. We inherit this bucketing idea, however, we round all these size groups together. In order to bound the cost of our solution we distinguish \emph{heavy} and \emph{light} covering sets according to the LP solution. Additional constraints for pairs of red elements allow us to bound the expected red cost of heavy sets across all sizes, while light sets have sufficiently small selection probabilities that we can bound their total cost by counting them with multiplicity. In order to show that our algorithm covers a significant fraction of the blue elements, we use random marks to identify some of the covered blue elements. Their randomized choice allows us to lower bound the expected number of distinct marked elements and, at the same time, upper bound this value's second moment. This comes in handy during the derandomization step where we design a carefully defined random variable we call \emph{potential}, whose non-negative value is maintained throughout the rounding using the method of conditional expectations, yielding a quality deterministic solution in polynomial time.
 
 \begin{theorem}\label{thm:partial-red-blue-bicriteria}
-There is a deterministic polynomial-time algorithm for $\ProblemPRBSC$ that outputs a subfamily $\cS'\subseteq\cS$ satisfying $\spr{\cov\br{\cS',\cB}}\geq t/8$ and $\spr{\cov\br{\cS',\cR}}\leq920\cdot m^{1/3}\cdot\OPT_{\mathrm{RB}}$, where $\OPT_{\mathrm{RB}}$ is the optimum red cost for the target $t$.
+For an instance $\cI=\br{\cR,\cB,\cS,t}$ of $\ProblemPRBSC$, there is a deterministic polynomial-time algorithm that outputs a cover $\cC\subseteq\cS$ satisfying $\spr{\cov\br{\cC,\cB}}\geq t/8$ and $\spr{\cov\br{\cC,\cR}}\leq920\cdot m^{1/3}\cdot\OPT\br{\cI}$.
 \end{theorem}
 \begin{proof}
 Write $\cR_S=S\cap\cR$ and $\cB_S=S\cap\cB$ for each $S\in\cS$.
 % First select all sets $S$ with $\cR_S=\emptyset$, that is, all sets containing no red elements. If they cover at least $t/8$ blue elements, return this family. In particular, this handles every instance whose optimum red cost is zero.
-In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost $\OPT_{\mathrm{RB}}$ (this can be done in $O\br{\log\br{\spr{\cR}}}$ tries). Assume that we have a correct guess. In our LP there will be the following variables:
+In the first step we guess an integer $K\in[\spr{\cR}]$ for the optimum red cost $\OPT\br{\cI}$ (this can be done in $O\br{\log\br{\spr{\cR}}}$ tries). Assume that we have a correct guess. In our LP there will be the following variables:
 \begin{enumerate}
     \item For each red element $r\in\cR$, the variable $y_r\in[0,1]$ indicating whether $r$ is covered.
     \item For each set $S\in\cS$, the variable $x_S\in[0,1]$ indicating whether $S$ is selected.
@@ -46,10 +46,10 @@ For the current guess $K$, the LP is as follows:
 %  The following claim verifies the relaxation.
 
 \begin{claim}\label{claim:rbsc-lp-validity}
-For the correct guess $K=\OPT_{\mathrm{RB}}$, the above system is a polynomial-size relaxation of $\ProblemPRBSC$ with red-cost bound $\OPT_{\mathrm{RB}}$.
+For the correct guess $K=\OPT\br{\cI}$, the above system is a polynomial-size relaxation of $\ProblemPRBSC$ with red-cost bound $\OPT\br{\cI}$.
 \end{claim}
 \begin{proof}
-Let $\cS^*\subseteq\cS$ be an optimal solution, with $\spr{\cov\br{\cS^*,\cB}}\geq t$ and $\spr{\cov\br{\cS^*,\cR}}=\OPT_{\mathrm{RB}}=K$. Choose $\cB^*\subseteq\cov\br{\cS^*,\cB}$ with $\spr{\cB^*}=t$ and, for each $u\in\cB^*$, choose a set $S_u\in\cS^*$ containing $u$. Define
+Let $\cS^*\subseteq\cS$ be an optimal solution, with $\spr{\cov\br{\cS^*,\cB}}\geq t$ and $\spr{\cov\br{\cS^*,\cR}}=\OPT\br{\cI}=K$. Choose $\cB^*\subseteq\cov\br{\cS^*,\cB}$ with $\spr{\cB^*}=t$ and, for each $u\in\cB^*$, choose a set $S_u\in\cS^*$ containing $u$. Define
 \[
  x_S=\boldsymbol{1}_{S\in\cS^*},\qquad
  y_r=\boldsymbol{1}_{r\in\cov\br{\cS^*}},\qquad
@@ -60,12 +60,12 @@ For the assignment variables, set $a_{u,S_u}=1$ for each $u\in\cB^*$ and set all
 
 The budget and assignment constraints hold by construction. Each assigned blue element belongs to a selected set, and at most $t$ blue elements are assigned to any set, proving~\eqref{eq:rbsc-lp-marginal} and~\eqref{eq:rbsc-lp-set}. \DDfix{Each selected set does not contain red elements that are not covered,} proving~\eqref{eq:rbsc-lp-red} and~\eqref{eq:rbsc-lp-pair}. If $y_r=0$, no selected set contains $r$, so both assignment sums in~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load} involving $r$ vanish. If $y_r=1$, a fixed blue element is assigned at most once, and there are $t$ assignments in total. This proves~\eqref{eq:rbsc-lp-blue-load} and~\eqref{eq:rbsc-lp-total-load}. Moreover,
 \[
- \sum_{q\in\cR}y_{r,q}=y_r\cdot\sum_{q\in\cR}y_q=\OPT_{\mathrm{RB}}\cdot y_r=K\cdot y_r,
+ \sum_{q\in\cR}y_{r,q}=y_r\cdot\sum_{q\in\cR}y_q=\OPT\br{\cI}\cdot y_r=K\cdot y_r,
 \]
-which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. In particular, the guess $K=\OPT_{\mathrm{RB}}$ gives a feasible relaxation.
+which proves~\eqref{eq:rbsc-lp-pair-budget}. The numbers of variables and constraints are polynomial in the explicit input size. In particular, the guess $K=\OPT\br{\cI}$ gives a feasible relaxation.
 \end{proof}
 
-For the smallest feasible guess $K\leq \OPT_{\mathrm{RB}}$ fix a feasible solution and put
+For the smallest feasible guess $K\leq \OPT\br{\cI}$ fix a feasible solution and put
 \[
  T=m^{1/3},\qquad \cR_+=\brc{r\in\cR\colon y_r\geq1/T},\qquad \cR'_S=\cR_S\setminus \cR_+, \textup{ for }S\in\cS.
 \]
@@ -85,17 +85,17 @@ For every power of two $d=2^j\leq\spr{\cR}$ with $j\in\mathbb{Z}_{\geq0}$, which
 Each set with a nonempty residual red part belongs to exactly one $\cS_d$. We call $r$ the \emph{pivot} of $\cS_{r,d}$. A set $S\in\cS_d$ belongs to the group $\cS_{r,d}$ for each residual red element $r\in\cR'_S$ with $y_r>0$. We call its membership in each such group an \emph{occurrence} of $S$. A set at scale $d$ has at least $d$ residual red elements and hence, unless its LP value is zero, at least $d$ occurrences.
 % This multiplicity will compensate for the factor $1/d$ in the activation probability.
 
-For each $r$ and $d$, let $E_{r,d}$ be the event that group $\cS_{r,d}$ is \emph{activated}, with $\Pr[E_{r,d}]=y_r/d$. For each $S\in\cS_{r,d}$, let $J_{r,d,S}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,d,S}]=x_S/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $S$ is \emph{selected} if and only if both $E_{r,d}$ and $J_{r,d,S}$ occur, so selection events in the same group share the activation event. Note that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $d\geq1$. Define the random families $\cF_{r,d}$ and $\cS'$, sets $\cR_{r,d}$ and $\cR_0$, and the variable $R$ by
+For each $r$ and $d$, let $E_{r,d}$ be the event that group $\cS_{r,d}$ is \emph{activated}, with $\Pr[E_{r,d}]=y_r/d$. For each $S\in\cS_{r,d}$, let $J_{r,d,S}$ be the event that its \emph{trial} succeeds, with $\Pr[J_{r,d,S}]=x_S/y_r$. The activation and trial events are mutually independent, including across groups with the same members. An occurrence of $S$ is \emph{selected} if and only if both $E_{r,d}$ and $J_{r,d,S}$ occur, so selection events in the same group share the activation event. Note that both probabilities belong to $[0,1]$ by~\eqref{eq:rbsc-lp-red} and $d\geq1$. Define the random families $\cF_{r,d}$ and $\cC$, sets $\cR_{r,d}$ and $\cR_0$, and the variable $R$ by
 \[
  \begin{gathered}
  \cF_{r,d}=\brc{S\in\cS_{r,d}\colon E_{r,d}\text{ and }J_{r,d,S}\text{ occur}},
- \qquad \cS'=\cS_0\cup\bigcup_{r,d}\cF_{r,d},\\
+ \qquad \cC=\cS_0\cup\bigcup_{r,d}\cF_{r,d},\\
  \cR_{r,d}=\bigcup_{S\in\cF_{r,d}}\cR'_S,
  \qquad \cR_0=\bigcup_{r,d}\cR_{r,d},
  \qquad R=\spr{\cR_+}+\spr{\cR_0}.
  \end{gathered}
 \]
-The output satisfies $\cov\br{\cS',\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cS',\cR}}\leq R$.
+The output satisfies $\cov\br{\cC,\cR}\subseteq\cR_+\cup\cR_0$, and therefore $\spr{\cov\br{\cC,\cR}}\leq R$.
 
 \begin{claim}\label{claim:rbsc-red-cost}
 The random construction satisfies $\mathbb{E}[R]\leq7\cdot K\cdot T$.
@@ -302,13 +302,13 @@ To find an outcome with both sufficient coverage and small red cost, we define a
 \end{equation}
 to be an affine combination of the random variables $Y$, $W^2$, and $R$. The term involving $Y$ rewards blue coverage, while the term involving $R$ penalizes red cost. Without the quadratic penalty, a large coverage reward could offset an arbitrarily large red cost. Since $W\geq Y$, the quadratic penalty grows faster than the coverage reward and prevents this from happening. At the same time, our bound on the second moment of $W$ ensures that the penalty is small enough on average to keep the expected potential nonnegative. An outcome with nonnegative potential then guarantees both sufficient coverage and a small red cost.
 \begin{claim}\label{claim:rbsc-positive-potential}
-We have $\mathbb{E}[\Phi]\geq0$. Every output $\cS'$ obtained from an outcome with $\Phi\geq0$ satisfies
+We have $\mathbb{E}[\Phi]\geq0$. Every output $\cC$ obtained from an outcome with $\Phi\geq0$ satisfies
 \[
- \spr{\cov\br{\cS',\cB}}\geq t/8
+ \spr{\cov\br{\cC,\cB}}\geq t/8
  \qquad\text{and}\qquad
- \spr{\cov\br{\cS',\cR}}<920\cdot K\cdot T.
+ \spr{\cov\br{\cC,\cR}}<920\cdot K\cdot T.
 \]
-In particular, for the correct guess $K=\OPT_{\mathrm{RB}}$, the red cost is smaller than $920\cdot\OPT_{\mathrm{RB}}\cdot T$.
+In particular, for the correct guess $K=\OPT\br{\cI}$, the red cost is smaller than $920\cdot\OPT\br{\cI}\cdot T$.
 \end{claim}
 \begin{proof}
 Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim:rbsc-second-moment} give
@@ -317,7 +317,7 @@ Claims~\ref{claim:rbsc-red-cost}, \ref{claim:rbsc-blue-coverage}, and~\ref{claim
  >\frac{2\cdot t}{5}-\frac{10\cdot t^2}{72\cdot t}-\frac{7\cdot t\cdot7\cdot K\cdot T}{360\cdot K\cdot T}-\frac{t}{8}
  =0.
 \]
-If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cS'}$, we have $\spr{\cov\br{\cS',\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
+If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Since $\widehat{\cB}\subseteq\cov\br{\cC}$, we have $\spr{\cov\br{\cC,\cB}}\geq Y\geq t/8$. Furthermore, $W\geq Y$ implies
 \[
  \frac{7\cdot t\cdot R}{360\cdot K\cdot T}
  \leq Y-\frac{W^2}{72\cdot t}-\frac{t}{8}
@@ -325,7 +325,7 @@ If $\Phi\geq0$, all three subtracted terms are nonnegative, so $Y\geq t/8$. Sinc
  =18\cdot t-\frac{(Y-36\cdot t)^2}{72\cdot t}-\frac{t}{8}
  \leq\frac{143\cdot t}{8}.
 \]
-It follows that $\spr{\cov\br{\cS',\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
+It follows that $\spr{\cov\br{\cC,\cR}}\leq R\leq\frac{6435}{7}\cdot K\cdot T<920\cdot K\cdot T$.
 \end{proof}
 
 Using the method of conditional expectations applied to the potential $\Phi$ in a relatively straightforward manner allows us to derandomize our procedure as follows.
@@ -388,7 +388,7 @@ Substituting~\eqref{eq:rbsc-conditional-coverage-cost} and~\eqref{eq:rbsc-condit
 By averaging, one such value does not decrease the conditional expectation. There are polynomially many coins, so fixing them as above preserves the nonnegative initial expectation from Claim~\ref{claim:rbsc-positive-potential} in polynomial time.
 \end{proof}
 
-For the smallest feasible guess $K$, return $\cS'=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cS'$ with a nonnegative potential. In both cases, $\spr{\cov\br{\cS',\cB}}\geq t/8$ and $\spr{\cov\br{\cS',\cR}}\leq920\cdot K\cdot T$. Since $K=\OPT_{\mathrm{RB}}$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT_{\mathrm{RB}}$. Hence, $\spr{\cov\br{\cS',\cR}}\leq920\cdot\OPT_{\mathrm{RB}}\cdot T = \bigo\br{m^{1/3}}\cdot \OPT_{\mathrm{RB}}$ as promised.
+For the smallest feasible guess $K$, return $\cC=\cS_0$ if $\spr{\cov\br{\cS_0,\cB}}\geq t/8$. Otherwise, use Claim~\ref{claim:rbsc-conditional-expectations} to obtain a solution $\cC$ with a nonnegative potential. In both cases, $\spr{\cov\br{\cC,\cB}}\geq t/8$ and $\spr{\cov\br{\cC,\cR}}\leq920\cdot K\cdot T$. Since $K=\OPT\br{\cI}$ is feasible by Claim~\ref{claim:rbsc-lp-validity}, the smallest feasible guess satisfies $K\leq\OPT\br{\cI}$. Hence, $\spr{\cov\br{\cC,\cR}}\leq920\cdot\OPT\br{\cI}\cdot T = \bigo\br{m^{1/3}}\cdot \OPT\br{\cI}$ as promised.
 \end{proof}
 
 Repeating Theorem~\ref{thm:partial-red-blue-bicriteria} logarithmically many times on the remaining blue target yields an approximation that meets the full target. The original optimum remains feasible for the residual target in each iteration, so the red cost in each iteration is bounded in terms of the original optimum.
@@ -514,7 +514,7 @@ We start with a lemma that relates the coverage times and the lengths of $\pi_{l
     \end{lemma}
     \begin{proof}
         By Lemma~\ref{lem:sigma-coverage}, the prefix and the final solution together cover at least $r+\frac{\max\brc{0,f\cdot n-r}}{\beta}\geq\frac{f\cdot n}{\beta}$ elements. Here the residual coverage from $\sigma_{l^*}$ is disjoint from the prefix coverage by definition of $\cR_{l^*}$.
-        For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$; otherwise, set $t_u=\spr{\pi_{l^*}}$.
+        For each element $u\in\cU$, let $t_u$ denote the index of the first set in $\pi_{l^*}$ that covers $u$ if $u$ is covered by $\pi_{l^*}$, otherwise, set $t_u=\spr{\pi_{l^*}}$.
         Lemma \ref{lem:pi-spread-cost} implies that 
         \[
         \coverageTime\br{\pi_{l^*}}=\sum_{u\in\cU} t_u = \bigo\br{\alpha\cdot\beta^3}\cdot \coverageTime\br{\cCopt}.
@@ -745,8 +745,8 @@ $\sum_{X \in \cX_\tau} w(X)$.
 \end{problem}
 The following tree-metric guarantee follows from the algorithm and its analysis in Section~5.1 of \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}: for a tree metric, the tree-embedding step is unnecessary, saving a logarithmic factor.
 \begin{theorem}[Gupta, Nagarajan and Ravi \cite{ApproxAlgsForOptDTsAndAdapTSPProblems}, Section~5.1]\label{thm:gso-tree-source}
-    Consider a $\ProblemGSO$ instance on a tree metric $(V,d)$ with a budget $\budget$.
-    There exists a polynomial-time algorithm that finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least $\frac{1}{4}\OPT_{\mathrm{GSO}}$, where $\OPT_{\mathrm{GSO}}$ denotes the maximum total weight of groups coverable by an $r$-tour of length at most $\budget$.
+    Consider a $\ProblemGSO$ instance $\cI$ on a tree metric $(V,d)$ with a budget $\budget$.
+    There exists a polynomial-time algorithm that finds an $r$-tour of length $\bigo\br{\log\spr{V}}\cdot\budget$ covering groups of total weight at least $\frac{1}{4}\OPT\br{\cI}$.
 \end{theorem}
 % \begin{problem}[\textup{\textsc{Partial Latency Group Steiner Tree}} (LPGST)] \label{problem:LPGST}
 % Given a metric space $(V, d)$, a root vertex $r \in V$, a family of groups $\cX \subseteq 2^V$, a weight function $w\colon \cX \to \mathbb{R}_{\geq 0}$, and a target $h \leq \spr{\cX}$, find an $r$-tour $\tau$ such that $\spr{\cX_\tau} \geq h$ and that minimizes
