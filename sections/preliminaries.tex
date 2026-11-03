@@ -45,34 +45,34 @@ All tests have unit cost, and the average-case objective uses the uniform distri
 
 Having introduced the necessary notation, we now formally state the decision tree problems for which we provide algorithms in Section~\ref{sec:AL}.
 Throughout the paper we use $\cI$ to denote instances of particular problems, and $\OPT\br{\cI}$ denotes then the cost of an optimal solution for $\cI$.
-\begin{problem}[\textup{\textsc{Precedence Constrained Worst-Case Decision Tree}} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the worst-case cost, $\COSTW\br{D}=\OPT\br{\cI}$.
+\begin{problem}[\textup{\textsc{Precedence-Constrained Worst-Case Decision Tree}} ($\ProblemPCWCDT$)] \label{problem:PCWCDT}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes $\COSTW\br{D}$.
 \end{problem}
-\begin{problem}[\textup{\textsc{Precedence Constrained Average-Case Decision Tree}} ($\ProblemPCACDT$)] \label{problem:PCACDT}
-Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes the average-case cost, $\COSTA\br{D}=\OPT\br{\cI}$.
+\begin{problem}[\textup{\textsc{Precedence-Constrained Average-Case Decision Tree}} ($\ProblemPCACDT$)] \label{problem:PCACDT}
+Given a set of hypotheses $\cH$, a set of tests $\cT$ and a precedence relation $(\cT,\preceq)$ on tests, find a precedence-closed decision tree $D$ that minimizes $\COSTA\br{D}$.
 \end{problem}
 
 \paraTitle{Additional notation for decision trees.}
 For a node $v$ of a decision tree $D$, let $\cH_v(D)$ be the set of hypotheses consistent with the replies on the path from the root to $v$: it is the intersection of $\cH$ with the reply labels on that path. In particular, $\cH_{r(D)}(D)=\cH$. We write $\cH_v$ when $D$ is clear from the context.
 
 \paraTitle{Set covering problems.}
-Set families are indexed, so distinct members may have identical contents.
+% Set families are indexed, so distinct members may have identical contents.
 %For any partial order $(X,\preceq)$ and $S\subseteq X$, we say that $S$ is \emph{precedence-closed} if for all $x \in S$ and all $y \in X$ such that $y \preceq x$, it holds that $y \in S$.
-For a family of sets $(\cS,\preceq)$ and a set $S\in\cS$, let $\closure{S}$ be the minimal precedence-closed subset of $\cS$ containing $S$.
+For a precedence-constrained family of sets $(\cS,\preceq)$ and a set $S\in\cS$, let $\closure{S}$ be the minimal precedence-closed subset of $\cS$ containing $S$.
 For a family of sets $\cC\subseteq \cS$ over a universe $\cU$, its \emph{coverage} is defined as $\cov\br{\cC}=\bigcup_{C\in\cC}C$, and by extension, $\cov\br{\cC, X} = \cov\br{\cC} \cap X$ for any set $X\subseteq\cU$.
 If $\cC$ is a sequence of sets, rather than a family, we analogously define $\cov\br{\cC}=\bigcup_{C\in\cC}C$.
 Let $\cC=\angl{C_1,\ldots,C_l}$ be a precedence-closed sequence.
-The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in such a precedence-closed sequence $\cC$ is the minimum index $i$ such that $x\in C_i$ if such an index exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
+The \emph{coverage time} of an element $x$, $\coverageTime\br{x,\cC}$, in $\cC$ is the minimum index $i$ such that $x\in C_i$ if it exists, i.e., if $x\in\cov\br{\cC}$, and $\spr{\cC}$ whenever $x\notin \cov\br{\cC}$.
 We denote by $\coverageTime\br{\cC, \cU}=\sum_{x\in\cU}\coverageTime\br{x,\cC}$ the sum of coverage times of all elements in $\cU$.
-When the universe is clear from the context we write $\coverageTime\br{\cC}$.
+When clear from the context we write $\coverageTime\br{\cC}$.
 
-\begin{problem}[\textup{\textsc{Precedence Constrained Set Cover}} ($\ProblemPCSC$)] \label{problem:PCSC}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that minimizes $\spr{\cC}$ and satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$.
+\begin{problem}[\textup{\textsc{Precedence-Constrained Set Cover}} ($\ProblemPCSC$)] \label{problem:PCSC}
+Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed subfamily $\cC\subseteq\cS$ that satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$ and minimizes $\spr{\cC}$.
 \end{problem}
-\begin{problem}[\textup{\textsc{Precedence Constrained Min-Sum Set Cover}} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
-Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that minimizes $\coverageTime\br{\cC}$ and satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$.
+\begin{problem}[\textup{\textsc{Precedence-Constrained Min-Sum Set Cover}} ($\ProblemPCMSSC$)] \label{problem:PCMSSC}
+Given a universe $\cU$ of $n$ items, a family $\cS$ of $m$ subsets of $\cU$, a precedence relation $(\cS,\preceq)$ and $0<f\leq 1$, find a precedence-closed sequence $\cC$ that satisfies $\spr{\cov\br{\cC}}\geq f\cdot n$ and minimizes $\coverageTime\br{\cC}$.
 \end{problem}
 
 \paraTitle{Approximation conventions.}
-A bicriteria ratio $(\alpha,\beta)$ means that an algorithm may lose at least a factor $1/\beta$-fraction of the target cover amount while losing at most a factor $\alpha$ on cost. For minimization problems, the cost is compared with the optimum for the original coverage target. For budgeted problems, the budget may be exceeded by at most a factor of $\alpha$.
+A bicriteria ratio $(\alpha,\beta)$ means that an algorithm may cover at least factor $1/\beta$-fraction of the target cover amount while paying at most a factor $\alpha$ on the cost. For minimization problems, the cost is compared with the optimum for the original coverage target. For budgeted problems, the budget may be exceeded by a factor of at most $\alpha$.
 

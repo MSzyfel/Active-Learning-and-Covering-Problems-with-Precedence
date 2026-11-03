@@ -17,9 +17,9 @@ Another direction for future research is to enrich \textup{\textsc{Optimal Decis
 
 We now consider the greedy approach mentioned above. Unlike the algorithms of Section~\ref{sec:AL}, it directly selects a test and its predecessors according to their information gain. The same rule works for both $\ProblemPCWCDT$ and $\ProblemPCACDT$.
 
-The algorithm proceeds in \emph{stages}. At the beginning of a stage, let $\cH'\subseteq\cH$ be the set of hypotheses consistent with the replies received so far and let $P\subseteq\cT$ be the set of tests already performed. For a family $S\subseteq\cT$, let $\Pi_{\cH'}(S)$ be the combined test whose replies are the subsets of hypotheses in $\cH'$ that give the same replies to the tests in $S$. Define its gain as
+The algorithm proceeds in \emph{stages}. At the beginning of a stage, let $\cH'\subseteq\cH$ be the set of hypotheses consistent with the replies received so far and let $P\subseteq\cT$ be the set of tests already performed. For a family $S\subseteq\cT$, let $t_{\cH'}\br{S}$ be the combined test whose replies partition $\cH'$ according to the replies to the tests in $S$. Define its gain as
 \[
-    g_{\cH'}(S)=1-\frac{1}{\spr{\cH'}}\cdot\max_{H\in\Pi_{\cH'}(S)}\spr{H}.
+    g_{\cH'}(S)=1-\frac{1}{\spr{\cH'}}\cdot\max_{H\in t_{\cH'}\br{S}}\spr{H}.
 \]
 For each $t\in\cT\setminus P$, put $C_t=\closure{t}\setminus P$. In a stage, the algorithm selects a test $t$ maximizing $g_{\cH'}(C_t)/\spr{C_t}$ and performs the tests in $C_t$ in a topological order. The stage ends after all tests in $C_t$ have been performed, unless the target is identified first. The algorithm stops as soon as the target is identified and otherwise begins a new stage. Every stage performs at least one previously unperformed test, so there are at most $m$ stages on each root-to-leaf path.
 
@@ -29,14 +29,14 @@ The above algorithm is a polynomial-time $\bigo\br{\sqrt{m\cdot\log n}}$-approxi
 
 \begin{proof}
 Let $D$ be the decision tree constructed by the algorithm. At an arbitrary stage $(\cH',P)$, let $C$ be the closure selected by the algorithm.
-Let $\cH''$ be the hypotheses remaining after the stage. They are contained in a reply of $\Pi_{\cH'}(C)$, so $\spr{\cH''}\leq \br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$.
+Let $\cH''$ be the hypotheses remaining after the stage. They are contained in a reply of $t_{\cH'}\br{C}$, so $\spr{\cH''}\leq \br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$.
 The actual number of tests performed in the current stage is at most $\spr{C}$.
 
 For the worst-case bound, let $\cI$ be the input instance and let $D^*$ be an optimal decision tree for $\cI$. At a stage $(\cH',P)$, restrict $D^*$ to $\cH'$ by removing branches inconsistent with $\cH'$. Then contract the nodes corresponding to tests in $P$, whose replies are already known. The resulting tree is feasible for the restricted instance and has depth at most $\OPT\br{\cI}$: the predecessors of each remaining test are either in $P$ or occur earlier on its path. In this tree, repeatedly follow a child containing the largest number of hypotheses until reaching a singleton. Let $t_1,\ldots,t_\ell$ be the tests on the resulting path, where $\ell\leq\OPT\br{\cI}$, and let $L_i$ be the hypotheses reaching $t_i$. Put $L_{\ell+1}$ equal to the singleton reached at the end of the path. Since the path follows a largest reply of $t_i$ on $L_i$ and $C_{t_i}$ contains $t_i$, for each $i\in[\ell]$ we have
 \begin{align*}
     \spr{L_{i+1}}
-    &=\max_{H\in\Pi_{\cH'}(\brc{t_i})}\spr{H\cap L_i}
-    \geq\spr{L_i}-\br{\spr{\cH'}-\max_{H\in\Pi_{\cH'}(\brc{t_i})}\spr{H}}\\
+    &=\max_{H\in t_i\br{\cH'}}\spr{H\cap L_i}
+    \geq\spr{L_i}-\br{\spr{\cH'}-\max_{H\in t_i\br{\cH'}}\spr{H}}\\
     &=\spr{L_i}-\spr{\cH'}\cdot g_{\cH'}(\brc{t_i})
     \geq\spr{L_i}-\spr{\cH'}\cdot g_{\cH'}(C_{t_i}).
 \end{align*}
@@ -65,7 +65,7 @@ For $k\geq1$, let $h_k=\sum_{i=1}^{k}1/i$, and put $h_0=0$. Then
     &\leq\OPT\br{\cI}^2\cdot\sum_{j=\spr{\cH''}}^{\spr{\cH'}-1}\frac1j
     =\OPT\br{\cI}^2\cdot\br{h_{\spr{\cH'}-1}-h_{\spr{\cH''}-1}}.
 \end{align*}
-The second inequality uses $\spr{\cH''}\leq\br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$, and the third follows by bounding each summand below by $1/(\spr{\cH'}-1)$. Consider the stages on the path in $D$ identifying a hypothesis $h$. Let $C_1,\ldots,C_r$ be the selected closures and let $n_i$ be the number of remaining hypotheses at the beginning of stage $i$, with $n_1=n$ and $n_{r+1}=1$. The number of tests performed in stage $i$ is at most $\spr{C_i}$, so
+The second inequality uses $\spr{\cH''}\leq\br{1-g_{\cH'}(C)}\cdot\spr{\cH'}$, and the third follows by bounding each summand below by $1/(\spr{\cH'}-1)$. Consider the stages on the path in $D$ identifying a hypothesis $h$. Let $C_1,\ldots,C_r$ be the selected closures and let $n_i$ be the number of remaining hypotheses at the beginning of stage $i$, with $n_1=n$ and $n_{r+1}=1$. Then
 \begin{align*}
     \COST\br{D,h}
     &\leq\sum_{i=1}^{r}\spr{C_i}
@@ -82,14 +82,14 @@ Since no test is repeated, the cost is also at most $m$. The approximation ratio
 For the average-case bound, it will be convenient to think of the hypothesis identification as a randomized process where the target hypothesis $\target$ is drawn uniformly from $\cH$.
 Let $D^*$ be an optimal decision tree for $\ProblemPCACDT$. Fix a stage history with remaining hypotheses $\cH'$ and completed tests $P$. Conditional on the tests performed and their replies, the target is uniformly distributed on $\cH'$. Restricting $D^*$ in the same way gives a decision tree $D'$ for the restricted instance.
 
-Write $S=\angl{t_1,\ldots,t_\ell}=\sepcoverD{D'}$ for its sepcover, as defined in Section~\ref{sec:AL}. We identify $S$ with the family of its tests when using set operations. By the definition of sepcover, each test node on this path is reached by more than $\spr{\cH'}/2$ hypotheses from $\cH'$, and every reply subtree remaining after removal of the path contains at most $\spr{\cH'}/2$ hypotheses. A reply of $\Pi_{\cH'}(S)$ is contained in one such subtree, determined by the first reply that leaves the path or by the reply to its last test. Thus every reply has size at most $\spr{\cH'}/2$, and $g_{\cH'}(S)\geq 1/2$.
+Write $S=\angl{t_1,\ldots,t_\ell}=\sepcoverD{D'}$ for its sepcover, as defined in Section~\ref{sec:AL}. We identify $S$ with the family of its tests when using set operations. By the definition of sepcover, each test node on this path is reached by more than $\spr{\cH'}/2$ hypotheses from $\cH'$, and every reply subtree remaining after removal of the path contains at most $\spr{\cH'}/2$ hypotheses. A reply of $t_{\cH'}\br{S}$ is contained in one such subtree, determined by the first reply that leaves the path or by the reply to its last test. Thus every reply has size at most $\spr{\cH'}/2$, and $g_{\cH'}(S)\geq 1/2$.
 
-For any families $S_1,S_2\subseteq\cT$, the gain is subadditive: $g_{\cH'}(S_1\cup S_2)\leq g_{\cH'}(S_1)+g_{\cH'}(S_2)$. To see this, let $H_i$ be a largest reply of $\Pi_{\cH'}(S_i)$ for each $i\in[2]$. The intersection $H_1\cap H_2$ is contained in a reply of $\Pi_{\cH'}(S_1\cup S_2)$, and
+For any families $S_1,S_2\subseteq\cT$, the gain is subadditive: $g_{\cH'}(S_1\cup S_2)\leq g_{\cH'}(S_1)+g_{\cH'}(S_2)$. To see this, let $H_i$ be a largest reply of $t_{\cH'}\br{S_i}$ for each $i\in[2]$. The intersection $H_1\cap H_2$ is contained in a reply of $t_{\cH'}\br{S_1\cup S_2}$, and
 \[
     \spr{H_1\cap H_2}\geq\spr{H_1}+\spr{H_2}-\spr{\cH'}
     =\spr{\cH'}\cdot\br{1-g_{\cH'}(S_1)-g_{\cH'}(S_2)}.
 \]
-Hence the largest reply of $\Pi_{\cH'}(S_1\cup S_2)$ has at least this size, proving subadditivity. Since $P\cup S$ is precedence-closed, $C_{t_i}\subseteq S$ for each $i\in[\ell]$. These residual closures cover the tests in $S$ and each has size at most $\ell$. Therefore,
+Hence the largest reply of $t_{\cH'}\br{S_1\cup S_2}$ has at least this size, proving subadditivity. Since $P\cup S$ is precedence-closed, $C_{t_i}\subseteq S$ for each $i\in[\ell]$. These residual closures cover the tests in $S$ and each has size at most $\ell$. Therefore,
 \[
     \sum_{i=1}^{\ell} g_{\cH'}(C_{t_i})\geq g_{\cH'}(S)\geq\frac12,
     \qquad
@@ -112,7 +112,6 @@ Let $v_1,\ldots,v_\ell$ be the test nodes on the sepcover of $D'$. Restricting $
     >\frac{\ell}{2},
 \end{align*}
 where $\inner{D'}$ is the set of test nodes of $D'$.
-The last inequality holds because each test node on the sepcover is reached by more than $\spr{\cH'}/2$ hypotheses from $\cH'$.
 Combining this bound with \eqref{eq:greedy-density} gives
 \begin{equation}\label{eq:greedy-average-density}
     \spr{C}\leq 2\cdot\ell^2\cdot g_{\cH'}(C)

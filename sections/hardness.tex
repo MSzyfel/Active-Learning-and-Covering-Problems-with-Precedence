@@ -454,7 +454,7 @@ The following source results provide the completeness and soundness gaps used in
 \begin{theorem}[Label Cover hardness \cite{AnalyticalApproachToParallelRepetition}]\label{thm:label-cover-source-hardness}
     The following hold for \textup{\textsc{Label Cover}} with perfect completeness:
     \begin{enumerate}
-        \item\label{item:label-cover-source-polylog} For every constant $c_0>0$, it is NP-hard to distinguish instances of graph size $N_0$ and alphabet size at most $N_0$ with value $1$ from those with value at most $(\log N_0)^{-c_0}$ \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition}.
+        \item\label{item:label-cover-source-polylog} For every constant $c_0>0$, it is $\mathrm{NP}$-hard to distinguish instances of graph size $N_0$ and alphabet size at most $N_0$ with value $1$ from those with value at most $(\log N_0)^{-c_0}$ \cite[Corollary~1.4]{AnalyticalApproachToParallelRepetition}.
         \item\label{item:label-cover-source-repetition} There are constants $a>1$ and $\beta_0\in(0,1)$ such that, for every integer $\tau\geq1$, a 3SAT instance of size $L$ can be transformed in time $L^{\bigo(\tau)}$ into a Label Cover instance of graph size $L^{\bigo(\tau)}$ and alphabet size at most $a^\tau$, with value $1$ if the 3SAT instance is satisfiable and value at most $\beta_0^\tau$ otherwise \cite[Theorem~6.2]{AnalyticalApproachToParallelRepetition}.
     \end{enumerate}
 \end{theorem}
@@ -576,9 +576,9 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
 \begin{theorem}\label{thm:label-cover-hardness}
     For every fixed target fraction $f\in(0,1]$ and each $x\in\{n,m\}$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a deterministic polynomial-time bicriteria approximation with the following guarantees under the indicated assumptions:
     \begin{enumerate}
-        \item\label{item:label-cover-polylog} $\br{\bigo\br{(\log x)^K},\bigo\br{(\log x)^J}}$ for any constants $K,J\geq0$, unless $\text{P}=\text{NP}$.
-        \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size.
-        \item\label{item:label-cover-polynomial} Assuming the \textup{\textsc{Projection Games Conjecture}}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\text{P}=\text{NP}$.
+        \item\label{item:label-cover-polylog} $\br{\bigo\br{(\log x)^K},\bigo\br{(\log x)^J}}$ for any constants $K,J\geq0$, unless $\mathrm{P}=\mathrm{NP}$.
+        \item\label{item:label-cover-subpolynomial} $\br{\bigo\br{2^{(\log x)^{1-\epsilon}}},\bigo\br{2^{(\log x)^{1-\epsilon}}}}$ for any $\epsilon\in(0,1)$, unless $\mathrm{NP}\subseteq\mathrm{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the 3SAT input size.
+        \item\label{item:label-cover-polynomial} Assuming the \textup{\textsc{Projection Games Conjecture}}, $\br{\bigo\br{x^\delta},\bigo\br{x^\delta}}$ for some constant $\delta>0$ independent of $f$ and $x$, unless $\mathrm{P}=\mathrm{NP}$.
     \end{enumerate}
     All three bounds hold even when the precedence POSET has height two and every set has size at most one.
 \end{theorem}
@@ -589,7 +589,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \end{equation}
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
-        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives NP-hard \textup{\textsc{Label Cover}} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives $\mathrm{NP}$-hard \textup{\textsc{Label Cover}} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
         \item Part~\ref{item:label-cover-source-repetition} of Theorem~\ref{thm:label-cover-source-hardness} gives, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
@@ -609,7 +609,7 @@ Given a connected graph $G=(V,E)$ with positive edge lengths $d$, a root $r\in V
 Let $\mathrm{ZQP}=\bigcup_{c\geq1}\mathrm{ZTIME}(2^{(\log s)^c})$ denote zero-error randomized quasipolynomial time, where $s$ is the input length of the language being decided.
 
 \begin{theorem}[Halperin and Krauthgamer \cite{PolylogarithmicInapproximability}, Theorem~1.1]\label{thm:source-GST-hardness}
-    For every $\epsilon>0$, \textup{\textsc{Group Steiner Tree}} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, \textup{\textsc{Group Steiner Tree}} on trees with $g$ groups admits no polynomial-time $\bigo\br{\log^{2-\epsilon}g}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 
 The following construction will be used for both covering problems. We start with a hard instance $(T=(V,E),d,r,\cX)$ of Theorem~\ref{thm:source-GST-hardness}. Those instances are complete $b$-ary trees of height $H$, with level-$j$ edge lengths $q^{-j}$ for integers $1<q\leq b$ \cite[Section~3.3]{PolylogarithmicInapproximability}. Scaling by $q^H$ gives positive integer lengths at most $q^H\leq b^H\leq\spr{V}$ and preserves approximation ratios. These instances also satisfy $\spr{V}=g^{\bigo(1)}$, and their groups contain only leaves (so none contains $r$).
@@ -626,7 +626,7 @@ For each $v\neq r$, let $e_v$ be its parent edge in $T$, and create a chain of $
     Let $\cI=(\cU,\cS,\preceq,f)$ be the resulting instance. Since $f$ is fixed, $n=\Theta(g)$, and $L\leq\spr{V}^2=g^{\bigo(1)}$; thus the construction has polynomial size.
 
 \begin{theorem}\label{thm:PCSC-outforest-hardness}
-    For every $\epsilon>0$ and fixed rational $f\in(0,1]$, $\ProblemPCSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$ and fixed rational $f\in(0,1]$, $\ProblemPCSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
     Selecting all representative sets covers $[g]$ at cost $L$, while covering any element of $D$ costs at least $n\cdot L+1$. Thus an optimal solution covers no element of $D$ and covers all of $[g]$. In any such solution, the dummy chain and every incomplete representative chain can be deleted: they cover nothing and no selected descendant depends on them. After these deletions, the selected chains correspond to a rooted subtree meeting every group, and the cover cardinality equals the subtree's total edge length. Conversely, every such subtree gives a feasible solution of the same cost. The two optima are therefore equal.
@@ -634,7 +634,7 @@ For each $v\neq r$, let $e_v$ be its parent edge in $T$, and create a chain of $
     For sufficiently large $n$, an $\bigo\br{\log^{2-\epsilon}n}$-approximate solution has cost at most $n\cdot L$, since $\OPT\br{\cI}\leq L$ and $\log^{2-\epsilon}n=o(n)$. It therefore covers no element of $D$ and can be converted as above to a $\ProblemGST$ solution of no greater cost. This would yield an $\bigo\br{\log^{2-\epsilon}g}$-approximation for the instances of Theorem~\ref{thm:source-GST-hardness}, contradicting that theorem under the stated assumption.
 \end{proof}
 \begin{theorem}\label{thm:PCMSSC-outforest-hardness}
-    For every $\epsilon>0$ and fixed $f\in(0,1)$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$ and fixed $f\in(0,1)$, $\ProblemPCMSSC$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
     Consider the instance $\cI$ given by the construction above. Since $f<1$, we have $\spr{D}>0$ for sufficiently large $g$.
@@ -680,11 +680,11 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 
 \begin{theorem}[Chakrabarty and Swamy \cite{ChakrabartySwamy2016FacilityLocationClientLatencies}, Theorem~2.5]\label{thm:source-MGL-hardness}
     \setlength{\emergencystretch}{2em}
-    For every $\epsilon>0$, \textup{\textsc{Minimum Group Latency}} on tree metrics with $g$ groups admits no polynomial-time $\bigo\br{\log^{1-\epsilon}g}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, \textup{\textsc{Minimum Group Latency}} on tree metrics with $g$ groups admits no polynomial-time $\bigo\br{\log^{1-\epsilon}g}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 
 \begin{theorem}\label{thm:PCMSSC-outforest-full-cover-hardness}
-    For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, $\ProblemPCMSSC$ with $f=1$ and outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{theorem}
 \begin{proof}
     We reduce from \textup{\textsc{Minimum Group Latency}} on tree metrics, using Theorem~\ref{thm:source-MGL-hardness}.
@@ -716,13 +716,13 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 \end{proof}
 
 \begin{corollary}\label{cor:PCACDT-outforest-hardness}
-    For every $\epsilon>0$, $\ProblemPCACDT$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, $\ProblemPCACDT$ with outforest precedence constraints admits no polynomial-time $\bigo\br{\log^{1-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{corollary}
 \begin{proof}
     The full-cover reduction in Theorem~\ref{thm:PCMSSC-to-PCACDT-hardness} preserves outforest precedence and transfers approximation ratios up to a constant factor. The result follows from Theorem~\ref{thm:PCMSSC-outforest-full-cover-hardness}.
 \end{proof}
 
-\subsection{Reductions from precedence constrained set cover}
+\subsection{Reductions from precedence-constrained set cover}
 \begin{theorem}\label{thm:PCSC-to-PCWCDT-hardness}
     Approximating $\ProblemPCWCDT$ is as hard as approximating $\ProblemPCSC$ with $f=1$.
 \end{theorem}
@@ -765,10 +765,10 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     Let $n$ denote the number of hypotheses and $m$ the number of tests. The following conditional hardness results hold:
     \begin{enumerate}
         \item Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, neither $\ProblemPCWCDT$ nor $\ProblemPCACDT$ admits a polynomial-time $\bigo\br{n^{1/2-\epsilon}}$- or $\bigo\br{m^{1/4-\epsilon}}$-approximation.
-        \item For every $x\in\{n,m\}$ and fixed $K>0$, neither problem admits a polynomial-time $\bigo\br{(\log x)^K}$-approximation unless $\text{P}=\text{NP}$.
-        \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\text{NP}\subseteq\text{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input.
-        \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\text{P}=\text{NP}$.
-        \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\text{NP}\subseteq\mathrm{ZQP}$.
+        \item For every $x\in\{n,m\}$ and fixed $K>0$, neither problem admits a polynomial-time $\bigo\br{(\log x)^K}$-approximation unless $\mathrm{P}=\mathrm{NP}$.
+        \item For every $x\in\{n,m\}$ and $\epsilon\in(0,1)$, neither problem admits a polynomial-time $\bigo\br{2^{(\log x)^{1-\epsilon}}}$-approximation unless $\mathrm{NP}\subseteq\mathrm{DTIME}\br{2^{(\log L)^{\bigo(1)}}}$, where $L$ is the size of the 3SAT input.
+        \item Assuming the Projection Games Conjecture, there is a constant $\delta>0$ such that, for each $x\in\{n,m\}$, neither problem admits a polynomial-time $\bigo\br{x^\delta}$-approximation unless $\mathrm{P}=\mathrm{NP}$.
+        \item For every $\epsilon>0$, no polynomial-time $\bigo\br{\log^{2-\epsilon}n}$-approximation exists for outforest $\ProblemPCWCDT$, and no polynomial-time $\bigo\br{\log^{1-\epsilon}n}$-approximation exists for outforest $\ProblemPCACDT$, unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
     \end{enumerate}
     The Label-Cover- and PGC-based bounds (items 2--4) concern deterministic algorithms and hold even when every test has at most three outcomes and the precedence POSET has height two.
 \end{corollary}
@@ -798,7 +798,7 @@ Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dens
 \end{proof}
 
 \begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
-    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\text{NP}\subseteq\mathrm{ZQP}$.
+    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:PCSC-outforest-hardness}.
