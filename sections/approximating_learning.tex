@@ -37,7 +37,7 @@ For each test $t\in\cT$, let
 \xi(t)=\brc{h\in\cH \mid h\in H \textup{ for some }H\in t\textup{ s.t. }  \spr{H}\leq\frac{3}{4}\cdot\spr{\cH}}.
 \]
 We regard $\xi\br{\cT}=\brc{\xi(t)\mid t\in\cT}$ as an \emph{indexed family}: distinct tests give distinct sets even when their contents coincide. If $\preceq$ is a partial order on $\cT$, then $\preceq_{\xi}$ is the corresponding partial order on $\xi(\cT)$, i.e., $t\preceq t'$ if and only if $\xi(t)\preceq_{\xi}\xi(t')$.
-By extension, for any subset $S\subseteq\cT$, $\xi(S)=\brc{\xi(t) \mid t\in S}$. For a sequence $S$, the map $\xi$ preserves its order.
+By extension, for any subset $\cS\subseteq\cT$, $\xi(\cS)=\brc{\xi(t) \mid t\in \cS}$. For a sequence $S$, the map $\xi$ preserves its order.
 We also set $\cU_{\xi}=\bigcup_{t\in\cT}\xi(t)$.
 For a family or sequence $\cC$ of indexed sets, $\xi^{-1}(\cC)$ is the corresponding family or sequence of tests.
 \begin{lemma}
@@ -132,7 +132,7 @@ An analogous analysis can be conducted for $\ProblemPCACDT$, which is deferred t
 \begin{corollary}\label{cor:PCACDT-special-cases}
     There exist poly-time algorithms for $\ProblemPCACDT$ with the following guarantees:
     \begin{itemize}
-        \item $\bigo\br{\log n}$-approximation for inforests, by Corollary~\ref{cor:BPCSC-inforest-to-PCMSSC}.
+        \item $\bigo\br{\log n}$-approximation for inforests, by Theorem~\ref{thm:inforest-PCMSSC}.
         \item $\bigo\br{\log m\cdot\log n}$-approximation for outforests, by Theorem~\ref{thm:BPCSC-outforest}.
         \item $\bigo\br{m^{1/3}\cdot\log n}$-approximation for general precedence constraints, by Corollary~\ref{cor:PCACDT-general}.
     \end{itemize}

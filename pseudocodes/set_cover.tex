@@ -10,13 +10,13 @@
   $\cA\gets\emptyset$\;
 
   \ForEach{$S\in\cS$}{
-    $D_S\gets\closure{S}$\;
-    $A_S\gets\brc{r_T\colon T\in D_S}\cup\brc{b_u\colon u\in\cov\br{D_S}}$\;
+    $\cS_S\gets\closure{S}$\;
+    $A_S\gets\brc{r_T\colon T\in \cS_S}\cup\brc{b_u\colon u\in\cov\br{\cS_S}}$\;
     $\cA\gets\cA\cup\brc{A_S}$\;
   }
 
   $\cA'\gets$ Run the $\alpha_{m,n}$-approximation algorithm for $\ProblemPRBSC$ on $(\cR,\cB,\cA,k)$\;
-  $\cC\gets\bigcup_{A_S\in\cA'}D_S$\;
+  $\cC\gets\bigcup_{A_S\in\cA'}\cS_S$\;
   \Return $\cC$\;
 }
 \end{algorithm}

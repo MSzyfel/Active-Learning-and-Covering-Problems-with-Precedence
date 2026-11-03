@@ -124,11 +124,11 @@ We use the following probability inequalities.
 
 \begin{theorem}\label{thm:PCSC-PDS-clique-hardness}
     \setlength{\emergencystretch}{1em}
-    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation algorithm for $\ProblemPCSC$ with target fraction $f$, even when the precedence POSET has height two.
+    Fix an integer $r\geq2$ and a coverage fraction $f\in(0,1]$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\bigo\br{1}}$- nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\bigo\br{1}}$-approximation algorithm for $\ProblemPCSC$ with target fraction $f$, even when the precedence POSET has height two.
 \end{theorem}
 \begin{proof}
     \par\noindent\textbf{Parameters and construction.}
-    It suffices to consider $0<\epsilon<(r-1)/(4\cdot r)$, since larger values weaken both claims. Let $N$ be the number of vertices of the input graph. The fixed integer $r$ is the number of vertices in each clique used by the reduction, and $R=\binom{r}{2}$ is its number of edges. Set
+    Fix a constant coverage-loss factor $\kappa\geq1$. It suffices to consider $0<\epsilon<(r-1)/(4\cdot r)$, since larger values weaken both claims. Let $N$ be the number of vertices of the input graph. The fixed integer $r$ is the number of vertices in each clique used by the reduction, and $R=\binom{r}{2}$ is its number of edges. Set
     \[
         \alpha=\frac{r-1}{r+1},\qquad \beta=\alpha-\frac{\epsilon}{2\cdot R},
         \qquad k=\lfloor\sqrt{N}\rfloor.
@@ -241,7 +241,7 @@ We use the following probability inequalities.
     Group the covariance terms according to $a=\spr{K\cap L}$. For each $a=2,\ldots,r-1$, there are $Q_{S,a}$ ordered pairs, each with the covariance bound above. Adding their contributions to the individual variances and dividing by $\mu_S^2$ gives
     \begin{align*}
         \frac{\operatorname{Var}(Y_S\mid\mathcal M_j=M)}{\mu_S^2}
-        &\leq\frac{1}{\mu_S}+\frac{1}{\mu_S^2}\sum_{a=2}^{r-1}Q_{S,a}\cdot k^{-(1-\beta)\cdot(2\cdot R-\binom{a}{2})}=\frac{1}{\mu_S}+\bigo_r\br{\sum_{a=2}^{r-1}z^{-a}\cdot k^{(1-\beta)\cdot\binom{a}{2}}}\\
+        &\leq\frac{1}{\mu_S}+\frac{1}{\mu_S^2}\cdot\sum_{a=2}^{r-1}Q_{S,a}\cdot k^{-(1-\beta)\cdot(2\cdot R-\binom{a}{2})}=\frac{1}{\mu_S}+\bigo_r\br{\sum_{a=2}^{r-1}z^{-a}\cdot k^{(1-\beta)\cdot\binom{a}{2}}}\\
         &=\frac{1}{\mu_S}+\bigo_r\br{\sum_{a=2}^{r-1}k^{-(1-\beta)\cdot a\cdot(r-a)/2}}=\frac{1}{\mu_S}+o(1).
     \end{align*}
     The first equality substitutes $Q_{S,a}=\bigo_r(z^{2\cdot r-a})$ and $\mu_S^2=\Theta_r(z^{2\cdot r}\cdot k^{-2\cdot(1-\beta)\cdot R})$. The next equality uses $z=\Theta_r(k^{(1-\beta)\cdot(r-1)/2})$. Since $\beta<1$ and $2\leq a\leq r-1$, each power of $k$ in the sum tends to zero, giving the final equality. For $r=2$, the sums are empty.
@@ -386,10 +386,10 @@ We use the following probability inequalities.
 
 \begin{theorem}\label{thm:PCMSSC-PDS-clique-hardness}
     \setlength{\emergencystretch}{1em}
-    Fix an integer $r\geq2$, a coverage fraction $f\in(0,1]$, and a coverage-loss factor $\kappa\geq1$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\kappa}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\kappa}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence POSET has height two.
+    Fix an integer $r\geq2$ and a coverage fraction $f\in(0,1]$. Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ there is no polynomial-time bicriteria $\br{\bigo\br{n^{(r-1)/(2\cdot r)-\epsilon}},\bigo\br{1}}$-approximation nor $\br{\bigo\br{m^{(r-1)/(4\cdot r)-\epsilon}},\bigo\br{1}}$-approximation for $\ProblemPCMSSC$ with target fraction $f$, even when the precedence POSET has height two.
 \end{theorem}
 \begin{proof}
-    Use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, placing all representative sets of $\cC_{\mathcal P}$ before its witness sets gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
+    Fix a constant coverage-loss factor $\kappa\geq1$ and use the instance and notation from Theorem~\ref{thm:PCSC-PDS-clique-hardness}. With probability at least $1/2-o(1)$ in the planted case, placing all representative sets of $\cC_{\mathcal P}$ before its witness sets gives a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\spr{\cC}\leq3\cdot n$. Since $\coverageTime\br{x,\cC}\leq3\cdot n$ for every $x\in\cU$, we have
     \[
         \coverageTime\br{\cC}\leq3\cdot n^2.
     \]
@@ -422,10 +422,10 @@ We use the following probability inequalities.
 
 For fixed $r$, the hardness exponents are $(r-1)/(2\cdot r)=1/2-1/(2\cdot r)$ in $n$ and $(r-1)/(4\cdot r)=1/4-1/(4\cdot r)$ in $m$. Thus $r=3$ gives exponents $1/3$ and $1/6$, and as $r\to\infty$ through fixed constants the two exponents converge to $1/2$ and $1/4$.
 \begin{corollary}\label{cor:PDS-limiting-hardness}
-    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed $f\in(0,1]$, and fixed $\kappa\geq1$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation with the target fraction $f$.
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ and fixed $f\in(0,1]$, neither $\ProblemPCSC$ nor $\ProblemPCMSSC$ admits a polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\bigo\br{1}}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\bigo\br{1}}$-approximation with the target fraction $f$.
 \end{corollary}
 \begin{proof}
-    Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with their parameter $\epsilon$ set to $\epsilon/2$ and with the given $f,\kappa$. The resulting hardness exponents satisfy
+    Choose a fixed integer $r\geq\max\brc{2,1/\epsilon}$ and apply Theorems~\ref{thm:PCSC-PDS-clique-hardness} and~\ref{thm:PCMSSC-PDS-clique-hardness} with their parameter $\epsilon$ set to $\epsilon/2$ and with the given $f$. The resulting hardness exponents satisfy
     \[
         \frac{r-1}{2\cdot r}-\frac\epsilon2
         =\frac12-\frac{1}{2\cdot r}-\frac\epsilon2\geq\frac12-\epsilon
@@ -470,7 +470,7 @@ Our reduction uses Label Cover instances with total projections.
     For every $s\in(0,1)$, a \textup{\textsc{Label Cover}} instance $\mathcal L$ can be transformed into a total-projection instance $\mathcal L'$ satisfying:
     \begin{itemize}
         \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, then $\operatorname{val}(\mathcal L')=1$.
-        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then $\operatorname{val}(\mathcal L')\leq2s$.
+        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then $\operatorname{val}(\mathcal L')\leq2\cdot s$.
     \end{itemize}
 \end{lemma}
 \begin{proof}
@@ -489,13 +489,13 @@ Our reduction uses Label Cover instances with total projections.
     Suppose $\operatorname{val}(\mathcal L)\leq s$, and fix any labeling $(a,b')$ of $\mathcal L'$. A right vertex assigned a private label $\bot_{e,j}$ can satisfy at most one incident constraint, since only $\pi'_{e_j}$ can output that label. Replace every private right label by an arbitrary label in $\Sigma_B$, keeping all other labels unchanged, to obtain $(a,b)$. This loses at most $\spr{B}$ satisfied copied constraints, so
     \[
         \operatorname{val}_{\mathcal L'}(a,b')
-        \leq\operatorname{val}_{\mathcal L'}(a,b)+\frac{\spr{B}}{r_0\spr{E}}
-        =\operatorname{val}_{\mathcal L}(a,b)+\frac{\spr{B}}{r_0\spr{E}}
-        \leq s+\frac1{r_0}\leq2s,
+        \leq\operatorname{val}_{\mathcal L'}(a,b)+\frac{\spr{B}}{r_0\cdot\spr{E}}
+        =\operatorname{val}_{\mathcal L}(a,b)+\frac{\spr{B}}{r_0\cdot\spr{E}}
+        \leq s+\frac1{r_0}\leq2\cdot s,
     \]
-    using $\operatorname{val}_{\mathcal L}(a,b)\leq\operatorname{val}(\mathcal L)\leq s$, $\spr{B}\leq\spr{E}$, and $1/r_0\leq s$. Maximizing over $(a,b')$ gives $\operatorname{val}(\mathcal L')\leq2s$.
+    using $\operatorname{val}_{\mathcal L}(a,b)\leq\operatorname{val}(\mathcal L)\leq s$, $\spr{B}\leq\spr{E}$, and $1/r_0\leq s$. Maximizing over $(a,b')$ gives $\operatorname{val}(\mathcal L')\leq2\cdot s$.
 
-    The construction has $\spr{E'}=r_0\spr{E}$ and $\spr{\Sigma_B'}=\spr{\Sigma_B}+r_0\spr{E}$.
+    The construction has $\spr{E'}=r_0\cdot\spr{E}$ and $\spr{\Sigma_B'}=\spr{\Sigma_B}+r_0\cdot\spr{E}$.
 \end{proof}
 
 Below, for the resulting total-projection instance, let $h=\spr{E}$ be its number of constraints, let $N=\spr{A}+\spr{B}+\spr{E}$ be its graph size, and let $Q=\spr{\Sigma_A}+\spr{\Sigma_B}$ be its combined alphabet size.
@@ -512,10 +512,10 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
         \item \textbf{YES case:} If $\operatorname{val}(\mathcal L)=1$, there is a precedence-closed sequence $\cC$ such that
         \[
             \cov\br{\cC}=\cU,\qquad
-            \spr{\cC}\leq3h,\qquad
-            \coverageTime\br{\cC}\leq3h^2.
+            \spr{\cC}\leq3\cdot h,\qquad
+            \coverageTime\br{\cC}\leq3\cdot h^2.
         \]
-        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then for every $\theta\in(0,1]$, every precedence-closed sequence $\cC$ of sets from $\cS$ with $\spr{\cov\br{\cC}}\geq\theta h$ satisfies
+        \item \textbf{NO case:} If $\operatorname{val}(\mathcal L)\leq s$, then for every $\theta\in(0,1]$, every precedence-closed sequence $\cC$ of sets from $\cS$ with $\spr{\cov\br{\cC}}\geq\theta\cdot h$ satisfies
         \[
             \spr{\cC}\geq c_*\cdot\theta^{3/2}\cdot h\cdot s^{-1/2},
             \qquad
@@ -529,18 +529,18 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     Since $\sum_{u\in A}d_u=\sum_{v\in B}d_v=h$, there are $h\cdot\spr{\Sigma_A}+h\cdot\spr{\Sigma_B}$ bundle sets and $h\cdot\spr{\Sigma_A}$ witness sets, giving the stated value of $m$.
 
     \par\noindent\textbf{YES case.}
-    Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. For $\cC$, select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to make $\cC$ precedence-closed. Then $\cov\br{\cC}=\cU$, $\spr{\cC}=2h+h=3h$, and $\coverageTime\br{\cC}\leq h\cdot\spr{\cC}=3h^2$.
+    Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. For $\cC$, select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to make $\cC$ precedence-closed. Then $\cov\br{\cC}=\cU$, $\spr{\cC}=2\cdot h+h=3\cdot h$, and $\coverageTime\br{\cC}\leq h\cdot\spr{\cC}=3\cdot h^2$.
 
     \par\noindent\textbf{NO case.}
-    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC}}\geq\theta h$. For each vertex $v$, let $L_v=\brc{\ell\in\Sigma_A\cup\Sigma_B\colon \mathcal B_{v,\ell}\subseteq\cC}$. Since the bundles are pairwise disjoint,
+    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC}}\geq\theta\cdot h$. For each vertex $v$, let $L_v=\brc{\ell\in\Sigma_A\cup\Sigma_B\colon \mathcal B_{v,\ell}\subseteq\cC}$. Since the bundles are pairwise disjoint,
     \[
         \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq\spr{\cC}.
     \]
-    Put $R=\spr{\cC}/h$, $B_0=2R/\theta$, and let $H=\{v\in A\cup B\colon \spr{L_v}>B_0\}$ be the set of \emph{heavy vertices}. Then
+    Put $R=\spr{\cC}/h$, $B_0=2\cdot R/\theta$, and let $H=\{v\in A\cup B\colon \spr{L_v}>B_0\}$ be the set of \emph{heavy vertices}. Then
     \[
-        \sum_{v\in H}d_v\leq\frac{\spr{\cC}}{B_0}=\frac{\theta h}{2}.
+        \sum_{v\in H}d_v\leq\frac{\spr{\cC}}{B_0}=\frac{\theta\cdot h}{2}.
     \]
-    Thus at most $\theta h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside of $H$, $F=\{e=uv\in\cov\br{\cC}\colon u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta h/2$.
+    Thus at most $\theta\cdot h/2$ constraints touch $H$. The set of covered constraints with both endpoints outside of $H$, $F=\{e=uv\in\cov\br{\cC}\colon u\notin H,\ v\notin H\}$, therefore satisfies $\spr{F}\geq\theta\cdot h/2$.
 
     Choose a random labeling $(a,b)$ by independently selecting at each vertex $v$ a uniform label from $L_v$ if $L_v\neq\emptyset$, and a fixed arbitrary label otherwise. For each $e=uv\in F$, a selected witness supplies a label $\ell\in L_u$ with $\pi_e(\ell)\in L_v$. Both lists are nonempty and have size at most $B_0$, so
     \[
@@ -551,20 +551,20 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     \[
         s\geq\operatorname{val}(\mathcal L)
         \geq\mathbb{E}_{a,b}[\operatorname{val}_{\mathcal L}(a,b)]
-        =\frac1h\sum_{e=uv\in E}\Pr_{a,b}[\pi_e(a_u)=b_v]
-        \geq\frac{\spr{F}}{hB_0^2}\geq\frac{\theta}{2B_0^2}
-        =\frac{\theta^3}{8R^2}.
+        =\frac1h\cdot\sum_{e=uv\in E}\Pr_{a,b}[\pi_e(a_u)=b_v]
+        \geq\frac{\spr{F}}{h\cdot B_0^2}\geq\frac{\theta}{2\cdot B_0^2}
+        =\frac{\theta^3}{8\cdot R^2}.
     \]
     Consequently,
     \[
-        \spr{\cC}=Rh\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
+        \spr{\cC}=R\cdot h\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
     \]
 
-    Let $t$ be the first position with $\spr{\cov\br{\pref{\cC}{t}}}\geq\lceil\theta h/2\rceil$. The sequence $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
+    Let $t$ be the first position with $\spr{\cov\br{\pref{\cC}{t}}}\geq\lceil\theta\cdot h/2\rceil$. The sequence $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
     \[
         t=\spr{\pref{\cC}{t}}\geq\frac{1}{\sqrt8}\cdot(\theta/2)^{3/2}\cdot h\cdot s^{-1/2}.
     \]
-    Immediately before position $t$, fewer than $\theta h/2\leq h/2$ elements have been covered. Thus $\coverageTime\br{x,\cC}\geq t$ for at least $h/2$ elements $x\in\cU$, including any that remain uncovered at the end of $\cC$. Consequently,
+    Immediately before position $t$, fewer than $\theta\cdot h/2\leq h/2$ elements have been covered. Thus $\coverageTime\br{x,\cC}\geq t$ for at least $h/2$ elements $x\in\cU$, including any that remain uncovered at the end of $\cC$. Consequently,
     \[
         \coverageTime\br{\cC}\geq\frac{h}{2}\cdot t
         \geq\frac{1}{16}\cdot\theta^{3/2}\cdot h^2\cdot s^{-1/2}.
@@ -583,21 +583,21 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     All three bounds hold even when the precedence POSET has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
-    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The set cover instances have $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
+    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The set cover instances have $n=h$ and $m\leq2\cdot h\cdot Q$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
     \begin{equation}\label{eq:label-cover-gap-criterion}
         \alpha\cdot\kappa^{3/2}=o(s^{-1/2}).
     \end{equation}
     We substitute the following source results, all of which have perfect completeness:
     \begin{enumerate}
-        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives $\mathrm{NP}$-hard \textup{\textsc{Label Cover}} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2K+3J$ gives~\eqref{eq:label-cover-gap-criterion}.
-        \item Part~\ref{item:label-cover-source-repetition} of Theorem~\ref{thm:label-cover-source-hardness} gives, after totalization, $s=2\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
+        \item Part~\ref{item:label-cover-source-polylog} of Theorem~\ref{thm:label-cover-source-hardness} gives $\mathrm{NP}$-hard \textup{\textsc{Label Cover}} instances of size $N_0$ with alphabet size at most $N_0$ and soundness $(\log N_0)^{-c_0}$ for any constant $c_0>0$. After totalization, $s=2\cdot(\log N_0)^{-c_0}$ and $h,Q=N_0^{\bigo(1)}$, so $\log x=\bigo(\log N_0)$. Choosing $c_0>2\cdot K+3\cdot J$ gives~\eqref{eq:label-cover-gap-criterion}.
+        \item Part~\ref{item:label-cover-source-repetition} of Theorem~\ref{thm:label-cover-source-hardness} gives, after totalization, $s=2\cdot\beta_0^\tau$ and $h,Q=L^{\bigo(\tau)}$, for an absolute constant $\beta_0\in(0,1)$ and any integer $\tau\geq1$. Choose $\tau=\lceil(\log L)^b\rceil$ with $b>(1-\epsilon)/\epsilon$. Since $x=L^{\bigo(\tau)}$,
         \[
             \log\br{\alpha\cdot\kappa^{3/2}}
-            =\bigo\br{(\log L)^{(b+1)(1-\epsilon)}}
+            =\bigo\br{(\log L)^{(b+1)\cdot(1-\epsilon)}}
             =o(\tau),
         \]
         which implies~\eqref{eq:label-cover-gap-criterion}. The reduction and approximation algorithm run in time $L^{\bigo(\tau)}=2^{(\log L)^{\bigo(1)}}$, giving the stated containment.
-        \item Conjecture~\ref{conj:label-cover-source-pgc} gives Label Cover instances of graph size $N$ with soundness $N^{-c}$ and alphabet size $N^{\bigo(1)}$. After totalization, $s=2N^{-c}$ and $h,Q=N^{\bigo(1)}$, so $x=N^{\bigo(1)}$. Choose a sufficiently small constant $\delta>0$ so that $x^{5\delta/2}=o(N^{c/2})$. This gives~\eqref{eq:label-cover-gap-criterion} for $\alpha,\kappa=\bigo(x^\delta)$.
+        \item Conjecture~\ref{conj:label-cover-source-pgc} gives Label Cover instances of graph size $N$ with soundness $N^{-c}$ and alphabet size $N^{\bigo(1)}$. After totalization, $s=2\cdot N^{-c}$ and $h,Q=N^{\bigo(1)}$, so $x=N^{\bigo(1)}$. Choose a sufficiently small constant $\delta>0$ so that $x^{5\cdot\delta/2}=o(N^{c/2})$. This gives~\eqref{eq:label-cover-gap-criterion} for $\alpha,\kappa=\bigo(x^\delta)$.
     \end{enumerate}
 \end{proof}
 
@@ -746,7 +746,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     \setlength{\emergencystretch}{1em}
     Use the reduction from Theorem~\ref{thm:PCSC-to-PCWCDT-hardness}. Let $\cC$ be a precedence-closed sequence with $\cov\br{\cC}=\cU$, and let $D$ be the corresponding decision tree. For every $u\in\cU$, both hypotheses $h_u^0$ and $h_u^1$ are identified at depth $\coverageTime\br{u,\cC}$. Thus
     \[
-        \COSTA\br{D}=2\sum_{u\in\cU}\coverageTime\br{u,\cC}
+        \COSTA\br{D}=2\cdot\sum_{u\in\cU}\coverageTime\br{u,\cC}
         =2\cdot\coverageTime\br{\cC}.
     \]
     Conversely, normalize a decision tree $D$ as in Theorem~\ref{thm:PCSC-to-PCWCDT-hardness}. Its internal path yields a precedence-closed sequence $\cC$ with $\cov\br{\cC}=\cU$ and $\coverageTime\br{\cC}=\COSTA\br{D}/2$. Since normalization only decreases cost, an $\alpha$-approximation for $\ProblemPCACDT$ yields an $\alpha$-approximation for $\ProblemPCMSSC$ with $f=1$.
@@ -776,14 +776,13 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 \end{proof}
 
 \subsection{Consequences for Partial Red-Blue Set Cover}
-The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and coverage, mapping a $\ProblemPCSC$ instance with $m$ sets and $n$ items to a $\ProblemPRBSC$ instance with $m$ red-blue sets, $k=m$ red elements, and $n$ blue elements.
-For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
+% The reduction in Theorem~\ref{thm:PCSC-RBSC} preserves the optimum cost and coverage, mapping a $\ProblemPCSC$ instance with $m$ sets and $n$ items to a $\ProblemPRBSC$ instance with $m$ red-blue sets, $k=m$ red elements, and $n$ blue elements.
+% For the PDS construction, the image instances have one red-blue set for each empty representative or clique witness. A representative gives one red element and no blue elements. A clique witness gives the red elements in its precedence closure and the blue elements in its witness set.
 
-\begingroup\setlength{\emergencystretch}{1em}
-Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 n}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. The following graph-PDS result removes the $\log^2 n$ loss on the restricted instances produced by our closure reduction.\par\endgroup
+Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dense-vs-Random Conjecture, there is no polynomial-time $\bigo\br{m^{1/4-\epsilon}/\log^2 n}$-approximation for Red-Blue Set Cover \cite[Theorem~6]{RedBlueSetCover}. Since $\ProblemPCSC$ is a special case of $\ProblemPRBSC$, our hardness result removes the $\log^2 n$ factor.
 
 \begin{corollary}[PDS hardness for Partial Red-Blue Set Cover]\label{cor:PRBSC-PDS-hardness}
-    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$, fixed target fraction $f\in(0,1]$, and fixed coverage-loss factor $\kappa\geq1$, there is no polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\kappa}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\kappa}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot n}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.
+    Assuming Conjecture~\ref{problem:PDS}, for every $\epsilon>0$ and fixed target fraction $f\in(0,1]$, there is no polynomial-time bicriteria $\br{\bigo\br{n^{1/2-\epsilon}},\bigo\br{1}}$- or $\br{\bigo\br{m^{1/4-\epsilon}},\bigo\br{1}}$-approximation for $\ProblemPRBSC$ with target $\cl{f\cdot n}$ on instances obtained by applying Theorem~\ref{thm:PCSC-RBSC} to the PDS construction.
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Corollary~\ref{cor:PDS-limiting-hardness}.
@@ -794,11 +793,4 @@ Chlamt\'a\v{c}, Makarychev and Vakilian prove that, assuming the Hypergraph Dens
 \end{corollary}
 \begin{proof}
     Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:label-cover-hardness}.
-\end{proof}
-
-\begin{corollary}[Outforest hardness for RBSC]\label{cor:PRBSC-outforest-hardness}
-    For every $\epsilon>0$, full-cover Red-Blue Set Cover on instances obtained from full-cover PCSC instances with outforest precedence constraints by Theorem~\ref{thm:PCSC-RBSC} admits no polynomial-time $\bigo\br{\log^{2-\epsilon} n}$-approximation unless $\mathrm{NP}\subseteq\mathrm{ZQP}$.
-\end{corollary}
-\begin{proof}
-    Apply Theorem~\ref{thm:PCSC-RBSC} to the instances in Theorem~\ref{thm:PCSC-outforest-hardness}.
 \end{proof}

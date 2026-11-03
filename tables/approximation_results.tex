@@ -1,5 +1,5 @@
 \begin{table}[ht!]
-\caption{Approximation guarantees for covering and \mbox{$\ProblemDT$} under different precedence constraints. All bicriteria approximation guarantees can be made single criteria with an $O\br{\log n}$-factor loss.}
+\caption{Approximation guarantees for covering and \mbox{$\ProblemDT$} under different precedence constraints. All bicriteria approximation guarantees can be made single criteria with an $\bigo\br{\log n}$-factor loss.}
 \label{tab:results}
 \centering
 {
@@ -9,13 +9,13 @@
 \textbf{prec.} & \textbf{\hyperref[problem:BPCSC]{\mbox{$\ProblemBPCSC$}}} & \textbf{\hyperref[problem:PCSC]{\mbox{$\ProblemPCSC$}}} & \textbf{\hyperref[problem:PCMSSC]{\mbox{$\ProblemPCMSSC$}}} & \textbf{\hyperref[problem:PCWCDT]{\mbox{$\ProblemPCWCDT$}}} & \textbf{\hyperref[problem:PCACDT]{\mbox{$\ProblemPCACDT$}}} \\
 \midrule
 \multirow{2}{\linewidth}{none} & \mbox{$\br{1, \frac{e}{e-1}}$} & \mbox{$\br{1, \frac{e}{e-1}}$}  & \mbox{$\br{4,\frac{e}{e-1}}$} & \mbox{$\bigo(\log n)$}  & \mbox{$\bigo(\log n)$}  \\
-      &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC} &  \cite{DiagnosisDetermination} & \cite{ApproximatingDecisionTreesMultiwayBranches} \\
+      &  \cite{TheBudgetedMaximumCoverageProblem} &  \cite{TheBudgetedMaximumCoverageProblem} & Thm.~\ref{thm:inforest-PCMSSC} &  \cite{DiagnosisDetermination} & \cite{ApproximatingDecisionTreesMultiwayBranches} \\
 
 \addlinespace[2pt]
 \cdashline{2-6}
 \addlinespace[2pt]
 
-inforest & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{4, \frac{e}{e-1}}$} Cor.~\ref{cor:BPCSC-inforest-to-PCMSSC} & \mbox{$\bigo(\log n)$} \newline Cor.~\ref{cor:PCWCDT-special-cases} & \mbox{$\bigo(\log n)$} \newline Cor.~\ref{cor:PCACDT-special-cases} \\
+inforest & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{1, \frac{e}{e-1}}$} Thm.~\ref{thm:BPCSC-inforest} & \mbox{$\br{4, \frac{e}{e-1}}$} Thm.~\ref{thm:inforest-PCMSSC} & \mbox{$\bigo(\log n)$} \newline Cor.~\ref{cor:PCWCDT-special-cases} & \mbox{$\bigo(\log n)$} \newline Cor.~\ref{cor:PCACDT-special-cases} \\
 
 
 \addlinespace[2pt]
