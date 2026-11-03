@@ -3,7 +3,7 @@
 \subsection{Hardness from Planted Dense Subgraph}
 We now establish inapproximability results for general precedence constraints. Our reduction generalizes the construction of \cite{PCMSSC}, which rules out the approximation factors of $\bigo\br{n^{1/6-\epsilon}}$ and $\bigo\br{m^{1/12-\epsilon}}$ for $\ProblemPCMSSC$.
 The source problem is to distinguish an Erd\H{o}s-R\'enyi random graph on $N$ vertices from a graph generated with a higher edge probability inside a hidden vertex subset. The \textup{\textsc{Planted Dense Subgraph Conjecture}} asserts that this distinction is computationally hard for suitable density parameters. The original reduction encodes the input graph as a covering instance with sets representing its vertices and edges. We replace the edge sets with sets indexed by all $r$-cliques, for a fixed integer $r\geq2$. The case $r=2$ is the original use of edges.
-Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors \DDfix{of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ both for $\ProblemPCSC$ and $\ProblemPCMSSC$.} Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
+Our improvement over the original approach is fourfold. First, for sufficiently large fixed $r$, we rule out approximation factors of $\bigo\br{n^{1/2-\epsilon}}$ and $\bigo\br{m^{1/4-\epsilon}}$ both for $\ProblemPCSC$ and $\ProblemPCMSSC$. Second, in order to reason about $r$-cliques in random graphs we sharpen the probabilistic analysis. This also strengthens the bounds even for $r=2$, giving $\bigo\br{n^{1/4-\epsilon}}$- and $\bigo\br{m^{1/8-\epsilon}}$-inapproximabilities even for this case. Third, the bounds apply to both the $\ProblemPCMSSC$ and $\ProblemPCSC$ objectives. Fourth, they hold even for bicriteria approximations allowing any fixed loss in coverage.
 
 Recall that a bicriteria algorithm with coverage-loss factor $\kappa\geq1$ need only cover an $f/\kappa$ fraction of the universe, while its cost is compared with the optimum for the original target fraction $f$. Our bounds hold for every fixed $f\in(0,1]$ and $\kappa\geq1$.
 
@@ -15,7 +15,7 @@ We use the following hardness assumption \cite{OnApproxTargetSetSelection}, also
     Fix constants $0<\beta<\alpha<1$ with $2\cdot\alpha<1+\beta$, and let $k=\lfloor\sqrt{N}\rfloor$. No randomized polynomial-time algorithm distinguishes the following distributions with success probability at least $1/2+\epsilon$, for any fixed $\epsilon>0$, when each distribution is chosen with probability $1/2$:
     \begin{itemize}
         \item the \emph{null distribution} $G(N,N^{\alpha-1})$,
-        \item the \emph{planted distribution} obtained by uniformly choosing a $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, \DDfix{and setting the edge probabilities to be $k^{\beta-1}$ if both endpoints belong to $\mathcal{P}$ and $N^{\alpha-1}$ otherwise.}
+        \item the \emph{planted distribution} obtained by uniformly choosing a $k$-vertex subset $\mathcal{P}$, called the \emph{planted vertex set}, and setting the edge probabilities to be $k^{\beta-1}$ if both endpoints belong to $\mathcal{P}$ and $N^{\alpha-1}$ otherwise.
     \end{itemize}
 \end{conjecture}
 
@@ -45,7 +45,7 @@ We use the following probability inequalities.
 \begin{proof}
     Put $R=\binom r2$, the number of edges in an $r$-clique. Then $(1-\alpha)\cdot R=r\cdot\alpha$. Set $s=\lceil3/\zeta\rceil$, which depends only on $\zeta$ and is fixed independently of $N$.
     We will first bound the expected value of $Z_e^s$ for the clique count $Z_e$ defined below.
-    \DDfix{In other words, we upper bound the number of $r$-cliques containing a given edge $e$.}
+    In other words, we upper bound the number of $r$-cliques containing a given edge $e$.
     Fix a pair of vertices $e\in\binom{[N]}{2}$, and define
     \[
         \mathcal{K}_e=\left\{K\in\binom{[N]}{r}\colon e\subseteq K\right\}.
@@ -87,9 +87,9 @@ We use the following probability inequalities.
         &\leq\sum_{e\in\binom{[N]}{2}}\frac{\mathbb{E}[Z_e^s]}{N^{s\cdot\zeta}}\\
         &\leq C_{r,\zeta} \cdot N^{2-s\cdot\zeta}\leq\frac{C_{r,\zeta}}{N}=o(1).
     \end{align*}
-    \DDfix{This concludes the bound on the number of $r$-cliques that may share the same edge.}
+    This concludes the bound on the number of $r$-cliques that may share the same edge.
 
-    Next \DDfix{we bound the number of edge-disjoint cliques in an arbitrarily selected subgraph $G[X]$. To that end,} let $B_G(X)$ be the independence number of the auxiliary graph whose vertices are the $r$-cliques of $G[X]$, with two distinct vertices adjacent if and only if the corresponding cliques share an edge of $G$. Thus $B_G(X)$ is the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$. Write $x=\spr{X}$. For every positive integer $t$, counting possible collections of $t$ such cliques and using independence of their disjoint edge sets gives
+    Next we bound the number of edge-disjoint cliques in an arbitrarily selected subgraph $G[X]$. To that end, let $B_G(X)$ be the independence number of the auxiliary graph whose vertices are the $r$-cliques of $G[X]$, with two distinct vertices adjacent if and only if the corresponding cliques share an edge of $G$. Thus $B_G(X)$ is the maximum number of pairwise edge-disjoint $r$-cliques contained in $X$. Write $x=\spr{X}$. For every positive integer $t$, counting possible collections of $t$ such cliques and using independence of their disjoint edge sets gives
     \[
         \Pr[B_G(X)\geq t]
         \leq\binom{\binom{x}{r}}{t} \cdot N^{-r\cdot\alpha\cdot t}
@@ -374,8 +374,8 @@ We use the following probability inequalities.
         m^{(r-1)/(4\cdot r)-\epsilon}=o(N^g).
     \]
 
-    \DDfix{Given an approximation algorithm that is randomized with} a fixed positive success probability, run it independently $\lceil\log_2 N\rceil$ times and retain the output with the fewest sets among those that respect precedence and cover at least $f\cdot n/\kappa$ elements.
-    The probability that every repetition fails to achieve the approximation guarantee \DDfix{in the planted case} is $o(1)$. If no output meets the precedence and coverage requirements, declare the null case.
+    Given an approximation algorithm that is randomized with a fixed positive success probability, run it independently $\lceil\log_2 N\rceil$ times and retain the output with the fewest sets among those that respect precedence and cover at least $f\cdot n/\kappa$ elements.
+    The probability that every repetition fails to achieve the approximation guarantee in the planted case is $o(1)$. If no output meets the precedence and coverage requirements, declare the null case.
     We now describe an algorithm deciding whether the input graph comes from the null or planted distribution. First check whether $\cov\br{\cS}=\cU$, using the constructed set family $\cS$. If not, declare the null case. The planted coverage bound shows that this happens with probability $o(1)$ in the planted case. Otherwise run the assumed bicriteria algorithm with cost approximation factor $a$, using the repetitions just described if needed, and let $\cC$ be its output. In the planted case $\spr{\cC}\leq3\cdot a\cdot n$ with probability at least $1/2-o(1)$, while in the null case $\spr{\cov\br{\cC}}\geq f\cdot n/\kappa$ implies $\spr{\cC}>\lambda\cdot x_0$ with probability $1-o(1)$. The exponent inequalities above imply $a=o(\lambda\cdot x_0/n)$ for either stated $n$- or $m$-based approximation. Thus, for sufficiently large $N$, declaring the null case when $\spr{\cC}>\lambda\cdot x_0$ and the planted case otherwise recognizes the null case with probability $1-o(1)$ and the planted case with probability at least $1/2-o(1)$. Since each distribution is chosen with probability $1/2$, the overall success probability is at least
     \[
         \frac12\cdot\br{1-o(1)}+\frac12\cdot\br{\frac12-o(1)}
@@ -532,7 +532,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     Choose $(a,b)$ with $\operatorname{val}_{\mathcal L}(a,b)=1$. For $\cC$, select the bundle for the assigned label at each vertex and, for every constraint $e=uv$, the witness $W_{e,a_u}$. All its predecessors have been selected because $\pi_e(a_u)=b_v$. Order the selected bundles before the witnesses to make $\cC$ precedence-closed. Then $\cov\br{\cC}=\cU$, $\spr{\cC}=2h+h=3h$, and $\coverageTime\br{\cC}\leq h\cdot\spr{\cC}=3h^2$.
 
     \par\noindent\textbf{NO case.}
-    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC}}\geq\theta h$. For each vertex $v$, let \DDfix{$L_v=\brc{\ell\in\Sigma_A\cup\Sigma_B\colon \mathcal B_{v,\ell}\subseteq\cC}$}. Since the bundles are pairwise disjoint,
+    Suppose $\operatorname{val}(\mathcal L)\leq s$. Let $\cC\subseteq\cS$ be a precedence-closed family with $\spr{\cov\br{\cC}}\geq\theta h$. For each vertex $v$, let $L_v=\brc{\ell\in\Sigma_A\cup\Sigma_B\colon \mathcal B_{v,\ell}\subseteq\cC}$. Since the bundles are pairwise disjoint,
     \[
         \sum_{v\in A\cup B}d_v\cdot\spr{L_v}\leq\spr{\cC}.
     \]
@@ -560,7 +560,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
         \spr{\cC}=Rh\geq\frac{1}{\sqrt8}\cdot\theta^{3/2}\cdot h\cdot s^{-1/2}.
     \]
 
-    \DDfix{Let $t$ be the first} position with $\spr{\cov\br{\pref{\cC}{t}}}\geq\lceil\theta h/2\rceil$. The \DDfix{sequence} $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
+    Let $t$ be the first position with $\spr{\cov\br{\pref{\cC}{t}}}\geq\lceil\theta h/2\rceil$. The sequence $\pref{\cC}{t}$ is precedence-closed, so the bound above with threshold $\theta/2$ gives
     \[
         t=\spr{\pref{\cC}{t}}\geq\frac{1}{\sqrt8}\cdot(\theta/2)^{3/2}\cdot h\cdot s^{-1/2}.
     \]
@@ -583,7 +583,7 @@ Below, for the resulting total-projection instance, let $h=\spr{E}$ be its numbe
     All three bounds hold even when the precedence POSET has height two and every set has size at most one.
 \end{theorem}
 \begin{proof}
-    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The \DDfix{set cover instances have} $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
+    Apply Lemma~\ref{lem:label-cover-totalization} if necessary to each source instance, then use Lemma~\ref{lem:label-cover-covering-gap}. Let $s$ bound the resulting \textup{\textsc{Label Cover}} soundness, and let $\alpha$ and $\kappa\geq1$ be the claimed cost and coverage-loss factors. The set cover instances have $n=h$ and $m\leq2hQ$. For fixed $f$, comparing the YES-case bounds with the NO-case bounds at $\theta=f/\kappa$ shows that the approximation algorithm distinguishes the source cases whenever
     \begin{equation}\label{eq:label-cover-gap-criterion}
         \alpha\cdot\kappa^{3/2}=o(s^{-1/2}).
     \end{equation}
@@ -691,7 +691,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
 
     Let $\cI_{\mathrm{MGL}}=(V,d,r,\cX)$ be an $\ProblemMGL$ instance, where $d$ is the metric induced by positive rational edge lengths on a tree $T=(V,E)$. For each edge $e=\{u,v\}\in E$, write $d(e)=d(u,v)$ for its length. If every group contains $r$, the route consisting only of $r$ is optimal. Otherwise, remove groups containing $r$, since their latency is zero, and let $g\geq1$ be the number of remaining groups and $M=|V|-1\geq1$. Index the remaining groups as $X_1,\ldots,X_g$ and set $\cU=[g]$. For $v\neq r$, write $e_v$ for its parent edge.
 
-    To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e)\colon e\in E\}$. Delete every edge of length greater than $B$ and all vertices \DDfix{not reachable from $r$}, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
+    To keep the construction polynomial without assuming polynomially bounded edge lengths, we construct a covering instance $\cI_B$ for each guess $B\in\{d(e)\colon e\in E\}$. Delete every edge of length greater than $B$ and all vertices not reachable from $r$, and skip this guess if a group has no remaining vertex. Set $\delta=B/(g\cdot M)$. For every remaining nonroot vertex $v$, create a chain of
     \[
         q_v=\left\lceil\frac{d(e_v)}{\delta}\right\rceil\leq g\cdot M
     \]
@@ -726,7 +726,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     Approximating $\ProblemPCWCDT$ is as hard as approximating $\ProblemPCSC$ with $f=1$.
 \end{theorem}
 \begin{proof}
-    \DDfix{Let $(\cU,\cS,\preceq,f=1)$} be a full-cover $\ProblemPCSC$ instance. For each $u\in\cU$, create two \emph{representative hypotheses} $h_u^0,h_u^1$.
+    Let $(\cU,\cS,\preceq,f=1)$ be a full-cover $\ProblemPCSC$ instance. For each $u\in\cU$, create two \emph{representative hypotheses} $h_u^0,h_u^1$.
     % \DD{tutaj chyba należałoby powiedzieć która hipoteza jest targetem w których sytuacjach?} 
     For each $S\in\cS$, create one indexed test whose replies are
     \[
@@ -735,7 +735,7 @@ An empty sum is zero, and groups with the same members retain distinct indices.
     \]
     Impose $t_S\preceq t_T$ when $S\preceq T$.
 
-    A decision tree can be normalized by pruning unreachable branches, deleting later occurrences of a test on a path, and stopping as soon as the hypothesis is identified. These operations do not increase its cost. Each test has at most one nonsingleton reply, so the internal nodes of a normalized tree $D$ form a single path. Let $\cC$ be the sequence of the corresponding sets. It is precedence-closed and covers every $u\in\cU$, since $h_u^0$ and $h_u^1$ are indistinguishable until \DDfix{executing a test $t_S$, where $u\in S$}. Moreover, $\COSTW\br{D}=\spr{\cC}$.
+    A decision tree can be normalized by pruning unreachable branches, deleting later occurrences of a test on a path, and stopping as soon as the hypothesis is identified. These operations do not increase its cost. Each test has at most one nonsingleton reply, so the internal nodes of a normalized tree $D$ form a single path. Let $\cC$ be the sequence of the corresponding sets. It is precedence-closed and covers every $u\in\cU$, since $h_u^0$ and $h_u^1$ are indistinguishable until executing a test $t_S$, where $u\in S$. Moreover, $\COSTW\br{D}=\spr{\cC}$.
 
     Conversely, any precedence-closed full cover, ordered topologically, gives a decision tree of worst-case cost at most its cardinality. Hence the optimum costs are equal, and an $\alpha$-approximation for $\ProblemPCWCDT$ gives an $\alpha$-approximation for $\ProblemPCSC$.
 \end{proof}
