@@ -70,9 +70,9 @@ To the best of our knowledge, the precedence-constrained \textup{\textsc{Optimal
 
 \textup{\textsc{Set Cover}} is among the most important problems in combinatorial approximation.
 It is well known that the greedy algorithm achieves an $H_n$-approximation for \textup{\textsc{Set Cover}} \cite{GreedyHeuristicSetCoverProblem}, where $H_n=\bigo\br{\log n}$ is the $n$-th harmonic number. This is tight since it cannot be approximated within a $(1-\epsilon)\cdot\ln n$ factor for any $\epsilon > 0$ unless $\mathrm{P}=\mathrm{NP}$ \cite{AnalyticalApproachToParallelRepetition}.
-The \textup{\textsc{Min-Sum Set Cover}} is a variant of the problem in which the goal is to minimize the average coverage time of elements. For this version, the greedy algorithm is $4$-approximate \cite{ApproximatingMinSumSetCover}, which is tight \DDfix{(see also \cite{BansalBFT21})}.
+The \textup{\textsc{Min-Sum Set Cover}} is a variant of the problem in which the goal is to minimize the average coverage time of elements. For this version, the greedy algorithm is $4$-approximate \cite{ApproximatingMinSumSetCover}, which is tight (see also \cite{BansalBFT21}).
 When allowing arbitrary precedence constraints, $\ProblemPCMSSC$ admits an $\bigo\br{\sqrt{m}}$-approximation \cite{PCMSSC}. Earlier PDS-based work rules out polynomial-time $\bigo\br{n^{1/6-\epsilon}}$- and $\bigo\br{m^{1/12-\epsilon}}$-approximations \cite{PCMSSC}. The construction and analysis below extend these bounds.
-\DDfix{Several other generalizations have been also studied, see e.g. \cite{AzarGY09,AzarG11,BansalGK10,DeshpandeHK14}.}
+Several other generalizations have been also studied, see e.g. \cite{AzarGY09,AzarG11,BansalGK10,DeshpandeHK14}.
 
 \subsection{Our results and techniques} \label{sec:our-results}
 
